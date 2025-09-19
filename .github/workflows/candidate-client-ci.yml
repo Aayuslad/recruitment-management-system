@@ -1,0 +1,49 @@
+name: Candidate Client CI
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  candidate-client:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./apps/candidate-client
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: make lint-candidate
+
+      - name: Format check
+        run: make format-check-candidate
+
+      - name: Build
+        run: npm run build
+
+      - name: Run tests
+        run: npm test -- --watchAll=false
