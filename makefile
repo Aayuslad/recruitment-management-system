@@ -6,13 +6,15 @@ STARTUP_PROJECT = apps/server/Server.API
 INFRA_PROJECT = apps/server/Server.Infrastructure
 
 ############# build and start #############
+
 build-server:
 	dotnet build apps/server/Server.sln
 
 build-recruiter-client:
-	cd apps/recruiter-client && npm install && npm run build
+	cd apps/recruiter-client && npm run build
+
 build-candidate-client:
-	cd apps/candidate-client && npm install && npm run build
+	cd apps/candidate-client && npm run build
 
 build-clients: build-recruiter-client build-candidate-client
 
@@ -22,14 +24,19 @@ start-server:
 	dotnet run --project apps/server/Server.API
 
 start-candidate-client:
-	cd apps/candidate-client && npm install && npm start
+	cd apps/candidate-client && npm start
 
 start-recruiter-client:
-	cd apps/recruiter-client && npm install && npm start
+	cd apps/recruiter-client && npm start
 
-start-all:
+start-all: start-server start-candidate-client start-recruiter-client
 
+############## Install dependencies for local setup ##############
 
+install-all:
+	cd apps/candidate-client && npm install
+	cd apps/recruiter-client && npm install
+	dotnet restore apps/server/Server.sln
 
 ############## database ##############
 
@@ -77,10 +84,10 @@ lint-fix-recruiter:
 	cd apps/recruiter-client && npx eslint . --ext .js,.jsx,.ts,.tsx --fix
 
 format-check-candidate:
-	npx prettier --check "apps/candidate-client/**/*.{js,jsx,ts,tsx,json,css,md}"
+	cd apps/candidate-client && npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
 
 format-check-recruiter:
-	npx prettier --check "apps/recruiter-client/**/*.{js,jsx,ts,tsx,json,css,md}"
+	cd apps/recruiter-client && npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
 
 format-check-server:
 	dotnet format --verify-no-changes apps/server/Server.sln
@@ -91,9 +98,9 @@ format-server:
 format-clients: format-check-candidate format-check-recruiter
 
 format-fix-candidate:
-	npx prettier --write "apps/candidate-client/**/*.{js,jsx,ts,tsx,json,css,md}"
+	cd apps/candidate-client && npx prettier --write "**/*.{js,jsx,ts,tsx,json,css,md}"
 
 format-fix-recruiter:
-	npx prettier --write "apps/recruiter-client/**/*.{js,jsx,ts,tsx,json,css,md}"
+	cd apps/recruiter-client && npx prettier --write "**/*.{js,jsx,ts,tsx,json,css,md}"
 
-
+format-fix-clients: format-fix-candidate format-fix-recruiter
