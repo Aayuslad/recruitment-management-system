@@ -9,6 +9,10 @@ on:
 jobs:
   server:
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./
 
     steps:
       - name: Checkout code

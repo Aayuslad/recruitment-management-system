@@ -9,9 +9,12 @@ INFRA_PROJECT = apps/server/Server.Infrastructure
 build-server:
 	dotnet build apps/server/Server.sln
 
-build-clients:
-	cd apps/candidate-client && npm install && npm run build
+build-recruiter-client:
 	cd apps/recruiter-client && npm install && npm run build
+build-candidate-client:
+	cd apps/candidate-client && npm install && npm run build
+
+build-clients: build-recruiter-client build-candidate-client
 
 build: build-server build-clients
 

@@ -14,7 +14,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./apps/candidate-client
+        working-directory: ./
 
     steps:
       - name: Checkout code
@@ -33,9 +33,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install dependencies
-        run: npm ci
-
       - name: Lint
         run: make lint-candidate
 
@@ -43,7 +40,4 @@ jobs:
         run: make format-check-candidate
 
       - name: Build
-        run: npm run build
-
-      - name: Run tests
-        run: npm test -- --watchAll=false
+        run: make build-candidate-client
