@@ -12,10 +12,6 @@ jobs:
   candidate-client:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -29,18 +25,22 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('apps/candidate-client/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: npm ci -w ./apps/candidate-client
+        run: npm ci
+        working-directory: ./apps/candidate-client
 
       - name: Lint
         run: make lint-candidate
+        working-directory: ./
 
       - name: Format check
         run: make format-check-candidate
+        working-directory: ./
 
       - name: Build
         run: make build-candidate-client
+        working-directory: ./
