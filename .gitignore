@@ -15,6 +15,7 @@ out/
 *.env
 secrets.json
 appsettings.Development.json
+apps/server/Server.API/appsettings.Development.json
 
 # Logs
 *.log
