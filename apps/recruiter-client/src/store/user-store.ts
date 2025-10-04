@@ -4,10 +4,10 @@ import type { StateCreator } from 'zustand';
 export type UserStoreSliceType = {};
 
 export const createUserSlice: StateCreator<UserStoreSliceType> = (
-    //@ts-ignore
+    //@ts-expect-error
     // eslint-disable-next-line 
     set,
-    //@ts-ignore
+    //@ts-expect-error
     // eslint-disable-next-line
     get 
 ) => ({});
