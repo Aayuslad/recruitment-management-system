@@ -8,12 +8,14 @@
 
     <ItemGroup>
         <PackageReference Include="MediatR" Version="13.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.20" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -24,6 +26,17 @@
 
     <ItemGroup>
         <Compile Include="..\..\..\infra\db\migrations\**\*.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="..\..\..\infra\db\migrations\20250919172618_UserAuthAndRolesAdded.cs" />
+      <Compile Remove="..\..\..\infra\db\migrations\20250919172618_UserAuthAndRolesAdded.Designer.cs" />
+      <Compile Remove="..\..\..\infra\db\migrations\20250926172018_UserAuthAndRolesAdded.cs" />
+      <Compile Remove="..\..\..\infra\db\migrations\20250926172018_UserAuthAndRolesAdded.Designer.cs" />
+      <Compile Remove="..\..\..\infra\db\migrations\20250927070938_UserAuthAndRolesAdded.cs" />
+      <Compile Remove="..\..\..\infra\db\migrations\20250927070938_UserAuthAndRolesAdded.Designer.cs" />
+      <Compile Remove="..\..\..\infra\db\migrations\20250927182234_UserAuthAndRolesAdded.cs" />
+      <Compile Remove="..\..\..\infra\db\migrations\20250927182234_UserAuthAndRolesAdded.Designer.cs" />
     </ItemGroup>
 
 

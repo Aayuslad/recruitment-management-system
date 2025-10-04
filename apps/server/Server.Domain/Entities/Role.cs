@@ -3,9 +3,6 @@ using Server.Core.Primitives;
 
 namespace Server.Domain.Entities
 {
-    /// <summary>
-    /// Role aggregate root.
-    /// </summary>
     public class Role : BaseEntity<Guid>, IAggregateRoot
     {
         private Role() : base(Guid.Empty) { }

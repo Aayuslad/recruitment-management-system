@@ -4,14 +4,11 @@ using Server.Domain.ValueObjects;
 
 namespace Server.Domain.Entities
 {
-    /// <summary>
-    /// Auth entity representing user/candidate authentication details.
-    /// </summary>
     public class Auth : BaseEntity<Guid>, IAggregateRoot
     {
         private Auth() : base(Guid.Empty) { }
 
-        public Auth(Guid id, string userName, Email email, string passwordHash, string googleId) : base(id)
+        private Auth(Guid id, string userName, Email email, string passwordHash, string googleId) : base(id)
         {
             Email = email;
             UserName = userName;
@@ -39,14 +36,7 @@ namespace Server.Domain.Entities
             LastLoginAt = DateTime.UtcNow;
         }
 
-        /// <summary>
-        /// factory method to create a new Auth entity
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="passwordHash"></param>
-        /// <param name="googleId"></param>
-        /// <returns></returns>
-        public static Auth Create(string userName, Email email, string passwordHash, string googleId)
+        public static Auth Create(string userName, Email email, string passwordHash, string googleId = default!)
         {
             return new Auth(Guid.NewGuid(), userName, email, passwordHash, googleId);
         }

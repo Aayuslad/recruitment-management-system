@@ -376,3 +376,11 @@ dotnet_naming_style.s_camelcase.required_suffix =
 dotnet_naming_style.s_camelcase.word_separator = 
 dotnet_naming_style.s_camelcase.capitalization = camel_case
 
+# Wrap long lines
+csharp_wrap_long_lines = true
+
+# How to wrap binary operators (like ||, &&, +, etc.)
+csharp_wrap_binary_operators = before
+
+# Maximum line length before wrapping
+csharp_max_line_length = 80

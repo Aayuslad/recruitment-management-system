@@ -53,7 +53,8 @@ namespace Server.Infrastructure.Migrations
                     MiddleName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     LastName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
-                    ContactNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    ContactNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    IsContactNumberVerified = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     Gender = table.Column<string>(type: "text", nullable: false),
                     Dob = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -118,6 +119,12 @@ namespace Server.Infrastructure.Migrations
                 name: "IX_User_AuthId",
                 table: "User",
                 column: "AuthId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_ContactNumber",
+                table: "User",
+                column: "ContactNumber",
                 unique: true);
 
             migrationBuilder.CreateIndex(
