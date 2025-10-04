@@ -9,57 +9,65 @@ import prettier from 'eslint-config-prettier';
 import { globalIgnores } from 'eslint/config';
 
 export default tseslint.config([
-  // Ignore build/dist folders globally
-  globalIgnores(['dist', 'build', 'node_modules']),
+    globalIgnores([
+        'dist',
+        'build',
+        'node_modules',
+        'generated',
+        'src/components/ui',
+    ]),
 
-  {
-    files: ['**/*.{ts,tsx,js,jsx}'],
+    {
+        files: ['**/*.{ts,tsx,js,jsx}'],
 
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      globals: globals.browser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        ecmaFeatures: { jsx: true }, // ✅ valid only inside parserOptions
-      },
+        languageOptions: {
+            ecmaVersion: 'latest',
+            sourceType: 'module',
+            globals: globals.browser,
+            parserOptions: {
+                ecmaVersion: 'latest',
+                sourceType: 'module',
+                ecmaFeatures: { jsx: true },
+            },
+        },
+
+        settings: {
+            react: { version: 'detect' },
+        },
+
+        plugins: {
+            react,
+            'jsx-a11y': jsxA11y,
+        },
+
+        extends: [
+            js.configs.recommended,
+            tseslint.configs.recommended,
+            reactHooks.configs['recommended-latest'],
+            reactRefresh.configs.vite,
+            prettier,
+        ],
+
+        rules: {
+            /* React */
+            'react/react-in-jsx-scope': 'off',
+            'react/prop-types': 'off',
+
+            /* TypeScript */
+            '@typescript-eslint/no-explicit-any': 'warn',
+            '@typescript-eslint/no-unused-vars': [
+                'warn',
+                { argsIgnorePattern: '^_' },
+            ],
+
+            /* General JS */
+            'no-unused-vars': 'off', // handled by TS rule above
+            eqeqeq: ['error', 'always'],
+            quotes: ['error', 'single'],
+            semi: ['error', 'always'],
+            indent: ['error', 4],
+            'no-console': 'warn',
+            'no-debugger': 'error',
+        },
     },
-
-    settings: {
-      react: { version: 'detect' },
-    },
-
-    plugins: {
-      react,
-      'jsx-a11y': jsxA11y,
-    },
-
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
-      prettier,
-    ],
-
-    rules: {
-      /* ✅ React */
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
-
-      /* ✅ TypeScript */
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-
-      /* ✅ General JS */
-      'no-unused-vars': 'off', // handled by TS rule above
-      eqeqeq: ['error', 'always'],
-      quotes: ['error', 'single'],
-      semi: ['error', 'always'],
-      indent: ['error', 2],
-      'no-console': 'warn',
-      'no-debugger': 'error',
-    },
-  },
 ]);

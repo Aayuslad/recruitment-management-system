@@ -7,15 +7,17 @@
     {
         public bool IsSuccess { get; private set; }
         public string? ErrorMessage { get; private set; }
+        public int StatusCode { get; private set; }
 
-        private Result(bool isSuccess, string? errorMessage)
+        private Result(bool isSuccess, string? errorMessage, int statusCode)
         {
             IsSuccess = isSuccess;
             ErrorMessage = errorMessage;
+            StatusCode = statusCode;
         }
 
-        public static Result Success() => new(true, default);
-        public static Result Failure(string errorMessage) => new(false, errorMessage);
+        public static Result Success(int statusCode = 200) => new(true, default, statusCode);
+        public static Result Failure(string errorMessage, int statusCode = 500) => new(false, errorMessage, statusCode);
     }
 
     /// <summary>
@@ -26,15 +28,17 @@
         public bool IsSuccess { get; private set; }
         public T? Value { get; private set; }
         public string? ErrorMessage { get; private set; }
+        public int StatusCode { get; private set; }
 
-        public Result(bool isSuccess, T? value, string? errorMessage)
+        public Result(bool isSuccess, T? value, string? errorMessage, int statusCode)
         {
             IsSuccess = isSuccess;
             Value = value;
             ErrorMessage = errorMessage;
+            StatusCode = statusCode;
         }
 
-        public static Result<T> Success(T value) => new(true, value, null);
-        public static Result<T> Failure(string error) => new(false, default, error);
+        public static Result<T> Success(T value, int statusCode = 200) => new(true, value, null, statusCode);
+        public static Result<T> Failure(string error, int statusCode = 500) => new(false, default, error, statusCode);
     }
 }

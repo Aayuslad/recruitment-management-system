@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Server.Domain.Entities;
+using Server.Domain.ValueObjects;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
@@ -19,15 +20,15 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.HasIndex(a => a.UserName)
                 .IsUnique();
 
-            builder.OwnsOne(a => a.Email, email =>
-            {
-                email.Property(e => e.Address)
-                    .IsRequired()
-                    .HasMaxLength(256)
-                    .HasColumnName("Email");
-
-                email.HasIndex(e => e.Address).IsUnique();
-            });
+            builder.Property(a => a.Email)
+                .HasConversion(
+                    emailVO => emailVO.ToString(),
+                    email => Email.Create(email).Value!
+                )
+                .IsRequired()
+                .HasMaxLength(256)
+                .HasColumnName("Email");
+            builder.HasIndex(a => a.Email).IsUnique();
 
             builder.Property(a => a.PasswordHash)
                 .HasMaxLength(256);

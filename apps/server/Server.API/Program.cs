@@ -1,32 +1,31 @@
+using Server.API.Extensions;
+using Server.API.Middlewares;
+using Server.Application;
 using Server.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// --------- DI registrations ----------
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("FrontendPolicy", policy =>
-    {
-        policy.WithOrigins(
-            "http://localhost:5173",
-            "http://localhost:5174"
-        )
-        .AllowAnyHeader()
-        .AllowAnyMethod();
-    });
-});
-
-// add infrastructure layer (DbContext, Repositories, etc.)
+builder.Services.AddApi(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
 
 var app = builder.Build();
+
+// --------- Middleware Pipeline ----------
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+if (!app.Environment.IsDevelopment())
+    app.UseHttpsRedirection();
 
 app.UseCors("FrontendPolicy");
 
 app.MapGet("/", () => "Hello World!");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
@@ -34,10 +33,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
-
 app.MapControllers();
+
+// ---------- Run ----------
 app.Run();

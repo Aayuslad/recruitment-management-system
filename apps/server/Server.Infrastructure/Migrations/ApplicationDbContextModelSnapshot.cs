@@ -17,7 +17,7 @@ namespace Server.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -33,6 +33,12 @@ namespace Server.Infrastructure.Migrations
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Email");
 
                     b.Property<string>("GoogleId")
                         .HasMaxLength(100)
@@ -54,6 +60,9 @@ namespace Server.Infrastructure.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.HasIndex("UserName")
                         .IsUnique();
@@ -93,6 +102,12 @@ namespace Server.Infrastructure.Migrations
                     b.Property<Guid>("AuthId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ContactNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("ContactNumber");
+
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -107,6 +122,11 @@ namespace Server.Infrastructure.Migrations
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsContactNumberVerified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -124,6 +144,9 @@ namespace Server.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthId")
+                        .IsUnique();
+
+                    b.HasIndex("ContactNumber")
                         .IsUnique();
 
                     b.ToTable("User", (string)null);
@@ -156,34 +179,6 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Auth", b =>
-                {
-                    b.OwnsOne("Server.Domain.ValueObjects.Email", "Email", b1 =>
-                        {
-                            b1.Property<Guid>("AuthId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Address")
-                                .IsRequired()
-                                .HasMaxLength(256)
-                                .HasColumnType("character varying(256)")
-                                .HasColumnName("Email");
-
-                            b1.HasKey("AuthId");
-
-                            b1.HasIndex("Address")
-                                .IsUnique();
-
-                            b1.ToTable("Auth");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AuthId");
-                        });
-
-                    b.Navigation("Email")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Server.Domain.Entities.User", b =>
                 {
                     b.HasOne("Server.Domain.Entities.Auth", null)
@@ -191,27 +186,6 @@ namespace Server.Infrastructure.Migrations
                         .HasForeignKey("Server.Domain.Entities.User", "AuthId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.OwnsOne("Server.Domain.ValueObjects.ContactNumber", "ContactNumber", b1 =>
-                        {
-                            b1.Property<Guid>("UserId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Number")
-                                .IsRequired()
-                                .HasMaxLength(20)
-                                .HasColumnType("character varying(20)")
-                                .HasColumnName("ContactNumber");
-
-                            b1.HasKey("UserId");
-
-                            b1.ToTable("User");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId");
-                        });
-
-                    b.Navigation("ContactNumber");
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.UserRole", b =>
