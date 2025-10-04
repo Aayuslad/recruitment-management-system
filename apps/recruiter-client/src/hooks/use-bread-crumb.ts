@@ -11,11 +11,14 @@ export function useBreadCrumbs() {
 
     return matches.map((match) => {
         const { route } = match;
-        const label =
-            typeof route.breadcrumb === 'function'
-            //@ts-ignore
-                ? route.breadcrumb(params)
-                : route.breadcrumb;
+        let label;
+
+        if (typeof route.breadcrumb === 'function'){
+            //@ts-expect-error will resolve when it is used
+            label = route.breadcrumb(params);
+        } else {
+            label = route.breadcrumb;
+        }
 
         return { label, path: match.pathname };
     });
