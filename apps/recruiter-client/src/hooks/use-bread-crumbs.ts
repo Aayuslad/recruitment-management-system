@@ -13,7 +13,7 @@ export function useBreadCrumbs() {
         const { route } = match;
         let label;
 
-        if (typeof route.breadcrumb === 'function'){
+        if (typeof route.breadcrumb === 'function') {
             //@ts-expect-error will resolve when it is used
             label = route.breadcrumb(params);
         } else {
