@@ -2,13 +2,16 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Server.Domain.Entities;
+using Server.Domain.ValueObjects;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserConfiguration : AuditableEntityConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public override void Configure(EntityTypeBuilder<User> builder)
         {
+            base.Configure(builder);
+
             builder.ToTable("User");
 
             builder.HasKey(u => u.Id);
@@ -31,12 +34,20 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .HasConversion<string>()   // store enum as string
                 .IsRequired();
 
-            builder.OwnsOne(u => u.ContactNumber, cn =>
-            {
-                cn.Property(c => c.Number)
-                  .HasColumnName("ContactNumber")
-                  .HasMaxLength(20);
-            });
+            builder.Property(u => u.ContactNumber)
+                .HasConversion(
+                    contactNumberVO => contactNumberVO.ToString(),
+                    contactNumber => ContactNumber.Create(contactNumber).Value!
+                )
+                .IsRequired()
+                .HasMaxLength(20)
+                .HasColumnName("ContactNumber");
+            builder.HasIndex(u => u.ContactNumber)
+                .IsUnique();
+
+            builder.Property(u => u.IsContactNumberVerified)
+                .IsRequired()
+                .HasDefaultValue(false);
 
             builder.Property(u => u.Gender)
                 .HasConversion<string>()
@@ -44,8 +55,6 @@ namespace Server.Infrastructure.Persistence.Configurations
 
             builder.Property(u => u.Dob)
                 .IsRequired();
-
-            builder.Property(u => u.DeletedAt);
 
             // FK: User → Auth (1:1)
             builder.HasOne<Auth>()

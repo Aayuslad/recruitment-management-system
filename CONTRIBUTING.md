@@ -44,15 +44,4 @@ We use **prefix-based branch names**:
 
 ---
 
-## 🚦 Workflow Summary
-
-1. Create a new branch from `main`.  
-2. Work on your changes in that branch.  
-3. Push your branch and open a Pull Request.  
-4. Ensure CI checks pass.  
-5. Request a review.  
-6. Squash & merge after approval.
-
----
-
 Happy coding! 🚀

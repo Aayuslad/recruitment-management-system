@@ -27,11 +27,13 @@ namespace Server.Infrastructure.Persistence.Configurations
             // User - Role ( n : m )
             builder.HasOne<User>()
                 .WithMany()
+                .IsRequired()
                 .HasForeignKey(ur => ur.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne<Role>()
                 .WithMany()
+                .IsRequired()
                 .HasForeignKey(ur => ur.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
         }

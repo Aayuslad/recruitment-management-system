@@ -2,13 +2,16 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Server.Domain.Entities;
+using Server.Domain.ValueObjects;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    public class AuthConfiguration : IEntityTypeConfiguration<Auth>
+    public class AuthConfiguration : AuditableEntityConfiguration<Auth>
     {
-        public void Configure(EntityTypeBuilder<Auth> builder)
+        public override void Configure(EntityTypeBuilder<Auth> builder)
         {
+            base.Configure(builder);
+
             builder.ToTable("Auth");
 
             builder.HasKey(a => a.Id);
@@ -19,15 +22,15 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.HasIndex(a => a.UserName)
                 .IsUnique();
 
-            builder.OwnsOne(a => a.Email, email =>
-            {
-                email.Property(e => e.Address)
-                    .IsRequired()
-                    .HasMaxLength(256)
-                    .HasColumnName("Email");
-
-                email.HasIndex(e => e.Address).IsUnique();
-            });
+            builder.Property(a => a.Email)
+                .HasConversion(
+                    emailVO => emailVO.ToString(),
+                    email => Email.Create(email).Value!
+                )
+                .IsRequired()
+                .HasMaxLength(256)
+                .HasColumnName("Email");
+            builder.HasIndex(a => a.Email).IsUnique();
 
             builder.Property(a => a.PasswordHash)
                 .HasMaxLength(256);
@@ -37,8 +40,6 @@ namespace Server.Infrastructure.Persistence.Configurations
 
             builder.Property(a => a.CreatedAt)
                 .IsRequired();
-
-            builder.Property(a => a.UpdatedAt);
 
             builder.Property(a => a.LastLoginAt);
 

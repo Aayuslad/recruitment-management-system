@@ -5,23 +5,30 @@ using Server.Domain.ValueObjects;
 
 namespace Server.Domain.Entities
 {
-    /// <summary>
-    /// User profile aggregate root.
-    /// </summary>
-    public class User : BaseEntity<Guid>, IAggregateRoot
+    public class User : AuditableEntity, IAggregateRoot
     {
-        private User() : base(Guid.Empty) { }
+        private User() : base(Guid.Empty, Guid.Empty) { }
 
-        private User(Guid id, Guid authId, string firstName, string? middleName, string lastName,
-            UserStatus status, ContactNumber? contactNumber, Gender gender, DateTime dob) : base(id)
+        private User(
+            Guid id,
+            Guid authId,
+            string firstName,
+            string? middleName,
+            string lastName,
+            UserStatus? status,
+            ContactNumber contactNumber,
+            Gender? gender,
+            DateTime dob,
+            Guid? createdBy
+        ) : base(id, createdBy ?? Guid.Empty)
         {
             AuthId = authId;
             FirstName = firstName;
             MiddleName = middleName;
             LastName = lastName;
-            Status = status;
+            Status = status ?? UserStatus.Active;
             ContactNumber = contactNumber;
-            Gender = gender;
+            Gender = gender ?? Gender.PreferNotToSay;
             Dob = dob;
         }
 
@@ -30,21 +37,43 @@ namespace Server.Domain.Entities
         public string? MiddleName { get; private set; }
         public string LastName { get; private set; } = default!;
         public UserStatus Status { get; private set; }
-        public ContactNumber? ContactNumber { get; private set; }
+        public ContactNumber ContactNumber { get; private set; } = default!;
+        public bool IsContactNumberVerified { get; private set; } = false;
         public Gender Gender { get; private set; }
         public DateTime Dob { get; private set; }
-        public DateTime? DeletedAt { get; private set; }
 
-        public void MarkDeleted()
+        public void Delete(Guid deletedBy)
         {
-            Status = UserStatus.Deleted;
-            DeletedAt = DateTime.UtcNow;
+            if (deletedBy == Guid.Empty)
+                throw new ArgumentException("Invalid DeletedBy user.");
+
+            MarkAsDeleted(deletedBy);
         }
 
-        public static User Create(Guid authId, string firstName, string? middleName, string lastName,
-            UserStatus status, ContactNumber? contactNumber, Gender gender, DateTime dob)
+        public static User Create(
+            Guid authId,
+            string firstName,
+            string? middleName,
+            string lastName,
+            UserStatus? status,
+            ContactNumber contactNumber,
+            Gender? gender,
+            DateTime dob,
+            Guid? createdBy = null
+        )
         {
-            return new User(Guid.NewGuid(), authId, firstName, middleName, lastName, status, contactNumber, gender, dob);
+            return new User(
+                Guid.NewGuid(),
+                authId,
+                firstName,
+                middleName,
+                lastName,
+                status,
+                contactNumber,
+                gender,
+                dob,
+                createdBy
+            );
         }
     }
 }
