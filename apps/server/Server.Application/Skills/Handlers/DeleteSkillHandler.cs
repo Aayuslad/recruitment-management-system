@@ -11,7 +11,7 @@ namespace Server.Application.Skills.Handlers
     public class DeleteSkillHandler : IRequestHandler<DeleteSkillCommand, Result>
     {
         private readonly ISkillRepository _skillRepository;
-        private IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public DeleteSkillHandler(ISkillRepository skillRepository, IHttpContextAccessor httpContextAccessor)
         {
