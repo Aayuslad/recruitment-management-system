@@ -7,7 +7,7 @@ namespace Server.Application.Skills.Queries
 {
     public class GetSkillsQuery : IRequest<Result<IEnumerable<SkillDTO>>>
     {
-        public GetSkillsQuery(int? page, int? pageCount, string? search) 
+        public GetSkillsQuery(int? page, int? pageCount, string? search)
         {
             Page = page;
             PageCount = pageCount;
@@ -16,6 +16,6 @@ namespace Server.Application.Skills.Queries
 
         public int? Page { get; set; }
         public int? PageCount { get; set; }
-        public string? Search {  get; set; }
+        public string? Search { get; set; }
     }
 }

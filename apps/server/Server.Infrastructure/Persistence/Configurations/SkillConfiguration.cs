@@ -14,7 +14,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("Skill");
 
             builder.HasKey(x => x.Id);
-            
+
             builder.Property(x => x.Name).IsRequired();
 
             builder.Property(x => x.Description).IsRequired();

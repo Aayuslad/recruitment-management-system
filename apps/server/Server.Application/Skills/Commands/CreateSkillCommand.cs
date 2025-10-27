@@ -4,7 +4,7 @@ using Server.Core.Results;
 
 namespace Server.Application.Skills.Commands
 {
-    public class CreateSkillCommand: IRequest<Result>
+    public class CreateSkillCommand : IRequest<Result>
     {
         public CreateSkillCommand(string name, string description)
         {

@@ -14,7 +14,7 @@ namespace Server.Application.Users.Handlers
         private readonly IHasher _hasher;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-        public LoginUserHandler(IAuthRepository authRepository, IUserRepository userRepository , IHasher hasher, IJwtTokenGenerator jwtTokenGenerator)
+        public LoginUserHandler(IAuthRepository authRepository, IUserRepository userRepository, IHasher hasher, IJwtTokenGenerator jwtTokenGenerator)
         {
             _authRepository = authRepository;
             _userRepository = userRepository;

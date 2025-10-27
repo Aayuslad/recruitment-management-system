@@ -6,7 +6,7 @@ namespace Server.Application.Skills.Validators
 {
     public class GetSkillQueryValidator : AbstractValidator<GetSkillQuery>
     {
-        public GetSkillQueryValidator() 
+        public GetSkillQueryValidator()
         {
             RuleFor(x => x.Id).NotEmpty();
         }

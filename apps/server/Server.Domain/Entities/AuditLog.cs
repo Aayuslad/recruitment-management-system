@@ -18,7 +18,7 @@ namespace Server.Domain.Entities
             ChangedAt = DateTime.UtcNow;
         }
 
-        public AuditEntityType EntityType { get; private set; } 
+        public AuditEntityType EntityType { get; private set; }
         public string EntityId { get; private set; } = default!;
         public AuditActionType Action { get; private set; }
         public Guid ChangedBy { get; private set; }

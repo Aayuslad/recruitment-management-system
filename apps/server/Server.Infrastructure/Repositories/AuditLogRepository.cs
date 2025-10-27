@@ -4,7 +4,7 @@ using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories
 {
-    public class AuditLogRepository: IAuditLogRepository
+    public class AuditLogRepository : IAuditLogRepository
     {
         private readonly ApplicationDbContext _context;
 
