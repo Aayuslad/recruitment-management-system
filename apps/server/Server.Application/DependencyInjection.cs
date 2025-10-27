@@ -8,7 +8,6 @@ using Server.Application.Common.Behaviors;
 using Server.Application.Skills.Queries;
 using Server.Application.Skills.Validators;
 using Server.Application.Users.Commands;
-using Server.Application.Users.Validators;
 
 namespace Server.Application
 {
