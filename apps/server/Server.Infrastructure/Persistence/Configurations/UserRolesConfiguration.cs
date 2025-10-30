@@ -9,7 +9,7 @@ namespace Server.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<UserRole> builder)
         {
-            builder.ToTable("UserRoles");
+            builder.ToTable("UserRole");
 
             builder.HasKey(ur => ur.Id); // using Guid as PK for simplicity
 
@@ -25,13 +25,13 @@ namespace Server.Infrastructure.Persistence.Configurations
             // relationships
 
             // User - Role ( n : m )
-            builder.HasOne<User>()
+            builder.HasOne(x => x.User)
                 .WithMany()
                 .IsRequired()
                 .HasForeignKey(ur => ur.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne<Role>()
+            builder.HasOne(x => x.Role)
                 .WithMany()
                 .IsRequired()
                 .HasForeignKey(ur => ur.RoleId)

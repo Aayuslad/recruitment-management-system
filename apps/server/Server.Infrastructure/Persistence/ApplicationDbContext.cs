@@ -15,15 +15,23 @@ namespace Server.Infrastructure.Persistence
         public DbSet<UserRole> UserRoles { get; set; } = null!;
         public DbSet<Skill> Skills { get; set; } = null!;
         public DbSet<AuditLog> AuditLogs { get; set; } = null!;
+        public DbSet<Designation> Designations { get; set; } = null!;
+        public DbSet<DesignationSkill> DesignationSkills { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
             // Global soft-delete filter for all auditable entities
-            modelBuilder.Entity<Skill>().HasQueryFilter(x => !x.IsDeleted);
-            modelBuilder.Entity<Auth>().HasQueryFilter(x => !x.IsDeleted);
-            modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDeleted);
+            // Soft delete filters
+            modelBuilder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);
+            modelBuilder.Entity<Auth>().HasQueryFilter(a => !a.IsDeleted);
+            modelBuilder.Entity<Skill>().HasQueryFilter(s => !s.IsDeleted);
+            modelBuilder.Entity<Designation>().HasQueryFilter(d => !d.IsDeleted);
+            modelBuilder.Entity<DesignationSkill>().HasQueryFilter(ds => !ds.Skill.IsDeleted && !ds.Designation.IsDeleted);
+            modelBuilder.Entity<UserRole>().HasQueryFilter(ur => !ur.User.IsDeleted);
+            modelBuilder.Entity<AuditLog>().HasQueryFilter(al => !al.CreatedByUser.IsDeleted);
+
 
             base.OnModelCreating(modelBuilder);
         }

@@ -14,8 +14,8 @@ export const routes: RouteConfigType[] = [
         path: 'jobs',
         children: [
             {
-                path: 'applications',
-                breadcrumb: 'Applications',
+                path: 'openings',
+                breadcrumb: 'Openings',
             },
             {
                 path: 'positions',

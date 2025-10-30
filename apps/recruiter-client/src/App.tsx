@@ -20,7 +20,7 @@ import InterviewSchedulingPage from './pages/feature/interview-scheduling-page';
 import NotificationAndTasksPage from './pages/feature/notification-and-tasks-page';
 import ReportsAndAnalyticsPage from './pages/feature/reports-and-analytics-page';
 import ScreeningAndShortlistingPage from './pages/feature/screening-and-shortlisting-page';
-import ApplicationsSectionPage from './pages/feature/jobs/applications-section-page';
+import OpeningsSectionPage from './pages/feature/jobs/openings-section-page';
 import PositionsSectionPage from './pages/feature/jobs/positions-section-page';
 import DesignationsSectionPage from './pages/feature/jobs/designations-section-page';
 import SkillsSectionPage from './pages/feature/jobs/skills-section-page';
@@ -37,8 +37,8 @@ function App() {
                     <Route path="dashboard" element={<DashBoardPage />} />
                     <Route path="jobs" element={<JobsPage />} />
                     <Route
-                        path="jobs/applications"
-                        element={<ApplicationsSectionPage />}
+                        path="jobs/openings"
+                        element={<OpeningsSectionPage />}
                     />
                     <Route
                         path="jobs/positions"

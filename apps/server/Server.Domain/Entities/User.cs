@@ -20,7 +20,7 @@ namespace Server.Domain.Entities
             Gender? gender,
             DateTime dob,
             Guid? createdBy
-        ) : base(id, createdBy ?? Guid.Empty)
+        ) : base(id, createdBy)
         {
             AuthId = authId;
             FirstName = firstName;
@@ -41,6 +41,7 @@ namespace Server.Domain.Entities
         public bool IsContactNumberVerified { get; private set; } = false;
         public Gender Gender { get; private set; }
         public DateTime Dob { get; private set; }
+        public Auth Auth { get; private set; } = default!;
 
         public void Delete(Guid deletedBy)
         {
@@ -59,11 +60,12 @@ namespace Server.Domain.Entities
             ContactNumber contactNumber,
             Gender? gender,
             DateTime dob,
-            Guid? createdBy = null
+            Guid? createdBy = null,
+            Guid? id = null
         )
         {
             return new User(
-                Guid.NewGuid(),
+                id ?? Guid.NewGuid(),
                 authId,
                 firstName,
                 middleName,

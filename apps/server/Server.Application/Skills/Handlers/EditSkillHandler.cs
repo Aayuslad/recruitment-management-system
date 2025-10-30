@@ -35,7 +35,7 @@ namespace Server.Application.Skills.Handlers
             }
 
             // step 2: update skill properties
-            skill.UpdateDetails(
+            skill.Update(
                 command.Name,
                 command.Description,
                 Guid.Parse(userIdString)

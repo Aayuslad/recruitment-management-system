@@ -1,11 +1,11 @@
 ﻿using MediatR;
 
-using Server.Application.DTOs;
+using Server.Application.Skills.Queries.DTOs;
 using Server.Core.Results;
 
 namespace Server.Application.Skills.Queries
 {
-    public class GetSkillQuery : IRequest<Result<SkillDTO>>
+    public class GetSkillQuery : IRequest<Result<SkillDetailDTO>>
     {
         public GetSkillQuery(Guid id)
         {

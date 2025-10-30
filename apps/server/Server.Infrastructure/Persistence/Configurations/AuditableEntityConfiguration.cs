@@ -13,6 +13,7 @@ namespace Server.Infrastructure.Persistence.Configurations
         {
             builder.HasOne<User>()
                 .WithMany()
+                .IsRequired(false)
                 .HasForeignKey(s => s.CreatedBy)
                 .OnDelete(DeleteBehavior.Restrict);
 

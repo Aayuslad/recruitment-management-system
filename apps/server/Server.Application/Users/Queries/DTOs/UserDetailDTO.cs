@@ -1,6 +1,6 @@
-﻿namespace Server.Application.DTOs
+﻿namespace Server.Application.Users.Queries.DTOs
 {
-    public class UserDTO
+    public class UserDetailDTO
     {
         public Guid AuthId { get; set; }
         public Guid UserId { get; set; }

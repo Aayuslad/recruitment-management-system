@@ -27,6 +27,7 @@ namespace Server.Infrastructure
             services.AddScoped<IUserRolesRepository, UserRolesRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+            services.AddScoped<IDesignationRepository, DesignationRepository>();
 
             // Register Services
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();

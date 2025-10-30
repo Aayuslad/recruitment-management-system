@@ -10,13 +10,13 @@
         public Guid? DeletedBy { get; private set; }
         public DateTime? DeletedAt { get; private set; }
 
-        protected AuditableEntity(Guid id, Guid createdBy) : base(id)
+        protected AuditableEntity(Guid id, Guid? createdBy) : base(id)
         {
-            CreatedBy = createdBy == Guid.Empty ? Guid.Empty : createdBy;
+            CreatedBy = createdBy;
             CreatedAt = DateTime.UtcNow;
         }
 
-        protected void SetUpdated(Guid updatedBy)
+        protected void MarkAsUpdated(Guid updatedBy)
         {
             LastUpdatedBy = updatedBy;
             LastUpdatedAt = DateTime.UtcNow;

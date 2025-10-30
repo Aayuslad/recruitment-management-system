@@ -57,7 +57,7 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             // FK: User → Auth (1:1)
-            builder.HasOne<Auth>()
+            builder.HasOne(x => x.Auth)
                 .WithOne()
                 .HasForeignKey<User>(u => u.AuthId)
                 .OnDelete(DeleteBehavior.Cascade);

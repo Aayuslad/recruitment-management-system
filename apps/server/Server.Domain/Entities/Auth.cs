@@ -9,7 +9,7 @@ namespace Server.Domain.Entities
         private Auth() : base(Guid.Empty, Guid.Empty) { }
 
         private Auth(Guid id, string userName, Email email, string passwordHash, string googleId, Guid? createdBy)
-            : base(id, createdBy ?? Guid.Empty)
+            : base(id, createdBy)
         {
             Email = email;
             UserName = userName;
@@ -26,7 +26,7 @@ namespace Server.Domain.Entities
         public void UpdatePassword(string newPasswordHash)
         {
             PasswordHash = newPasswordHash;
-            SetUpdated(Guid.Empty);
+            MarkAsUpdated(Guid.Empty);
         }
 
         public void UpdateLastLogin()
@@ -42,7 +42,7 @@ namespace Server.Domain.Entities
             MarkAsDeleted(deletedBy);
         }
 
-        public static Auth Create(string userName, Email email, string passwordHash, Guid? createdBy = null, string googleId = default!)
+        public static Auth Create(string userName, Email email, string passwordHash, Guid? createdBy, string googleId = default!)
         {
             return new Auth(Guid.NewGuid(), userName, email, passwordHash, googleId, createdBy);
         }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Server.Infrastructure.Persistence;
 using Server.Domain.Entities;
+using Server.Infrastructure.Persistence;
 
 class Program
 {

@@ -49,7 +49,7 @@ namespace Server.Application.Users.Handlers
             var hashedPassword = _hasher.Hash(request.Password);
 
             // step 3: create user
-            var auth = Auth.Create(request.UserName, email, hashedPassword);
+            var auth = Auth.Create(request.UserName, email, hashedPassword, null);
 
             // step 4: persist user
             await _authRepository.AddAsync(auth, cancellationToken);

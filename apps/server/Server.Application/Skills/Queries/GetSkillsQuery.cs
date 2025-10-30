@@ -1,11 +1,11 @@
 ﻿using MediatR;
 
-using Server.Application.DTOs;
+using Server.Application.Skills.Queries.DTOs;
 using Server.Core.Results;
 
 namespace Server.Application.Skills.Queries
 {
-    public class GetSkillsQuery : IRequest<Result<IEnumerable<SkillDTO>>>
+    public class GetSkillsQuery : IRequest<Result<IEnumerable<SkillDetailDTO>>>
     {
         public GetSkillsQuery(int? page, int? pageCount, string? search)
         {

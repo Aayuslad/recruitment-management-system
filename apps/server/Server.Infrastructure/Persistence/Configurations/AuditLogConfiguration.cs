@@ -24,8 +24,8 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .HasConversion<string>()
                 .IsRequired();
 
-            // FK: AuditLog -> user (1:1)
-            builder.HasOne<User>()
+            // FK: AuditLog -> user (n:1)
+            builder.HasOne(x => x.CreatedByUser)
                 .WithMany()
                 .IsRequired()
                 .HasForeignKey(x => x.ChangedBy)

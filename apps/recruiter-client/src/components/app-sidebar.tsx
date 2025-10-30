@@ -75,8 +75,8 @@ const data = {
             icon: Briefcase,
             items: [
                 {
-                    title: 'Applications',
-                    url: '/jobs/applications',
+                    title: 'Openings',
+                    url: '/jobs/openings',
                 },
                 {
                     title: 'Positions',

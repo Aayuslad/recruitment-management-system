@@ -23,6 +23,7 @@ namespace Server.Domain.Entities
         public AuditActionType Action { get; private set; }
         public Guid ChangedBy { get; private set; }
         public DateTime ChangedAt { get; private set; }
+        public User CreatedByUser { get; private set; } = default!;
 
         public static AuditLog Create(AuditEntityType entityType, string entityId, AuditActionType action, Guid changedBy)
         {

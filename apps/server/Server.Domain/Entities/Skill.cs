@@ -17,7 +17,7 @@ namespace Server.Domain.Entities
         public string Name { get; private set; } = default!;
         public string Description { get; private set; } = default!;
 
-        public void UpdateDetails(string name, string description, Guid updatedBy)
+        public void Update(string name, string description, Guid updatedBy)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be empty.");
@@ -29,7 +29,7 @@ namespace Server.Domain.Entities
             Name = name;
             Description = description;
 
-            SetUpdated(updatedBy);
+            MarkAsUpdated(updatedBy);
         }
 
         public void Delete(Guid deletedBy)

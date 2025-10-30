@@ -4,7 +4,10 @@ export interface SkillDTO {
     id: string;
     name: string;
     description: string;
-    createdAt: string;
+    createdBy?: string;
+    createdAt?: string;
+    lastUpdatedBy?: string;
+    lastUpdatedAt?: string;
 }
 
 export type CreateSkillCommandCorrected = Omit<
