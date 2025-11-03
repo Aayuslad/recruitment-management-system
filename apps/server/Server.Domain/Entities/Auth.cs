@@ -1,10 +1,9 @@
 ﻿using Server.Core.Entities;
-using Server.Core.Primitives;
 using Server.Domain.ValueObjects;
 
 namespace Server.Domain.Entities
 {
-    public class Auth : AuditableEntity, IAggregateRoot
+    public class Auth : AuditableEntity
     {
         private Auth() : base(Guid.Empty, Guid.Empty) { }
 

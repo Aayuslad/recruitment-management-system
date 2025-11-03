@@ -1,4 +1,6 @@
-﻿namespace Server.Core.Entities
+﻿using Server.Domain.Entities;
+
+namespace Server.Core.Entities
 {
     public abstract class AuditableEntity : BaseEntity<Guid>
     {
@@ -9,6 +11,10 @@
         public bool IsDeleted { get; private set; } = false;
         public Guid? DeletedBy { get; private set; }
         public DateTime? DeletedAt { get; private set; }
+
+        public User? CreatedByUser { get; private set; }
+        public User? UpdatedByUser { get; private set; }
+        public User? DeletedByUser { get; private set; }
 
         protected AuditableEntity(Guid id, Guid? createdBy) : base(id)
         {

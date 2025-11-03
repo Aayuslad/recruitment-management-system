@@ -24,10 +24,10 @@ namespace Server.Infrastructure
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRolesRepository, RolesRepository>();
-            services.AddScoped<IUserRolesRepository, UserRolesRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
-            services.AddScoped<IAuditLogRepository, AuditLogRepository>();
             services.AddScoped<IDesignationRepository, DesignationRepository>();
+            services.AddScoped<IPositionBatchRepository, PositionBatchRepository>();
+            services.AddScoped<IPositionRepository, PositionRespository>();
 
             // Register Services
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();

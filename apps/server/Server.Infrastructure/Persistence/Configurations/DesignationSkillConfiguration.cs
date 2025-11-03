@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Server.Domain.Entities;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    public class DesignationSkillConfiguration : IEntityTypeConfiguration<DesignationSkill>
+    internal class DesignationSkillConfiguration : IEntityTypeConfiguration<DesignationSkill>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<DesignationSkill> builder)
+        public void Configure(EntityTypeBuilder<DesignationSkill> builder)
         {
             builder.ToTable("DesignationSkill");
 

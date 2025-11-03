@@ -22,17 +22,19 @@ namespace Server.Infrastructure.Repositories
 
         Task<bool> ISkillRepository.ExistsByNameAsync(string name, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_context.Skills.Any(x => x.Name == name));
+            return _context.Skills.AnyAsync(x => x.Name == name);
         }
 
         Task<bool> ISkillRepository.ExistsByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_context.Skills.Any(x => x.Id == id));
+            return _context.Skills.AnyAsync(x => x.Id == id);
         }
 
         Task<Skill?> ISkillRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return _context.Skills.FindAsync(id, cancellationToken).AsTask();
+            return _context.Skills
+                .AsTracking()
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         Task<List<Skill>> ISkillRepository.GetAllAsync(CancellationToken cancellationToken)
@@ -44,7 +46,6 @@ namespace Server.Infrastructure.Repositories
 
         Task ISkillRepository.UpdateAsync(Skill skill, CancellationToken cancellationToken)
         {
-            _context.Skills.Update(skill);
             return _context.SaveChangesAsync(cancellationToken);
         }
     }

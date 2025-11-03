@@ -5,7 +5,7 @@ using Server.Domain.Entities;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    public class SkillConfiguration : AuditableEntityConfiguration<Skill>
+    internal class SkillConfiguration : AuditableEntityConfiguration<Skill>
     {
         public override void Configure(EntityTypeBuilder<Skill> builder)
         {

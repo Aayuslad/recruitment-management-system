@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Server.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AuthAndJobsTableAdded : Migration
+    public partial class InitTheSChema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,22 +22,6 @@ namespace Server.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Role", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AuditLog",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    EntityType = table.Column<string>(type: "text", nullable: false),
-                    EntityId = table.Column<string>(type: "text", nullable: false),
-                    Action = table.Column<string>(type: "text", nullable: false),
-                    ChangedBy = table.Column<Guid>(type: "uuid", nullable: false),
-                    ChangedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AuditLog", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,6 +92,42 @@ namespace Server.Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_User_User_LastUpdatedBy",
+                        column: x => x.LastUpdatedBy,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Candidate",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Candidate", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Candidate_User_CreatedBy",
+                        column: x => x.CreatedBy,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Candidate_User_DeletedBy",
+                        column: x => x.DeletedBy,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Candidate_User_LastUpdatedBy",
                         column: x => x.LastUpdatedBy,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -218,6 +238,53 @@ namespace Server.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PositionBatch",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    DesignationId = table.Column<Guid>(type: "uuid", nullable: false),
+                    JobLocation = table.Column<string>(type: "text", nullable: false),
+                    MinCTC = table.Column<float>(type: "real", nullable: false),
+                    MaxCTC = table.Column<float>(type: "real", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PositionBatch", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PositionBatch_Designation_DesignationId",
+                        column: x => x.DesignationId,
+                        principalTable: "Designation",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PositionBatch_User_CreatedBy",
+                        column: x => x.CreatedBy,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PositionBatch_User_DeletedBy",
+                        column: x => x.DeletedBy,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PositionBatch_User_LastUpdatedBy",
+                        column: x => x.LastUpdatedBy,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DesignationSkill",
                 columns: table => new
                 {
@@ -243,10 +310,114 @@ namespace Server.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_AuditLog_ChangedBy",
-                table: "AuditLog",
-                column: "ChangedBy");
+            migrationBuilder.CreateTable(
+                name: "Position",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    BatchId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
+                    ClosedByCandidate = table.Column<Guid>(type: "uuid", nullable: true),
+                    ClosureReason = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Position", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Position_Candidate_ClosedByCandidate",
+                        column: x => x.ClosedByCandidate,
+                        principalTable: "Candidate",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Position_PositionBatch_BatchId",
+                        column: x => x.BatchId,
+                        principalTable: "PositionBatch",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PositionBatchReviewer",
+                columns: table => new
+                {
+                    PositionBatchId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ReviewerUserId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PositionBatchReviewer", x => new { x.PositionBatchId, x.ReviewerUserId });
+                    table.ForeignKey(
+                        name: "FK_PositionBatchReviewer_PositionBatch_PositionBatchId",
+                        column: x => x.PositionBatchId,
+                        principalTable: "PositionBatch",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PositionBatchReviewer_User_ReviewerUserId",
+                        column: x => x.ReviewerUserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SkillOverRide",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PositionBatchId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SkillId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Comments = table.Column<string>(type: "text", nullable: true),
+                    MinExperienceYears = table.Column<float>(type: "real", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    ActionType = table.Column<string>(type: "text", nullable: false),
+                    SourceType = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SkillOverRide", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SkillOverRide_PositionBatch_PositionBatchId",
+                        column: x => x.PositionBatchId,
+                        principalTable: "PositionBatch",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SkillOverRide_Skill_SkillId",
+                        column: x => x.SkillId,
+                        principalTable: "Skill",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PositionStatusMoveHistory",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PositionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    MovedTo = table.Column<string>(type: "text", nullable: false),
+                    Comments = table.Column<string>(type: "text", nullable: true),
+                    MovedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    MovedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PositionStatusMoveHistory", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PositionStatusMoveHistory_Position_PositionId",
+                        column: x => x.PositionId,
+                        principalTable: "Position",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PositionStatusMoveHistory_User_MovedById",
+                        column: x => x.MovedById,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Auth_CreatedBy",
@@ -276,6 +447,21 @@ namespace Server.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Candidate_CreatedBy",
+                table: "Candidate",
+                column: "CreatedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Candidate_DeletedBy",
+                table: "Candidate",
+                column: "DeletedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Candidate_LastUpdatedBy",
+                table: "Candidate",
+                column: "LastUpdatedBy");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Designation_CreatedBy",
                 table: "Designation",
                 column: "CreatedBy");
@@ -294,6 +480,51 @@ namespace Server.Infrastructure.Migrations
                 name: "IX_DesignationSkill_SkillId",
                 table: "DesignationSkill",
                 column: "SkillId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Position_BatchId",
+                table: "Position",
+                column: "BatchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Position_ClosedByCandidate",
+                table: "Position",
+                column: "ClosedByCandidate");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PositionBatch_CreatedBy",
+                table: "PositionBatch",
+                column: "CreatedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PositionBatch_DeletedBy",
+                table: "PositionBatch",
+                column: "DeletedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PositionBatch_DesignationId",
+                table: "PositionBatch",
+                column: "DesignationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PositionBatch_LastUpdatedBy",
+                table: "PositionBatch",
+                column: "LastUpdatedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PositionBatchReviewer_ReviewerUserId",
+                table: "PositionBatchReviewer",
+                column: "ReviewerUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PositionStatusMoveHistory_MovedById",
+                table: "PositionStatusMoveHistory",
+                column: "MovedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PositionStatusMoveHistory_PositionId",
+                table: "PositionStatusMoveHistory",
+                column: "PositionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Role_RoleName",
@@ -315,6 +546,16 @@ namespace Server.Infrastructure.Migrations
                 name: "IX_Skill_LastUpdatedBy",
                 table: "Skill",
                 column: "LastUpdatedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SkillOverRide_PositionBatchId",
+                table: "SkillOverRide",
+                column: "PositionBatchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SkillOverRide_SkillId",
+                table: "SkillOverRide",
+                column: "SkillId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_AuthId",
@@ -352,14 +593,6 @@ namespace Server.Infrastructure.Migrations
                 name: "IX_UserRole_UserId",
                 table: "UserRole",
                 column: "UserId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AuditLog_User_ChangedBy",
-                table: "AuditLog",
-                column: "ChangedBy",
-                principalTable: "User",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Auth_User_CreatedBy",
@@ -402,22 +635,37 @@ namespace Server.Infrastructure.Migrations
                 table: "Auth");
 
             migrationBuilder.DropTable(
-                name: "AuditLog");
+                name: "DesignationSkill");
 
             migrationBuilder.DropTable(
-                name: "DesignationSkill");
+                name: "PositionBatchReviewer");
+
+            migrationBuilder.DropTable(
+                name: "PositionStatusMoveHistory");
+
+            migrationBuilder.DropTable(
+                name: "SkillOverRide");
 
             migrationBuilder.DropTable(
                 name: "UserRole");
 
             migrationBuilder.DropTable(
-                name: "Designation");
+                name: "Position");
 
             migrationBuilder.DropTable(
                 name: "Skill");
 
             migrationBuilder.DropTable(
                 name: "Role");
+
+            migrationBuilder.DropTable(
+                name: "Candidate");
+
+            migrationBuilder.DropTable(
+                name: "PositionBatch");
+
+            migrationBuilder.DropTable(
+                name: "Designation");
 
             migrationBuilder.DropTable(
                 name: "User");

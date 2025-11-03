@@ -2,9 +2,6 @@
 
 namespace Server.Domain.Entities
 {
-    /// <summary>
-    /// Junction entity for User ↔ Role.
-    /// </summary>
     public class UserRole : BaseEntity<Guid>
     {
         private UserRole() : base(Guid.Empty) { }
@@ -21,8 +18,8 @@ namespace Server.Domain.Entities
         public Guid RoleId { get; private set; }
         public Guid AssignedBy { get; private set; }
         public DateTime AssignedAt { get; private set; }
-        public User User { get; private set; } = default!;
-        public Role Role { get; private set; } = default!;
+        public User User { get; private set; } = null!;
+        public Role Role { get; private set; } = null!;
 
         public static UserRole Assign(Guid userId, Guid roleId, Guid assignedBy)
         {

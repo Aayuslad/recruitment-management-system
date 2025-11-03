@@ -6,7 +6,7 @@ using Server.Domain.ValueObjects;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    public class AuthConfiguration : AuditableEntityConfiguration<Auth>
+    internal class AuthConfiguration : AuditableEntityConfiguration<Auth>
     {
         public override void Configure(EntityTypeBuilder<Auth> builder)
         {

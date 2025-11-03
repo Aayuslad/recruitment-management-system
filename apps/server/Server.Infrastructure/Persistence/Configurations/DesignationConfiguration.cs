@@ -5,7 +5,7 @@ using Server.Domain.Entities;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    public class DesignationConfiguration : AuditableEntityConfiguration<Designation>
+    internal class DesignationConfiguration : AuditableEntityConfiguration<Designation>
     {
         public override void Configure(EntityTypeBuilder<Designation> builder)
         {

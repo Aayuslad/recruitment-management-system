@@ -43,16 +43,19 @@ namespace Server.Application.Designations.Handlers
                     Guid.Parse(userIdString)
                 );
 
-            foreach (var skill in command.DesignationSkills ?? Enumerable.Empty<DesignationSkillDTO>())
+            if (command.DesignationSkills?.Count > 0)
             {
-                designation.AddSkill(
-                    DesignationSkill.Create(
-                        designation.Id,
-                        skill.SkillId,
-                        skill.SkillType,
-                        skill.MinExperienceYears
-                    )
-                );
+                foreach (var skill in command.DesignationSkills)
+                {
+                    designation.AddSkill(
+                        DesignationSkill.Create(
+                            designation.Id,
+                            skill.SkillId,
+                            skill.SkillType,
+                            skill.MinExperienceYears
+                        )
+                    );
+                }
             }
 
             // step 3: presist

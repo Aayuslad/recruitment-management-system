@@ -25,5 +25,11 @@ namespace Server.Domain.Entities
         {
             return new DesignationSkill(designationId, skillId, skillType, minExperienceYears);
         }
+
+        public void Update(SkillType skillType, float? minExperienceYears)
+        {
+            SkillType = skillType;
+            MinExperienceYears = minExperienceYears;
+        }
     }
 }

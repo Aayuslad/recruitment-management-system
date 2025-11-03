@@ -15,12 +15,10 @@ namespace Server.API.Controllers
     public class SkillController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IHttpContextAccessor _contextAccessor;
 
-        public SkillController(IMediator mediator, IHttpContextAccessor contextAccessor)
+        public SkillController(IMediator mediator)
         {
             _mediator = mediator;
-            _contextAccessor = contextAccessor;
         }
 
         [HttpPost]

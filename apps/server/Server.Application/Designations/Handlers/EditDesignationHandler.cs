@@ -36,19 +36,32 @@ namespace Server.Application.Designations.Handlers
             }
 
             // step 2: edit skill
-            var designationSkills = command.DesignationSkills?
-                .Select(ds => DesignationSkill.Create(
-                    designation.Id,
-                    ds.SkillId,
-                    ds.SkillType,
-                    ds.MinExperienceYears
-                ))
-                .ToList() ?? new List<DesignationSkill>();
+            if (command.DesignationSkills?.Count > 0)
+            {
+                foreach (var ds in command.DesignationSkills)
+                {
+                    var existing = designation.DesignationSkills.FirstOrDefault(s => s.SkillId == ds.SkillId);
+                    if (existing != null)
+                    {
+                        // update
+                        existing.Update(ds.SkillType, ds.MinExperienceYears);
+                    }
+                    else
+                    {
+                        // add
+                        designation.AddSkill(DesignationSkill.Create(designation.Id, ds.SkillId, ds.SkillType, ds.MinExperienceYears));
+                    }
+                }
+                // remove
+                var toRemove = designation.DesignationSkills
+                        .Where(s => !command.DesignationSkills.Any(cs => cs.SkillId == s.SkillId))
+                        .ToList();
+                foreach (var r in toRemove) designation.RemoveSkill(r);
+            }
 
             designation.Update(
                 command.Name,
                 command.Description,
-                designationSkills,
                 Guid.Parse(userIdString)
             );
 

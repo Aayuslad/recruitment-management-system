@@ -14,8 +14,8 @@ namespace Server.Domain.Entities
             Description = description;
         }
 
-        public string Name { get; private set; } = default!;
-        public string Description { get; private set; } = default!;
+        public string Name { get; private set; } = null!;
+        public string Description { get; private set; } = null!;
 
         public void Update(string name, string description, Guid updatedBy)
         {

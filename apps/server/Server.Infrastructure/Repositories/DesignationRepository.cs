@@ -23,16 +23,15 @@ namespace Server.Infrastructure.Repositories
 
         Task IDesignationRepository.UpdateAsync(Designation designation, CancellationToken cancellationToken)
         {
-            _context.Designations.Update(designation);
             return _context.SaveChangesAsync(cancellationToken);
         }
 
         Task<Designation?> IDesignationRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return _context.Designations
+                .AsTracking()
                 .Include(d => d.DesignationSkills)
                     .ThenInclude(ds => ds.Skill)
-                .AsNoTracking()
                 .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
         }
 
@@ -47,7 +46,7 @@ namespace Server.Infrastructure.Repositories
 
         Task<bool> IDesignationRepository.ExistsByNameAsync(string name, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_context.Designations.Any(x => x.Name == name));
+            return _context.Designations.AnyAsync(x => x.Name == name);
         }
     }
 }

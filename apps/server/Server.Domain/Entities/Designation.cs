@@ -5,8 +5,6 @@ namespace Server.Domain.Entities
 {
     public class Designation : AuditableEntity, IAggregateRoot
     {
-        //private readonly List<DesignationSkill> _designationSkills = new();
-
         private Designation() : base(Guid.Empty, Guid.Empty) { }
 
         private Designation(Guid id, string name, string description, Guid createdBy)
@@ -18,7 +16,7 @@ namespace Server.Domain.Entities
 
         public string Name { get; private set; } = default!;
         public string Description { get; private set; } = default!;
-        public ICollection<DesignationSkill> DesignationSkills { get; private set; } = new List<DesignationSkill>();
+        public ICollection<DesignationSkill> DesignationSkills { get; private set; } = new HashSet<DesignationSkill>();
 
         public static Designation Create(string name, string description, Guid createdBy)
         {
@@ -27,11 +25,15 @@ namespace Server.Domain.Entities
 
         public void AddSkill(DesignationSkill designationSkill)
         {
+            if (DesignationSkills.Any(s => s.SkillId == designationSkill.SkillId))
+                return;
             DesignationSkills.Add(designationSkill);
         }
 
         public void RemoveSkill(DesignationSkill designationSkill)
         {
+            if (!DesignationSkills.Contains(designationSkill))
+                return;
             DesignationSkills.Remove(designationSkill);
         }
 
@@ -40,7 +42,7 @@ namespace Server.Domain.Entities
             MarkAsDeleted(deletedBy);
         }
 
-        public void Update(string name, string description, List<DesignationSkill> skills, Guid updatedBy)
+        public void Update(string name, string description, Guid updatedBy)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Name cannot be null or empty", nameof(name));
@@ -49,11 +51,7 @@ namespace Server.Domain.Entities
 
             Name = name;
             Description = description;
-            DesignationSkills.Clear();
-            foreach (var skill in skills)
-            {
-                DesignationSkills.Add(skill);
-            }
+
             MarkAsUpdated(updatedBy);
         }
     }

@@ -15,12 +15,10 @@ namespace Server.API.Controllers
     public class DesignationController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public DesignationController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
+        public DesignationController(IMediator mediator)
         {
             _mediator = mediator;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]

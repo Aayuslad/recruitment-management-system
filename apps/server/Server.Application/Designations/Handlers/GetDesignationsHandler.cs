@@ -1,7 +1,5 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Designations.Queries;
 using Server.Application.Designations.Queries.DTOs;
@@ -12,12 +10,10 @@ namespace Server.Application.Designations.Handlers
     public class GetDesignationsHandler : IRequestHandler<GetDesignationsQuery, Result<IEnumerable<DesignationDetailDTO>>>
     {
         private readonly IDesignationRepository _designationRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GetDesignationsHandler(IDesignationRepository designationRepository, IHttpContextAccessor httpContextAccessor)
+        public GetDesignationsHandler(IDesignationRepository designationRepository)
         {
             _designationRepository = designationRepository;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Result<IEnumerable<DesignationDetailDTO>>> Handle(GetDesignationsQuery query, CancellationToken cancellationToken)

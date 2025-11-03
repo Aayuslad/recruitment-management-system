@@ -31,7 +31,7 @@ namespace Server.Application.Designations.Handlers
             var designation = await _designationRepository.GetByIdAsync(command.Id, cancellationToken);
             if (designation == null)
             {
-                return Result.Failure("Designation not found", 409);
+                return Result.Failure("Designation not found", 404);
             }
 
             // step 2: delete designation

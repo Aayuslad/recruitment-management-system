@@ -6,12 +6,12 @@ using Server.Domain.Entities;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    public abstract class AuditableEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>
+    internal abstract class AuditableEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>
         where TEntity : AuditableEntity
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
-            builder.HasOne<User>()
+            builder.HasOne(x => x.CreatedByUser)
                 .WithMany()
                 .IsRequired(false)
                 .HasForeignKey(s => s.CreatedBy)
@@ -20,7 +20,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(e => e.CreatedAt)
                 .IsRequired();
 
-            builder.HasOne<User>()
+            builder.HasOne(x => x.UpdatedByUser)
                 .WithMany()
                 .IsRequired(false)
                 .HasForeignKey(s => s.LastUpdatedBy)
@@ -32,7 +32,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(e => e.IsDeleted)
                 .HasDefaultValue(false);
 
-            builder.HasOne<User>()
+            builder.HasOne(x => x.DeletedByUser)
                 .WithMany()
                 .IsRequired(false)
                 .HasForeignKey(s => s.DeletedBy)
