@@ -17,7 +17,7 @@ namespace Server.Application.Positions.Queries.DTOs.PositionBatchDTOs
         public Guid? CreatedBy { get; set; }
         public string? CreatedByUserName { get; set; } = null!;
         public List<ReviewersDetailDTO> Reviewers { get; set; } = new List<ReviewersDetailDTO>();
-        public List<SkillsDetailDTO> Skills { get; set; } = new List<SkillsDetailDTO>();
-        public List<SkillOverRideDTO> SkillOverRides { get; set; } = new List<SkillOverRideDTO>();
+        public List<SkillDetailDTO> Skills { get; set; } = new List<SkillDetailDTO>();
+        public List<SkillOverRideDetailDTO> SkillOverRides { get; set; } = new List<SkillOverRideDetailDTO>();
     }
 }

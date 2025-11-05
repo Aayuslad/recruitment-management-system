@@ -28,6 +28,7 @@ namespace Server.Infrastructure
             services.AddScoped<IDesignationRepository, DesignationRepository>();
             services.AddScoped<IPositionBatchRepository, PositionBatchRepository>();
             services.AddScoped<IPositionRepository, PositionRespository>();
+            services.AddScoped<IJobOpeningRepository, JobOpeningRepository>();
 
             // Register Services
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();

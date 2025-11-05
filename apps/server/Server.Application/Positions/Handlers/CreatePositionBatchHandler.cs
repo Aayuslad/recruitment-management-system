@@ -42,9 +42,9 @@ namespace Server.Application.Positions.Handlers
             // step 2: add skill overrides
             if (command.SkillOverRides?.Count > 0)
             {
-                var skillOverRides = command.SkillOverRides.Select(skillOverRide =>
-                    {
-                        return SkillOverRide.Create(
+                var skillOverRides = command.SkillOverRides.Select(
+                    selector: skillOverRide => SkillOverRide.CreateForPosition(
+                            id: null,
                             positionBatchId: positionBatch.Id,
                             skillId: skillOverRide.SkillId,
                             comments: skillOverRide.Comments,
@@ -52,29 +52,29 @@ namespace Server.Application.Positions.Handlers
                             type: skillOverRide.Type,
                             actionType: skillOverRide.ActionType,
                             sourceType: SkillSourceType.Position
-                        );
-                    }).ToList();
+                        )).ToList();
 
                 positionBatch.AddSkillOverRides(skillOverRides);
             }
 
             // step 3: add reviewers for positon batch
-            var reviewers = command.Reviewers?.Select(reviewer =>
-                {
-                    return PositionBatchReviewers.Create(
+            var reviewers = command.Reviewers?.Select(
+                selector: reviewer => PositionBatchReviewers.Create(
                             positionBatchId: positionBatch.Id,
                             reviewerUserId: reviewer.ReviewerUserId
-                        );
-                }).ToList() ?? new();
+                        )).ToList() ?? [];
+
             positionBatch.AddReviewers(reviewers);
 
             // step 4: create needed positions and add
             var positions = new List<Position>();
+
             for (int i = 0; i < command.NumberOfPositions; i++)
             {
                 var position = Position.Create(positionBatch.Id);
                 positions.Add(position);
             }
+
             positionBatch.AddPositions(positions);
 
             // step 5: persist position batch

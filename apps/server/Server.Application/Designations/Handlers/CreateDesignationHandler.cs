@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Designations.Commands;
-using Server.Application.Designations.Commands.DTOs;
 using Server.Core.Results;
 using Server.Domain.Entities;
 

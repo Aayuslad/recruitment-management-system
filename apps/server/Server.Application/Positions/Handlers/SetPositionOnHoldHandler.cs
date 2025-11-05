@@ -8,7 +8,7 @@ using Server.Core.Results;
 
 namespace Server.Application.Positions.Handlers
 {
-    public class SetPositionOnHoldHandler : IRequestHandler<SetPositionOnHoldCommand, Result>
+    internal class SetPositionOnHoldHandler : IRequestHandler<SetPositionOnHoldCommand, Result>
     {
         private readonly IPositionRepository _positionRepository;
         private readonly IHttpContextAccessor _contextAccessor;

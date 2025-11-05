@@ -22,6 +22,10 @@ namespace Server.Infrastructure.Persistence
         public DbSet<PositionStatusMoveHistory> PositionStatusMoveHistories { get; set; } = null!;
         public DbSet<SkillOverRide> SkillOverRides { get; set; } = null!;
         public DbSet<Candidate> Candidates { get; set; } = null!;
+        public DbSet<JobOpening> JobOpenings { get; set; } = null!;
+        public DbSet<JobOpeningInterviewer> JobOpeningInterviewers { get; set; } = null!;
+        public DbSet<JobOpeningInterviewPanelRequirement> JobOpeningInterviewPanelRequirements { get; set; } = null!;
+        public DbSet<JobOpeningInterviewRoundTemplate> JobOpeningInterviewRoundTemplates { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,7 +53,7 @@ namespace Server.Infrastructure.Persistence
 
             modelBuilder.Entity<PositionBatchReviewers>().HasQueryFilter(x => !x.PositionBatch.IsDeleted);
             modelBuilder.Entity<Position>().HasQueryFilter(x => !x.PositionBatch.IsDeleted);
-            modelBuilder.Entity<SkillOverRide>().HasQueryFilter(x => !x.PositionBatch.IsDeleted);
+            //modelBuilder.Entity<SkillOverRide>().HasQueryFilter(x => !x.PositionBatch.IsDeleted);
             modelBuilder.Entity<PositionStatusMoveHistory>().HasQueryFilter(x => !x.Position.PositionBatch.IsDeleted);
 
             modelBuilder.Entity<SkillOverRide>().HasQueryFilter(x => !x.Skill.IsDeleted);
@@ -58,6 +62,12 @@ namespace Server.Infrastructure.Persistence
             // candidate Aggregate
             modelBuilder.Entity<Candidate>().HasQueryFilter(d => !d.IsDeleted);
 
+            // job opening aggregate
+            // TODO: complete filters here...
+            modelBuilder.Entity<JobOpening>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<JobOpeningInterviewer>().HasQueryFilter(x => !x.JobOpening.IsDeleted);
+            modelBuilder.Entity<JobOpeningInterviewRoundTemplate>().HasQueryFilter(x => !x.JobOpening.IsDeleted);
+            modelBuilder.Entity<JobOpeningInterviewPanelRequirement>().HasQueryFilter(x => !x.InterviewRoundTemplate.JobOpening.IsDeleted);
 
             base.OnModelCreating(modelBuilder);
         }

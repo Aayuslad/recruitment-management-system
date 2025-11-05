@@ -15,8 +15,14 @@ namespace Server.Infrastructure.Persistence.Configurations
 
             builder.HasOne(x => x.PositionBatch)
                 .WithMany(x => x.SkillOverRides)
-                .IsRequired()
+                .IsRequired(false)
                 .HasForeignKey(x => x.PositionBatchId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(x => x.JobOpening)
+                .WithMany(x => x.SkillOverRides)
+                .IsRequired(false)
+                .HasForeignKey(x => x.JobOpeningId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.Skill)

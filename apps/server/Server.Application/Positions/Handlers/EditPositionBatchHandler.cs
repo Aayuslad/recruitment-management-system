@@ -65,7 +65,8 @@ namespace Server.Application.Positions.Handlers
                     else
                     {
                         // add
-                        var overRide = SkillOverRide.Create(
+                        var overRide = SkillOverRide.CreateForPosition(
+                                id: null,
                                 positionBatchId: positionBatch.Id,
                                 skillId: skill.SkillId,
                                 comments: skill.Comments,
@@ -74,7 +75,7 @@ namespace Server.Application.Positions.Handlers
                                 actionType: skill.ActionType,
                                 sourceType: SkillSourceType.Position
                         );
-                        positionBatch.AddSkillOverRides(new List<SkillOverRide> { overRide });
+                        positionBatch.AddSkillOverRides([overRide]);
                     }
 
                     // remove
@@ -86,7 +87,7 @@ namespace Server.Application.Positions.Handlers
             }
 
             // step 4: update reviewers
-            foreach (var reviewer in command.Reviewers ?? new())
+            foreach (var reviewer in command.Reviewers ?? [])
             {
                 var existing = positionBatch.PositionBatchReviewers.FirstOrDefault(x => x.ReviewerUserId == reviewer.ReviewerUserId);
                 if (existing == null)
@@ -96,7 +97,7 @@ namespace Server.Application.Positions.Handlers
                             positionBatchId: positionBatch.Id,
                             reviewerUserId: reviewer.ReviewerUserId
                         );
-                    positionBatch.AddReviewers(new List<PositionBatchReviewers> { newReviewer });
+                    positionBatch.AddReviewers([newReviewer]);
                 }
             }
             // remove

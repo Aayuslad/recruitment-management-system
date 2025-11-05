@@ -31,7 +31,7 @@ namespace Server.Application.Positions.Handlers
             // designation skills (the source of skills)
             var skills = batch.Designation.DesignationSkills.Select(ds =>
             {
-                return new SkillsDetailDTO
+                return new SkillDetailDTO
                 {
                     SkillId = ds.SkillId,
                     SkillName = ds.Skill.Name,
@@ -46,7 +46,7 @@ namespace Server.Application.Positions.Handlers
                 switch (overRide.ActionType)
                 {
                     case SkillActionType.Add:
-                        skills.Add(new SkillsDetailDTO
+                        skills.Add(new SkillDetailDTO
                         {
                             SkillId = overRide.SkillId,
                             SkillName = overRide.Skill.Name,
@@ -95,10 +95,9 @@ namespace Server.Application.Positions.Handlers
                 Skills = skills,
                 SkillOverRides = batch.SkillOverRides.Select(x =>
                 {
-                    return new SkillOverRideDTO
+                    return new SkillOverRideDetailDTO
                     {
                         Id = x.Id,
-                        PositionBatchId = x.PositionBatchId,
                         SkillId = x.SkillId,
                         Comments = x.Comments,
                         MinExperienceYears = x.MinExperienceYears,

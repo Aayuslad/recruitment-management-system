@@ -1,8 +1,8 @@
 ﻿using Server.Domain.Enums;
 
-namespace Server.Application.Positions.Queries.DTOs
+namespace Server.Application.JobOpenings.Queries.DTOs
 {
-    public class SkillsDetailDTO
+    public class SkillDetailDTO
     {
         public Guid SkillId { get; set; }
         public string SkillName { get; set; } = null!;
