@@ -7,7 +7,7 @@ import CandidatesPage from './pages/feature/candidates-page';
 import CreateUserPage from './pages/auth/create-user-page';
 import DashBoardPage from './pages/feature/dashboard-page';
 import HomeLayout from './pages/home-layout';
-import JobsPage from './pages/feature/jobs-page';
+import JobsPage from './pages/feature/jobs/jobs-page';
 import LandingPage from './pages/landing-page';
 import LoginPage from './pages/auth/login-page';
 import NotFoundPage from './pages/not-found-page';
@@ -20,6 +20,10 @@ import InterviewSchedulingPage from './pages/feature/interview-scheduling-page';
 import NotificationAndTasksPage from './pages/feature/notification-and-tasks-page';
 import ReportsAndAnalyticsPage from './pages/feature/reports-and-analytics-page';
 import ScreeningAndShortlistingPage from './pages/feature/screening-and-shortlisting-page';
+import OpeningsSectionPage from './pages/feature/jobs/openings-section-page';
+import PositionsSectionPage from './pages/feature/jobs/positions-section-page';
+import DesignationsSectionPage from './pages/feature/jobs/designations-section-page';
+import SkillsSectionPage from './pages/feature/jobs/skills-section-page';
 
 function App() {
     return (
@@ -32,6 +36,19 @@ function App() {
                 <Route path="/" element={<HomeLayout />}>
                     <Route path="dashboard" element={<DashBoardPage />} />
                     <Route path="jobs" element={<JobsPage />} />
+                    <Route
+                        path="jobs/openings"
+                        element={<OpeningsSectionPage />}
+                    />
+                    <Route
+                        path="jobs/positions"
+                        element={<PositionsSectionPage />}
+                    />
+                    <Route
+                        path="jobs/designations"
+                        element={<DesignationsSectionPage />}
+                    />
+                    <Route path="jobs/skills" element={<SkillsSectionPage />} />
                     <Route path="candidates" element={<CandidatesPage />} />
                     <Route
                         path="candidates/candidate-sub-page-1"

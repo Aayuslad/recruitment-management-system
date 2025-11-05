@@ -23,12 +23,12 @@ namespace Server.Infrastructure.Repositories
 
         Task<bool> IAuthRepository.ExistsByEmailAsync(Email email, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_context.Auths.Any(a => a.Email == email));
+            return _context.Auths.AnyAsync(a => a.Email == email);
         }
 
         Task<bool> IAuthRepository.ExistsByUserNameAsync(string userName, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_context.Auths.Any(a => a.UserName == userName));
+            return _context.Auths.AnyAsync(a => a.UserName == userName);
         }
 
         Task<Auth?> IAuthRepository.GetByUserNameOrEmail(string emailOrUserName, CancellationToken cancellationToken)

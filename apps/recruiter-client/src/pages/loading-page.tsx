@@ -1,7 +1,9 @@
+import { Spinner } from '@/components/ui/spinner';
+
 function LoadingPage() {
     return (
-        <div className="h-screen w-screen flex items-center justify-center">
-            <span>Loading...</span>
+        <div className="h-screen flex justify-center items-center">
+            <Spinner className="size-8" />
         </div>
     );
 }

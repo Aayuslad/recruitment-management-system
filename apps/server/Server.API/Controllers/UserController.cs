@@ -10,7 +10,7 @@ using Server.Core.Extensions;
 namespace Server.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/user")]
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -86,6 +86,22 @@ namespace Server.API.Controllers
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {
             var result = await _mediator.Send(command);
+
+            if (result.IsSuccess && !string.IsNullOrEmpty(result.Value))
+            {
+                var token = result.Value;
+
+                Response.Cookies.Append("jwt", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddDays(30)
+                });
+
+                return Ok(new { message = "User Created" });
+            }
+
             return result.ToActionResult(this);
         }
 

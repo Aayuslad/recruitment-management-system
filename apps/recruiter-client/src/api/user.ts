@@ -5,7 +5,7 @@ import type {
     UserDTO,
 } from '@/types/user-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -16,13 +16,13 @@ export function useRegisterUser() {
     return useMutation({
         mutationFn: async (
             payload: RegisterUserCommandCorrected
-        ): Promise<undefined> => {
-            await axios.post('/User/register', payload);
+        ): Promise<void> => {
+            await axios.post('/user/register', payload);
         },
         onSuccess: () => {
             navigate('/create-user');
         },
-        onError: (error: any) => {
+        onError: (error: AxiosError<{ error: string }>) => {
             toast.error(
                 error.response?.data?.error ||
                     error.message ||
@@ -38,14 +38,16 @@ export function useCreateUser() {
     const navigate = useNavigate();
 
     return useMutation({
-        mutationFn: async (payload: CreateUserCommandCorrected) => {
-            const { data } = await axios.post('/User/createUser', payload);
+        mutationFn: async (
+            payload: CreateUserCommandCorrected
+        ): Promise<void> => {
+            const { data } = await axios.post('/user/createUser', payload);
             return data;
         },
         onSuccess: () => {
             navigate('/dashboard');
         },
-        onError: (error: any) => {
+        onError: (error: AxiosError<{ error: string }>) => {
             toast.error(
                 error.response?.data?.error ||
                     error.message ||
@@ -63,13 +65,13 @@ export function useLoginUser() {
     return useMutation({
         mutationFn: async (
             payload: LoginUserCommandCorrected
-        ): Promise<undefined> => {
-            await axios.post('/User/login', payload);
+        ): Promise<void> => {
+            await axios.post('/user/login', payload);
         },
         onSuccess: () => {
             navigate('/dashboard');
         },
-        onError: (error: any) => {
+        onError: (error: AxiosError<{ error: string }>) => {
             toast.error(
                 error.response?.data?.error ||
                     error.message ||
@@ -87,7 +89,7 @@ export function useLogoutUser() {
 
     return useMutation({
         mutationFn: async () => {
-            await axios.post('/User/logout');
+            await axios.post('/user/logout');
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['user'] });
@@ -104,7 +106,7 @@ export function useGetUser() {
         queryKey: ['user'],
         queryFn: async (): Promise<UserDTO | undefined> => {
             try {
-                const { data } = await axios.get('/User/me');
+                const { data } = await axios.get('/user/me');
                 return data;
             } catch {
                 navigate('/login');

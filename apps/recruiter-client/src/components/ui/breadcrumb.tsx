@@ -10,7 +10,7 @@ function Breadcrumb({ ...props }: React.ComponentProps<'nav'>) {
 
 function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
     return (
-        <ol
+        <span
             data-slot="breadcrumb-list"
             className={cn(
                 'text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5',
@@ -23,7 +23,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
 
 function BreadcrumbItem({ className, ...props }: React.ComponentProps<'li'>) {
     return (
-        <li
+        <span
             data-slot="breadcrumb-item"
             className={cn('inline-flex items-center gap-1.5', className)}
             {...props}

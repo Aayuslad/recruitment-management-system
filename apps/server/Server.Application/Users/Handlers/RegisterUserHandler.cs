@@ -49,14 +49,14 @@ namespace Server.Application.Users.Handlers
             var hashedPassword = _hasher.Hash(request.Password);
 
             // step 3: create user
-            var auth = Auth.Create(request.UserName, email, hashedPassword);
+            var auth = Auth.Create(request.UserName, email, hashedPassword, null);
 
             // step 4: persist user
             await _authRepository.AddAsync(auth, cancellationToken);
             _logger.LogInformation("New user registered: {Username}, {Email}", request.UserName, request.Email);
 
             // step 5: generate JWT token
-            var token = _jwtTokenGenerator.GenerateToken(auth.Id, auth.UserName);
+            var token = _jwtTokenGenerator.GenerateToken(auth.Id, null, auth.UserName);
 
             // step 6: return result
             return Result<string>.Success(token);

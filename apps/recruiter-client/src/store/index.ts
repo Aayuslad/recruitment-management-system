@@ -1,16 +1,14 @@
 import { create } from 'zustand';
 import { createUserSlice, type UserStoreSliceType } from './user-store';
-import {
-    createThemeSlice,
-    THEME_KEY,
-    type ThemeStoreSliceType,
-} from './theme-store';
+import { createUiSlice, THEME_KEY, type UiStoreSliceType } from './ui-store';
+import { createSkillSlice, type SkillStoreSliceType } from './skill-store';
 
-type AppStoreTupe = UserStoreSliceType & ThemeStoreSliceType;
+type AppStoreTupe = UserStoreSliceType & UiStoreSliceType & SkillStoreSliceType;
 
 export const useAppStore = create<AppStoreTupe>((...args) => ({
     ...createUserSlice(...args),
-    ...createThemeSlice(...args),
+    ...createUiSlice(...args),
+    ...createSkillSlice(...args),
 }));
 
 // Initialize theme from localStorage on load

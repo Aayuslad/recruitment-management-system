@@ -5,7 +5,7 @@ using Server.Domain.Enums;
 
 namespace Server.Application.Users.Commands
 {
-    public class CreateUserCommand : IRequest<Result>
+    public class CreateUserCommand : IRequest<Result<string>>
     {
         public CreateUserCommand(
             string firstName,
@@ -24,11 +24,11 @@ namespace Server.Application.Users.Commands
             Dob = dob;
         }
 
-        public string FirstName { get; set; } = default!;
+        public string FirstName { get; set; }
         public string? MiddleName { get; set; }
-        public string LastName { get; set; } = default!;
-        public string ContactNumber { get; set; } = default!;
+        public string LastName { get; set; }
+        public string ContactNumber { get; set; }
         public Gender? Gender { get; set; }
-        public DateTime Dob { get; set; } = default!;
+        public DateTime Dob { get; set; }
     }
 }

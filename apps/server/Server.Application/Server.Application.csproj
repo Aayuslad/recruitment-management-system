@@ -16,4 +16,9 @@
     <ProjectReference Include="..\Server.Domain\Server.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="JobOpenings\Validators\" />
+    <Folder Include="Skills\Commands\DTOs\" />
+  </ItemGroup>
+
 </Project>

@@ -10,12 +10,14 @@ namespace Server.Application.Users.Handlers
     public class LoginUserHandler : IRequestHandler<LoginUserCommand, Result<string>>
     {
         private readonly IAuthRepository _authRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IHasher _hasher;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-        public LoginUserHandler(IAuthRepository authRepository, IHasher hasher, IJwtTokenGenerator jwtTokenGenerator)
+        public LoginUserHandler(IAuthRepository authRepository, IUserRepository userRepository, IHasher hasher, IJwtTokenGenerator jwtTokenGenerator)
         {
             _authRepository = authRepository;
+            _userRepository = userRepository;
             _hasher = hasher;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
@@ -28,6 +30,11 @@ namespace Server.Application.Users.Handlers
             {
                 return Result<string>.Failure("User not found", 404);
             }
+            var user = await _userRepository.GetByAuthIdAsync(auth.Id);
+            if (user is null)
+            {
+                return Result<string>.Failure("User not found", 404);
+            }
 
             // step 2: verify password
             var passwordVerificationResult = _hasher.Verify(auth.PasswordHash!, request.Password);
@@ -37,7 +44,7 @@ namespace Server.Application.Users.Handlers
             }
 
             // step 3: generate token
-            var token = _jwtTokenGenerator.GenerateToken(auth.Id, auth.UserName);
+            var token = _jwtTokenGenerator.GenerateToken(auth.Id, user.Id, auth.UserName);
 
             // step 4: return token
             return Result<string>.Success(token);

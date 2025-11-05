@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Server.Core.ValueObjects
+﻿namespace Server.Core.ValueObjects
 {
     /// <summary>
     /// Base class for value objects. Subclasses must provide equality components.

@@ -1,11 +1,11 @@
 ﻿using MediatR;
 
-using Server.Application.DTOs;
+using Server.Application.Users.Queries.DTOs;
 using Server.Core.Results;
 
 namespace Server.Application.Users.Queries
 {
-    public class GetUserQuery : IRequest<Result<UserDTO>>
+    public class GetUserQuery : IRequest<Result<UserDetailDTO>>
     {
         public GetUserQuery(Guid authId)
         {

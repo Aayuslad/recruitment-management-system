@@ -6,10 +6,12 @@ using Server.Domain.ValueObjects;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    internal class UserConfiguration : AuditableEntityConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public override void Configure(EntityTypeBuilder<User> builder)
         {
+            base.Configure(builder);
+
             builder.ToTable("User");
 
             builder.HasKey(u => u.Id);
@@ -54,10 +56,8 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(u => u.Dob)
                 .IsRequired();
 
-            builder.Property(u => u.DeletedAt);
-
             // FK: User → Auth (1:1)
-            builder.HasOne<Auth>()
+            builder.HasOne(x => x.Auth)
                 .WithOne()
                 .HasForeignKey<User>(u => u.AuthId)
                 .OnDelete(DeleteBehavior.Cascade);

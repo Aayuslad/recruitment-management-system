@@ -5,9 +5,9 @@ using Server.Domain.ValueObjects;
 
 namespace Server.Domain.Entities
 {
-    public class User : BaseEntity<Guid>, IAggregateRoot
+    public class User : AuditableEntity, IAggregateRoot
     {
-        private User() : base(Guid.Empty) { }
+        private User() : base(Guid.Empty, Guid.Empty) { }
 
         private User(
             Guid id,
@@ -18,8 +18,9 @@ namespace Server.Domain.Entities
             UserStatus? status,
             ContactNumber contactNumber,
             Gender? gender,
-            DateTime dob
-        ) : base(id)
+            DateTime dob,
+            Guid? createdBy
+        ) : base(id, createdBy)
         {
             AuthId = authId;
             FirstName = firstName;
@@ -35,17 +36,19 @@ namespace Server.Domain.Entities
         public string FirstName { get; private set; } = default!;
         public string? MiddleName { get; private set; }
         public string LastName { get; private set; } = default!;
-        public UserStatus Status { get; private set; } = UserStatus.Active;
+        public UserStatus Status { get; private set; }
         public ContactNumber ContactNumber { get; private set; } = default!;
         public bool IsContactNumberVerified { get; private set; } = false;
-        public Gender Gender { get; private set; } = Gender.PreferNotToSay;
+        public Gender Gender { get; private set; }
         public DateTime Dob { get; private set; }
-        public DateTime? DeletedAt { get; private set; }
+        public Auth Auth { get; private set; } = default!;
 
-        public void MarkDeleted()
+        public void Delete(Guid deletedBy)
         {
-            Status = UserStatus.Deleted;
-            DeletedAt = DateTime.UtcNow;
+            if (deletedBy == Guid.Empty)
+                throw new ArgumentException("Invalid DeletedBy user.");
+
+            MarkAsDeleted(deletedBy);
         }
 
         public static User Create(
@@ -56,11 +59,13 @@ namespace Server.Domain.Entities
             UserStatus? status,
             ContactNumber contactNumber,
             Gender? gender,
-            DateTime dob
+            DateTime dob,
+            Guid? createdBy = null,
+            Guid? id = null
         )
         {
             return new User(
-                Guid.NewGuid(),
+                id ?? Guid.NewGuid(),
                 authId,
                 firstName,
                 middleName,
@@ -68,7 +73,8 @@ namespace Server.Domain.Entities
                 status,
                 contactNumber,
                 gender,
-                dob
+                dob,
+                createdBy
             );
         }
     }

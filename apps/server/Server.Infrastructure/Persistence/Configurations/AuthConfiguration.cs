@@ -6,10 +6,12 @@ using Server.Domain.ValueObjects;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    public class AuthConfiguration : IEntityTypeConfiguration<Auth>
+    internal class AuthConfiguration : AuditableEntityConfiguration<Auth>
     {
-        public void Configure(EntityTypeBuilder<Auth> builder)
+        public override void Configure(EntityTypeBuilder<Auth> builder)
         {
+            base.Configure(builder);
+
             builder.ToTable("Auth");
 
             builder.HasKey(a => a.Id);
@@ -38,8 +40,6 @@ namespace Server.Infrastructure.Persistence.Configurations
 
             builder.Property(a => a.CreatedAt)
                 .IsRequired();
-
-            builder.Property(a => a.UpdatedAt);
 
             builder.Property(a => a.LastLoginAt);
 

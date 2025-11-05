@@ -66,7 +66,7 @@ export default tseslint.config([
             quotes: ['error', 'single'],
             semi: ['error', 'always'],
             indent: ['error', 4],
-            'no-console': 'warn',
+            'no-console': ['warn', { allow: ['warn', 'error'] }],
             'no-debugger': 'error',
         },
     },

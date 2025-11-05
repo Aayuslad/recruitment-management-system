@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -17,7 +18,7 @@ namespace Server.Infrastructure.Security
             _configuration = configuration;
         }
 
-        public string GenerateToken(Guid authId, string? userName)
+        public string GenerateToken(Guid authId, Guid? userId, string? userName)
         {
             var jwtKey = _configuration["Jwt:Key"];
             if (string.IsNullOrEmpty(jwtKey))
@@ -26,15 +27,17 @@ namespace Server.Infrastructure.Security
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
-                new System.Security.Claims.Claim("authId", authId.ToString()),
+                new("authId", authId.ToString())
             };
 
+            if (!string.IsNullOrEmpty(userId.ToString()))
+                claims.Add(new("userId", userId.ToString() ?? ""));
+
             if (!string.IsNullOrEmpty(userName))
-            {
-                claims.Append(new System.Security.Claims.Claim("userName", userName.ToString()));
-            }
+                claims.Add(new("userName", userName));
+
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],

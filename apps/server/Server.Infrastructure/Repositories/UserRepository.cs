@@ -24,9 +24,8 @@ namespace Server.Infrastructure.Repositories
         Task<User?> IUserRepository.GetByAuthIdAsync(Guid authId, CancellationToken cancellationToken)
         {
             return _context.Users
-                .Where(u => u.AuthId == authId)
-                .Select(u => u)
-                .FirstOrDefaultAsync(cancellationToken);
+                .AsTracking()
+                .FirstOrDefaultAsync(u => u.AuthId == authId, cancellationToken);
         }
 
         Task<bool> IUserRepository.ExistsByContactNumberAsync(ContactNumber contactNumber, CancellationToken cancellationToken)

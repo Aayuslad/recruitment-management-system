@@ -75,16 +75,20 @@ const data = {
             icon: Briefcase,
             items: [
                 {
-                    title: 'sub page 1',
-                    url: '#',
+                    title: 'Openings',
+                    url: '/jobs/openings',
                 },
                 {
-                    title: 'sub page 2',
-                    url: '#',
+                    title: 'Positions',
+                    url: '/jobs/positions',
                 },
                 {
-                    title: 'sub page 3',
-                    url: '#',
+                    title: 'Designations',
+                    url: '/jobs/designations',
+                },
+                {
+                    title: 'Skills',
+                    url: '/jobs/skills',
                 },
             ],
         },

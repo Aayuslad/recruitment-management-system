@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-
-namespace Server.Core.Entities
+﻿namespace Server.Core.Entities
 {
     /// <summary>
     /// Base entity implementing simple identity-based equality semantics.
