@@ -10,7 +10,7 @@ using Server.Domain.Enums;
 
 namespace Server.Application.Positions.Handlers
 {
-    public class EditPositionBatchHandler : IRequestHandler<EditPositionBatchCommand, Result>
+    internal class EditPositionBatchHandler : IRequestHandler<EditPositionBatchCommand, Result>
     {
         private readonly IPositionBatchRepository _positionBatchRepository;
         private readonly IHttpContextAccessor _contextAccessor;
@@ -36,82 +36,46 @@ namespace Server.Application.Positions.Handlers
                 return Result.Failure("Position does not exist", 404);
             }
 
-            // step 2: update root entity
+            // step 2: update entity
+
+            // new updated skill overrides list
+            var overRides = command.SkillOverRides?.Select(
+                    selector: x => SkillOverRide.CreateForPosition(
+                            id: x.Id ?? Guid.NewGuid(),
+                            positionBatchId: positionBatch.Id,
+                            skillId: x.SkillId,
+                            comments: x.Comments,
+                            minExperienceYears: x.MinExperienceYears,
+                            type: x.Type,
+                            actionType: x.ActionType,
+                            sourceType: SkillSourceType.Position
+                        )
+                ).ToList() ?? [];
+
+            // new updated revievers list
+            var revievers = command.Reviewers?.Select(
+                    selector: x => PositionBatchReviewers.Create(
+                            positionBatchId: positionBatch.Id,
+                            reviewerUserId: x.ReviewerUserId
+                        )
+                ).ToList() ?? [];
+
+            // update root entity
             positionBatch.Update(
+                updatedBy: Guid.Parse(userIdString),
                 designationId: command.DesignationId,
                 description: command.Description,
                 jobLocation: command.JobLocation,
                 minCTC: command.MinCTC,
                 maxCTC: command.MaxCTC,
-                updatedBy: Guid.Parse(userIdString)
+                newReviewers: revievers,
+                newOverRides: overRides
             );
 
-            // step 3: update skill overrides
-            if (command.SkillOverRides != null)
-            {
-                foreach (var skill in command.SkillOverRides)
-                {
-                    var existing = positionBatch.SkillOverRides.FirstOrDefault(x => x.SkillId == skill.SkillId);
-                    if (existing != null)
-                    {
-                        // update
-                        existing.Update(
-                            comments: skill.Comments,
-                            minExperienceYears: skill.MinExperienceYears,
-                            type: skill.Type,
-                            actionType: skill.ActionType
-                        );
-                    }
-                    else
-                    {
-                        // add
-                        var overRide = SkillOverRide.CreateForPosition(
-                                id: null,
-                                positionBatchId: positionBatch.Id,
-                                skillId: skill.SkillId,
-                                comments: skill.Comments,
-                                minExperienceYears: skill.MinExperienceYears,
-                                type: skill.Type,
-                                actionType: skill.ActionType,
-                                sourceType: SkillSourceType.Position
-                        );
-                        positionBatch.AddSkillOverRides([overRide]);
-                    }
-
-                    // remove
-                    var toRemoveSkills = positionBatch.SkillOverRides
-                        .Where(x => !command.SkillOverRides.Any(y => y.SkillId == x.SkillId))
-                        .ToList();
-                    positionBatch.RemoveSkillOverRides(toRemoveSkills);
-                }
-            }
-
-            // step 4: update reviewers
-            foreach (var reviewer in command.Reviewers ?? [])
-            {
-                var existing = positionBatch.PositionBatchReviewers.FirstOrDefault(x => x.ReviewerUserId == reviewer.ReviewerUserId);
-                if (existing == null)
-                {
-                    // add
-                    var newReviewer = PositionBatchReviewers.Create(
-                            positionBatchId: positionBatch.Id,
-                            reviewerUserId: reviewer.ReviewerUserId
-                        );
-                    positionBatch.AddReviewers([newReviewer]);
-                }
-            }
-            // remove
-            var toRemove = new List<PositionBatchReviewers>();
-            if (command.Reviewers?.Count > 0)
-                toRemove = positionBatch.PositionBatchReviewers
-                    .Where(x => !command.Reviewers.Any(y => y.ReviewerUserId == x.ReviewerUserId))
-                    .ToList();
-            positionBatch.RemoveReviewers(toRemove);
-
-            // step 5: persist edits
+            // step 3: persist edits
             await _positionBatchRepository.UpdateAsync(positionBatch, cancellationToken);
 
-            // step 6: return result
+            // step 4: return result
             return Result.Success();
         }
     }

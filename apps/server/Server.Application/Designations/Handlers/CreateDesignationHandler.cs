@@ -9,7 +9,7 @@ using Server.Domain.Entities;
 
 namespace Server.Application.Designations.Handlers
 {
-    public class CreateDesignationHandler : IRequestHandler<CreateDesignationCommand, Result>
+    internal class CreateDesignationHandler : IRequestHandler<CreateDesignationCommand, Result>
     {
         private readonly IDesignationRepository _designationRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -36,26 +36,26 @@ namespace Server.Application.Designations.Handlers
             }
 
             // step 2: create designation
-            var designation = Designation.Create(
-                    command.Name,
-                    command.Description,
-                    Guid.Parse(userIdString)
-                );
+            var newDesignationId = Guid.NewGuid();
 
-            if (command.DesignationSkills?.Count > 0)
-            {
-                foreach (var skill in command.DesignationSkills)
-                {
-                    designation.AddSkill(
-                        DesignationSkill.Create(
-                            designation.Id,
-                            skill.SkillId,
-                            skill.SkillType,
-                            skill.MinExperienceYears
+            // create designation skills
+            var dSkills = command.DesignationSkills?.Select(
+                    selector: x => DesignationSkill.Create(
+                            designationId: newDesignationId,
+                            skillId: x.SkillId,
+                            skillType: x.SkillType,
+                            minExperienceYears: x.MinExperienceYears
                         )
-                    );
-                }
-            }
+                ).ToList() ?? [];
+
+            // create root entity designation
+            var designation = Designation.Create(
+                    id: newDesignationId,
+                    createdBy: Guid.Parse(userIdString),
+                    name: command.Name,
+                    description: command.Description,
+                    skills: dSkills
+                );
 
             // step 3: presist
             await _designationRepository.AddAsync(designation, cancellationToken);

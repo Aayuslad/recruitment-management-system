@@ -3,6 +3,7 @@
     public class PositionBatchReviewers
     {
         private PositionBatchReviewers() { }
+
         private PositionBatchReviewers(Guid positionBatchId, Guid reviewerUserId)
         {
             PositionBatchId = positionBatchId;

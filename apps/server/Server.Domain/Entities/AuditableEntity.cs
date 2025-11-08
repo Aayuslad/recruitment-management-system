@@ -1,6 +1,6 @@
-﻿using Server.Domain.Entities;
+﻿using Server.Core.Entities;
 
-namespace Server.Core.Entities
+namespace Server.Domain.Entities
 {
     public abstract class AuditableEntity : BaseEntity<Guid>
     {

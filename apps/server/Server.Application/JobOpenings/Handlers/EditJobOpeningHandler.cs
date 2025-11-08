@@ -22,7 +22,7 @@ namespace Server.Application.JobOpenings.Handlers
             _httpContextAccessor = httpContext;
         }
 
-        public async Task<Result> Handle(EditJobOpeningCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(EditJobOpeningCommand cmd, CancellationToken cancellationToken)
         {
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
@@ -31,7 +31,7 @@ namespace Server.Application.JobOpenings.Handlers
             }
 
             // step 1: fetch the entity
-            var jobOpening = await _jobOpeningRepository.GetByIdAsync(request.JobOpeningId, cancellationToken);
+            var jobOpening = await _jobOpeningRepository.GetByIdAsync(cmd.JobOpeningId, cancellationToken);
             if (jobOpening == null)
             {
                 return Result.Failure("Job opening not found", 404);
@@ -40,7 +40,7 @@ namespace Server.Application.JobOpenings.Handlers
             // step 2: edit entity
 
             // skill over ride edit
-            var skillOverRides = request.SkillOverRides.Select(
+            var skillOverRides = cmd.SkillOverRides.Select(
                     selector: x => SkillOverRide.CreateForJobOpening(
                             id: x.Id ?? Guid.NewGuid(),
                             jobOpeningId: jobOpening.Id,
@@ -54,7 +54,7 @@ namespace Server.Application.JobOpenings.Handlers
                 ).ToList();
 
             // interviewers edit
-            var interviewers = request.Interviewers.Select(
+            var interviewers = cmd.Interviewers.Select(
                     selector: x => JobOpeningInterviewer.Create(
                             id: x.Id ?? Guid.NewGuid(),
                             jobOpeningId: jobOpening.Id,
@@ -64,7 +64,7 @@ namespace Server.Application.JobOpenings.Handlers
                 ).ToList();
 
             // interview rounds edit
-            var interviewRounds = request.InterviewRounds.Select(
+            var interviewRounds = cmd.InterviewRounds.Select(
                 selector: x =>
                     {
                         var roundTemplateId = x.Id ?? Guid.NewGuid();
@@ -90,10 +90,10 @@ namespace Server.Application.JobOpenings.Handlers
             // update aggregate root
             jobOpening.Update(
                 updatedBy: Guid.Parse(userIdString),
-                positionBatchId: request.PositionBatchId,
-                title: request.Title,
-                type: request.Type,
-                description: request.Description,
+                positionBatchId: cmd.PositionBatchId,
+                title: cmd.Title,
+                type: cmd.Type,
+                description: cmd.Description,
                 jobOpeningInterviewers: interviewers,
                 interviewRounds: interviewRounds,
                 skillOverRides: skillOverRides

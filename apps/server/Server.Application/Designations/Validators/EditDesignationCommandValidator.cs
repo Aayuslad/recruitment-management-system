@@ -4,7 +4,7 @@ using Server.Application.Designations.Commands;
 
 namespace Server.Application.Designations.Validators
 {
-    public class EditDesignationCommandValidator : AbstractValidator<EditDesignationCommand>
+    internal class EditDesignationCommandValidator : AbstractValidator<EditDesignationCommand>
     {
         public EditDesignationCommandValidator()
         {

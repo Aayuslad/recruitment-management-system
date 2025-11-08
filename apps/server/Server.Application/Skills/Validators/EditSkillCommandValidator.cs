@@ -4,7 +4,7 @@ using Server.Application.Skills.Commands;
 
 namespace Server.Application.Skills.Validators
 {
-    public class EditSkillCommandValidator : AbstractValidator<EditSkillCommand>
+    internal class EditSkillCommandValidator : AbstractValidator<EditSkillCommand>
     {
         public EditSkillCommandValidator()
         {

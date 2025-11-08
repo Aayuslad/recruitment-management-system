@@ -7,7 +7,7 @@ using Server.Core.Results;
 
 namespace Server.API.Controllers
 {
-    public class GetUserHandler : IRequestHandler<GetUserQuery, Result<UserDetailDTO>>
+    internal class GetUserHandler : IRequestHandler<GetUserQuery, Result<UserDetailDTO>>
     {
         private readonly IAuthRepository _authRepository;
         private readonly IUserRepository _userRepository;

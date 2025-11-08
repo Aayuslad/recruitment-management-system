@@ -7,7 +7,7 @@ using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories
 {
-    public class UserRepository : IUserRepository
+    internal class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _context;
 

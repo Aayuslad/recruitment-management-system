@@ -16,18 +16,18 @@ namespace Server.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task AddAsync(JobOpening jobOpening, CancellationToken cancellationToken)
+        Task IJobOpeningRepository.AddAsync(JobOpening jobOpening, CancellationToken cancellationToken)
         {
             _context.JobOpenings.Add(jobOpening);
             return _context.SaveChangesAsync(cancellationToken);
         }
 
-        public Task UpdateAysnc(JobOpening jobOpening, CancellationToken cancellationToken)
+        Task IJobOpeningRepository.UpdateAysnc(JobOpening jobOpening, CancellationToken cancellationToken)
         {
             return _context.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<JobOpening?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        Task<JobOpening?> IJobOpeningRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return _context.JobOpenings
                 .AsTracking()
@@ -48,7 +48,7 @@ namespace Server.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public Task<List<JobOpening>> GetAllAsync(CancellationToken cancellationToken)
+        Task<List<JobOpening>> IJobOpeningRepository.GetAllAsync(CancellationToken cancellationToken)
         {
             return _context.JobOpenings
                 .AsNoTracking()

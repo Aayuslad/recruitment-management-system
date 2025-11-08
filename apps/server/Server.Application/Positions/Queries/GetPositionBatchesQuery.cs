@@ -5,7 +5,7 @@ using Server.Core.Results;
 
 namespace Server.Application.Positions.Queries
 {
-    public class GetPositionBatchesQuery : IRequest<Result<PositionBatchesDetailDTO>>
+    public class GetPositionBatchesQuery : IRequest<Result<List<PositionBatchSummaryDTO>>>
     {
         // add pagination later
     }

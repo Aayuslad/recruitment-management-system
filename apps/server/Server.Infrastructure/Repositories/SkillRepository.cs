@@ -22,12 +22,12 @@ namespace Server.Infrastructure.Repositories
 
         Task<bool> ISkillRepository.ExistsByNameAsync(string name, CancellationToken cancellationToken)
         {
-            return _context.Skills.AnyAsync(x => x.Name == name);
+            return _context.Skills.AnyAsync(x => x.Name == name, cancellationToken);
         }
 
         Task<bool> ISkillRepository.ExistsByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return _context.Skills.AnyAsync(x => x.Id == id);
+            return _context.Skills.AnyAsync(x => x.Id == id, cancellationToken);
         }
 
         Task<Skill?> ISkillRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)

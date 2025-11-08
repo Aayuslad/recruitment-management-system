@@ -4,7 +4,7 @@ using Server.Application.Designations.Queries;
 
 namespace Server.Application.Designations.Validators
 {
-    public class GetDesignationQueryValidator : AbstractValidator<GetDesignationQuery>
+    internal class GetDesignationQueryValidator : AbstractValidator<GetDesignationQuery>
     {
         public GetDesignationQueryValidator()
         {

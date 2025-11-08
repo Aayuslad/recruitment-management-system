@@ -9,7 +9,7 @@ using Server.Infrastructure.Repositories;
 
 namespace Server.Application.Skills.Handlers
 {
-    public class CreateSkillHandler : IRequestHandler<CreateSkillCommand, Result>
+    internal class CreateSkillHandler : IRequestHandler<CreateSkillCommand, Result>
     {
         private readonly ISkillRepository _skillRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;

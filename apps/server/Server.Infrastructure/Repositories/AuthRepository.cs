@@ -7,7 +7,7 @@ using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories
 {
-    public class AuthRepository : IAuthRepository
+    internal class AuthRepository : IAuthRepository
     {
         private readonly ApplicationDbContext _context;
 

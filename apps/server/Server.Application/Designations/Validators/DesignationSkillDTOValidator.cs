@@ -4,7 +4,7 @@ using Server.Application.Designations.Commands.DTOs;
 
 namespace Server.Application.Designations.Validators
 {
-    public class DesignationSkillDTOValidator : AbstractValidator<DesignationSkillDTO>
+    internal class DesignationSkillDTOValidator : AbstractValidator<DesignationSkillDTO>
     {
         public DesignationSkillDTOValidator()
         {

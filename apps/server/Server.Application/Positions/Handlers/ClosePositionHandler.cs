@@ -8,7 +8,7 @@ using Server.Core.Results;
 
 namespace Server.Application.Positions.Handlers
 {
-    public class ClosePositionHandler : IRequestHandler<ClosePositionCommand, Result>
+    internal class ClosePositionHandler : IRequestHandler<ClosePositionCommand, Result>
     {
         private readonly IPositionRepository _positionRepository;
         private readonly IHttpContextAccessor _contextAccessor;

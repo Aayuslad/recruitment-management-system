@@ -1,5 +1,4 @@
-﻿using Server.Core.Entities;
-using Server.Domain.ValueObjects;
+﻿using Server.Domain.ValueObjects;
 
 namespace Server.Domain.Entities
 {
@@ -7,8 +6,14 @@ namespace Server.Domain.Entities
     {
         private Auth() : base(Guid.Empty, Guid.Empty) { }
 
-        private Auth(Guid id, string userName, Email email, string passwordHash, string googleId, Guid? createdBy)
-            : base(id, createdBy)
+        private Auth(
+            Guid id,
+            string userName,
+            Email email,
+            string passwordHash,
+            string googleId,
+            Guid? createdBy
+        ) : base(id, createdBy)
         {
             Email = email;
             UserName = userName;
@@ -41,9 +46,22 @@ namespace Server.Domain.Entities
             MarkAsDeleted(deletedBy);
         }
 
-        public static Auth Create(string userName, Email email, string passwordHash, Guid? createdBy, string googleId = default!)
+        public static Auth Create(
+            string userName,
+            Email email,
+            string passwordHash,
+            Guid? createdBy,
+            string googleId = default!
+        )
         {
-            return new Auth(Guid.NewGuid(), userName, email, passwordHash, googleId, createdBy);
+            return new Auth(
+                Guid.NewGuid(),
+                userName,
+                email,
+                passwordHash,
+                googleId,
+                createdBy
+            );
         }
     }
 }

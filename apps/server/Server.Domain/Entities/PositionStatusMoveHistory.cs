@@ -30,18 +30,18 @@ namespace Server.Domain.Entities
         public User MovedBy { get; private set; } = null!;
 
         public static PositionStatusMoveHistory Create(
-                Guid positionId,
-                PositionStatus movedTo,
-                string? comments,
-                Guid? movedById
-            )
+            Guid positionId,
+            PositionStatus movedTo,
+            string? comments,
+            Guid? movedById
+        )
         {
             return new PositionStatusMoveHistory(
-                    positionId,
-                    movedTo,
-                    comments,
-                    movedById
-                );
+                positionId,
+                movedTo,
+                comments,
+                movedById
+            );
         }
     }
 }

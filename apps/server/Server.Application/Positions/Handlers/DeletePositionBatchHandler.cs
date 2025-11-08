@@ -8,7 +8,7 @@ using Server.Core.Results;
 
 namespace Server.Application.Positions.Handlers
 {
-    public class DeletePositionBatchHandler : IRequestHandler<DeletePositionBatchCommand, Result>
+    internal class DeletePositionBatchHandler : IRequestHandler<DeletePositionBatchCommand, Result>
     {
         private readonly IPositionBatchRepository _positionBatchRepository;
         private readonly IHttpContextAccessor _contextAccessor;

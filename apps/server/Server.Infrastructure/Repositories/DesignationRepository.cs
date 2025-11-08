@@ -6,7 +6,7 @@ using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories
 {
-    public class DesignationRepository : IDesignationRepository
+    internal class DesignationRepository : IDesignationRepository
     {
         private readonly ApplicationDbContext _context;
 

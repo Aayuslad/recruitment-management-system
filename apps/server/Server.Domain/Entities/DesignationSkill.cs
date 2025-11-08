@@ -6,7 +6,12 @@ namespace Server.Domain.Entities
     {
         private DesignationSkill() { }
 
-        private DesignationSkill(Guid designationId, Guid skillId, SkillType skillType, float? minExperienceYears)
+        private DesignationSkill(
+            Guid designationId,
+            Guid skillId,
+            SkillType skillType,
+            float? minExperienceYears
+        )
         {
             DesignationId = designationId;
             SkillId = skillId;
@@ -21,9 +26,19 @@ namespace Server.Domain.Entities
         public Skill Skill { get; private set; } = default!;
         public Designation Designation { get; private set; } = default!;
 
-        public static DesignationSkill Create(Guid designationId, Guid skillId, SkillType skillType, float? minExperienceYears)
+        public static DesignationSkill Create(
+            Guid designationId,
+            Guid skillId,
+            SkillType skillType,
+            float? minExperienceYears
+        )
         {
-            return new DesignationSkill(designationId, skillId, skillType, minExperienceYears);
+            return new DesignationSkill(
+                designationId,
+                skillId,
+                skillType,
+                minExperienceYears
+            );
         }
 
         public void Update(SkillType skillType, float? minExperienceYears)

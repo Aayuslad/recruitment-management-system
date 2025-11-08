@@ -11,7 +11,7 @@ using Server.Domain.ValueObjects;
 
 namespace Server.Application.Users.Handlers
 {
-    public sealed class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<string>>
+    internal sealed class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<string>>
     {
         private readonly IAuthRepository _authRepository;
         private readonly IHasher _hasher;

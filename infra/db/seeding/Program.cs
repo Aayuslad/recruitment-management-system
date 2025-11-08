@@ -26,7 +26,7 @@ class Program
 
         if (string.IsNullOrWhiteSpace(connectionString))
         {
-            Console.WriteLine("❌ No connection string found. Check appsettings or environment variables.");
+            Console.WriteLine("No connection string found. Check appsettings or environment variables.");
             return;
         }
 
@@ -53,11 +53,11 @@ class Program
             db.Roles.Add(Role.Create("Viewer", "Read-only access to all data."));
 
             await db.SaveChangesAsync();
-            Console.WriteLine("✅ Roles seeded successfully.");
+            Console.WriteLine("Roles seeded successfully.");
         }
         else
         {
-            Console.WriteLine("ℹ️ Roles already exist. Skipping.");
+            Console.WriteLine("Roles already exist. Skipping.");
         }
     }
 }

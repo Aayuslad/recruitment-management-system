@@ -8,7 +8,7 @@ using Server.Domain.Enums;
 
 namespace Server.Application.Positions.Handlers
 {
-    public class GetPositionBatchesHandler : IRequestHandler<GetPositionBatchesQuery, Result<PositionBatchesDetailDTO>>
+    internal class GetPositionBatchesHandler : IRequestHandler<GetPositionBatchesQuery, Result<List<PositionBatchSummaryDTO>>>
     {
         private readonly IPositionBatchRepository _batchRepository;
 
@@ -17,13 +17,13 @@ namespace Server.Application.Positions.Handlers
             _batchRepository = batchRepository;
         }
 
-        public async Task<Result<PositionBatchesDetailDTO>> Handle(GetPositionBatchesQuery query, CancellationToken cancellationToken)
+        public async Task<Result<List<PositionBatchSummaryDTO>>> Handle(GetPositionBatchesQuery query, CancellationToken cancellationToken)
         {
             // step 1: fetch positinoBatch
             var batches = await _batchRepository.GetAllAsync(cancellationToken);
 
             // step 2: map dto
-            var batchesDetailDTO = new PositionBatchesDetailDTO();
+            var batchesDto = new List<PositionBatchSummaryDTO>();
             foreach (var batch in batches)
             {
                 var summaryDto = new PositionBatchSummaryDTO
@@ -41,11 +41,11 @@ namespace Server.Application.Positions.Handlers
                     CreatedBy = batch.CreatedBy,
                     CreatedByUserName = batch.CreatedByUser?.Auth.UserName,
                 };
-                batchesDetailDTO.Batches.Add(summaryDto);
+                batchesDto.Add(summaryDto);
             }
 
             // step 3: return result
-            return Result<PositionBatchesDetailDTO>.Success(batchesDetailDTO);
+            return Result<List<PositionBatchSummaryDTO>>.Success(batchesDto);
         }
     }
 }

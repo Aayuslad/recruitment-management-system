@@ -4,6 +4,7 @@ namespace Server.Application.Positions.Commands.DTOs
 {
     public class PositionSkillOverRideDTO
     {
+        public Guid? Id { get; set; }
         public Guid SkillId { get; set; }
         public string? Comments { get; set; } = string.Empty;
         public float MinExperienceYears { get; set; }

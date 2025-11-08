@@ -7,7 +7,7 @@ using Server.Core.Results;
 
 namespace Server.Application.Designations.Handlers
 {
-    public class GetDesignationsHandler : IRequestHandler<GetDesignationsQuery, Result<IEnumerable<DesignationDetailDTO>>>
+    internal class GetDesignationsHandler : IRequestHandler<GetDesignationsQuery, Result<IEnumerable<DesignationDetailDTO>>>
     {
         private readonly IDesignationRepository _designationRepository;
 

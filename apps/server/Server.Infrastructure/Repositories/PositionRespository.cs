@@ -6,7 +6,7 @@ using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories
 {
-    public class PositionRespository : IPositionRepository
+    internal class PositionRespository : IPositionRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -27,6 +27,7 @@ namespace Server.Infrastructure.Repositories
         {
             return _context.Positions
                 .Include(x => x.PositionStatusMoveHistories)
+                    .ThenInclude(x => x.MovedBy.Auth)
                 .Include(x => x.PositionBatch)
                     .ThenInclude(x => x.SkillOverRides)
                         .ThenInclude(x => x.Skill)
