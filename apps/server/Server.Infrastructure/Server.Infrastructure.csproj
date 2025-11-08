@@ -23,21 +23,4 @@
         <ProjectReference Include="..\Server.Core\Server.Core.csproj" />
         <ProjectReference Include="..\Server.Domain\Server.Domain.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-        <Compile Include="..\..\..\infra\db\migrations\**\*.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="..\..\..\infra\db\migrations\20250919172618_UserAuthAndRolesAdded.cs" />
-      <Compile Remove="..\..\..\infra\db\migrations\20250919172618_UserAuthAndRolesAdded.Designer.cs" />
-      <Compile Remove="..\..\..\infra\db\migrations\20250926172018_UserAuthAndRolesAdded.cs" />
-      <Compile Remove="..\..\..\infra\db\migrations\20250926172018_UserAuthAndRolesAdded.Designer.cs" />
-      <Compile Remove="..\..\..\infra\db\migrations\20250927070938_UserAuthAndRolesAdded.cs" />
-      <Compile Remove="..\..\..\infra\db\migrations\20250927070938_UserAuthAndRolesAdded.Designer.cs" />
-      <Compile Remove="..\..\..\infra\db\migrations\20250927182234_UserAuthAndRolesAdded.cs" />
-      <Compile Remove="..\..\..\infra\db\migrations\20250927182234_UserAuthAndRolesAdded.Designer.cs" />
-    </ItemGroup>
-
-
 </Project>

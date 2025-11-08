@@ -130,6 +130,410 @@
         }
       }
     },
+    "/api/job-opening": {
+      "post": {
+        "tags": [
+          "JobOpening"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJobOpeningCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJobOpeningCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJobOpeningCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "JobOpening"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/job-opening/{id}": {
+      "put": {
+        "tags": [
+          "JobOpening"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditJobOpeningCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditJobOpeningCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditJobOpeningCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "JobOpening"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "JobOpening"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/job-opening/for-candidate": {
+      "get": {
+        "tags": [
+          "JobOpening"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/job-opening/for-candidate/{id}": {
+      "get": {
+        "tags": [
+          "JobOpening"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/position/batch": {
+      "post": {
+        "tags": [
+          "Position"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePositionBatchCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePositionBatchCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePositionBatchCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Position"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/position/batch/{id}": {
+      "put": {
+        "tags": [
+          "Position"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditPositionBatchCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditPositionBatchCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditPositionBatchCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Position"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Position"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/close/{id}": {
+      "put": {
+        "tags": [
+          "Position"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClosePositionCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClosePositionCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClosePositionCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/onHold/{id}": {
+      "put": {
+        "tags": [
+          "Position"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetPositionOnHoldCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetPositionOnHoldCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetPositionOnHoldCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/position/{id}": {
+      "get": {
+        "tags": [
+          "Position"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/position": {
+      "get": {
+        "tags": [
+          "Position"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "tags": [
@@ -394,6 +798,20 @@
   },
   "components": {
     "schemas": {
+      "ClosePositionCommand": {
+        "type": "object",
+        "properties": {
+          "positionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "closureReason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateDesignationCommand": {
         "type": "object",
         "properties": {
@@ -409,6 +827,92 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/DesignationSkillDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateJobOpeningCommand": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/JobOpeningType"
+          },
+          "positionBatchId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "interviewers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JobOpeningInterviewerDTO"
+            },
+            "nullable": true
+          },
+          "interviewRounds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InterviewRoundTemplateDTO"
+            },
+            "nullable": true
+          },
+          "skillOverRides": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SkillOverRideDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreatePositionBatchCommand": {
+        "type": "object",
+        "properties": {
+          "numberOfPositions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "jobLocation": {
+            "type": "string",
+            "nullable": true
+          },
+          "minCTC": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxCTC": {
+            "type": "number",
+            "format": "float"
+          },
+          "reviewers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PositionReviewersDTO"
+            },
+            "nullable": true
+          },
+          "skillOverRides": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PositionSkillOverRideDTO"
             },
             "nullable": true
           }
@@ -501,6 +1005,96 @@
         },
         "additionalProperties": false
       },
+      "EditJobOpeningCommand": {
+        "type": "object",
+        "properties": {
+          "jobOpeningId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/JobOpeningType"
+          },
+          "positionBatchId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "interviewers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JobOpeningInterviewerDTO"
+            },
+            "nullable": true
+          },
+          "interviewRounds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InterviewRoundTemplateDTO"
+            },
+            "nullable": true
+          },
+          "skillOverRides": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SkillOverRideDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EditPositionBatchCommand": {
+        "type": "object",
+        "properties": {
+          "positionBatchId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "jobLocation": {
+            "type": "string",
+            "nullable": true
+          },
+          "minCTC": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxCTC": {
+            "type": "number",
+            "format": "float"
+          },
+          "reviewers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PositionReviewersDTO"
+            },
+            "nullable": true
+          },
+          "skillOverRides": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PositionSkillOverRideDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "EditSkillCommand": {
         "type": "object",
         "properties": {
@@ -528,6 +1122,106 @@
         ],
         "type": "string"
       },
+      "InterviewPanelRequirementDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "jobOpeningInterviewTemplateId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "role": {
+            "$ref": "#/components/schemas/InterviewParticipantRole"
+          },
+          "requirementCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InterviewParticipantRole": {
+        "enum": [
+          "Interviewer",
+          "Observer",
+          "NoteTaker",
+          "HRRepresentative",
+          "HiringManager"
+        ],
+        "type": "string"
+      },
+      "InterviewRoundTemplateDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "roundNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "durationInMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "$ref": "#/components/schemas/InterviewType"
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InterviewPanelRequirementDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "InterviewType": {
+        "enum": [
+          "Technical",
+          "HR",
+          "OnlineTest"
+        ],
+        "type": "string"
+      },
+      "JobOpeningInterviewerDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "role": {
+            "$ref": "#/components/schemas/InterviewParticipantRole"
+          }
+        },
+        "additionalProperties": false
+      },
+      "JobOpeningType": {
+        "enum": [
+          "Normal",
+          "CampusDrive",
+          "WalkIn"
+        ],
+        "type": "string"
+      },
       "LoginUserCommand": {
         "type": "object",
         "properties": {
@@ -538,6 +1232,45 @@
           "password": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PositionReviewersDTO": {
+        "type": "object",
+        "properties": {
+          "reviewerUserId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PositionSkillOverRideDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "skillId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "comments": {
+            "type": "string",
+            "nullable": true
+          },
+          "minExperienceYears": {
+            "type": "number",
+            "format": "float"
+          },
+          "type": {
+            "$ref": "#/components/schemas/SkillType"
+          },
+          "actionType": {
+            "$ref": "#/components/schemas/SkillActionType"
           }
         },
         "additionalProperties": false
@@ -556,6 +1289,57 @@
           "password": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SetPositionOnHoldCommand": {
+        "type": "object",
+        "properties": {
+          "positionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "comments": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SkillActionType": {
+        "enum": [
+          "Add",
+          "Remove",
+          "Update"
+        ],
+        "type": "string"
+      },
+      "SkillOverRideDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "skillId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "comments": {
+            "type": "string",
+            "nullable": true
+          },
+          "minExperienceYears": {
+            "type": "number",
+            "format": "float"
+          },
+          "type": {
+            "$ref": "#/components/schemas/SkillType"
+          },
+          "actionType": {
+            "$ref": "#/components/schemas/SkillActionType"
           }
         },
         "additionalProperties": false

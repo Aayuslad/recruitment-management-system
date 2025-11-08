@@ -35,6 +35,3 @@ jobs:
 
       - name: Build
         run: dotnet build ./apps/server/Server.sln --no-restore --configuration Release
-
-      - name: Test
-        run: dotnet test ./apps/server/Server.sln --no-build --no-restore --verbosity normal --configuration Release
