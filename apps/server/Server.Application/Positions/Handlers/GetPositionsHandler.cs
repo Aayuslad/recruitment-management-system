@@ -2,13 +2,12 @@
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Positions.Queries;
-using Server.Application.Positions.Queries.DTOs;
 using Server.Application.Positions.Queries.DTOs.PositionDTOs;
 using Server.Core.Results;
 
 namespace Server.Application.Positions.Handlers
 {
-    public class GetPositionsHandler : IRequestHandler<GetPositionsQuery, Result<PositionsDetailDTO>>
+    internal class GetPositionsHandler : IRequestHandler<GetPositionsQuery, Result<List<PositionSummaryDTO>>>
     {
         private readonly IPositionRepository _positionRepository;
 
@@ -17,13 +16,13 @@ namespace Server.Application.Positions.Handlers
             _positionRepository = positionRepository;
         }
 
-        public async Task<Result<PositionsDetailDTO>> Handle(GetPositionsQuery query, CancellationToken cancellationToken)
+        public async Task<Result<List<PositionSummaryDTO>>> Handle(GetPositionsQuery query, CancellationToken cancellationToken)
         {
             // step 1: fetch positions
             var positions = await _positionRepository.GetAllAsync(cancellationToken);
 
             // step 2: map dto
-            var positionsDetailDTO = new PositionsDetailDTO();
+            var positionsDto = new List<PositionSummaryDTO>();
             foreach (var position in positions)
             {
                 var positionSummaryDto = new PositionSummaryDTO
@@ -40,11 +39,11 @@ namespace Server.Application.Positions.Handlers
                     ClosedByCandidate = position.ClosedByCandidate,
                     ClosureReason = position.ClosureReason,
                 };
-                positionsDetailDTO.Positions.Add(positionSummaryDto);
+                positionsDto.Add(positionSummaryDto);
             }
 
             // step 3: return result
-            return Result<PositionsDetailDTO>.Success(positionsDetailDTO);
+            return Result<List<PositionSummaryDTO>>.Success(positionsDto);
         }
     }
 }

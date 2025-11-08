@@ -4,7 +4,7 @@ using Server.Application.Users.Commands;
 
 namespace Server.Application.Users.Validators
 {
-    public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
+    internal class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
     {
         public RegisterUserCommandValidator()
         {

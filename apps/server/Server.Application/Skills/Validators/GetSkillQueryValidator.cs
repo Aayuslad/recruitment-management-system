@@ -4,7 +4,7 @@ using Server.Application.Skills.Queries;
 
 namespace Server.Application.Skills.Validators
 {
-    public class GetSkillQueryValidator : AbstractValidator<GetSkillQuery>
+    internal class GetSkillQueryValidator : AbstractValidator<GetSkillQuery>
     {
         public GetSkillQueryValidator()
         {

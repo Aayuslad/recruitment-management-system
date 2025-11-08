@@ -9,7 +9,7 @@ using Server.Core.Results;
 
 namespace Server.Application.Designations.Handlers
 {
-    public class GetDesignationHandler : IRequestHandler<GetDesignationQuery, Result<DesignationDetailDTO>>
+    internal class GetDesignationHandler : IRequestHandler<GetDesignationQuery, Result<DesignationDetailDTO>>
     {
         private readonly IDesignationRepository _designationRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;

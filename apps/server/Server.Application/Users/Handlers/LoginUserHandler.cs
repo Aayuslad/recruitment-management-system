@@ -7,7 +7,7 @@ using Server.Core.Results;
 
 namespace Server.Application.Users.Handlers
 {
-    public class LoginUserHandler : IRequestHandler<LoginUserCommand, Result<string>>
+    internal class LoginUserHandler : IRequestHandler<LoginUserCommand, Result<string>>
     {
         private readonly IAuthRepository _authRepository;
         private readonly IUserRepository _userRepository;

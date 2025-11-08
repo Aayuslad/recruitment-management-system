@@ -4,7 +4,7 @@ using Server.Application.Designations.Commands;
 
 namespace Server.Application.Designations.Validators
 {
-    public class DeleteDesignationCommandValidator : AbstractValidator<DeleteDesignationCommand>
+    internal class DeleteDesignationCommandValidator : AbstractValidator<DeleteDesignationCommand>
     {
         public DeleteDesignationCommandValidator()
         {

@@ -9,7 +9,7 @@ using Server.Domain.Enums;
 
 namespace Server.Application.Positions.Handlers
 {
-    public class GetPositionBatchHandler : IRequestHandler<GetPositionBatchQuery, Result<PositionBatchDetailDTO>>
+    internal class GetPositionBatchHandler : IRequestHandler<GetPositionBatchQuery, Result<PositionBatchDetailDTO>>
     {
         private readonly IPositionBatchRepository _batchRepository;
 

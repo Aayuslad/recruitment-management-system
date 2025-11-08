@@ -1,5 +1,4 @@
-﻿using Server.Core.Entities;
-using Server.Core.Primitives;
+﻿using Server.Core.Primitives;
 using Server.Domain.Enums;
 
 namespace Server.Domain.Entities
@@ -86,6 +85,7 @@ namespace Server.Domain.Entities
             Description = description;
             Type = type;
             PositionBatchId = positionBatchId;
+
             SyncInterviewers(jobOpeningInterviewers);
             SyncInterviewRounds(interviewRounds);
             SyncSkillOverRides(skillOverRides);
@@ -93,26 +93,23 @@ namespace Server.Domain.Entities
             MarkAsUpdated(updatedBy);
         }
 
-        public void SyncInterviewers(IEnumerable<JobOpeningInterviewer> newInterviewers)
+        private void SyncInterviewers(IEnumerable<JobOpeningInterviewer> newInterviewers)
         {
-            if (newInterviewers is null) return;
-
-            var newIds = newInterviewers.Select(x => x.Id).ToHashSet();
+            if (newInterviewers is null)
+                return;
 
             // remove missing ones
-            var toRemove = JobOpeningInterviewers
-                .Where(x => !newIds.Contains(x.Id))
-                .ToList();
-
-            foreach (var rem in toRemove)
-                JobOpeningInterviewers.Remove(rem);
+            foreach (var existing in JobOpeningInterviewers.ToList())
+            {
+                if (!newInterviewers.Any(x => x.Id == existing.Id))
+                    JobOpeningInterviewers.Remove(existing);
+            }
 
             // update existing
-            foreach (var existing in JobOpeningInterviewers)
+            foreach (var interviewer in newInterviewers)
             {
-                var toUpdate = newInterviewers.FirstOrDefault(x => x.Id == existing.Id);
-                if (toUpdate != null)
-                    existing.Update(toUpdate.Role);
+                var toUpdate = JobOpeningInterviewers.FirstOrDefault(x => x.Id == interviewer.Id);
+                toUpdate?.Update(interviewer.Role);
             }
 
             // add new ones
@@ -123,78 +120,72 @@ namespace Server.Domain.Entities
             }
         }
 
-        public void SyncInterviewRounds(IEnumerable<JobOpeningInterviewRoundTemplate> newRounds)
+        private void SyncInterviewRounds(IEnumerable<JobOpeningInterviewRoundTemplate> newRounds)
         {
-            if (newRounds is null) return;
+            if (newRounds is null)
+                return;
 
-            var newIds = newRounds.Select(x => x.Id).ToHashSet();
-
-            // remove missing
-            var toRemove = InterviewRounds
-                .Where(r => !newIds.Contains(r.Id))
-                .ToList();
-
-            foreach (var rem in toRemove)
-                InterviewRounds.Remove(rem);
+            // remove missing ones
+            foreach (var existing in InterviewRounds.ToList())
+            {
+                if (!newRounds.Any(x => x.Id == existing.Id))
+                    InterviewRounds.Remove(existing);
+            }
 
             // update existing
-            foreach (var existing in InterviewRounds)
+            foreach (var round in newRounds)
             {
-                var toUpdate = newRounds.FirstOrDefault(x => x.Id == existing.Id);
-                if (toUpdate != null)
+                var toUpdate = InterviewRounds.FirstOrDefault(x => x.Id == round.Id);
+                if (toUpdate is not null)
                 {
-                    existing.Update(
-                        toUpdate.RoundNumber,
-                        toUpdate.Type,
-                        toUpdate.DurationInMinutes,
-                        toUpdate.Description
+                    toUpdate.Update(
+                        round.RoundNumber,
+                        round.Type,
+                        round.DurationInMinutes,
+                        round.Description
                     );
 
-                    // sync panel requirements of each round
-                    existing.SyncPanelRequirements(toUpdate.PanelRequirements);
+                    // sync panel requirements inside the round
+                    toUpdate.SyncPanelRequirements(round.PanelRequirements);
                 }
             }
 
-            // add new
+            // add new ones
             foreach (var round in newRounds)
             {
-                if (!InterviewRounds.Any(r => r.Id == round.Id))
+                if (!InterviewRounds.Any(x => x.Id == round.Id))
                     InterviewRounds.Add(round);
             }
         }
 
-        public void SyncSkillOverRides(IEnumerable<SkillOverRide> newSkills)
+        private void SyncSkillOverRides(IEnumerable<SkillOverRide> newOverRides)
         {
-            if (newSkills is null) return;
+            if (newOverRides is null) return;
 
-            var newIds = newSkills.Select(x => x.SkillId).ToHashSet();
-
-            // remove missing
-            var toRemove = SkillOverRides
-                .Where(s => !newIds.Contains(s.SkillId))
-                .ToList();
-
-            foreach (var x in toRemove)
-                SkillOverRides.Remove(x);
+            // remove removed ones
+            foreach (var overRide in SkillOverRides.ToList())
+            {
+                if (!newOverRides.Any(x => x.Id == overRide.Id))
+                    SkillOverRides.Remove(overRide);
+            }
 
             // update existing
-            foreach (var existing in SkillOverRides)
+            foreach (var overRide in newOverRides)
             {
-                var incoming = newSkills.FirstOrDefault(x => x.SkillId == existing.SkillId);
-                if (incoming != null)
-                    existing.Update(
-                        incoming.Comments,
-                        incoming.MinExperienceYears,
-                        incoming.Type,
-                        incoming.ActionType
+                var toUpdate = SkillOverRides.FirstOrDefault(x => x.Id == overRide.Id);
+                toUpdate?.Update(
+                        overRide.Comments,
+                        overRide.MinExperienceYears,
+                        overRide.Type,
+                        overRide.ActionType
                     );
             }
 
-            // add new
-            foreach (var skill in newSkills)
+            // add added ones
+            foreach (var overRide in newOverRides)
             {
-                if (!SkillOverRides.Any(s => s.SkillId == skill.SkillId))
-                    SkillOverRides.Add(skill);
+                if (!SkillOverRides.Any(x => x.Id == overRide.Id))
+                    SkillOverRides.Add(overRide);
             }
         }
     }

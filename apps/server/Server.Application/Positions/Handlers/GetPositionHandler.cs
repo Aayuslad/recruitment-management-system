@@ -9,7 +9,7 @@ using Server.Domain.Enums;
 
 namespace Server.Application.Positions.Handlers
 {
-    public class GetPositionHandler : IRequestHandler<GetPositionQuery, Result<PositionDetailDTO>>
+    internal class GetPositionHandler : IRequestHandler<GetPositionQuery, Result<PositionDetailDTO>>
     {
         private readonly IPositionRepository _positionRepository;
 
@@ -93,10 +93,11 @@ namespace Server.Application.Positions.Handlers
                     };
                 }).ToList(),
                 Skills = skills,
-                MoveHistory = position.PositionStatusMoveHistories.Select(x =>
+                MoveHistory = position.PositionStatusMoveHistories?.Select(x =>
                 {
                     return new PositionStatusMoveHistoryDetailDTO
                     {
+                        Id = x.Id,
                         PositionId = x.PositionId,
                         MovedTo = x.MovedTo,
                         Comments = x.Comments,
@@ -104,7 +105,7 @@ namespace Server.Application.Positions.Handlers
                         MovedById = x.MovedById,
                         MovedByUserName = x.MovedBy.Auth.UserName,
                     };
-                }).ToList(),
+                }).ToList() ?? [],
             };
 
             // step 3: return result

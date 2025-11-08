@@ -8,7 +8,7 @@ using Server.Infrastructure.Repositories;
 
 namespace Server.Application.Skills.Handlers
 {
-    public class DeleteSkillHandler : IRequestHandler<DeleteSkillCommand, Result>
+    internal class DeleteSkillHandler : IRequestHandler<DeleteSkillCommand, Result>
     {
         private readonly ISkillRepository _skillRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;

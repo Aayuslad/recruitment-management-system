@@ -11,7 +11,7 @@ using Server.Domain.ValueObjects;
 
 namespace Server.Application.Users.Handlers
 {
-    public class CreateUserHandler : IRequestHandler<CreateUserCommand, Result<string>>
+    internal class CreateUserHandler : IRequestHandler<CreateUserCommand, Result<string>>
     {
         private readonly IUserRepository _userRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;

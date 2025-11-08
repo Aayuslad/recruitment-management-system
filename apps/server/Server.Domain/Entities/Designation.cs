@@ -1,5 +1,4 @@
-﻿using Server.Core.Entities;
-using Server.Core.Primitives;
+﻿using Server.Core.Primitives;
 
 namespace Server.Domain.Entities
 {
@@ -7,34 +6,40 @@ namespace Server.Domain.Entities
     {
         private Designation() : base(Guid.Empty, Guid.Empty) { }
 
-        private Designation(Guid id, string name, string description, Guid createdBy)
-            : base(id, createdBy)
+        private Designation(
+            Guid? id,
+            string name,
+            string description,
+            IEnumerable<DesignationSkill> skills,
+            Guid createdBy
+        ) : base(id ?? Guid.NewGuid(), createdBy)
         {
             Name = name;
             Description = description;
+
+            DesignationSkills = skills.ToHashSet();
         }
 
         public string Name { get; private set; } = default!;
         public string Description { get; private set; } = default!;
-        public ICollection<DesignationSkill> DesignationSkills { get; private set; } = new HashSet<DesignationSkill>();
+        public ICollection<DesignationSkill> DesignationSkills { get; private set; } =
+            new HashSet<DesignationSkill>();
 
-        public static Designation Create(string name, string description, Guid createdBy)
+        public static Designation Create(
+            Guid? id,
+            string name,
+            string description,
+            Guid createdBy,
+            IEnumerable<DesignationSkill> skills
+        )
         {
-            return new Designation(Guid.NewGuid(), name, description, createdBy);
-        }
-
-        public void AddSkill(DesignationSkill designationSkill)
-        {
-            if (DesignationSkills.Any(s => s.SkillId == designationSkill.SkillId))
-                return;
-            DesignationSkills.Add(designationSkill);
-        }
-
-        public void RemoveSkill(DesignationSkill designationSkill)
-        {
-            if (!DesignationSkills.Contains(designationSkill))
-                return;
-            DesignationSkills.Remove(designationSkill);
+            return new Designation(
+                id,
+                name,
+                description,
+                skills,
+                createdBy
+            );
         }
 
         public void Delete(Guid deletedBy)
@@ -42,17 +47,47 @@ namespace Server.Domain.Entities
             MarkAsDeleted(deletedBy);
         }
 
-        public void Update(string name, string description, Guid updatedBy)
+        public void Update(
+            string name,
+            string description,
+            IEnumerable<DesignationSkill> newSkills,
+            Guid updatedBy
+        )
         {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Name cannot be null or empty", nameof(name));
-            if (string.IsNullOrEmpty(description))
-                throw new ArgumentException("Description cannot be null or empty", nameof(description));
-
             Name = name;
             Description = description;
 
+            SyncDesignatioSkills(newSkills);
+
             MarkAsUpdated(updatedBy);
+        }
+
+        private void SyncDesignatioSkills(IEnumerable<DesignationSkill> newDesignationSkills)
+        {
+            if (newDesignationSkills is null) return;
+
+            // remove removed ones
+            foreach (var dSkill in DesignationSkills.ToList())
+            {
+                if (!newDesignationSkills.Any(x => x.SkillId == dSkill.SkillId))
+                    DesignationSkills.Remove(dSkill);
+            }
+
+            foreach (var newSkill in newDesignationSkills)
+            {
+                var toUpdate = DesignationSkills.FirstOrDefault(x => x.SkillId == newSkill.SkillId);
+                toUpdate?.Update(
+                    newSkill.SkillType,
+                    newSkill.MinExperienceYears
+                );
+            }
+
+            // add added ones
+            foreach (var newDSkill in newDesignationSkills)
+            {
+                if (!DesignationSkills.Any(x => x.SkillId == newDSkill.SkillId))
+                    DesignationSkills.Add(newDSkill);
+            }
         }
     }
 }

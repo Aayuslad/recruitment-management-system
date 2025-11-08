@@ -8,7 +8,7 @@ using Server.Infrastructure.Repositories;
 
 namespace Server.Application.Skills.Handlers
 {
-    public class EditSkillHandler : IRequestHandler<EditSkillCommand, Result>
+    internal class EditSkillHandler : IRequestHandler<EditSkillCommand, Result>
     {
         private readonly ISkillRepository _skillRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;

@@ -10,7 +10,7 @@ using Server.Domain.Enums;
 
 namespace Server.Application.Positions.Handlers
 {
-    public class CreatePositionBatchHandler : IRequestHandler<CreatePositionBatchCommand, Result>
+    internal class CreatePositionBatchHandler : IRequestHandler<CreatePositionBatchCommand, Result>
     {
         private readonly IPositionBatchRepository _positionBatchRepository;
         private readonly IHttpContextAccessor _contextAccessor;
@@ -29,53 +29,51 @@ namespace Server.Application.Positions.Handlers
                 return Result.Failure("Unauthorised", 401);
             }
 
-            // step 1: create position batch
-            var positionBatch = PositionBatch.Create(
-                    Guid.Parse(userIdString),
-                    description: command.Description,
-                    designationId: command.DesignationId,
-                    jobLocation: command.JobLocation,
-                    maxCTC: command.MaxCTC,
-                    minCTC: command.MinCTC
-                );
+            // step 1: create entity
+            var newPositionBatchId = Guid.NewGuid();
 
-            // step 2: add skill overrides
-            if (command.SkillOverRides?.Count > 0)
-            {
-                var skillOverRides = command.SkillOverRides.Select(
-                    selector: skillOverRide => SkillOverRide.CreateForPosition(
+            // create skil over rides entity list
+            var overrides = command.SkillOverRides?.Select(
+                    selector: x => SkillOverRide.CreateForPosition(
                             id: null,
-                            positionBatchId: positionBatch.Id,
-                            skillId: skillOverRide.SkillId,
-                            comments: skillOverRide.Comments,
-                            minExperienceYears: skillOverRide.MinExperienceYears,
-                            type: skillOverRide.Type,
-                            actionType: skillOverRide.ActionType,
+                            positionBatchId: newPositionBatchId,
+                            skillId: x.SkillId,
+                            comments: x.Comments,
+                            minExperienceYears: x.MinExperienceYears,
+                            type: x.Type,
+                            actionType: x.ActionType,
                             sourceType: SkillSourceType.Position
-                        )).ToList();
+                        )
+                ).ToList() ?? [];
 
-                positionBatch.AddSkillOverRides(skillOverRides);
-            }
-
-            // step 3: add reviewers for positon batch
+            // create reviewers list
             var reviewers = command.Reviewers?.Select(
                 selector: reviewer => PositionBatchReviewers.Create(
-                            positionBatchId: positionBatch.Id,
+                            positionBatchId: newPositionBatchId,
                             reviewerUserId: reviewer.ReviewerUserId
                         )).ToList() ?? [];
 
-            positionBatch.AddReviewers(reviewers);
-
-            // step 4: create needed positions and add
+            // create needed positions list
             var positions = new List<Position>();
-
             for (int i = 0; i < command.NumberOfPositions; i++)
             {
-                var position = Position.Create(positionBatch.Id);
+                var position = Position.Create(newPositionBatchId);
                 positions.Add(position);
             }
 
-            positionBatch.AddPositions(positions);
+            // create root entity
+            var positionBatch = PositionBatch.Create(
+                   id: newPositionBatchId,
+                   createdBy: Guid.Parse(userIdString),
+                   description: command.Description,
+                   designationId: command.DesignationId,
+                   jobLocation: command.JobLocation,
+                   maxCTC: command.MaxCTC,
+                   minCTC: command.MinCTC,
+                   positions: positions,
+                   reviewers: reviewers,
+                   overRides: overrides
+               );
 
             // step 5: persist position batch
             await _positionBatchRepository.AddAsync(positionBatch, cancellationToken);

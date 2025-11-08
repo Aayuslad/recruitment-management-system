@@ -1,5 +1,4 @@
-﻿using Server.Core.Entities;
-using Server.Core.Primitives;
+﻿using Server.Core.Primitives;
 using Server.Domain.Enums;
 using Server.Domain.ValueObjects;
 

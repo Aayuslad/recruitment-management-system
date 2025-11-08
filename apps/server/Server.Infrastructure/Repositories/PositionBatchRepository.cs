@@ -2,12 +2,11 @@
 
 using Server.Application.Abstractions.Repositories;
 using Server.Domain.Entities;
-using Server.Domain.Enums;
 using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories
 {
-    public class PositionBatchRepository : IPositionBatchRepository
+    internal class PositionBatchRepository : IPositionBatchRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -40,6 +39,8 @@ namespace Server.Infrastructure.Repositories
                 .Include(x => x.SkillOverRides)
                     .ThenInclude(x => x.Skill)
                 .Include(x => x.Positions)
+                .Include(x => x.CreatedByUser)
+                    .ThenInclude(x => x.Auth)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
@@ -48,14 +49,9 @@ namespace Server.Infrastructure.Repositories
             return _context.PositionBatchs
                 .AsNoTracking()
                 .Include(x => x.Designation)
-                    .ThenInclude(x => x.DesignationSkills)
-                        .ThenInclude(x => x.Skill)
-                .Include(x => x.PositionBatchReviewers)
-                    .ThenInclude(x => x.ReviewerUser)
-                        .ThenInclude(x => x.Auth)
-                .Include(x => x.SkillOverRides)
-                    .ThenInclude(x => x.Skill)
                 .Include(x => x.Positions)
+                .Include(x => x.CreatedByUser)
+                    .ThenInclude(x => x.Auth)
                 .ToListAsync(cancellationToken);
         }
     }

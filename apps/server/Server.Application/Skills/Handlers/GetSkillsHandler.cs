@@ -7,7 +7,7 @@ using Server.Infrastructure.Repositories;
 
 namespace Server.Application.Skills.Handlers
 {
-    public class GetSkillsHandler : IRequestHandler<GetSkillsQuery, Result<IEnumerable<SkillDetailDTO>>>
+    internal class GetSkillsHandler : IRequestHandler<GetSkillsQuery, Result<IEnumerable<SkillDetailDTO>>>
     {
         private readonly ISkillRepository _skillRepository;
 

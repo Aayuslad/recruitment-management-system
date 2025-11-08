@@ -1,25 +1,32 @@
-﻿using Server.Core.Entities;
-using Server.Core.Primitives;
+﻿using Server.Core.Primitives;
 
 namespace Server.Domain.Entities
 {
     public class PositionBatch : AuditableEntity, IAggregateRoot
     {
         private PositionBatch() : base(Guid.Empty, Guid.Empty) { }
+
         private PositionBatch(
+            Guid? id,
             Guid createdBy,
             Guid designationId,
             string? description,
             string jobLocation,
             float minCTC,
-            float maxCTC
-        ) : base(Guid.Empty, createdBy)
+            float maxCTC,
+            IEnumerable<Position> positions,
+            IEnumerable<PositionBatchReviewers> reviewers,
+            IEnumerable<SkillOverRide> overRides
+        ) : base(id ?? Guid.NewGuid(), createdBy)
         {
             DesignationId = designationId;
             Description = description;
             JobLocation = jobLocation;
             MinCTC = minCTC;
             MaxCTC = maxCTC;
+            Positions = positions.ToHashSet();
+            PositionBatchReviewers = reviewers.ToHashSet();
+            SkillOverRides = overRides.ToHashSet();
         }
 
         public string? Description { get; private set; }
@@ -28,26 +35,37 @@ namespace Server.Domain.Entities
         public float MinCTC { get; private set; } = default;
         public float MaxCTC { get; private set; } = default;
         public Designation Designation { get; private set; } = null!;
-        public ICollection<Position> Positions { get; private set; } = new List<Position>();
-        public ICollection<PositionBatchReviewers> PositionBatchReviewers { get; private set; } = new List<PositionBatchReviewers>();
-        public ICollection<SkillOverRide> SkillOverRides { get; private set; } = new List<SkillOverRide>();
+        public ICollection<Position> Positions { get; private set; } =
+            new HashSet<Position>();
+        public ICollection<PositionBatchReviewers> PositionBatchReviewers { get; private set; } =
+            new HashSet<PositionBatchReviewers>();
+        public ICollection<SkillOverRide> SkillOverRides { get; private set; } =
+            new HashSet<SkillOverRide>();
 
         public static PositionBatch Create(
+            Guid? id,
             Guid createdBy,
             Guid designationId,
             string? description,
             string jobLocation,
             float minCTC,
-            float maxCTC
+            float maxCTC,
+            IEnumerable<Position> positions,
+            IEnumerable<PositionBatchReviewers> reviewers,
+            IEnumerable<SkillOverRide> overRides
         )
         {
             return new PositionBatch(
+                id,
                 createdBy,
                 designationId,
                 description,
                 jobLocation,
                 minCTC,
-                maxCTC
+                maxCTC,
+                positions,
+                reviewers,
+                overRides
             );
         }
 
@@ -57,6 +75,8 @@ namespace Server.Domain.Entities
             string jobLocation,
             float minCTC,
             float maxCTC,
+            IEnumerable<PositionBatchReviewers> newReviewers,
+            IEnumerable<SkillOverRide> newOverRides,
             Guid updatedBy
         )
         {
@@ -66,6 +86,9 @@ namespace Server.Domain.Entities
             MinCTC = minCTC;
             MaxCTC = maxCTC;
 
+            SyncReviewers(newReviewers);
+            SyncSkillOverRides(newOverRides);
+
             MarkAsUpdated(updatedBy);
         }
 
@@ -74,51 +97,55 @@ namespace Server.Domain.Entities
             MarkAsDeleted(deletedBy);
         }
 
-        public void AddPositions(List<Position> positions)
+        private void SyncReviewers(IEnumerable<PositionBatchReviewers> newReviewers)
         {
-            foreach (var position in positions)
+            if (newReviewers is null) return;
+
+            // remove removed ones
+            foreach (var existing in PositionBatchReviewers.ToList())
             {
-                Positions.Add(position);
+                if (!newReviewers.Any(x => x.ReviewerUserId == existing.ReviewerUserId))
+                    PositionBatchReviewers.Remove(existing);
+            }
+
+            // no update section, join table has no updatable data
+
+            // add added ones
+            foreach (var reviewer in newReviewers)
+            {
+                if (!PositionBatchReviewers.Any(x => x.ReviewerUserId == reviewer.ReviewerUserId))
+                    PositionBatchReviewers.Add(reviewer);
             }
         }
 
-        public void AddReviewers(List<PositionBatchReviewers> reviewers)
+        private void SyncSkillOverRides(IEnumerable<SkillOverRide> newOverRides)
         {
-            foreach (var reviewer in reviewers)
-            {
-                if (PositionBatchReviewers.Any(x => x.ReviewerUserId == reviewer.ReviewerUserId))
-                    continue;
-                PositionBatchReviewers.Add(reviewer);
-            }
-        }
+            if (newOverRides is null) return;
 
-        public void RemoveReviewers(List<PositionBatchReviewers> reviewers)
-        {
-            foreach (var reviewer in reviewers)
+            // remove removed ones
+            foreach (var overRide in SkillOverRides.ToList())
             {
-                if (!PositionBatchReviewers.Contains(reviewer))
-                    continue;
-                PositionBatchReviewers.Remove(reviewer);
+                if (!newOverRides.Any(x => x.Id == overRide.Id))
+                    SkillOverRides.Remove(overRide);
             }
-        }
 
-        public void AddSkillOverRides(List<SkillOverRide> skillOverRides)
-        {
-            foreach (var skill in skillOverRides)
+            // update existing
+            foreach (var overRide in newOverRides)
             {
-                if (SkillOverRides.Any(x => x.SkillId == skill.SkillId))
-                    continue;
-                SkillOverRides.Add(skill);
+                var toUpdate = SkillOverRides.FirstOrDefault(x => x.Id == overRide.Id);
+                toUpdate?.Update(
+                        overRide.Comments,
+                        overRide.MinExperienceYears,
+                        overRide.Type,
+                        overRide.ActionType
+                    );
             }
-        }
 
-        public void RemoveSkillOverRides(List<SkillOverRide> skillOverRides)
-        {
-            foreach (var skill in skillOverRides)
+            // add added ones
+            foreach (var overRide in newOverRides)
             {
-                if (!SkillOverRides.Contains(skill))
-                    continue;
-                SkillOverRides.Remove(skill);
+                if (!SkillOverRides.Any(x => x.Id == overRide.Id))
+                    SkillOverRides.Add(overRide);
             }
         }
     }

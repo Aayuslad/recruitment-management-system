@@ -4,11 +4,11 @@ namespace Server.Infrastructure.Repositories
 {
     public interface ISkillRepository
     {
-        Task AddAsync(Skill skill, CancellationToken cancellation);
-        Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken);
-        Task<bool> ExistsByIdAsync(Guid id, CancellationToken cancellationToken);
-        Task<Skill?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
-        Task<List<Skill>> GetAllAsync(CancellationToken cancellationToken);
-        Task UpdateAsync(Skill skill, CancellationToken cancellation);
+        Task AddAsync(Skill skill, CancellationToken ct);
+        Task UpdateAsync(Skill skill, CancellationToken ct);
+        Task<bool> ExistsByNameAsync(string name, CancellationToken ct);
+        Task<bool> ExistsByIdAsync(Guid id, CancellationToken ct);
+        Task<Skill?> GetByIdAsync(Guid id, CancellationToken ct);
+        Task<List<Skill>> GetAllAsync(CancellationToken ct);
     }
 }

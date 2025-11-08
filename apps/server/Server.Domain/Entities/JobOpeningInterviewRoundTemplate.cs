@@ -22,8 +22,7 @@ namespace Server.Domain.Entities
             Type = type;
             DurationInMinutes = durationInMinutes;
             Description = description;
-            PanelRequirements = panelRequirements?.ToHashSet()
-                ?? [];
+            PanelRequirements = panelRequirements?.ToHashSet() ?? [];
         }
 
         public Guid JobOpeningId { get; private set; }

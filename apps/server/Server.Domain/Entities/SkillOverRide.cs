@@ -42,51 +42,51 @@ namespace Server.Domain.Entities
         public Skill Skill { get; private set; } = null!;
 
         public static SkillOverRide CreateForJobOpening(
-                Guid? id,
-                Guid jobOpeningId,
-                Guid skillId,
-                string? comments,
-                float minExperienceYears,
-                SkillType type,
-                SkillActionType actionType,
-                SkillSourceType sourceType
-            )
+            Guid? id,
+            Guid jobOpeningId,
+            Guid skillId,
+            string? comments,
+            float minExperienceYears,
+            SkillType type,
+            SkillActionType actionType,
+            SkillSourceType sourceType
+        )
         {
             return new SkillOverRide(
-                    id,
-                    null,
-                    jobOpeningId,
-                    skillId,
-                    comments,
-                    minExperienceYears,
-                    type,
-                    actionType,
-                    sourceType
-                );
+                id,
+                null,
+                jobOpeningId,
+                skillId,
+                comments,
+                minExperienceYears,
+                type,
+                actionType,
+                sourceType
+            );
         }
 
         public static SkillOverRide CreateForPosition(
-                Guid? id,
-                Guid positionBatchId,
-                Guid skillId,
-                string? comments,
-                float minExperienceYears,
-                SkillType type,
-                SkillActionType actionType,
-                SkillSourceType sourceType
-            )
+            Guid? id,
+            Guid positionBatchId,
+            Guid skillId,
+            string? comments,
+            float minExperienceYears,
+            SkillType type,
+            SkillActionType actionType,
+            SkillSourceType sourceType
+        )
         {
             return new SkillOverRide(
-                    id,
-                    positionBatchId,
-                    null,
-                    skillId,
-                    comments,
-                    minExperienceYears,
-                    type,
-                    actionType,
-                    sourceType
-                );
+                id,
+                positionBatchId,
+                null,
+                skillId,
+                comments,
+                minExperienceYears,
+                type,
+                actionType,
+                sourceType
+            );
         }
 
         public void Update(

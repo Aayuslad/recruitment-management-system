@@ -1,27 +1,21 @@
 ﻿namespace Server.Core.Entities
 {
     /// <summary>
-    /// Base entity implementing simple identity-based equality semantics.
+    /// Base entity implementing the surrogate key
     /// </summary>
     public abstract class BaseEntity<Guid> : IEntity<Guid>
     {
-        public virtual Guid Id { get; protected set; }
-
         protected BaseEntity(Guid id)
         {
             Id = id;
         }
 
+        public virtual Guid Id { get; protected set; }
+
         public override bool Equals(object? obj)
         {
-            if (obj is null || obj.GetType() != GetType()) return false;
-            if (ReferenceEquals(this, obj)) return true;
-
-            var other = (BaseEntity<Guid>)obj;
-
-            // If either entity is transient (default id) they are not equal
-            if (IsTransient(Id) || IsTransient(other.Id)) return false;
-
+            if (obj is not BaseEntity<Guid> other) return false;
+            if (ReferenceEquals(this, other)) return true;
             return EqualityComparer<Guid>.Default.Equals(Id, other.Id);
         }
 
@@ -35,8 +29,5 @@
             // If transient use base implementation (object hash) to avoid collisions
             return IsTransient(Id) ? base.GetHashCode() : Id!.GetHashCode();
         }
-
-        public static bool operator ==(BaseEntity<Guid>? left, BaseEntity<Guid>? right) => Equals(left, right);
-        public static bool operator !=(BaseEntity<Guid>? left, BaseEntity<Guid>? right) => !Equals(left, right);
     }
 }

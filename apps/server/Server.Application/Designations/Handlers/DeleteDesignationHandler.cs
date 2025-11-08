@@ -8,7 +8,7 @@ using Server.Core.Results;
 
 namespace Server.Application.Designations.Handlers
 {
-    public class DeleteDesignationHandler : IRequestHandler<DeleteDesignationCommand, Result>
+    internal class DeleteDesignationHandler : IRequestHandler<DeleteDesignationCommand, Result>
     {
         private readonly IDesignationRepository _designationRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -36,9 +36,11 @@ namespace Server.Application.Designations.Handlers
 
             // step 2: delete designation
             designation.Delete(Guid.Parse(userIdString));
+
+            // step 3: persist chages
             await _designationRepository.UpdateAsync(designation, cancellationToken);
 
-            // step 3: return success
+            // step 4: return success
             return Result.Success();
         }
     }
