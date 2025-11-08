@@ -1,131 +1,89 @@
 SHELL := bash
 
 ############# VARIABLES #############
-CANDIDATE_CLIENT = apps/candidate-client
-RECRUITER_CLIENT = apps/recruiter-client
+CLIENT = apps/client
+SERVER = apps/server
 SERVER_SOLUTION  = apps/server/Server.sln
 STARTUP_PROJECT  = apps/server/Server.API
 INFRA_PROJECT    = apps/server/Server.Infrastructure
-INFRA_MIGRATIONS_DIR = ../../../infra/db/migrations
 OPENAPI_JSON     = docs/openapi.json
 
 
 
 ############# build and start #############
-.PHONY: build-server build-recruiter-client build-candidate-client \
-		build-clients build-all start-server start-candidate-client \
-		start-recruiter-client start-all watch-server
+.PHONY: build-server build-client \
+		build start-server \
+		start-client watch-server
 
 build-server:
 	dotnet build $(SERVER_SOLUTION)
 
-build-recruiter-client:
-	cd $(RECRUITER_CLIENT) && npm run build
+build-client:
+	cd $(CLIENT) && npm run build
 
-build-candidate-client:
-	cd $(CANDIDATE_CLIENT) && npm run build
-
-build-clients: build-recruiter-client build-candidate-client
-
-build-all: build-server build-clients
+build: build-server build-client
 
 start-server:
 	dotnet run --project apps/server/Server.API
 watch-server:
 	dotnet watch run --project apps/server/Server.API
 
-start-candidate-client:
-	cd $(CANDIDATE_CLIENT) && npm run dev
-
-start-recruiter-client:
-	cd $(RECRUITER_CLIENT) && npm run dev
-
-start-all: start-server start-candidate-client start-recruiter-client
-
+start-client:
+	cd $(CLIENT) && npm run dev
 
 
 
 ############## database ##############
-.PHONY: add-migration update-database seed-database
+.PHONY: add-migration update-database
 
 add-migration:
 ifeq ($(strip $(name)),)
-	$(error ❌ Please provide a migration name. Example: make add-migration name=Init)
+	$(error ### Please provide a migration name. Example: make add-migration name=Init ###)
 endif
-	dotnet tool run dotnet-ef migrations add $(name) \
+	dotnet ef migrations add $(name) \
 		--project $(INFRA_PROJECT) \
-		--startup-project $(STARTUP_PROJECT) \
-		--output-dir $(INFRA_MIGRATIONS_DIR)
+		--startup-project $(STARTUP_PROJECT)
 
 update-database:
-ifeq ($(strip $(name)),)
-	dotnet tool run dotnet-ef database update \
+	dotnet ef database update \
 		--project $(INFRA_PROJECT) \
 		--startup-project $(STARTUP_PROJECT)
-else
-	dotnet tool run dotnet-ef database update $(name) \
-		--project $(INFRA_PROJECT) \
-		--startup-project $(STARTUP_PROJECT)
-endif
-
-seed-database:
-	dotnet run --project infra/db/seeding
 
 
 
 ############## Linting and Formatting ##############
-.PHONY: lint-candidate lint-recruiter lint-clients lint-fix-candidate \
-		lint-fix-recruiter format-check-candidate format-check-recruiter \
-		format-check-server format-server format-clients format-fix-candidate \
-		format-fix-recruiter format-fix-clients  check fix
+.PHONY: lint-check-client lint-fix-client lint-clients lint-fix-client format-fix-client \
+		format-check-server format-fix-server \
+		
 
-check: lint-clients format-clients format-server
-fix: lint-fix-candidate lint-fix-recruiter format-fix-candidate format-fix-recruiter format-server	
+format-check: lint-check-client format-check-client format-check-server
+format-fix: lint-fix-client format-fix-client format-fix-server	
 
-lint-candidate:
-	cd $(CANDIDATE_CLIENT) && npx eslint . --ext .js,.jsx,.ts,.tsx
+lint-check-client:
+	cd $(CLIENT) && npx eslint . --ext .js,.jsx,.ts,.tsx
 
-lint-recruiter:
-	cd $(RECRUITER_CLIENT) && npx eslint . --ext .js,.jsx,.ts,.tsx
+lint-fix-client:
+	cd $(CLIENT) && npx eslint . --ext .js,.jsx,.ts,.tsx --fix
 
-lint-clients: lint-candidate lint-recruiter
+format-check-client:
+	cd $(CLIENT) && npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
 
-lint-fix-candidate:
-	cd $(CANDIDATE_CLIENT) && npx eslint . --ext .js,.jsx,.ts,.tsx --fix
-
-lint-fix-recruiter:
-	cd $(RECRUITER_CLIENT) && npx eslint . --ext .js,.jsx,.ts,.tsx --fix
-
-format-check-candidate:
-	cd $(CANDIDATE_CLIENT) && npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
-
-format-check-recruiter:
-	cd $(RECRUITER_CLIENT) && npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
+format-fix-client:
+	cd $(CLIENT) && npx prettier --write "**/*.{js,jsx,ts,tsx,json,css,md}"
 
 format-check-server:
-	dotnet tool run dotnet-format --folder apps/server --check --verbosity minimal
+	cd $(SERVER) && dotnet format --verify-no-changes
 
-format-server:
-	dotnet tool run dotnet-format --folder apps/server --verbosity minimal
-
-format-clients: format-check-candidate format-check-recruiter
-
-format-fix-candidate:
-	cd $(CANDIDATE_CLIENT) && npx prettier --write "**/*.{js,jsx,ts,tsx,json,css,md}"
-
-format-fix-recruiter:
-	cd $(RECRUITER_CLIENT) && npx prettier --write "**/*.{js,jsx,ts,tsx,json,css,md}"
-
-format-fix-clients: format-fix-candidate format-fix-recruiter
+format-fix-server:
+	cd $(SERVER) && dotnet format ./Server.sln
 
 
 
 ############## Install dependencies for local setup ############+##
 .PHONY: install-all
 
-install-all:
-	cd $(CANDIDATE_CLIENT) && npm install
-	cd $(RECRUITER_CLIENT) && npm install
+install:
+	cd $(CLIENT) && npm install
 	dotnet restore $(SERVER_SOLUTION)
 
 	
@@ -137,7 +95,6 @@ export-openapi:
 	dotnet tool run swagger tofile --output ./$(OPENAPI_JSON) ./apps/Server/Server.API/bin/Debug/net8.0/Server.API.dll v1
 
 generate-ts-types:
-	cd $(RECRUITER_CLIENT) && npx openapi-typescript ../../$(OPENAPI_JSON) --output src/types/generated/api.d.ts
-	cd $(CANDIDATE_CLIENT) && npx openapi-typescript ../../$(OPENAPI_JSON) --output src/types/generated/api.d.ts
+	cd $(CLIENT) && npx openapi-typescript ../../$(OPENAPI_JSON) --output src/types/generated/api.d.ts
 
 sync-api-contracts: build-server export-openapi generate-ts-types

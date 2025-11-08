@@ -1,4 +1,4 @@
-name: Recruiter Client CI
+name: Client CI
 
 on:
   push:
@@ -23,22 +23,22 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('apps/recruiter-client/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('apps/client/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm ci
-        working-directory: ./apps/recruiter-client
+        working-directory: ./apps/client
 
       - name: Lint
-        run: make lint-recruiter
+        run: make lint-check-client
         working-directory: ./
 
       - name: Format check
-        run: make format-check-recruiter
+        run: make format-check-client
         working-directory: ./
 
       - name: Build
-        run: make build-recruiter-client
+        run: make build-client
         working-directory: ./
