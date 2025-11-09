@@ -21,11 +21,14 @@ namespace Server.Infrastructure.Persistence
         public DbSet<PositionBatchReviewers> PositionReviewers { get; set; } = null!;
         public DbSet<PositionStatusMoveHistory> PositionStatusMoveHistories { get; set; } = null!;
         public DbSet<SkillOverRide> SkillOverRides { get; set; } = null!;
-        public DbSet<Candidate> Candidates { get; set; } = null!;
         public DbSet<JobOpening> JobOpenings { get; set; } = null!;
         public DbSet<JobOpeningInterviewer> JobOpeningInterviewers { get; set; } = null!;
         public DbSet<JobOpeningInterviewPanelRequirement> JobOpeningInterviewPanelRequirements { get; set; } = null!;
         public DbSet<JobOpeningInterviewRoundTemplate> JobOpeningInterviewRoundTemplates { get; set; } = null!;
+        public DbSet<Candidate> Candidates { get; set; } = null!;
+        public DbSet<CandidateSkill> CandidateSkills { get; set; } = null!;
+        public DbSet<CandidateDocument> CandidatesDocument { get; set; } = null!;
+        public DbSet<DocumentType> DocumentTypes { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,6 +63,7 @@ namespace Server.Infrastructure.Persistence
             modelBuilder.Entity<PositionBatch>().HasQueryFilter(x => !x.Designation.IsDeleted);
 
             // candidate Aggregate
+            // TODO: add dependent entitues for safety
             modelBuilder.Entity<Candidate>().HasQueryFilter(d => !d.IsDeleted);
 
             // job opening aggregate

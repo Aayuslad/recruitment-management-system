@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Candidates\Validators\" />
     <Folder Include="JobOpenings\Validators\" />
     <Folder Include="Skills\Commands\DTOs\" />
   </ItemGroup>
