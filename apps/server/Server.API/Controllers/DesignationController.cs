@@ -21,22 +21,6 @@ namespace Server.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetDesignations(CancellationToken cancellationToken)
-        {
-            var query = new GetDesignationsQuery(null, null, null);
-            var result = await _mediator.Send(query, cancellationToken);
-            return result.ToActionResult(this);
-        }
-
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetDesignation(Guid id, CancellationToken cancellationToken)
-        {
-            var query = new GetDesignationQuery(id);
-            var result = await _mediator.Send(query, cancellationToken);
-            return result.ToActionResult(this);
-        }
-
         [HttpPost]
         public async Task<IActionResult> CreateDesignation([FromBody] CreateDesignationCommand command, CancellationToken cancellationToken)
         {
@@ -57,6 +41,22 @@ namespace Server.API.Controllers
         {
             var command = new DeleteDesignationCommand(id);
             var result = await _mediator.Send(command, cancellationToken);
+            return result.ToActionResult(this);
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetDesignation(Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetDesignationQuery(id);
+            var result = await _mediator.Send(query, cancellationToken);
+            return result.ToActionResult(this);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDesignations(CancellationToken cancellationToken)
+        {
+            var query = new GetDesignationsQuery(null, null, null);
+            var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }
     }
