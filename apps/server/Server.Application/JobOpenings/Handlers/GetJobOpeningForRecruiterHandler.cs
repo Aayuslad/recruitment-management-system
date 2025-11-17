@@ -6,7 +6,6 @@ using Server.Application.JobOpenings.Queries;
 using Server.Application.JobOpenings.Queries.DTOs;
 using Server.Application.JobOpenings.Queries.DTOs.ForRecruterClient;
 using Server.Core.Results;
-using Server.Domain.Entities;
 using Server.Domain.Enums;
 
 namespace Server.Application.JobOpenings.Handlers

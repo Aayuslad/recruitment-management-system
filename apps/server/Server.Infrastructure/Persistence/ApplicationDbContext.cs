@@ -8,7 +8,6 @@ namespace Server.Infrastructure.Persistence
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        // entities here
         public DbSet<Auth> Auths { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Role> Roles { get; set; } = null!;
@@ -29,6 +28,10 @@ namespace Server.Infrastructure.Persistence
         public DbSet<CandidateSkill> CandidateSkills { get; set; } = null!;
         public DbSet<CandidateDocument> CandidatesDocument { get; set; } = null!;
         public DbSet<DocumentType> DocumentTypes { get; set; } = null!;
+        public DbSet<JobApplication> JobApplications { get; set; } = null!;
+        public DbSet<JobApplicationStatusMoveHistory> JobApplicationStatusMoveHistories { get; set; } = null!;
+        public DbSet<Feedback> Feedbacks { get; set; } = null!;
+        public DbSet<SkillFeedback> SkillFeedbacks { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,6 +68,8 @@ namespace Server.Infrastructure.Persistence
             // candidate Aggregate
             // TODO: add dependent entitues for safety
             modelBuilder.Entity<Candidate>().HasQueryFilter(d => !d.IsDeleted);
+            modelBuilder.Entity<CandidateDocument>().HasQueryFilter(d => !d.Candidate.IsDeleted);
+            modelBuilder.Entity<CandidateSkill>().HasQueryFilter(x => x.Candidate.IsDeleted);
 
             // job opening aggregate
             // TODO: complete filters here...
@@ -72,6 +77,10 @@ namespace Server.Infrastructure.Persistence
             modelBuilder.Entity<JobOpeningInterviewer>().HasQueryFilter(x => !x.JobOpening.IsDeleted);
             modelBuilder.Entity<JobOpeningInterviewRoundTemplate>().HasQueryFilter(x => !x.JobOpening.IsDeleted);
             modelBuilder.Entity<JobOpeningInterviewPanelRequirement>().HasQueryFilter(x => !x.InterviewRoundTemplate.JobOpening.IsDeleted);
+
+            // job application
+            modelBuilder.Entity<JobApplication>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<JobApplicationStatusMoveHistory>().HasQueryFilter(x => !x.JobApplication.IsDeleted);
 
             base.OnModelCreating(modelBuilder);
         }

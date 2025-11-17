@@ -39,7 +39,7 @@ namespace Server.Infrastructure.Repositories
                 .Include(x => x.SkillOverRides)
                     .ThenInclude(x => x.Skill)
                 .Include(x => x.Positions)
-                .Include(x => x.CreatedByUser)
+                .Include(x => x.CreatedByUser!)
                     .ThenInclude(x => x.Auth)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
@@ -50,7 +50,7 @@ namespace Server.Infrastructure.Repositories
                 .AsNoTracking()
                 .Include(x => x.Designation)
                 .Include(x => x.Positions)
-                .Include(x => x.CreatedByUser)
+                .Include(x => x.CreatedByUser!)
                     .ThenInclude(x => x.Auth)
                 .ToListAsync(cancellationToken);
         }
