@@ -1,7 +1,7 @@
 ﻿using MediatR;
 
 using Server.Application.JobOpenings.Queries.DTOs.ForRecruterClient;
-using Server.Core.Results; 
+using Server.Core.Results;
 
 namespace Server.Application.JobOpenings.Queries
 {

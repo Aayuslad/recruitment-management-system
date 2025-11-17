@@ -18,4 +18,3 @@ namespace Server.Application.JobApplications.Queries.DTOs
             new List<StatusMoveHistoryDetailDTO>();
     }
 }
- 

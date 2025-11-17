@@ -6,7 +6,7 @@ namespace Server.Application.JobApplications.Commands
 {
     public class DeleteJobApplicationCommand : IRequest<Result>
     {
-        public DeleteJobApplicationCommand(Guid id) 
+        public DeleteJobApplicationCommand(Guid id)
         {
             Id = id;
         }

@@ -14,4 +14,4 @@ namespace Server.Application.JobOpenings.Queries
 
         public Guid JobOpeningId { get; set; }
     }
-} 
+}

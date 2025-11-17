@@ -19,4 +19,4 @@ namespace Server.Application.JobOpenings.Queries.DTOs.ForRecruterClient
         public List<InterviewRoundTemplateDetailDTO> InterviewRounds { get; set; } =
             new List<InterviewRoundTemplateDetailDTO>();
     }
-} 
+}

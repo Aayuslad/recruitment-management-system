@@ -36,7 +36,7 @@ namespace Server.Infrastructure.Repositories
         Task<bool> IJobApplicationRepository.ExistsByCandidateAndOpeningAsync(Guid jobOpeningId, Guid candidateId, CancellationToken cancellationToken)
         {
             return _context.JobApplications.AnyAsync(
-                    x => x.JobOpeningId == jobOpeningId && x.CandidateId == candidateId, 
+                    x => x.JobOpeningId == jobOpeningId && x.CandidateId == candidateId,
                     cancellationToken
                 );
         }

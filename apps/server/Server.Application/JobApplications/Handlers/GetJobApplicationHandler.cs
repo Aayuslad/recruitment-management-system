@@ -14,7 +14,7 @@ namespace Server.Application.JobApplications.Handlers
 
         public GetJobApplicationHandler(IJobApplicationRepository jobApplicationRepository)
         {
-            _jobApplicationRepository = jobApplicationRepository; 
+            _jobApplicationRepository = jobApplicationRepository;
         }
 
         public async Task<Result<JobApplicationDetailDTO>> Handle(GetJobApplicationQuery request, CancellationToken cancellationToken)

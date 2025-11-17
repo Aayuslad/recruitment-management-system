@@ -15,4 +15,3 @@ namespace Server.Application.JobApplications.Queries
         public Guid Id { get; set; }
     }
 }
- 
