@@ -31,7 +31,7 @@ namespace Server.Infrastructure.Repositories
         {
             return _context.Candidates
                 .AsTracking()
-                .Include(x => x.BgVerifiedByUser)
+                .Include(x => x.BgVerifiedByUser!)
                     .ThenInclude(x => x.Auth)
                 .Include(x => x.Skills)
                     .ThenInclude(x => x.Skill)
