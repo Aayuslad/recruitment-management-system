@@ -32,6 +32,8 @@ namespace Server.Infrastructure.Persistence
         public DbSet<JobApplicationStatusMoveHistory> JobApplicationStatusMoveHistories { get; set; } = null!;
         public DbSet<Feedback> Feedbacks { get; set; } = null!;
         public DbSet<SkillFeedback> SkillFeedbacks { get; set; } = null!;
+        public DbSet<Interview> Interviews { get; set; } = null!;
+        public DbSet<InterviewParticipant> InterviewParticipants { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -81,6 +83,7 @@ namespace Server.Infrastructure.Persistence
             // job application
             modelBuilder.Entity<JobApplication>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<JobApplicationStatusMoveHistory>().HasQueryFilter(x => !x.JobApplication.IsDeleted);
+            modelBuilder.Entity<Interview>().HasQueryFilter(x => !x.JobApplication.IsDeleted);
 
             base.OnModelCreating(modelBuilder);
         }

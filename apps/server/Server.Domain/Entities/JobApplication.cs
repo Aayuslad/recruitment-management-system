@@ -84,21 +84,18 @@ namespace Server.Domain.Entities
             Feedbacks.Remove(existing);
         }
 
-        public void Shortlist(Guid doneById)
+        public void MoveStatus(Guid doneById, JobApplicationStatus moveTo)
         {
-            // TODO: throw proper domain exeption here
-            if (Status != JobApplicationStatus.Applied) return;
-
             var moveHistory = JobApplicationStatusMoveHistory.Create(
                     id: null,
                     jobApplicationId: Id,
-                    statusMovedTo: JobApplicationStatus.Shortlisted,
+                    statusMovedTo: moveTo,
                     movedById: doneById,
                     comment: null
                 );
             StatusMoveHistories.Add(moveHistory);
 
-            Status = JobApplicationStatus.Shortlisted;
+            Status = moveTo;
         }
     }
 }

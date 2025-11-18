@@ -53,10 +53,10 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
-        [HttpPut("shortlist/{id:guid}")]
-        public async Task<IActionResult> ShortlistJobApplication(Guid id, CancellationToken cancellationToken)
+        [HttpPut("{id:guid}/move-status")]
+        public async Task<IActionResult> MoveStatusJobApplication(Guid id, [FromBody] MoveJobApplicationStatusCommand command, CancellationToken cancellationToken)
         {
-            var command = new ShortListApplicationCommand(id);
+            command.Id = id;
             var result = await _mediator.Send(command, cancellationToken);
             return result.ToActionResult(this);
         }

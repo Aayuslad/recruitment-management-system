@@ -10,6 +10,7 @@ namespace Server.Domain.Entities
         private Feedback(
             Guid? id,
             Guid? jobApplicationId,
+            Guid? interviewId,
             Guid givenById,
             FeedbackStage stage,
             string? comment,
@@ -18,6 +19,7 @@ namespace Server.Domain.Entities
         ) : base(id ?? Guid.NewGuid())
         {
             JobApplicationId = jobApplicationId;
+            InterviewId = interviewId;
             GivenById = givenById;
             Stage = stage;
             Comment = comment;
@@ -27,23 +29,21 @@ namespace Server.Domain.Entities
         }
 
         public Guid? JobApplicationId { get; private set; }
-        // TODO: add when interview entity is created
-        //public Guid? InterviewId {  get; set; }
+        public Guid? InterviewId { get; set; }
         public Guid GivenById { get; private set; }
         public FeedbackStage Stage { get; private set; }
         public string? Comment { get; private set; }
         public int Rating { get; private set; }
         public JobApplication? JobApplication { get; private set; }
-        // TODO: add interviw entity mapping here when it is added
+        public Interview? Interview { get; private set; } = null;
         public User GivenByUser { get; private set; } = null!;
         public ICollection<SkillFeedback> SkillFeedbacks { get; private set; } =
             new HashSet<SkillFeedback>();
 
-        public static Feedback Create(
+        public static Feedback CreateForReviewStage(
             Guid? id,
             Guid? jobApplicationId,
             Guid givenById,
-            FeedbackStage stage,
             string? comment,
             int rating,
             IEnumerable<SkillFeedback> skillFeedbacks
@@ -52,8 +52,30 @@ namespace Server.Domain.Entities
             return new Feedback(
                 id,
                 jobApplicationId,
+                null,
                 givenById,
-                stage,
+                FeedbackStage.Review,
+                comment,
+                rating,
+                skillFeedbacks
+            );
+        }
+
+        public static Feedback CreateForInterviewStage(
+            Guid? id,
+            Guid? interviewId,
+            Guid givenById,
+            string? comment,
+            int rating,
+            IEnumerable<SkillFeedback> skillFeedbacks
+        )
+        {
+            return new Feedback(
+                id,
+                interviewId,
+                null,
+                givenById,
+                FeedbackStage.Interview,
                 comment,
                 rating,
                 skillFeedbacks
