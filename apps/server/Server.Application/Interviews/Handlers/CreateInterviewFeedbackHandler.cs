@@ -4,25 +4,24 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
-using Server.Application.JobApplications.Commands;
+using Server.Application.Interviews.Commands;
 using Server.Core.Results;
 using Server.Domain.Entities;
-using Server.Domain.Enums;
 
-namespace Server.Application.JobApplications.Handlers
+namespace Server.Application.Interviews.Handlers
 {
-    internal class CreateJobApplicationFeedbackHandler : IRequestHandler<CreateJobApplicationFeedbackCommand, Result>
+    internal class CreateInterviewFeedbackHandler : IRequestHandler<CreateInterviewFeedbackCommand, Result>
     {
-        private readonly IJobApplicationRepository _jobApplicationRepository;
+        private readonly IInterviewRespository _interviewRespository;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public CreateJobApplicationFeedbackHandler(IJobApplicationRepository jobApplicationRepository, IHttpContextAccessor contextAccessor)
+        public CreateInterviewFeedbackHandler(IInterviewRespository interviewRespository, IHttpContextAccessor contextAccessor)
         {
-            _jobApplicationRepository = jobApplicationRepository;
+            _interviewRespository = interviewRespository;
             _contextAccessor = contextAccessor;
         }
 
-        public async Task<Result> Handle(CreateJobApplicationFeedbackCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreateInterviewFeedbackCommand request, CancellationToken cancellationToken)
         {
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
@@ -30,11 +29,11 @@ namespace Server.Application.JobApplications.Handlers
                 return Result.Failure("Unauthorised", 401);
             }
 
-            // step 1: check if exists
-            var application = await _jobApplicationRepository.GetByIdAsync(request.JobApplicationId, cancellationToken);
-            if (application is null)
+            // step 1: fetch the interviw
+            var interview = await _interviewRespository.GetByIdAsync(request.InterviewId, cancellationToken);
+            if (interview is null)
             {
-                return Result.Failure("Job Application does not exists", 409);
+                return Result.Failure("interview does not exist", 404);
             }
 
             // step 2: create and add feedback entities
@@ -54,9 +53,9 @@ namespace Server.Application.JobApplications.Handlers
             }
 
             // create the feedback entity
-            var feedback = Feedback.CreateForReviewStage(
+            var feedback = Feedback.CreateForInterviewStage(
                     id: feedbackId,
-                    jobApplicationId: application.Id,
+                    interviewId: interview.Id,
                     givenById: Guid.Parse(userIdString),
                     rating: request.Rating,
                     comment: request.Comment,
@@ -64,10 +63,10 @@ namespace Server.Application.JobApplications.Handlers
                 );
 
             // step 3: update root entity
-            application.AddFeedback(feedback);
+            interview.AddFeedback(feedback);
 
             // step 4: persist entity
-            await _jobApplicationRepository.UpdateAsync(application, cancellationToken);
+            await _interviewRespository.UpdateAsync(interview, cancellationToken);
 
             // step 5: return result
             return Result.Success();

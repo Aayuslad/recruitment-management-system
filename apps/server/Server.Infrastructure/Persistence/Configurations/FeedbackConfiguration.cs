@@ -28,7 +28,10 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .HasForeignKey(x => x.JobApplicationId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // TODO add interviw later
+            builder.HasOne(x => x.Interview)
+                .WithMany(x => x.Feedbacks)
+                .HasForeignKey(x => x.InterviewId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.GivenByUser)
                 .WithMany()

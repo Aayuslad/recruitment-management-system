@@ -4,10 +4,9 @@
     {
         Applied = 0,
         Shortlisted = 1,
-        OnlineTestScheduled = 2,
-        InterviewScheduled = 3,
-        Offered = 4,
-        Rejected = 5,
-        Hired = 6
+        Interviwed = 2,
+        Offered = 3,
+        Rejected = 4,
+        Hired = 5
     }
 }
