@@ -34,6 +34,9 @@ namespace Server.Infrastructure.Persistence
         public DbSet<SkillFeedback> SkillFeedbacks { get; set; } = null!;
         public DbSet<Interview> Interviews { get; set; } = null!;
         public DbSet<InterviewParticipant> InterviewParticipants { get; set; } = null!;
+        public DbSet<Event> Events { get; set; } = null!;
+        public DbSet<EventJobOpening> EventsJobOpening { get; set; } = null!;
+        public DbSet<Notification> Notifications { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -84,6 +87,10 @@ namespace Server.Infrastructure.Persistence
             modelBuilder.Entity<JobApplication>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<JobApplicationStatusMoveHistory>().HasQueryFilter(x => !x.JobApplication.IsDeleted);
             modelBuilder.Entity<Interview>().HasQueryFilter(x => !x.JobApplication.IsDeleted);
+
+            // event
+            modelBuilder.Entity<Event>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<EventJobOpening>().HasQueryFilter(x => !x.Event.IsDeleted);
 
             base.OnModelCreating(modelBuilder);
         }

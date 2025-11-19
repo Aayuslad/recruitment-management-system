@@ -41,6 +41,7 @@ namespace Server.Domain.Entities
         public Gender Gender { get; private set; }
         public DateTime Dob { get; private set; }
         public Auth Auth { get; private set; } = default!;
+        public ICollection<Notification> Notifications { get; private set; } = new HashSet<Notification>();
 
         public void Delete(Guid deletedBy)
         {
