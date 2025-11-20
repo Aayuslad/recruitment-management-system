@@ -50,7 +50,7 @@ namespace Server.Application.Interviews.Handlers
                     roundNumber: request.RoundNumber,
                     interviewType: request.InterviewType,
                     scheduledAt: request.ScheduledAt,
-                    durationMinutes: request.DurationMinutes,
+                    durationInMinutes: request.DurationInMinutes,
                     meetingLink: request.MeetingLink,
                     status: request.Status,
                     participants: participants

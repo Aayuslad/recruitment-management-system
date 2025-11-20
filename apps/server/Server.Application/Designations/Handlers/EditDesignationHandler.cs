@@ -51,7 +51,6 @@ namespace Server.Application.Designations.Handlers
             designation.Update(
                 updatedBy: Guid.Parse(userIdString),
                 name: command.Name,
-                description: command.Description,
                 newSkills: newDSkills
             );
 

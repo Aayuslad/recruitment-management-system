@@ -25,7 +25,7 @@ namespace Server.Domain.Entities
             Comment = comment;
             Rating = rating;
 
-            SkillFeedbacks = skillFeedbacks.ToList();
+            SkillFeedbacks = skillFeedbacks.ToHashSet();
         }
 
         public Guid? JobApplicationId { get; private set; }

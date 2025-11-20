@@ -33,7 +33,7 @@ namespace Server.Infrastructure.Repositories
                 .Include(x => x.Designation)
                     .ThenInclude(x => x.DesignationSkills)
                         .ThenInclude(x => x.Skill)
-                .Include(x => x.PositionBatchReviewers)
+                .Include(x => x.Reviewers)
                     .ThenInclude(x => x.ReviewerUser)
                         .ThenInclude(x => x.Auth)
                 .Include(x => x.SkillOverRides)

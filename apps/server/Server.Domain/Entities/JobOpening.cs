@@ -1,4 +1,5 @@
 ﻿using Server.Core.Primitives;
+using Server.Domain.Entities.Abstractions;
 using Server.Domain.Enums;
 
 namespace Server.Domain.Entities
@@ -15,7 +16,7 @@ namespace Server.Domain.Entities
             JobOpeningType type,
             string? description,
             IEnumerable<JobOpeningInterviewer> jobOpeningInterviewers,
-            IEnumerable<JobOpeningInterviewRoundTemplate> interviewRounds,
+            IEnumerable<InterviewRoundTemplate> interviewRounds,
             IEnumerable<SkillOverRide> skillOverRides
         ) : base(id ?? Guid.NewGuid(), createdBy)
         {
@@ -35,8 +36,8 @@ namespace Server.Domain.Entities
         public PositionBatch PositionBatch { get; private set; } = null!;
         public ICollection<JobOpeningInterviewer> JobOpeningInterviewers { get; private set; } =
             new HashSet<JobOpeningInterviewer>();
-        public ICollection<JobOpeningInterviewRoundTemplate> InterviewRounds { get; private set; } =
-            new HashSet<JobOpeningInterviewRoundTemplate>();
+        public ICollection<InterviewRoundTemplate> InterviewRounds { get; private set; } =
+            new HashSet<InterviewRoundTemplate>();
         public ICollection<SkillOverRide> SkillOverRides { get; private set; } =
             new HashSet<SkillOverRide>();
 
@@ -48,7 +49,7 @@ namespace Server.Domain.Entities
             JobOpeningType type,
             string? description,
             IEnumerable<JobOpeningInterviewer> jobOpeningInterviewers,
-            IEnumerable<JobOpeningInterviewRoundTemplate> interviewRounds,
+            IEnumerable<InterviewRoundTemplate> interviewRounds,
             IEnumerable<SkillOverRide> skillOverRides
         )
         {
@@ -77,7 +78,7 @@ namespace Server.Domain.Entities
             JobOpeningType type,
             string? description,
             IEnumerable<JobOpeningInterviewer> jobOpeningInterviewers,
-            IEnumerable<JobOpeningInterviewRoundTemplate> interviewRounds,
+            IEnumerable<InterviewRoundTemplate> interviewRounds,
             IEnumerable<SkillOverRide> skillOverRides
         )
         {
@@ -120,7 +121,7 @@ namespace Server.Domain.Entities
             }
         }
 
-        private void SyncInterviewRounds(IEnumerable<JobOpeningInterviewRoundTemplate> newRounds)
+        private void SyncInterviewRounds(IEnumerable<InterviewRoundTemplate> newRounds)
         {
             if (newRounds is null)
                 return;

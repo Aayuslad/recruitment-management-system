@@ -53,7 +53,6 @@ namespace Server.Application.Designations.Handlers
                     id: newDesignationId,
                     createdBy: Guid.Parse(userIdString),
                     name: command.Name,
-                    description: command.Description,
                     skills: dSkills
                 );
 

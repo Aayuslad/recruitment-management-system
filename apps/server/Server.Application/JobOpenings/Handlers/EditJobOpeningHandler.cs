@@ -68,7 +68,7 @@ namespace Server.Application.JobOpenings.Handlers
                 selector: x =>
                     {
                         var roundTemplateId = x.Id ?? Guid.NewGuid();
-                        return JobOpeningInterviewRoundTemplate.Create(
+                        return InterviewRoundTemplate.Create(
                             id: roundTemplateId,
                             jobOpeningId: jobOpening.Id,
                             description: x.Description,
@@ -76,9 +76,9 @@ namespace Server.Application.JobOpenings.Handlers
                             type: x.Type,
                             durationInMinutes: x.DurationInMinutes,
                             panelRequirements: x.Requirements.Select(
-                                    selector: y => JobOpeningInterviewPanelRequirement.Create(
+                                    selector: y => InterviewPanelRequirement.Create(
                                             id: y.Id ?? Guid.NewGuid(),
-                                            jobOpeningInterviewTemplateId: roundTemplateId,
+                                            interviewTemplateId: roundTemplateId,
                                             role: y.Role,
                                             requiredCount: y.RequirementCount
                                         )

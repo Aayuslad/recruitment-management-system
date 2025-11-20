@@ -12,7 +12,7 @@ namespace Server.Application.Interviews.Commands
         public int RoundNumber { get; set; }
         public InterviewType InterviewType { get; set; }
         public DateTime? ScheduledAt { get; set; }
-        public int DurationMinutes { get; set; }
+        public int DurationInMinutes { get; set; }
         public string? MeetingLink { get; set; }
         public InterviewStatus Status { get; set; }
         public ICollection<InterviewParticipantDTO> Participants { get; set; } =

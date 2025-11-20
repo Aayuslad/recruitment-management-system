@@ -3,7 +3,7 @@ using MediatR;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.JobOpenings.Queries;
-using Server.Application.JobOpenings.Queries.DTOs.ForRecruterClient;
+using Server.Application.JobOpenings.Queries.DTOs;
 using Server.Core.Results;
 
 namespace Server.Application.JobOpenings.Handlers

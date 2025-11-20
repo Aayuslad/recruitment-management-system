@@ -4,7 +4,6 @@ using MediatR;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.JobOpenings.Queries;
 using Server.Application.JobOpenings.Queries.DTOs;
-using Server.Application.JobOpenings.Queries.DTOs.ForRecruterClient;
 using Server.Core.Results;
 using Server.Domain.Enums;
 

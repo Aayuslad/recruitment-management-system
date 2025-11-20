@@ -27,7 +27,7 @@ namespace Server.Domain.Entities
         public DateTime MovedAt { get; private set; }
         public Guid? MovedById { get; private set; }
         public Position Position { get; private set; } = null!;
-        public User MovedBy { get; private set; } = null!;
+        public User MovedByUser { get; private set; } = null!;
 
         public static PositionStatusMoveHistory Create(
             Guid positionId,

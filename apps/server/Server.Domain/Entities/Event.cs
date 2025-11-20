@@ -1,4 +1,5 @@
 ﻿using Server.Core.Primitives;
+using Server.Domain.Entities.Abstractions;
 using Server.Domain.Enums;
 
 namespace Server.Domain.Entities
@@ -29,7 +30,7 @@ namespace Server.Domain.Entities
             Guid createdBy,
             string name,
             EventType type,
-            IEnumerable<EventJobOpening> jobOpenings
+            IEnumerable<EventJobOpening> eventJobOpenings
         )
         {
             return new Event(
@@ -37,7 +38,7 @@ namespace Server.Domain.Entities
                 createdBy,
                 name,
                 type,
-                jobOpenings
+                eventJobOpenings
             );
         }
 
@@ -50,13 +51,13 @@ namespace Server.Domain.Entities
             Guid updatedBy,
             string name,
             EventType type,
-            IEnumerable<EventJobOpening> jobOpenings
+            IEnumerable<EventJobOpening> eventJobOpenings
         )
         {
             Name = name;
             Type = type;
 
-            SyncJobOpenings(jobOpenings);
+            SyncJobOpenings(eventJobOpenings);
 
             MarkAsUpdated(updatedBy);
         }

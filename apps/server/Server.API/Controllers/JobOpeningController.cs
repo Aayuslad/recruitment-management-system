@@ -59,21 +59,5 @@ namespace Server.API.Controllers
             var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }
-
-        [HttpGet("for-candidate")]
-        public async Task<IActionResult> GetJobOpeningsForCandidate(CancellationToken cancellationToken)
-        {
-            var query = new GetJobOpeningsForCandidateQuery();
-            var result = await _mediator.Send(query, cancellationToken);
-            return result.ToActionResult(this);
-        }
-
-        [HttpGet("for-candidate/{id:guid}")]
-        public async Task<IActionResult> GetJobOpeningForCandidate(Guid id, CancellationToken cancellationToken)
-        {
-            var query = new GetJobOpeningForCandiateQuery(id);
-            var result = await _mediator.Send(query, cancellationToken);
-            return result.ToActionResult(this);
-        }
     }
 }

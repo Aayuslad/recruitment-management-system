@@ -18,17 +18,17 @@ namespace Server.Infrastructure.Repositories
 
         Task<Auth?> IAuthRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return _context.Auths.FindAsync(new object?[] { id }, cancellationToken).AsTask();
+            return _context.Auths.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         Task<bool> IAuthRepository.ExistsByEmailAsync(Email email, CancellationToken cancellationToken)
         {
-            return _context.Auths.AnyAsync(a => a.Email == email);
+            return _context.Auths.AnyAsync(a => a.Email == email, cancellationToken);
         }
 
         Task<bool> IAuthRepository.ExistsByUserNameAsync(string userName, CancellationToken cancellationToken)
         {
-            return _context.Auths.AnyAsync(a => a.UserName == userName);
+            return _context.Auths.AnyAsync(a => a.UserName == userName, cancellationToken);
         }
 
         Task<Auth?> IAuthRepository.GetByUserNameOrEmail(string emailOrUserName, CancellationToken cancellationToken)

@@ -15,7 +15,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.HasOne(x => x.Position)
-                .WithMany(x => x.PositionStatusMoveHistories)
+                .WithMany(x => x.StatusMoveHistories)
                 .HasForeignKey(x => x.PositionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -29,7 +29,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(x => x.MovedAt)
                 .IsRequired();
 
-            builder.HasOne(x => x.MovedBy)
+            builder.HasOne(x => x.MovedByUser)
                 .WithMany()
                 .HasForeignKey(x => x.MovedById)
                 .OnDelete(DeleteBehavior.Restrict);

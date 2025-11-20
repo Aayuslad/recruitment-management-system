@@ -3,18 +3,18 @@ using Server.Domain.Enums;
 
 namespace Server.Domain.Entities
 {
-    public class JobOpeningInterviewRoundTemplate : BaseEntity<Guid>
+    public class InterviewRoundTemplate : BaseEntity<Guid>
     {
-        private JobOpeningInterviewRoundTemplate() : base(Guid.Empty) { }
+        private InterviewRoundTemplate() : base(Guid.Empty) { }
 
-        private JobOpeningInterviewRoundTemplate(
+        private InterviewRoundTemplate(
             Guid? id,
             Guid jobOpeningId,
             int roundNumber,
             InterviewType type,
             int durationInMinutes,
             string? description,
-            IEnumerable<JobOpeningInterviewPanelRequirement> panelRequirements
+            IEnumerable<InterviewPanelRequirement> panelRequirements
         ) : base(id ?? Guid.NewGuid())
         {
             JobOpeningId = jobOpeningId;
@@ -31,20 +31,20 @@ namespace Server.Domain.Entities
         public int DurationInMinutes { get; private set; }
         public InterviewType Type { get; private set; }
         public JobOpening JobOpening { get; private set; } = null!;
-        public ICollection<JobOpeningInterviewPanelRequirement> PanelRequirements { get; private set; } =
-            new HashSet<JobOpeningInterviewPanelRequirement>();
+        public ICollection<InterviewPanelRequirement> PanelRequirements { get; private set; } =
+            new HashSet<InterviewPanelRequirement>();
 
-        public static JobOpeningInterviewRoundTemplate Create(
+        public static InterviewRoundTemplate Create(
             Guid? id,
             Guid jobOpeningId,
             int roundNumber,
             InterviewType type,
             int durationInMinutes,
-            IEnumerable<JobOpeningInterviewPanelRequirement> panelRequirements,
+            IEnumerable<InterviewPanelRequirement> panelRequirements,
             string? description = null
         )
         {
-            return new JobOpeningInterviewRoundTemplate(
+            return new InterviewRoundTemplate(
                 id,
                 jobOpeningId,
                 roundNumber,
@@ -68,7 +68,7 @@ namespace Server.Domain.Entities
             Description = description;
         }
 
-        public void SyncPanelRequirements(IEnumerable<JobOpeningInterviewPanelRequirement> newRequirements)
+        public void SyncPanelRequirements(IEnumerable<InterviewPanelRequirement> newRequirements)
         {
             if (newRequirements is null) return;
 

@@ -84,11 +84,11 @@ namespace Server.Application.Positions.Handlers
                 PositionsOnHoldCount = batch.Positions.Count(x => x.Status == PositionStatus.OnHold),
                 CreatedBy = batch.CreatedBy,
                 CreatedByUserName = batch.CreatedByUser?.Auth.UserName,
-                Reviewers = batch.PositionBatchReviewers.Select(reviewer =>
+                Reviewers = batch.Reviewers.Select(reviewer =>
                 {
                     return new ReviewersDetailDTO
                     {
-                        ReviewerUserId = reviewer.ReviewerUserId,
+                        ReviewerUserId = reviewer.ReviewerId,
                         ReviewerUserName = reviewer.ReviewerUser.Auth.UserName,
                     };
                 }).ToList(),

@@ -7,18 +7,18 @@ namespace Server.Domain.Entities
     {
         private Role() : base(Guid.Empty) { }
 
-        private Role(Guid id, string roleName, string? description) : base(id)
+        private Role(Guid id, string name, string? description) : base(id)
         {
-            RoleName = roleName;
+            Name = name;
             Description = description;
         }
 
-        public string RoleName { get; private set; } = default!;
+        public string Name { get; private set; } = default!;
         public string? Description { get; private set; }
 
-        public static Role Create(string roleName, string? description = null)
+        public static Role Create(string name, string? description = null)
         {
-            return new Role(Guid.NewGuid(), roleName, description);
+            return new Role(Guid.NewGuid(), name, description);
         }
     }
 }

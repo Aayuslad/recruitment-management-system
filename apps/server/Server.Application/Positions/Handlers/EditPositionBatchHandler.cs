@@ -54,9 +54,9 @@ namespace Server.Application.Positions.Handlers
 
             // new updated revievers list
             var revievers = command.Reviewers?.Select(
-                    selector: x => PositionBatchReviewers.Create(
+                    selector: x => PositionBatchReviewer.Create(
                             positionBatchId: positionBatch.Id,
-                            reviewerUserId: x.ReviewerUserId
+                            reviewerId: x.ReviewerUserId
                         )
                 ).ToList() ?? [];
 

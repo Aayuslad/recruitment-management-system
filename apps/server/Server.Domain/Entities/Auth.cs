@@ -1,4 +1,5 @@
-﻿using Server.Domain.ValueObjects;
+﻿using Server.Domain.Entities.Abstractions;
+using Server.Domain.ValueObjects;
 
 namespace Server.Domain.Entities
 {

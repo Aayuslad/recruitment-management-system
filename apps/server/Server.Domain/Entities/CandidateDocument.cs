@@ -19,13 +19,13 @@ namespace Server.Domain.Entities
             IsVerified = false;
         }
 
-        public Guid CandidateId { get; set; }
-        public Guid DocumentTypeId { get; set; }
-        public string Url { get; set; } = null!;
-        public bool IsVerified { get; set; }
-        public Guid? VerifiedBy { get; set; }
-        public Candidate Candidate { get; set; } = null!;
-        public DocumentType DocumentType { get; set; } = null!;
+        public Guid CandidateId { get; private set; }
+        public Guid DocumentTypeId { get; private set; }
+        public string Url { get; private set; } = null!;
+        public bool IsVerified { get; private set; }
+        public Guid? VerifiedBy { get; private set; }
+        public Candidate Candidate { get; private set; } = null!;
+        public DocumentType DocumentType { get; private set; } = null!;
 
         public static CandidateDocument Create(
             Guid? id,
@@ -34,7 +34,12 @@ namespace Server.Domain.Entities
             string url
         )
         {
-            return new CandidateDocument(id, candidateId, documentTypeId, url);
+            return new CandidateDocument(
+                id, 
+                candidateId, 
+                documentTypeId, 
+                url
+            );
         }
 
         public void MarkVerified(Guid verifiedBy)

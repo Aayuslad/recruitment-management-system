@@ -46,7 +46,7 @@ namespace Server.Infrastructure.Repositories
 
         Task<bool> IDesignationRepository.ExistsByNameAsync(string name, CancellationToken cancellationToken)
         {
-            return _context.Designations.AnyAsync(x => x.Name == name);
+            return _context.Designations.AnyAsync(x => x.Name == name, cancellationToken);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Server.Core.Primitives;
+using Server.Domain.Entities.Abstractions;
 
 namespace Server.Domain.Entities
 {
@@ -6,27 +7,22 @@ namespace Server.Domain.Entities
     {
         private Skill() : base(Guid.Empty, Guid.Empty) { }
 
-        private Skill(Guid id, string name, string description, Guid createdBy)
+        private Skill(Guid id, string name, Guid createdBy)
             : base(id, createdBy)
         {
             Name = name;
-            Description = description;
         }
 
         public string Name { get; private set; } = null!;
-        public string Description { get; private set; } = null!;
 
-        public void Update(string name, string description, Guid updatedBy)
+        public void Update(string name, Guid updatedBy)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be empty.");
-            if (string.IsNullOrWhiteSpace(description))
-                throw new ArgumentException("Description cannot be empty.");
             if (updatedBy == Guid.Empty)
                 throw new ArgumentException("Invalid UpdatedBy user.");
 
             Name = name;
-            Description = description;
 
             MarkAsUpdated(updatedBy);
         }
@@ -39,9 +35,9 @@ namespace Server.Domain.Entities
             MarkAsDeleted(deletedBy);
         }
 
-        public static Skill Create(string name, string description, Guid createdBy)
+        public static Skill Create(string name, Guid createdBy)
         {
-            return new Skill(Guid.NewGuid(), name, description, createdBy);
+            return new Skill(Guid.NewGuid(), name, createdBy);
         }
     }
 }

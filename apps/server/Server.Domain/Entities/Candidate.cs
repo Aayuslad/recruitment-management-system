@@ -1,4 +1,5 @@
 ﻿using Server.Core.Primitives;
+using Server.Domain.Entities.Abstractions;
 using Server.Domain.ValueObjects;
 
 namespace Server.Domain.Entities
@@ -31,19 +32,18 @@ namespace Server.Domain.Entities
             Skills = skills?.ToHashSet() ?? [];
         }
 
-        public Email Email { get; set; } = null!;
-        public string FirstName { get; set; } = null!;
-        public string? MiddleName { get; set; }
-        public string LastName { get; set; } = null!;
-        public ContactNumber ContactNumber { get; set; } = null!;
-        public DateTime Dob { get; set; }
-        public string ResumeUrl { get; set; } = null!;
-        public bool IsBgVerificationCompleted { get; set; }
-        public Guid? BgVerifiedById { get; set; }
-        public User? BgVerifiedByUser { get; set; }
-
-        public ICollection<CandidateSkill> Skills { get; set; } = new HashSet<CandidateSkill>();
-        public ICollection<CandidateDocument> Documents { get; set; } = new HashSet<CandidateDocument>();
+        public Email Email { get; private set; } = null!;
+        public string FirstName { get; private set; } = null!;
+        public string? MiddleName { get; private set; }
+        public string LastName { get; private set; } = null!;
+        public ContactNumber ContactNumber { get; private set; } = null!;
+        public DateTime Dob { get; private set; }
+        public string ResumeUrl { get; private set; } = null!;
+        public bool IsBgVerificationCompleted { get; private set; }
+        public Guid? BgVerifiedById { get; private set; }
+        public User? BgVerifiedByUser { get; private set; }
+        public ICollection<CandidateSkill> Skills { get; private set; } = new HashSet<CandidateSkill>();
+        public ICollection<CandidateDocument> Documents { get; private set; } = new HashSet<CandidateDocument>();
 
         public static Candidate Create(
             Guid? id,

@@ -14,11 +14,11 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.HasKey(r => r.Id);
             builder.Property(x => x.Id).ValueGeneratedNever();
 
-            builder.Property(r => r.RoleName)
+            builder.Property(r => r.Name)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            builder.HasIndex(r => r.RoleName)
+            builder.HasIndex(r => r.Name)
                 .IsUnique();
 
             builder.Property(r => r.Description)

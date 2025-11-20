@@ -5,16 +5,16 @@ using Server.Domain.Entities;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    internal class PositionBatchReviewersConfiguration : IEntityTypeConfiguration<PositionBatchReviewers>
+    internal class PositionBatchReviewersConfiguration : IEntityTypeConfiguration<PositionBatchReviewer>
     {
-        public void Configure(EntityTypeBuilder<PositionBatchReviewers> builder)
+        public void Configure(EntityTypeBuilder<PositionBatchReviewer> builder)
         {
             builder.ToTable("PositionBatchReviewer");
 
-            builder.HasKey(x => new { x.PositionBatchId, x.ReviewerUserId });
+            builder.HasKey(x => new { x.PositionBatchId, x.ReviewerId });
 
             builder.HasOne(x => x.PositionBatch)
-                .WithMany(x => x.PositionBatchReviewers)
+                .WithMany(x => x.Reviewers)
                 .IsRequired()
                 .HasForeignKey(x => x.PositionBatchId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -22,7 +22,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.HasOne(x => x.ReviewerUser)
                 .WithMany()
                 .IsRequired()
-                .HasForeignKey(x => x.ReviewerUserId)
+                .HasForeignKey(x => x.ReviewerId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

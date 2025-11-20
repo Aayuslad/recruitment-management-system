@@ -20,7 +20,7 @@ namespace Server.Domain.Entities
         public string? ClosureReason { get; private set; }
         public Candidate? Candidate { get; private set; }
         public PositionBatch PositionBatch { get; private set; } = null!;
-        public ICollection<PositionStatusMoveHistory> PositionStatusMoveHistories { get; private set; } =
+        public ICollection<PositionStatusMoveHistory> StatusMoveHistories { get; private set; } =
             new HashSet<PositionStatusMoveHistory>();
 
         public static Position Create(Guid batchId)
@@ -41,7 +41,7 @@ namespace Server.Domain.Entities
             }
 
             var history = PositionStatusMoveHistory.Create(Id, PositionStatus.OnHold, comments, updatedBy);
-            PositionStatusMoveHistories.Add(history);
+            StatusMoveHistories.Add(history);
             Status = PositionStatus.OnHold;
         }
 
@@ -54,7 +54,7 @@ namespace Server.Domain.Entities
 
             var history = PositionStatusMoveHistory.Create(Id, PositionStatus.Open, comments, updatedBy);
             Status = PositionStatus.Open;
-            PositionStatusMoveHistories.Add(history);
+            StatusMoveHistories.Add(history);
         }
 
         public void CloseWithCandidate(Guid closedByCandidate, Guid updatedBy)
@@ -68,7 +68,7 @@ namespace Server.Domain.Entities
             var history = PositionStatusMoveHistory.Create(Id, PositionStatus.Closed, comments, updatedBy);
             ClosedByCandidate = closedByCandidate;
             Status = PositionStatus.Closed;
-            PositionStatusMoveHistories.Add(history);
+            StatusMoveHistories.Add(history);
         }
 
         public void CloseWithoutCandidate(string closureReason, Guid updatedBy)
@@ -82,7 +82,7 @@ namespace Server.Domain.Entities
             var history = PositionStatusMoveHistory.Create(Id, PositionStatus.Closed, comments, updatedBy);
             Status = PositionStatus.Closed;
             ClosureReason = closureReason;
-            PositionStatusMoveHistories.Add(history);
+            StatusMoveHistories.Add(history);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Server.Domain.Entities
             int roundNumber,
             InterviewType interviewType,
             DateTime? scheduledAt,
-            int durationMinutes,
+            int durationInMinutes,
             string? meetingLink,
             InterviewStatus status,
             IEnumerable<InterviewParticipant> participants
@@ -24,18 +24,18 @@ namespace Server.Domain.Entities
             RoundNumber = roundNumber;
             InterviewType = interviewType;
             ScheduledAt = scheduledAt;
-            DurationMinutes = durationMinutes;
+            DurationInMinutes = durationInMinutes;
             MeetingLink = meetingLink;
             Status = status;
 
-            Participants = participants.ToList();
+            Participants = participants.ToHashSet();
         }
 
         public Guid JobApplicationId { get; private set; }
         public int RoundNumber { get; private set; }
         public InterviewType InterviewType { get; private set; }
         public DateTime? ScheduledAt { get; private set; }
-        public int DurationMinutes { get; private set; }
+        public int DurationInMinutes { get; private set; }
         public string? MeetingLink { get; private set; }
         public InterviewStatus Status { get; private set; }
         public JobApplication JobApplication { get; private set; } = null!;
@@ -48,7 +48,7 @@ namespace Server.Domain.Entities
             int roundNumber,
             InterviewType interviewType,
             DateTime? scheduledAt,
-            int durationMinutes,
+            int durationInMinutes,
             string? meetingLink,
             InterviewStatus status,
             IEnumerable<InterviewParticipant> participants
@@ -60,7 +60,7 @@ namespace Server.Domain.Entities
                 roundNumber,
                 interviewType,
                 scheduledAt,
-                durationMinutes,
+                durationInMinutes,
                 meetingLink,
                 status,
                 participants
@@ -71,7 +71,7 @@ namespace Server.Domain.Entities
             int roundNumber,
             InterviewType interviewType,
             DateTime? scheduledAt,
-            int durationMinutes,
+            int durationInMinutes,
             string? meetingLink,
             InterviewStatus status,
             IEnumerable<InterviewParticipant> participants
@@ -80,7 +80,7 @@ namespace Server.Domain.Entities
             RoundNumber = roundNumber;
             InterviewType = interviewType;
             ScheduledAt = scheduledAt;
-            DurationMinutes = durationMinutes;
+            DurationInMinutes = durationInMinutes;
             MeetingLink = meetingLink;
             Status = status;
 

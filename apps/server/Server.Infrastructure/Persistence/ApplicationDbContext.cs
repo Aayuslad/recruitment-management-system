@@ -17,13 +17,13 @@ namespace Server.Infrastructure.Persistence
         public DbSet<DesignationSkill> DesignationSkills { get; set; } = null!;
         public DbSet<PositionBatch> PositionBatchs { get; set; } = null!;
         public DbSet<Position> Positions { get; set; } = null!;
-        public DbSet<PositionBatchReviewers> PositionReviewers { get; set; } = null!;
+        public DbSet<PositionBatchReviewer> PositionBatchReviewers { get; set; } = null!;
         public DbSet<PositionStatusMoveHistory> PositionStatusMoveHistories { get; set; } = null!;
         public DbSet<SkillOverRide> SkillOverRides { get; set; } = null!;
         public DbSet<JobOpening> JobOpenings { get; set; } = null!;
         public DbSet<JobOpeningInterviewer> JobOpeningInterviewers { get; set; } = null!;
-        public DbSet<JobOpeningInterviewPanelRequirement> JobOpeningInterviewPanelRequirements { get; set; } = null!;
-        public DbSet<JobOpeningInterviewRoundTemplate> JobOpeningInterviewRoundTemplates { get; set; } = null!;
+        public DbSet<InterviewPanelRequirement> InterviewPanelRequirements { get; set; } = null!;
+        public DbSet<InterviewRoundTemplate> InterviewRoundTemplates { get; set; } = null!;
         public DbSet<Candidate> Candidates { get; set; } = null!;
         public DbSet<CandidateSkill> CandidateSkills { get; set; } = null!;
         public DbSet<CandidateDocument> CandidatesDocument { get; set; } = null!;
@@ -37,6 +37,7 @@ namespace Server.Infrastructure.Persistence
         public DbSet<Event> Events { get; set; } = null!;
         public DbSet<EventJobOpening> EventsJobOpening { get; set; } = null!;
         public DbSet<Notification> Notifications { get; set; } = null!;
+        public DbSet<Employee> Employees { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -62,7 +63,7 @@ namespace Server.Infrastructure.Persistence
             // PositionBatch Aggregate
             modelBuilder.Entity<PositionBatch>().HasQueryFilter(a => !a.IsDeleted);
 
-            modelBuilder.Entity<PositionBatchReviewers>().HasQueryFilter(x => !x.PositionBatch.IsDeleted);
+            modelBuilder.Entity<PositionBatchReviewer>().HasQueryFilter(x => !x.PositionBatch.IsDeleted);
             modelBuilder.Entity<Position>().HasQueryFilter(x => !x.PositionBatch.IsDeleted);
             //modelBuilder.Entity<SkillOverRide>().HasQueryFilter(x => !x.PositionBatch.IsDeleted);
             modelBuilder.Entity<PositionStatusMoveHistory>().HasQueryFilter(x => !x.Position.PositionBatch.IsDeleted);
@@ -80,8 +81,8 @@ namespace Server.Infrastructure.Persistence
             // TODO: complete filters here...
             modelBuilder.Entity<JobOpening>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<JobOpeningInterviewer>().HasQueryFilter(x => !x.JobOpening.IsDeleted);
-            modelBuilder.Entity<JobOpeningInterviewRoundTemplate>().HasQueryFilter(x => !x.JobOpening.IsDeleted);
-            modelBuilder.Entity<JobOpeningInterviewPanelRequirement>().HasQueryFilter(x => !x.InterviewRoundTemplate.JobOpening.IsDeleted);
+            modelBuilder.Entity<InterviewRoundTemplate>().HasQueryFilter(x => !x.JobOpening.IsDeleted);
+            modelBuilder.Entity<InterviewPanelRequirement>().HasQueryFilter(x => !x.InterviewRoundTemplate.JobOpening.IsDeleted);
 
             // job application
             modelBuilder.Entity<JobApplication>().HasQueryFilter(x => !x.IsDeleted);

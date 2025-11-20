@@ -41,7 +41,7 @@ namespace Server.Application.Events.Handlers
                     updatedBy: Guid.Parse(userIdString),
                     name: request.Name,
                     type: request.Type,
-                    jobOpenings: request.JobOpenings.Select(
+                    eventJobOpenings: request.JobOpenings.Select(
                             selector: x => EventJobOpening.Create(
                                     eventId: event_.Id,
                                     jobOpeningId: x.JobOpeningId

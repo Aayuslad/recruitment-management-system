@@ -23,7 +23,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(x => x.InterviewType)
                 .IsRequired();
 
-            builder.Property(x => x.DurationMinutes)
+            builder.Property(x => x.DurationInMinutes)
                 .IsRequired();
 
             builder.Property(x => x.Status)

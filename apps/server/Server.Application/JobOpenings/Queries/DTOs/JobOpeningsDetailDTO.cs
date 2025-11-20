@@ -1,6 +1,6 @@
 ﻿using Server.Domain.Enums;
 
-namespace Server.Application.JobOpenings.Queries.DTOs.ForRecruterClient
+namespace Server.Application.JobOpenings.Queries.DTOs
 {
     public class JobOpeningsDetailDTO
     {

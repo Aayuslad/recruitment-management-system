@@ -6,6 +6,6 @@ namespace Server.Domain.Entities
     {
         private DocumentType() : base(Guid.Empty) { }
 
-        public string Name { get; set; } = null!;
+        public string Name { get; private set; } = null!;
     }
 }

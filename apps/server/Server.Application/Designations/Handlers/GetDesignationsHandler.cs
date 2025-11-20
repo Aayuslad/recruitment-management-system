@@ -26,7 +26,6 @@ namespace Server.Application.Designations.Handlers
             {
                 Id = designation.Id,
                 Name = designation.Name,
-                Description = designation.Description,
                 DesignationSkills = designation.DesignationSkills?.Select(ds => new DesignationSkillDetailDTO
                 {
                     SkillId = ds.SkillId,

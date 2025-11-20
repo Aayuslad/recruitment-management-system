@@ -1,4 +1,5 @@
 ﻿using Server.Core.Primitives;
+using Server.Domain.Entities.Abstractions;
 using Server.Domain.Enums;
 using Server.Domain.ValueObjects;
 

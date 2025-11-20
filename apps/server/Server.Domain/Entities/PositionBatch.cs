@@ -1,4 +1,5 @@
 ﻿using Server.Core.Primitives;
+using Server.Domain.Entities.Abstractions;
 
 namespace Server.Domain.Entities
 {
@@ -15,7 +16,7 @@ namespace Server.Domain.Entities
             float minCTC,
             float maxCTC,
             IEnumerable<Position> positions,
-            IEnumerable<PositionBatchReviewers> reviewers,
+            IEnumerable<PositionBatchReviewer> reviewers,
             IEnumerable<SkillOverRide> overRides
         ) : base(id ?? Guid.NewGuid(), createdBy)
         {
@@ -25,7 +26,7 @@ namespace Server.Domain.Entities
             MinCTC = minCTC;
             MaxCTC = maxCTC;
             Positions = positions.ToHashSet();
-            PositionBatchReviewers = reviewers.ToHashSet();
+            Reviewers = reviewers.ToHashSet();
             SkillOverRides = overRides.ToHashSet();
         }
 
@@ -37,8 +38,8 @@ namespace Server.Domain.Entities
         public Designation Designation { get; private set; } = null!;
         public ICollection<Position> Positions { get; private set; } =
             new HashSet<Position>();
-        public ICollection<PositionBatchReviewers> PositionBatchReviewers { get; private set; } =
-            new HashSet<PositionBatchReviewers>();
+        public ICollection<PositionBatchReviewer> Reviewers { get; private set; } =
+            new HashSet<PositionBatchReviewer>();
         public ICollection<SkillOverRide> SkillOverRides { get; private set; } =
             new HashSet<SkillOverRide>();
 
@@ -51,7 +52,7 @@ namespace Server.Domain.Entities
             float minCTC,
             float maxCTC,
             IEnumerable<Position> positions,
-            IEnumerable<PositionBatchReviewers> reviewers,
+            IEnumerable<PositionBatchReviewer> reviewers,
             IEnumerable<SkillOverRide> overRides
         )
         {
@@ -75,7 +76,7 @@ namespace Server.Domain.Entities
             string jobLocation,
             float minCTC,
             float maxCTC,
-            IEnumerable<PositionBatchReviewers> newReviewers,
+            IEnumerable<PositionBatchReviewer> newReviewers,
             IEnumerable<SkillOverRide> newOverRides,
             Guid updatedBy
         )
@@ -97,15 +98,15 @@ namespace Server.Domain.Entities
             MarkAsDeleted(deletedBy);
         }
 
-        private void SyncReviewers(IEnumerable<PositionBatchReviewers> newReviewers)
+        private void SyncReviewers(IEnumerable<PositionBatchReviewer> newReviewers)
         {
             if (newReviewers is null) return;
 
             // remove removed ones
-            foreach (var existing in PositionBatchReviewers.ToList())
+            foreach (var existing in Reviewers.ToList())
             {
-                if (!newReviewers.Any(x => x.ReviewerUserId == existing.ReviewerUserId))
-                    PositionBatchReviewers.Remove(existing);
+                if (!newReviewers.Any(x => x.ReviewerId == existing.ReviewerId))
+                    Reviewers.Remove(existing);
             }
 
             // no update section, join table has no updatable data
@@ -113,8 +114,8 @@ namespace Server.Domain.Entities
             // add added ones
             foreach (var reviewer in newReviewers)
             {
-                if (!PositionBatchReviewers.Any(x => x.ReviewerUserId == reviewer.ReviewerUserId))
-                    PositionBatchReviewers.Add(reviewer);
+                if (!Reviewers.Any(x => x.ReviewerId == reviewer.ReviewerId))
+                    Reviewers.Add(reviewer);
             }
         }
 

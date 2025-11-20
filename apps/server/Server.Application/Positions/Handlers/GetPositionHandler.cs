@@ -84,16 +84,16 @@ namespace Server.Application.Positions.Handlers
                 Status = position.Status,
                 ClosedByCandidate = position.ClosedByCandidate,
                 ClosureReason = position.ClosureReason,
-                Reviewers = position.PositionBatch.PositionBatchReviewers.Select(reviewer =>
+                Reviewers = position.PositionBatch.Reviewers.Select(reviewer =>
                 {
                     return new ReviewersDetailDTO
                     {
-                        ReviewerUserId = reviewer.ReviewerUserId,
+                        ReviewerUserId = reviewer.ReviewerId,
                         ReviewerUserName = reviewer.ReviewerUser.Auth.UserName,
                     };
                 }).ToList(),
                 Skills = skills,
-                MoveHistory = position.PositionStatusMoveHistories?.Select(x =>
+                MoveHistory = position.StatusMoveHistories?.Select(x =>
                 {
                     return new PositionStatusMoveHistoryDetailDTO
                     {
@@ -103,7 +103,7 @@ namespace Server.Application.Positions.Handlers
                         Comments = x.Comments,
                         MovedAt = x.MovedAt,
                         MovedById = x.MovedById,
-                        MovedByUserName = x.MovedBy.Auth.UserName,
+                        MovedByUserName = x.MovedByUser.Auth.UserName,
                     };
                 }).ToList() ?? [],
             };

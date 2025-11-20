@@ -19,10 +19,6 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(d => d.Name)
                 .IsRequired()
                 .HasMaxLength(50);
-
-            builder.Property(d => d.Description)
-                .IsRequired()
-                .HasMaxLength(500);
         }
     }
 }

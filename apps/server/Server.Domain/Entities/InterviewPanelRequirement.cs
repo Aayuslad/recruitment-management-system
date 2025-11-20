@@ -3,37 +3,37 @@ using Server.Domain.Enums;
 
 namespace Server.Domain.Entities
 {
-    public class JobOpeningInterviewPanelRequirement : BaseEntity<Guid>
+    public class InterviewPanelRequirement : BaseEntity<Guid>
     {
-        private JobOpeningInterviewPanelRequirement() : base(Guid.Empty) { }
+        private InterviewPanelRequirement() : base(Guid.Empty) { }
 
-        private JobOpeningInterviewPanelRequirement(
+        private InterviewPanelRequirement(
             Guid? id,
-            Guid jobOpeningInterviewTemplateId,
+            Guid interviewTemplateId,
             InterviewParticipantRole role,
             int requiredCount
         ) : base(id ?? Guid.NewGuid())
         {
-            JobOpeningInterviewTemplateId = jobOpeningInterviewTemplateId;
+            InterviewTemplateId = interviewTemplateId;
             Role = role;
             RequiredCount = requiredCount;
         }
 
-        public Guid JobOpeningInterviewTemplateId { get; private set; }
+        public Guid InterviewTemplateId { get; private set; }
         public InterviewParticipantRole Role { get; private set; }
         public int RequiredCount { get; private set; }
-        public JobOpeningInterviewRoundTemplate InterviewRoundTemplate { get; private set; } = null!;
+        public InterviewRoundTemplate InterviewRoundTemplate { get; private set; } = null!;
 
-        public static JobOpeningInterviewPanelRequirement Create(
+        public static InterviewPanelRequirement Create(
             Guid? id,
-            Guid jobOpeningInterviewTemplateId,
+            Guid interviewTemplateId,
             InterviewParticipantRole role,
             int requiredCount
         )
         {
-            return new JobOpeningInterviewPanelRequirement(
+            return new InterviewPanelRequirement(
                 id,
-                jobOpeningInterviewTemplateId,
+                interviewTemplateId,
                 role,
                 requiredCount
             );

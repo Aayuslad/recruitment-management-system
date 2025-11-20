@@ -5,11 +5,11 @@ using Server.Domain.Entities;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    internal class JobOpeningInterviewRoundTemplateConfiguration : IEntityTypeConfiguration<JobOpeningInterviewRoundTemplate>
+    internal class InterviewRoundTemplateConfiguration : IEntityTypeConfiguration<InterviewRoundTemplate>
     {
-        public void Configure(EntityTypeBuilder<JobOpeningInterviewRoundTemplate> builder)
+        public void Configure(EntityTypeBuilder<InterviewRoundTemplate> builder)
         {
-            builder.ToTable("JobOpeningInterviewRoundTemplate");
+            builder.ToTable("InterviewRoundTemplate");
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedNever();

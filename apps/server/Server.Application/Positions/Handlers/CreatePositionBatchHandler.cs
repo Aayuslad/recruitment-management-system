@@ -48,9 +48,9 @@ namespace Server.Application.Positions.Handlers
 
             // create reviewers list
             var reviewers = command.Reviewers?.Select(
-                selector: reviewer => PositionBatchReviewers.Create(
+                selector: reviewer => PositionBatchReviewer.Create(
                             positionBatchId: newPositionBatchId,
-                            reviewerUserId: reviewer.ReviewerUserId
+                            reviewerId: reviewer.ReviewerUserId
                         )).ToList() ?? [];
 
             // create needed positions list

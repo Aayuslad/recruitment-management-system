@@ -5,18 +5,18 @@ using Server.Domain.Entities;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    internal class JobOpeningInterviewPanelRequirementConfiguration : IEntityTypeConfiguration<JobOpeningInterviewPanelRequirement>
+    internal class InterviewPanelRequirementConfiguration : IEntityTypeConfiguration<InterviewPanelRequirement>
     {
-        public void Configure(EntityTypeBuilder<JobOpeningInterviewPanelRequirement> builder)
+        public void Configure(EntityTypeBuilder<InterviewPanelRequirement> builder)
         {
-            builder.ToTable("JobOpeningInterviewPanelRequirement");
+            builder.ToTable("InterviewPanelRequirement");
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedNever();
 
-            builder.HasOne<JobOpeningInterviewRoundTemplate>(x => x.InterviewRoundTemplate)
+            builder.HasOne<InterviewRoundTemplate>(x => x.InterviewRoundTemplate)
                 .WithMany(x => x.PanelRequirements)
-                .HasForeignKey(x => x.JobOpeningInterviewTemplateId)
+                .HasForeignKey(x => x.InterviewTemplateId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -27,7 +27,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(x => x.RequiredCount)
                 .IsRequired();
 
-            builder.HasIndex(x => new { x.JobOpeningInterviewTemplateId, x.Role })
+            builder.HasIndex(x => new { x.InterviewTemplateId, x.Role })
                 .IsUnique();
         }
     }

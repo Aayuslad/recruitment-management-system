@@ -10,10 +10,10 @@
             SkillId = skillId;
         }
 
-        public Guid CandidateId { get; set; }
-        public Guid SkillId { get; set; }
-        public Candidate Candidate { get; set; } = null!;
-        public Skill Skill { get; set; } = null!;
+        public Guid CandidateId { get; private set; }
+        public Guid SkillId { get; private set; }
+        public Candidate Candidate { get; private set; } = null!;
+        public Skill Skill { get; private set; } = null!;
 
         public static CandidateSkill Create(Guid candidateId, Guid skillId)
         {

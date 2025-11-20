@@ -34,7 +34,7 @@ namespace Server.Application.Interviews.Handlers
                 RoundNumber = interview.RoundNumber,
                 InterviewType = interview.InterviewType,
                 ScheduledAt = interview.ScheduledAt,
-                DurationMinutes = interview.DurationMinutes,
+                DurationInMinutes = interview.DurationInMinutes,
                 MeetingLink = interview.MeetingLink,
                 Status = interview.Status,
                 Feedbacks = interview.Feedbacks.Select(

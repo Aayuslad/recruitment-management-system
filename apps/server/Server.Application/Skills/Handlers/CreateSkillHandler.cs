@@ -38,7 +38,6 @@ namespace Server.Application.Skills.Handlers
             // step 2: create and persist entiry
             var skill = Skill.Create(
                 command.Name,
-                command.Description,
                 Guid.Parse(userIdString)
             );
             await _skillRepository.AddAsync(skill, cancellationToken);

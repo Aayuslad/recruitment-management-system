@@ -37,7 +37,6 @@ namespace Server.Application.Skills.Handlers
             // step 2: update skill properties
             skill.Update(
                 command.Name,
-                command.Description,
                 Guid.Parse(userIdString)
             );
 

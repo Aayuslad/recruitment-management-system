@@ -1,4 +1,5 @@
 ﻿using Server.Core.Primitives;
+using Server.Domain.Entities.Abstractions;
 
 namespace Server.Domain.Entities
 {
@@ -9,26 +10,21 @@ namespace Server.Domain.Entities
         private Designation(
             Guid? id,
             string name,
-            string description,
             IEnumerable<DesignationSkill> skills,
             Guid createdBy
         ) : base(id ?? Guid.NewGuid(), createdBy)
         {
             Name = name;
-            Description = description;
-
             DesignationSkills = skills.ToHashSet();
         }
 
         public string Name { get; private set; } = default!;
-        public string Description { get; private set; } = default!;
         public ICollection<DesignationSkill> DesignationSkills { get; private set; } =
             new HashSet<DesignationSkill>();
 
         public static Designation Create(
             Guid? id,
             string name,
-            string description,
             Guid createdBy,
             IEnumerable<DesignationSkill> skills
         )
@@ -36,7 +32,6 @@ namespace Server.Domain.Entities
             return new Designation(
                 id,
                 name,
-                description,
                 skills,
                 createdBy
             );
@@ -49,13 +44,11 @@ namespace Server.Domain.Entities
 
         public void Update(
             string name,
-            string description,
             IEnumerable<DesignationSkill> newSkills,
             Guid updatedBy
         )
         {
             Name = name;
-            Description = description;
 
             SyncDesignatioSkills(newSkills);
 

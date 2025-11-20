@@ -32,11 +32,6 @@ namespace Server.Application.Skills.Handlers
             {
                 Id = skill.Id,
                 Name = skill.Name,
-                Description = skill.Description,
-                CreatedBy = skill.CreatedBy,
-                CreatedAt = skill.CreatedAt,
-                LastUpdatedAt = skill.LastUpdatedAt,
-                LastUpdatedBy = skill.LastUpdatedBy,
             };
 
             // step 3: return dto

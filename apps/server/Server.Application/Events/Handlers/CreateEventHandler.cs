@@ -46,7 +46,7 @@ namespace Server.Application.Events.Handlers
                     createdBy: Guid.Parse(userIdString),
                     name: request.Name,
                     type: request.Type,
-                    jobOpenings: jobOpenings
+                    eventJobOpenings: jobOpenings
                 );
 
             // step 2: persist entity

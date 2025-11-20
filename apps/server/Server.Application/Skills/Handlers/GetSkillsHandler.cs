@@ -26,11 +26,6 @@ namespace Server.Application.Skills.Handlers
             {
                 Id = s.Id,
                 Name = s.Name,
-                Description = s.Description,
-                CreatedBy = s.CreatedBy,
-                CreatedAt = s.CreatedAt,
-                LastUpdatedAt = s.LastUpdatedAt,
-                LastUpdatedBy = s.LastUpdatedBy,
             });
 
             // step 3: return success

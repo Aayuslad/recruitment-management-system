@@ -23,7 +23,7 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .WithMany()
                 .IsRequired()
                 .HasForeignKey(x => x.DesignationId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(x => x.JobLocation)
                 .IsRequired();
