@@ -11,20 +11,12 @@ namespace Server.Infrastructure.Persistence.Configurations
         {
             builder.ToTable("UserRole");
 
-            builder.HasKey(ur => ur.Id); // using Guid as PK for simplicity
+            builder.HasKey(ur => ur.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
-            builder.Property(ur => ur.UserId).IsRequired();
-            builder.Property(ur => ur.RoleId).IsRequired();
-            builder.Property(ur => ur.AssignedBy).IsRequired();
-            builder.Property(ur => ur.AssignedAt).IsRequired();
+            builder.Property(ur => ur.AssignedAt)
+                .IsRequired();
 
-            // indexes
-            builder.HasIndex(ur => ur.UserId);
-            builder.HasIndex(ur => ur.RoleId);
-
-            // relationships
-
-            // User - Role ( n : m )
             builder.HasOne(x => x.User)
                 .WithMany()
                 .IsRequired()
@@ -36,6 +28,15 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .IsRequired()
                 .HasForeignKey(ur => ur.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(ur => ur.UserId);
+            builder.HasIndex(ur => ur.RoleId);
+
+            builder.HasOne(x => x.AssignedByUser)
+                .WithMany()
+                .IsRequired()
+                .HasForeignKey(ur => ur.AssignedBy)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

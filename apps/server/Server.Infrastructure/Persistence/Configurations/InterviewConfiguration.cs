@@ -12,6 +12,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("Interview");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.Property(x => x.JobApplicationId)
                 .IsRequired();

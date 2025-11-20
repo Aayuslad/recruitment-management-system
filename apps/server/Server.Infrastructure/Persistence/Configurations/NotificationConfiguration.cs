@@ -12,6 +12,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("Notification");
 
             builder.HasKey(e => e.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.HasOne(x => x.User)
                 .WithMany(x => x.Notifications)

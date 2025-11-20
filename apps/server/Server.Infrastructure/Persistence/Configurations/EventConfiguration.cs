@@ -14,6 +14,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("Event");
 
             builder.HasKey(e => e.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.Property(e => e.Name)
                 .IsRequired();

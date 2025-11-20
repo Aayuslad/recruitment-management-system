@@ -18,7 +18,7 @@ namespace Server.Infrastructure.Repositories
         Task IPositionRepository.UpdateAsync(Position position, CancellationToken cancellationToken)
         {
             // TEMP FIX
-            _context.Set<PositionStatusMoveHistory>().AddRange(position.PositionStatusMoveHistories);
+            //_context.Set<PositionStatusMoveHistory>().AddRange(position.PositionStatusMoveHistories);
             // TODO: solve bug, somehow EF not traking the changes properly. it is updating insted of adding column in Hstory
             return _context.SaveChangesAsync(cancellationToken);
         }

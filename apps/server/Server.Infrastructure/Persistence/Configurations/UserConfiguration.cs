@@ -15,6 +15,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("User");
 
             builder.HasKey(u => u.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.Property(u => u.AuthId)
                 .IsRequired();

@@ -14,6 +14,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("PositionBatch");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.Property(x => x.Description)
                 .IsRequired(false);

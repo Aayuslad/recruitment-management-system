@@ -12,6 +12,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("JobOpeningInterviewer");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.HasOne<JobOpening>(x => x.JobOpening)
                 .WithMany(x => x.JobOpeningInterviewers)

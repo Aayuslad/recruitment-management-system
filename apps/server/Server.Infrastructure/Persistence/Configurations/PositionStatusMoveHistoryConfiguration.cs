@@ -12,6 +12,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("PositionStatusMoveHistory");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.HasOne(x => x.Position)
                 .WithMany(x => x.PositionStatusMoveHistories)

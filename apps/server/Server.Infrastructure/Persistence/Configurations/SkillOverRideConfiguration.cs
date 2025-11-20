@@ -12,6 +12,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("SkillOverRide");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.HasOne(x => x.PositionBatch)
                 .WithMany(x => x.SkillOverRides)

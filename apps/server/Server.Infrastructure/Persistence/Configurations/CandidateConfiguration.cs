@@ -15,6 +15,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("Candidate");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.Property(u => u.ContactNumber)
                 .HasConversion(

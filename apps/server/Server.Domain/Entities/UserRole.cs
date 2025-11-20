@@ -20,6 +20,7 @@ namespace Server.Domain.Entities
         public DateTime AssignedAt { get; private set; }
         public User User { get; private set; } = null!;
         public Role Role { get; private set; } = null!;
+        public User AssignedByUser { get; private set; } = null!;
 
         public static UserRole Assign(Guid userId, Guid roleId, Guid assignedBy)
         {

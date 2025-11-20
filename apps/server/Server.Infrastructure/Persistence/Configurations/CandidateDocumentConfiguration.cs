@@ -12,8 +12,8 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("CandidateDocument");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
-            // Properties
             builder.Property(x => x.Url)
                 .IsRequired();
 

@@ -14,6 +14,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("Designation");
 
             builder.HasKey(d => d.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.Property(d => d.Name)
                 .IsRequired()

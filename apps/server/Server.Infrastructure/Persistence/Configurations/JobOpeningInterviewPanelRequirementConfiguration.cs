@@ -12,6 +12,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("JobOpeningInterviewPanelRequirement");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.HasOne<JobOpeningInterviewRoundTemplate>(x => x.InterviewRoundTemplate)
                 .WithMany(x => x.PanelRequirements)

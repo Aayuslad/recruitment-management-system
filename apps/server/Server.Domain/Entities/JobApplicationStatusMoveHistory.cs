@@ -18,7 +18,7 @@ namespace Server.Domain.Entities
             JobApplicationId = jobApplicationId;
             StatusMovedTo = statusMovedTo;
             MovedById = movedById;
-            MovedAt = DateTime.Now;
+            MovedAt = DateTime.UtcNow;
             Comment = comment;
         }
 

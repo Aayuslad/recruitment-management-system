@@ -12,6 +12,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("Role");
 
             builder.HasKey(r => r.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.Property(r => r.RoleName)
                 .IsRequired()
