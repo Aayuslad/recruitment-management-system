@@ -28,6 +28,7 @@ namespace Server.Domain.Entities
             LastName = lastName;
             Status = status ?? UserStatus.Active;
             ContactNumber = contactNumber;
+            IsContactNumberVerified = false;
             Gender = gender ?? Gender.PreferNotToSay;
             Dob = dob;
         }
@@ -38,7 +39,7 @@ namespace Server.Domain.Entities
         public string LastName { get; private set; } = default!;
         public UserStatus Status { get; private set; }
         public ContactNumber ContactNumber { get; private set; } = default!;
-        public bool IsContactNumberVerified { get; private set; } = false;
+        public bool IsContactNumberVerified { get; private set; } 
         public Gender Gender { get; private set; }
         public DateTime Dob { get; private set; }
         public Auth Auth { get; private set; } = default!;

@@ -4,9 +4,9 @@ using Server.Application.Users.Commands;
 
 namespace Server.Application.Users.Validators
 {
-    internal class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+    internal class CreateUserProfileCommandValidator : AbstractValidator<CreateUserProfileCommand>
     {
-        public CreateUserCommandValidator()
+        public CreateUserProfileCommandValidator()
         {
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("First name is required.")

@@ -1,10 +1,11 @@
 ﻿using MediatR;
 
+using Server.Application.Users.Commands.DTOs;
 using Server.Core.Results;
 
 namespace Server.Application.Users.Commands
 {
-    public sealed class RegisterUserCommand : IRequest<Result<string>>
+    public sealed class RegisterUserCommand : IRequest<Result<RegisterUserDTO>>
     {
         public RegisterUserCommand(string userName, string email, string password)
         {

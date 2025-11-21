@@ -36,9 +36,6 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(a => a.PasswordHash)
                 .HasMaxLength(256);
 
-            builder.Property(a => a.GoogleId)
-                .HasMaxLength(100);
-
             builder.Property(a => a.CreatedAt)
                 .IsRequired();
 

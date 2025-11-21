@@ -10,7 +10,7 @@ namespace Server.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
-            builder.ToTable("Candidate");
+            builder.ToTable("Employee");
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedNever();

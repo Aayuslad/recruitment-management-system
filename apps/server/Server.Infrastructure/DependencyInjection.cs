@@ -21,7 +21,6 @@ namespace Server.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
             // Register Repositories
-            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRolesRepository, RolesRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();

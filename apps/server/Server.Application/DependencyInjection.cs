@@ -25,7 +25,7 @@ namespace Server.Application
             // validators
             services.AddTransient<IValidator<RegisterUserCommand>, RegisterUserCommandValidator>();
             services.AddTransient<IValidator<LoginUserCommand>, LoginUserCommandValidator>();
-            services.AddTransient<IValidator<CreateUserCommand>, CreateUserCommandValidator>();
+            services.AddTransient<IValidator<CreateUserProfileCommand>, CreateUserProfileCommandValidator>();
             services.AddTransient<IValidator<GetSkillQuery>, GetSkillQueryValidator>();
             services.AddTransient<IValidator<GetSkillsQuery>, GetSkillsQueryValidator>();
             services.AddTransient<IValidator<CreateSkillCommand>, CreateSkillCommandValidator>();
@@ -37,7 +37,7 @@ namespace Server.Application
             services.AddTransient<IValidator<EditDesignationCommand>, EditDesignationCommandValidator>();
             services.AddTransient<IValidator<DeleteDesignationCommand>, DeleteDesignationCommandValidator>();
 
-            //// pipeline
+            // pipeline
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             return services;

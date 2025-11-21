@@ -12,20 +12,17 @@ namespace Server.Domain.Entities
             string userName,
             Email email,
             string passwordHash,
-            string googleId,
             Guid? createdBy
         ) : base(id, createdBy)
         {
             Email = email;
             UserName = userName;
             PasswordHash = passwordHash;
-            GoogleId = googleId;
         }
 
         public string UserName { get; private set; } = default!;
         public Email Email { get; private set; } = default!;
         public string? PasswordHash { get; private set; }
-        public string? GoogleId { get; private set; }
         public DateTime? LastLoginAt { get; private set; }
 
         public void UpdatePassword(string newPasswordHash)
@@ -51,8 +48,7 @@ namespace Server.Domain.Entities
             string userName,
             Email email,
             string passwordHash,
-            Guid? createdBy,
-            string googleId = default!
+            Guid? createdBy
         )
         {
             return new Auth(
@@ -60,7 +56,6 @@ namespace Server.Domain.Entities
                 userName,
                 email,
                 passwordHash,
-                googleId,
                 createdBy
             );
         }

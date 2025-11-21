@@ -1,13 +1,14 @@
 ﻿using MediatR;
 
+using Server.Application.Users.Commands.DTOs;
 using Server.Core.Results;
 using Server.Domain.Enums;
 
 namespace Server.Application.Users.Commands
 {
-    public class CreateUserCommand : IRequest<Result<string>>
+    public class CreateUserProfileCommand : IRequest<Result<CreateUserProfileDTO>>
     {
-        public CreateUserCommand(
+        public CreateUserProfileCommand(
             string firstName,
             string? middleName,
             string lastName,

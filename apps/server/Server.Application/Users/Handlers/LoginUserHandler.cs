@@ -3,51 +3,53 @@
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Abstractions.Services;
 using Server.Application.Users.Commands;
+using Server.Application.Users.Commands.DTOs;
 using Server.Core.Results;
 
 namespace Server.Application.Users.Handlers
 {
-    internal class LoginUserHandler : IRequestHandler<LoginUserCommand, Result<string>>
+    internal class LoginUserHandler : IRequestHandler<LoginUserCommand, Result<LoginUserDTO>>
     {
-        private readonly IAuthRepository _authRepository;
         private readonly IUserRepository _userRepository;
         private readonly IHasher _hasher;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-        public LoginUserHandler(IAuthRepository authRepository, IUserRepository userRepository, IHasher hasher, IJwtTokenGenerator jwtTokenGenerator)
+        public LoginUserHandler(IUserRepository userRepository, IHasher hasher, IJwtTokenGenerator jwtTokenGenerator)
         {
-            _authRepository = authRepository;
             _userRepository = userRepository;
             _hasher = hasher;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
-        public async Task<Result<string>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<LoginUserDTO>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            // step 1: check if user exists
-            var auth = await _authRepository.GetByUserNameOrEmail(request.UsernameOrEmail, cancellationToken);
+            // step 1: check if user auth exists
+            var auth = await _userRepository.GetAuthByEmailOrUserNameAsync(request.UsernameOrEmail, cancellationToken);
             if (auth is null)
             {
-                return Result<string>.Failure("User not found", 404);
-            }
-            var user = await _userRepository.GetByAuthIdAsync(auth.Id);
-            if (user is null)
-            {
-                return Result<string>.Failure("User not found", 404);
+                return Result<LoginUserDTO>.Failure("User not found", 404);
             }
 
             // step 2: verify password
             var passwordVerificationResult = _hasher.Verify(auth.PasswordHash!, request.Password);
             if (!passwordVerificationResult)
             {
-                return Result<string>.Failure("Invalid credentials", 401);
+                return Result<LoginUserDTO>.Failure("Invalid credentials", 401);
             }
 
+            // step 3: fetch user profile
+            var user = await _userRepository.GetProfileByAuthIdAsync(auth.Id, cancellationToken);
+
             // step 3: generate token
-            var token = _jwtTokenGenerator.GenerateToken(auth.Id, user.Id, auth.UserName);
+            var token = _jwtTokenGenerator.GenerateToken(auth.Id, user?.Id, auth.UserName);
 
             // step 4: return token
-            return Result<string>.Success(token);
+            var loginUserDto = new LoginUserDTO
+            {
+                Token = token,
+                IsProfileCompleted = user != null,
+            };
+            return Result<LoginUserDTO>.Success(loginUserDto);
         }
     }
 }

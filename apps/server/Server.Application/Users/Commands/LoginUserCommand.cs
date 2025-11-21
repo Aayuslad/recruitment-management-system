@@ -1,10 +1,11 @@
 ﻿using MediatR;
 
+using Server.Application.Users.Commands.DTOs;
 using Server.Core.Results;
 
 namespace Server.Application.Users.Commands
 {
-    public class LoginUserCommand : IRequest<Result<string>>
+    public class LoginUserCommand : IRequest<Result<LoginUserDTO>>
     {
         public LoginUserCommand(string usernameOrEmail, string password)
         {

@@ -27,9 +27,9 @@ namespace Server.API.Controllers
         {
             var result = await _mediator.Send(command);
 
-            if (result.IsSuccess && !string.IsNullOrEmpty(result.Value))
+            if (result.IsSuccess && !string.IsNullOrEmpty(result.Value?.Token))
             {
-                var token = result.Value;
+                var token = result.Value.Token;
 
                 Response.Cookies.Append("jwt", token, new CookieOptions
                 {
@@ -39,7 +39,7 @@ namespace Server.API.Controllers
                     Expires = DateTimeOffset.UtcNow.AddDays(30)
                 });
 
-                return Ok(new { message = "Registration successful" });
+                return Ok(new { message = "Registerd" });
             }
 
             return result.ToActionResult(this);
@@ -50,9 +50,9 @@ namespace Server.API.Controllers
         {
             var result = await _mediator.Send(command);
 
-            if (result.IsSuccess && !string.IsNullOrEmpty(result.Value))
+            if (result.IsSuccess && !string.IsNullOrEmpty(result.Value?.Token))
             {
-                var token = result.Value;
+                var token = result.Value.Token;
 
                 Response.Cookies.Append("jwt", token, new CookieOptions
                 {
@@ -62,7 +62,7 @@ namespace Server.API.Controllers
                     Expires = DateTimeOffset.UtcNow.AddDays(30)
                 });
 
-                return Ok(new { message = "Login successful" });
+                return Ok(new { message = "Logged In", IsPorofileCompleted = result.Value.IsProfileCompleted });
             }
 
             return result.ToActionResult(this);
@@ -82,14 +82,14 @@ namespace Server.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("createUser")]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
+        [HttpPost("user-profile")]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserProfileCommand command)
         {
             var result = await _mediator.Send(command);
 
-            if (result.IsSuccess && !string.IsNullOrEmpty(result.Value))
+            if (result.IsSuccess && !string.IsNullOrEmpty(result.Value?.Token))
             {
-                var token = result.Value;
+                var token = result.Value.Token;
 
                 Response.Cookies.Append("jwt", token, new CookieOptions
                 {
@@ -99,7 +99,7 @@ namespace Server.API.Controllers
                     Expires = DateTimeOffset.UtcNow.AddDays(30)
                 });
 
-                return Ok(new { message = "User Created" });
+                return Ok(new { message = "profile created" });
             }
 
             return result.ToActionResult(this);
