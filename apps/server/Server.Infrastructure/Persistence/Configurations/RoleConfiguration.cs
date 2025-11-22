@@ -5,10 +5,12 @@ using Server.Domain.Entities;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    internal class RoleConfiguration : IEntityTypeConfiguration<Role>
+    internal class RoleConfiguration : AuditableEntityConfiguration<Role>
     {
-        public void Configure(EntityTypeBuilder<Role> builder)
+        public override void Configure(EntityTypeBuilder<Role> builder)
         {
+            base.Configure(builder);
+
             builder.ToTable("Role");
 
             builder.HasKey(r => r.Id);
@@ -22,6 +24,7 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .IsUnique();
 
             builder.Property(r => r.Description)
+                .IsRequired(false)
                 .HasMaxLength(200);
         }
     }

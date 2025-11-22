@@ -11,14 +11,13 @@ namespace Server.Infrastructure.Persistence.Configurations
         {
             builder.ToTable("UserRole");
 
-            builder.HasKey(ur => ur.Id);
-            builder.Property(x => x.Id).ValueGeneratedNever();
+            builder.HasKey(x => new { x.UserId, x.RoleId });
 
             builder.Property(ur => ur.AssignedAt)
                 .IsRequired();
 
             builder.HasOne(x => x.User)
-                .WithMany()
+                .WithMany(x => x.Roles)
                 .IsRequired()
                 .HasForeignKey(ur => ur.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -28,9 +27,6 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .IsRequired()
                 .HasForeignKey(ur => ur.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasIndex(ur => ur.UserId);
-            builder.HasIndex(ur => ur.RoleId);
 
             builder.HasOne(x => x.AssignedByUser)
                 .WithMany()

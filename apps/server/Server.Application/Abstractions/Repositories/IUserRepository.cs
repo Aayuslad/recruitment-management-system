@@ -14,6 +14,7 @@ namespace Server.Application.Abstractions.Repositories
 
         // user profile (the user table)
         Task AddProfileAsync(User user, CancellationToken cancellationToken);
+        Task UpdateProfileAsync(User user, CancellationToken cancellationToken);
         Task<User?> GetProfileByUserIdAsync(Guid id, CancellationToken cancellationToken);
         Task<User?> GetProfileByAuthIdAsync(Guid authId, CancellationToken cancellationToken);
         Task<bool> ProfileExistsByAuthIdAsync(Guid authId, CancellationToken cancellationToken);

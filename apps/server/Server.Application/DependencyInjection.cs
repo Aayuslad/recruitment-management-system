@@ -26,7 +26,6 @@ namespace Server.Application
             services.AddTransient<IValidator<RegisterUserCommand>, RegisterUserCommandValidator>();
             services.AddTransient<IValidator<LoginUserCommand>, LoginUserCommandValidator>();
             services.AddTransient<IValidator<CreateUserProfileCommand>, CreateUserProfileCommandValidator>();
-            services.AddTransient<IValidator<GetSkillQuery>, GetSkillQueryValidator>();
             services.AddTransient<IValidator<GetSkillsQuery>, GetSkillsQueryValidator>();
             services.AddTransient<IValidator<CreateSkillCommand>, CreateSkillCommandValidator>();
             services.AddTransient<IValidator<EditSkillCommand>, EditSkillCommandValidator>();

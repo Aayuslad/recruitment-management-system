@@ -5,10 +5,12 @@ using Server.Domain.Entities;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
-    internal class DocumentTypeConfiguration : IEntityTypeConfiguration<DocumentType>
+    internal class DocumentTypeConfiguration : AuditableEntityConfiguration<DocumentType>
     {
-        public void Configure(EntityTypeBuilder<DocumentType> builder)
+        public override void Configure(EntityTypeBuilder<DocumentType> builder)
         {
+            base.Configure(builder);
+
             builder.ToTable("DocumentType");
 
             builder.HasKey(x => x.Id);

@@ -1,8 +1,9 @@
 ﻿using Server.Core.Entities;
+using Server.Core.Primitives;
 
 namespace Server.Domain.Entities
 {
-    public class Notification : BaseEntity<Guid>
+    public class Notification : BaseEntity<Guid>, IAggregateRoot
     {
         private Notification() : base(Guid.Empty) { }
 
@@ -47,7 +48,6 @@ namespace Server.Domain.Entities
                 false
             );
         }
-
 
         public void MarkAsRead()
         {

@@ -18,9 +18,15 @@
 
   <ItemGroup>
     <Folder Include="Candidates\Validators\" />
+    <Folder Include="Documents\Validators\" />
+    <Folder Include="Employees\Commands\" />
+    <Folder Include="Employees\Validators\" />
     <Folder Include="Interviews\Validators\" />
     <Folder Include="JobApplications\Validators\" />
     <Folder Include="JobOpenings\Validators\" />
+    <Folder Include="Notifications\Validators\" />
+    <Folder Include="Roles\Commands\DTOs\" />
+    <Folder Include="Roles\Validators\" />
     <Folder Include="Skills\Commands\DTOs\" />
   </ItemGroup>
 

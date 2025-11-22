@@ -15,7 +15,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.HasOne(x => x.User)
-                .WithMany(x => x.Notifications)
+                .WithMany()
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 

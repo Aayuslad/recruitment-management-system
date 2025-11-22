@@ -32,6 +32,9 @@ namespace Server.Infrastructure
             services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
             services.AddScoped<IInterviewRespository, InterviewRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<IDocumentRepository, DocumentRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             // Register Services
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();

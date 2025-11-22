@@ -42,6 +42,13 @@ namespace Server.API.Controllers
                 IsContactNumberVerified = user?.IsContactNumberVerified,
                 Gender = user?.Gender.ToString(),
                 Dob = user?.Dob,
+                Roles = user?.Roles.Select(
+                    selector: x => new UserRolesDTO
+                    {
+                        Id = x.RoleId,
+                        Name = x.Role.Name,
+                    }
+                ).ToList() ?? [],
             };
 
             // step 4: return result

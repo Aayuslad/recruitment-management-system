@@ -17,5 +17,6 @@ namespace Server.Application.Users.Queries.DTOs
         public bool? IsContactNumberVerified { get; set; }
         public string? Gender { get; set; }
         public DateTime? Dob { get; set; }
+        public List<UserRolesDTO> Roles { get; set; } = new List<UserRolesDTO>();
     }
 }

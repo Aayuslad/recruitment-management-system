@@ -28,14 +28,6 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetSkill(Guid id, CancellationToken cancellationToken)
-        {
-            var query = new GetSkillQuery(id);
-            var result = await _mediator.Send(query, cancellationToken);
-            return result.ToActionResult(this);
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetSkills(CancellationToken cancellationToken)
         {

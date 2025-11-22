@@ -1,12 +1,10 @@
-﻿using Server.Core.Entities;
-
-namespace Server.Domain.Entities
+﻿namespace Server.Domain.Entities
 {
-    public class UserRole : BaseEntity<Guid>
+    public class UserRole
     {
-        private UserRole() : base(Guid.Empty) { }
+        private UserRole() { }
 
-        private UserRole(Guid id, Guid userId, Guid roleId, Guid assignedBy) : base(id)
+        private UserRole(Guid userId, Guid roleId, Guid assignedBy)
         {
             UserId = userId;
             RoleId = roleId;
@@ -22,9 +20,9 @@ namespace Server.Domain.Entities
         public Role Role { get; private set; } = null!;
         public User AssignedByUser { get; private set; } = null!;
 
-        public static UserRole Assign(Guid userId, Guid roleId, Guid assignedBy)
+        public static UserRole Create(Guid userId, Guid roleId, Guid assignedBy)
         {
-            return new UserRole(Guid.NewGuid(), userId, roleId, assignedBy);
+            return new UserRole(userId, roleId, assignedBy);
         }
     }
 }

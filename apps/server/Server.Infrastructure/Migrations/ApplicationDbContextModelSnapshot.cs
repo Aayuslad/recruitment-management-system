@@ -278,11 +278,40 @@ namespace Server.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastUpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastUpdatedBy")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("DeletedBy");
+
+                    b.HasIndex("LastUpdatedBy");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -867,9 +896,32 @@ namespace Server.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Description")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastUpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastUpdatedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -877,6 +929,12 @@ namespace Server.Infrastructure.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("DeletedBy");
+
+                    b.HasIndex("LastUpdatedBy");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -1078,7 +1136,10 @@ namespace Server.Infrastructure.Migrations
 
             modelBuilder.Entity("Server.Domain.Entities.UserRole", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RoleId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("AssignedAt")
@@ -1087,19 +1148,11 @@ namespace Server.Infrastructure.Migrations
                     b.Property<Guid>("AssignedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("AssignedBy");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserRole", (string)null);
                 });
@@ -1238,6 +1291,30 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("Designation");
 
                     b.Navigation("Skill");
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.DocumentType", b =>
+                {
+                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("LastUpdatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("UpdatedByUser");
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.Employee", b =>
@@ -1489,7 +1566,7 @@ namespace Server.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Server.Domain.Entities.User", "User")
-                        .WithMany("Notifications")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1584,6 +1661,30 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("MovedByUser");
 
                     b.Navigation("Position");
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.Role", b =>
+                {
+                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("LastUpdatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("UpdatedByUser");
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.Skill", b =>
@@ -1701,7 +1802,7 @@ namespace Server.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Server.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1779,7 +1880,7 @@ namespace Server.Infrastructure.Migrations
 
             modelBuilder.Entity("Server.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Notifications");
+                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

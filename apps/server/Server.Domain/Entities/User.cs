@@ -43,7 +43,7 @@ namespace Server.Domain.Entities
         public Gender Gender { get; private set; }
         public DateTime Dob { get; private set; }
         public Auth Auth { get; private set; } = default!;
-        public ICollection<Notification> Notifications { get; private set; } = new HashSet<Notification>();
+        public ICollection<UserRole> Roles { get; private set; } = null!;
 
         public void Delete(Guid deletedBy)
         {
@@ -78,6 +78,25 @@ namespace Server.Domain.Entities
                 dob,
                 createdBy
             );
+        }
+
+        public void SyncRoles(IEnumerable<UserRole> newRoles)
+        {
+            if (newRoles is null) return;
+
+            // remove removed ones
+            foreach (var role in Roles.ToList())
+            {
+                if (!newRoles.Any(x => x.RoleId == role.RoleId))
+                    Roles.Remove(role);
+            }
+
+            // add added ones
+            foreach (var role in newRoles)
+            {
+                if (!Roles.Any(x => x.RoleId == role.RoleId))
+                    Roles.Add(role);
+            }
         }
     }
 }
