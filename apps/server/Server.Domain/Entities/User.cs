@@ -39,7 +39,7 @@ namespace Server.Domain.Entities
         public string LastName { get; private set; } = default!;
         public UserStatus Status { get; private set; }
         public ContactNumber ContactNumber { get; private set; } = default!;
-        public bool IsContactNumberVerified { get; private set; } 
+        public bool IsContactNumberVerified { get; private set; }
         public Gender Gender { get; private set; }
         public DateTime Dob { get; private set; }
         public Auth Auth { get; private set; } = default!;

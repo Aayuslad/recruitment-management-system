@@ -24,24 +24,24 @@ namespace Server.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateDocumentType([FromBody] CreateDocumentTypeCommand command, CancellationToken cancellationToken)
         {
-           var result = await _mediator.Send(command, cancellationToken);
-           return result.ToActionResult(this);
+            var result = await _mediator.Send(command, cancellationToken);
+            return result.ToActionResult(this);
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteDocumentType(Guid id, CancellationToken cancellationToken)
         {
-           var command = new DeleteDocumentTypeCommand(id);
-           var result = await _mediator.Send(command, cancellationToken);
-           return result.ToActionResult(this);
+            var command = new DeleteDocumentTypeCommand(id);
+            var result = await _mediator.Send(command, cancellationToken);
+            return result.ToActionResult(this);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetDesignations(CancellationToken cancellationToken)
         {
-           var query = new GetDocumentTypesQuery();
-           var result = await _mediator.Send(query, cancellationToken);
-           return result.ToActionResult(this);
+            var query = new GetDocumentTypesQuery();
+            var result = await _mediator.Send(query, cancellationToken);
+            return result.ToActionResult(this);
         }
     }
 }

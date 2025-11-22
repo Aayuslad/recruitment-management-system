@@ -24,32 +24,32 @@ namespace Server.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRole([FromBody] CreateRoleCommand command, CancellationToken cancellationToken)
         {
-           var result = await _mediator.Send(command, cancellationToken);
-           return result.ToActionResult(this);
+            var result = await _mediator.Send(command, cancellationToken);
+            return result.ToActionResult(this);
         }
 
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> EditRole(Guid id, [FromBody] EditRoleCommand command, CancellationToken cancellationToken)
         {
-           command.Id = id;
-           var result = await _mediator.Send(command, cancellationToken);
-           return result.ToActionResult(this);
+            command.Id = id;
+            var result = await _mediator.Send(command, cancellationToken);
+            return result.ToActionResult(this);
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteRole(Guid id, CancellationToken cancellationToken)
         {
-           var command = new DeleteRoleCommand(id);
-           var result = await _mediator.Send(command, cancellationToken);
-           return result.ToActionResult(this);
+            var command = new DeleteRoleCommand(id);
+            var result = await _mediator.Send(command, cancellationToken);
+            return result.ToActionResult(this);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetDesignations(CancellationToken cancellationToken)
         {
-           var query = new GetRolesQuery();
-           var result = await _mediator.Send(query, cancellationToken);
-           return result.ToActionResult(this);
+            var query = new GetRolesQuery();
+            var result = await _mediator.Send(query, cancellationToken);
+            return result.ToActionResult(this);
         }
     }
 }

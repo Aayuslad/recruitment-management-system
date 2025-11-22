@@ -20,7 +20,7 @@ namespace Server.Application.Roles.Handlers
             _rolesRepository = rolesRepository;
             _httpContextAccessor = httpContextAccessor;
         }
-        
+
         public async Task<Result> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
         {
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;

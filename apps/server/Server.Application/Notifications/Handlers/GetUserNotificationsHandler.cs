@@ -10,7 +10,7 @@ using Server.Core.Results;
 namespace Server.Application.Notifications.Handlers
 {
     internal class GetUserNotificationsHandler : IRequestHandler<GetUserNotificationsQuery, Result<List<NotificationDetailDTO>>>
-    { 
+    {
         private readonly INotificationRepository _notificationRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 

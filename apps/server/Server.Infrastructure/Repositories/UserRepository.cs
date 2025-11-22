@@ -57,7 +57,7 @@ namespace Server.Infrastructure.Repositories
         {
             return _context.SaveChangesAsync(cancellationToken);
         }
-        
+
         Task<User?> IUserRepository.GetProfileByAuthIdAsync(Guid authId, CancellationToken cancellationToken)
         {
             return _context.Users

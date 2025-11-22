@@ -38,7 +38,7 @@ namespace Server.Application.Roles.Handlers
 
             // step 2: make the entity
             var role = Role.Create(
-                name: request.Name, 
+                name: request.Name,
                 description: request.Description,
                 createdBy: Guid.Parse(userIdString)
             );

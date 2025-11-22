@@ -23,9 +23,9 @@ namespace Server.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetDesignations(CancellationToken cancellationToken)
         {
-           var query = new GetEmployeesQuery();
-           var result = await _mediator.Send(query, cancellationToken);
-           return result.ToActionResult(this);
+            var query = new GetEmployeesQuery();
+            var result = await _mediator.Send(query, cancellationToken);
+            return result.ToActionResult(this);
         }
     }
 }

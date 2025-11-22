@@ -37,7 +37,7 @@ namespace Server.Application.Roles.Handlers
 
             // step 2: update
             role.Update(
-                name: request.Name, 
+                name: request.Name,
                 description: request.Description,
                 updatedBy: Guid.Parse(userIdString)
             );

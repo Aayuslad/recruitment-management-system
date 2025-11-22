@@ -35,9 +35,9 @@ namespace Server.Domain.Entities
         )
         {
             return new CandidateDocument(
-                id, 
-                candidateId, 
-                documentTypeId, 
+                id,
+                candidateId,
+                documentTypeId,
                 url
             );
         }

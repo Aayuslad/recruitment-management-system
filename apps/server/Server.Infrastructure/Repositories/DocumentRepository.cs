@@ -20,7 +20,7 @@ namespace Server.Infrastructure.Repositories
             _context.DocumentTypes.Add(documentType);
             return _context.SaveChangesAsync(cancellationToken);
         }
-        
+
         Task IDocumentRepository.UpdateAsync(DocumentType documentType, CancellationToken cancellationToken)
         {
             return _context.SaveChangesAsync(cancellationToken);

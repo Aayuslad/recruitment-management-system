@@ -24,16 +24,16 @@ namespace Server.API.Controllers
         [HttpPut]
         public async Task<IActionResult> MarkNotificationsAsRead([FromBody] MarkNotificationsAsReadCommand command, CancellationToken cancellationToken)
         {
-           var result = await _mediator.Send(command, cancellationToken);
-           return result.ToActionResult(this);
+            var result = await _mediator.Send(command, cancellationToken);
+            return result.ToActionResult(this);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUserNotifications(CancellationToken cancellationToken)
         {
-           var query = new GetUserNotificationsQuery();
-           var result = await _mediator.Send(query, cancellationToken);
-           return result.ToActionResult(this);
+            var query = new GetUserNotificationsQuery();
+            var result = await _mediator.Send(query, cancellationToken);
+            return result.ToActionResult(this);
         }
     }
 }

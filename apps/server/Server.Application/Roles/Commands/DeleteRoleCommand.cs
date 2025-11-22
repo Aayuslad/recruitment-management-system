@@ -10,7 +10,7 @@ namespace Server.Application.Roles.Commands
         {
             Id = id;
         }
-        
+
         public Guid Id { get; set; }
     }
 }

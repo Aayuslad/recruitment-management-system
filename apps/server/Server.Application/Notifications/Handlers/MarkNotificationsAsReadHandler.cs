@@ -8,13 +8,13 @@ namespace Server.Application.Notifications.Handlers
 {
     internal class MarkNotificationsAsReadHandler : IRequestHandler<MarkNotificationsAsReadCommand, Result>
     {
-         private readonly INotificationRepository _notificationRepository;
+        private readonly INotificationRepository _notificationRepository;
 
         public MarkNotificationsAsReadHandler(INotificationRepository rolesRepository)
         {
             _notificationRepository = rolesRepository;
         }
-        
+
         public async Task<Result> Handle(MarkNotificationsAsReadCommand request, CancellationToken cancellationToken)
         {
             // step 1: fetch notifications
