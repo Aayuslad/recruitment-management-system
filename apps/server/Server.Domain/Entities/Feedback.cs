@@ -1,4 +1,7 @@
 ﻿using Server.Core.Entities;
+using Server.Domain.Entities.Interviews;
+using Server.Domain.Entities.JobApplications;
+using Server.Domain.Entities.Users;
 using Server.Domain.Enums;
 
 namespace Server.Domain.Entities

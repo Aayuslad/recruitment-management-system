@@ -3,8 +3,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Server.Application.Designations.Commands;
-using Server.Application.Designations.Queries;
+using Server.Application.Aggregates.Designations.Commands;
+using Server.Application.Aggregates.Designations.Queries;
 using Server.Core.Extensions;
 
 namespace Server.API.Controllers

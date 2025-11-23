@@ -3,8 +3,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Server.Application.Documents.Commands;
-using Server.Application.Documents.Queries;
+using Server.Application.Aggregates.Documents.Commands;
+using Server.Application.Aggregates.Documents.Queries;
 using Server.Core.Extensions;
 
 namespace Server.API.Controllers

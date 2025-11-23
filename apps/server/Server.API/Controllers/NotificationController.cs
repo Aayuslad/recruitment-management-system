@@ -3,8 +3,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Server.Application.Notifications.Commands;
-using Server.Application.Notifications.Queries;
+using Server.Application.Aggregates.Notifications.Commands;
+using Server.Application.Aggregates.Notifications.Queries;
 using Server.Core.Extensions;
 
 namespace Server.API.Controllers

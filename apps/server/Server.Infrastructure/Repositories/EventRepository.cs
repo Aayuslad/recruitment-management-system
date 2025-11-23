@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using Server.Application.Abstractions.Repositories;
-using Server.Domain.Entities;
+using Server.Domain.Entities.Events;
 using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories

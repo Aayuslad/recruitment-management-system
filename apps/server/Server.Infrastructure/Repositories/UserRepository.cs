@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using Server.Application.Abstractions.Repositories;
-using Server.Domain.Entities;
+using Server.Domain.Entities.Users;
 using Server.Domain.ValueObjects;
 using Server.Infrastructure.Persistence;
 

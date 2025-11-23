@@ -1,6 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using Server.Domain.Entities;
+using Server.Domain.Entities.Candidates;
+using Server.Domain.Entities.Designations;
+using Server.Domain.Entities.Documents;
+using Server.Domain.Entities.Employees;
+using Server.Domain.Entities.Events;
+using Server.Domain.Entities.Interviews;
+using Server.Domain.Entities.JobApplications;
+using Server.Domain.Entities.JobOpenings;
+using Server.Domain.Entities.Notifications;
+using Server.Domain.Entities.Positions;
+using Server.Domain.Entities.Roles;
+using Server.Domain.Entities.Skills;
+using Server.Domain.Entities.Users;
 
 namespace Server.Infrastructure.Persistence
 {

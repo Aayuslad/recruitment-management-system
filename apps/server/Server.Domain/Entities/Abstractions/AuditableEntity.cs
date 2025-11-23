@@ -1,4 +1,5 @@
 ﻿using Server.Core.Entities;
+using Server.Domain.Entities.Users;
 
 namespace Server.Domain.Entities.Abstractions
 {

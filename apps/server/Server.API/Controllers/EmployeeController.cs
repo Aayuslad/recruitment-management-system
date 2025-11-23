@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Server.Application.Employees.Queries;
+using Server.Application.Aggregates.Employees.Queries;
 using Server.Core.Extensions;
 
 namespace Server.API.Controllers

@@ -340,7 +340,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("JobOpeningInterviewer", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Position", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -368,7 +368,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("Position", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionBatch", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionsBatch", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -426,7 +426,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("PositionBatch", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionBatchReviewers", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionsBatchReviewers", b =>
                 {
                     b.Property<Guid>("PositionBatchId")
                         .HasColumnType("uuid");
@@ -441,7 +441,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("PositionBatchReviewer", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionStatusMoveHistory", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionstatusMoveHistory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -809,7 +809,7 @@ namespace Server.Infrastructure.Migrations
                         .HasForeignKey("LastUpdatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.PositionBatch", "PositionBatch")
+                    b.HasOne("Server.Domain.Entities.PositionsBatch", "PositionBatch")
                         .WithMany()
                         .HasForeignKey("PositionBatchId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -865,9 +865,9 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("JobOpening");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Position", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.PositionBatch", "PositionBatch")
+                    b.HasOne("Server.Domain.Entities.PositionsBatch", "PositionBatch")
                         .WithMany("Positions")
                         .HasForeignKey("BatchId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -883,7 +883,7 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("PositionBatch");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionBatch", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionsBatch", b =>
                 {
                     b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
                         .WithMany()
@@ -915,9 +915,9 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("UpdatedByUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionBatchReviewers", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionsBatchReviewers", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.PositionBatch", "PositionBatch")
+                    b.HasOne("Server.Domain.Entities.PositionsBatch", "PositionBatch")
                         .WithMany("PositionBatchReviewers")
                         .HasForeignKey("PositionBatchId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -934,14 +934,14 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("ReviewerUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionStatusMoveHistory", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionstatusMoveHistory", b =>
                 {
                     b.HasOne("Server.Domain.Entities.User", "MovedBy")
                         .WithMany()
                         .HasForeignKey("MovedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.Position", "Position")
+                    b.HasOne("Server.Domain.Entities.Positions", "Position")
                         .WithMany("PositionStatusMoveHistories")
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -983,7 +983,7 @@ namespace Server.Infrastructure.Migrations
                         .HasForeignKey("JobOpeningId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Server.Domain.Entities.PositionBatch", "PositionBatch")
+                    b.HasOne("Server.Domain.Entities.PositionsBatch", "PositionBatch")
                         .WithMany("SkillOverRides")
                         .HasForeignKey("PositionBatchId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -1071,12 +1071,12 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("PanelRequirements");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Position", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions", b =>
                 {
                     b.Navigation("PositionStatusMoveHistories");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionBatch", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionsBatch", b =>
                 {
                     b.Navigation("PositionBatchReviewers");
 

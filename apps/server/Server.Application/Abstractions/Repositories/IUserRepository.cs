@@ -1,4 +1,4 @@
-﻿using Server.Domain.Entities;
+﻿using Server.Domain.Entities.Users;
 using Server.Domain.ValueObjects;
 
 namespace Server.Application.Abstractions.Repositories

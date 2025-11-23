@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Server.Domain.Entities;
+using Server.Domain.Entities.JobOpenings;
+using Server.Domain.Entities.Users;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {

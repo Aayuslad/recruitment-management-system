@@ -1,4 +1,4 @@
-﻿using Server.Domain.Entities;
+﻿using Server.Domain.Entities.Notifications;
 
 namespace Server.Application.Abstractions.Repositories
 {

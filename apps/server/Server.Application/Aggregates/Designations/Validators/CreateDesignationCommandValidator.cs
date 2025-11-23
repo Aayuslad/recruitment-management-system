@@ -1,0 +1,19 @@
+﻿using FluentValidation;
+
+using Server.Application.Aggregates.Designations.Commands;
+
+namespace Server.Application.Aggregates.Designations.Validators
+{
+    internal class CreateDesignationCommandValidator : AbstractValidator<CreateDesignationCommand>
+    {
+        public CreateDesignationCommandValidator()
+        {
+            RuleFor(x => x.Name)
+                .NotEmpty().WithMessage("Designation name is required.")
+                .MaximumLength(50).WithMessage("Designation name must not exceed 50 characters.");
+
+            RuleForEach(x => x.DesignationSkills)
+                .SetValidator(new DesignationSkillDTOValidator()!);
+        }
+    }
+}
