@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.JobOpenings.Commands;
 using Server.Core.Results;
 using Server.Domain.Entities;
@@ -27,7 +28,7 @@ namespace Server.Application.JobOpenings.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: create entity

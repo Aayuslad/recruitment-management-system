@@ -38,7 +38,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(u => u.ContactNumber)
                 .HasConversion(
                     contactNumberVO => contactNumberVO.ToString(),
-                    contactNumber => ContactNumber.Create(contactNumber).Value!
+                    contactNumber => ContactNumber.Create(contactNumber)!
                 )
                 .IsRequired()
                 .HasMaxLength(20)

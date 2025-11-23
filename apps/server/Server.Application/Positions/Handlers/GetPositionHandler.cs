@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.Positions.Queries;
 using Server.Application.Positions.Queries.DTOs;
 using Server.Application.Positions.Queries.DTOs.PositionDTOs;
@@ -25,7 +26,7 @@ namespace Server.Application.Positions.Handlers
             var position = await _positionRepository.GetByIdAsync(query.PositionId, cancellationToken);
             if (position == null)
             {
-                return Result<PositionDetailDTO>.Failure("Position does not exist", 404);
+                throw new NotFoundExeption("Position Not Found.");
             }
 
             // step 2: make dto

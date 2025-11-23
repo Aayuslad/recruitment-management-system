@@ -26,7 +26,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(a => a.Email)
                 .HasConversion(
                     emailVO => emailVO.ToString(),
-                    email => Email.Create(email).Value!
+                    email => Email.Create(email)!
                 )
                 .IsRequired()
                 .HasMaxLength(256)

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Events.Commands;
+using Server.Application.Exeptions;
 using Server.Core.Results;
 using Server.Domain.Entities;
 
@@ -26,7 +27,7 @@ namespace Server.Application.Events.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: create entty

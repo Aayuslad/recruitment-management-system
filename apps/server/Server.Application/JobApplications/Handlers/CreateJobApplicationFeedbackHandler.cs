@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.JobApplications.Commands;
 using Server.Core.Results;
 using Server.Domain.Entities;
@@ -27,14 +28,14 @@ namespace Server.Application.JobApplications.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: check if exists
             var application = await _jobApplicationRepository.GetByIdAsync(request.JobApplicationId, cancellationToken);
             if (application is null)
             {
-                return Result.Failure("Job Application does not exists", 409);
+                throw new NotFoundExeption("Job Application Not Found.");
             }
 
             // step 2: create and add feedback entities

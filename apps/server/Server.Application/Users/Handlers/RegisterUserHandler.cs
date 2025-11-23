@@ -2,6 +2,7 @@
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Abstractions.Services;
+using Server.Application.Exeptions;
 using Server.Application.Users.Commands;
 using Server.Application.Users.Commands.DTOs;
 using Server.Core.Results;
@@ -26,22 +27,16 @@ namespace Server.Application.Users.Handlers
         public async Task<Result<RegisterUserDTO>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             // step 1: check VOs 
-            // TODO: this can be moved in VO by throwing exeption
-            var emailResult = Email.Create(request.Email);
-            if (emailResult.IsSuccess == false)
-            {
-                return Result<RegisterUserDTO>.Failure(emailResult.ErrorMessage ?? "Invalid Email", emailResult.StatusCode);
-            }
-            var email = emailResult.Value!;
+            var email = Email.Create(request.Email);
 
             // step 1: check if user auth already exists
             if (await _userRepository.AuthExistsByUserNameAsync(request.UserName, cancellationToken))
             {
-                return Result<RegisterUserDTO>.Failure("Username is already taken.", 409);
+                throw new ConflictExeption("User with this username already exists.");
             }
             if (await _userRepository.AuthExistsByEmailAsync(email, cancellationToken))
             {
-                return Result<RegisterUserDTO>.Failure("User with this email already exists.", 409);
+                throw new ConflictExeption("User with this email already exists.");
             }
 
             // step 2: hash password

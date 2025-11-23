@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.Roles.Commands;
 using Server.Core.Results;
 using Server.Domain.Entities;
@@ -26,14 +27,14 @@ namespace Server.Application.Roles.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: check if with this name a role exsist
             var result = await _rolesRepository.ExistsByNameAsync(request.Name, cancellationToken);
             if (result)
             {
-                return Result.Failure("Role with same name already exist", 409);
+                throw new ConflictExeption($"Role with name {request.Name} already exsist");
             }
 
             // step 2: make the entity

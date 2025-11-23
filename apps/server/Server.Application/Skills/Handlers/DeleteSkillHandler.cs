@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Http;
 
+using Server.Application.Exeptions;
 using Server.Application.Skills.Commands;
 using Server.Core.Results;
 using Server.Infrastructure.Repositories;
@@ -24,14 +25,14 @@ namespace Server.Application.Skills.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
             if (String.IsNullOrEmpty(userIdString))
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: fetch existing skill
             var skill = await _skillRepository.GetByIdAsync(command.Id, cancellationToken);
             if (skill == null)
             {
-                return Result.Failure("Skill not found", 404);
+                throw new NotFoundExeption("Skill Not Found.");
             }
 
             // step 2: delete skill

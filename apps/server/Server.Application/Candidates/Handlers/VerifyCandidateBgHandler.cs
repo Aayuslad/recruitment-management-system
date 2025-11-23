@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Candidates.Commands;
+using Server.Application.Exeptions;
 using Server.Core.Results;
 
 namespace Server.Application.Candidates.Handlers
@@ -25,14 +26,14 @@ namespace Server.Application.Candidates.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: fetch the candidate
             var candidate = await _candidateRepository.GetByIdAsync(request.CandidateId, cancellationToken);
             if (candidate == null)
             {
-                return Result.Failure("Candidate not found", 404);
+                throw new NotFoundExeption("Candidate Not Found");
             }
 
             // step 2: verify

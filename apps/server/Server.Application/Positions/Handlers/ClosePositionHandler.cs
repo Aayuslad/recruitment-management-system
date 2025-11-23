@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.Positions.Commands;
 using Server.Core.Results;
 
@@ -24,14 +25,14 @@ namespace Server.Application.Positions.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: fetch existing position
             var position = await _positionRepository.GetByIdAsync(command.PositionId, cancellationToken);
             if (position == null)
             {
-                return Result.Failure("Position not found", 404);
+                throw new NotFoundExeption("Position Not Found.");
             }
 
             // step 2: make move

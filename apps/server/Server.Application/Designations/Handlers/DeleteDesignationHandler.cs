@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Designations.Commands;
+using Server.Application.Exeptions;
 using Server.Core.Results;
 
 namespace Server.Application.Designations.Handlers
@@ -24,14 +25,14 @@ namespace Server.Application.Designations.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: check if designation with this name exists
             var designation = await _designationRepository.GetByIdAsync(command.Id, cancellationToken);
             if (designation == null)
             {
-                return Result.Failure("Designation not found", 404);
+                throw new NotFoundExeption($"Designation not found."); 
             }
 
             // step 2: delete designation

@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.JobOpenings.Commands;
 using Server.Core.Results;
 
@@ -25,14 +26,14 @@ namespace Server.Application.JobOpenings.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: find the position
             var jobOpening = await _jobOpeningRepository.GetByIdAsync(request.JobOpeningId, cancellationToken);
             if (jobOpening == null)
             {
-                return Result.Failure("Job opening not found", 404);
+                throw new NotFoundExeption("Job Opening Not Found.");
             }
 
             // step 2: soft delet

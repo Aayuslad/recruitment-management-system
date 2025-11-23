@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.JobApplications.Commands;
 using Server.Core.Results;
 using Server.Domain.Entities;
@@ -25,14 +26,14 @@ namespace Server.Application.JobApplications.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: check if alredy exists
             var result = await _jobApplicationRepository.ExistsByCandidateAndOpeningAsync(request.JobOpeningId, request.CandidateId, cancellationToken);
             if (result)
             {
-                return Result.Failure("Candidate is alredy applied in this job application", 409);
+                throw new ConflictExeption("Job application already exists for this candidate and job opening.");
             }
 
             // step 2: create entity

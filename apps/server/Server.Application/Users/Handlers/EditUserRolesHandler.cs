@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.Users.Commands;
 using Server.Core.Results;
 using Server.Domain.Entities;
@@ -26,14 +27,14 @@ namespace Server.Application.Users.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
             if (String.IsNullOrEmpty(userIdString))
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: fetch user
             var user = await _userRepository.GetProfileByUserIdAsync(request.UserId, cancellationToken);
             if (user is null)
             {
-                return Result.Failure("user not found", 404);
+                throw new NotFoundExeption("User Not Found.");
             }
 
             // step 2: edit roles

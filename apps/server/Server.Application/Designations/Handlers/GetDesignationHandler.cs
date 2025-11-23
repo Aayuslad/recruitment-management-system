@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Designations.Queries;
 using Server.Application.Designations.Queries.DTOs;
+using Server.Application.Exeptions;
 using Server.Core.Results;
 
 namespace Server.Application.Designations.Handlers
@@ -25,14 +26,14 @@ namespace Server.Application.Designations.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result<DesignationDetailDTO>.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: fetch designation
             var designation = await _designationRepository.GetByIdAsync(query.Id, cancellationToken);
             if (designation == null)
             {
-                return Result<DesignationDetailDTO>.Failure("Designation not found", 404);
+                throw new NotFoundExeption("Designation not found");
             }
 
             // step 2: map to DTO

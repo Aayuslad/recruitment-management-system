@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.Users.Queries;
 using Server.Application.Users.Queries.DTOs;
 using Server.Core.Results;
@@ -21,7 +22,7 @@ namespace Server.API.Controllers
             // step 1: fetch user auth
             var auth = await _userRepository.GetAuthByAuthIdAsync(request.AuthId, cancellationToken);
             if (auth is null)
-                return Result<UserDetailDTO>.Failure("User not found", 404);
+                throw new NotFoundExeption("User Not Found.");
 
             // step 2: fetch user profile
             var user = await _userRepository.GetProfileByAuthIdAsync(request.AuthId, cancellationToken);

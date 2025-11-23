@@ -2,6 +2,7 @@
 using MediatR;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.Interviews.Queries;
 using Server.Application.Interviews.Queries.DTOs;
 using Server.Core.Results;
@@ -23,7 +24,7 @@ namespace Server.Application.Interviews.Handlers
             var interview = await _interviewRespository.GetByIdAsync(request.Id, cancellationToken);
             if (interview is null)
             {
-                return Result<InterviewDetailDTO>.Failure("interview does not exist", 404);
+                throw new NotFoundExeption($"Interview Not Found.");
             }
 
             // step 2: map dto

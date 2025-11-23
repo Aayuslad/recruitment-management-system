@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Candidates.Commands;
+using Server.Application.Exeptions;
 using Server.Core.Results;
 using Server.Domain.Entities;
 using Server.Domain.ValueObjects;
@@ -27,31 +28,20 @@ namespace Server.Application.Candidates.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: fetch the entity
             var candidate = await _candidateRepository.GetByIdAsync(request.Id, cancellationToken);
             if (candidate == null)
             {
-                return Result.Failure("Candidate not found", 404);
+                return Result.Failure("Candidate not found");
             }
 
             // step 2: check VOs
-            var result = ContactNumber.Create(request.ContactNumber);
-            if (result.IsSuccess == false)
-            {
-                return Result.Failure(result.ErrorMessage ?? "Invalid contact number", result.StatusCode);
-            }
-            var contactNumber = result.Value!;
-
-            var emailResult = Email.Create(request.Email);
-            if (emailResult.IsSuccess == false)
-            {
-                return Result.Failure(emailResult.ErrorMessage ?? "Invalid Email", emailResult.StatusCode);
-            }
-            var email = emailResult.Value!;
-
+            var contactNumber = ContactNumber.Create(request.ContactNumber);
+            var email = Email.Create(request.Email);
+            
             // step 2: prepare updated child collections
 
             // candidate skills

@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 
-using Server.Core.Results;
 using Server.Core.ValueObjects;
+using Server.Domain.Exeptions;
 
 namespace Server.Domain.ValueObjects
 {
@@ -20,15 +20,15 @@ namespace Server.Domain.ValueObjects
         private static readonly Regex _emailRegex =
                     new(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled);
 
-        public static Result<Email> Create(string email)
+        public static Email Create(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
-                return Result<Email>.Failure("Email cannot be empty.");
+                throw new DomainExeption("Email cannot be null or empty.");
 
             if (!_emailRegex.IsMatch(email))
-                return Result<Email>.Failure("Email format is invalid.");
+                throw new DomainExeption("Invalid email format.");
 
-            return Result<Email>.Success(new Email(email));
+            return new Email(email);
         }
 
         protected override IEnumerable<object?> GetEqualityComponents()

@@ -2,6 +2,7 @@
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Abstractions.Services;
+using Server.Application.Exeptions;
 using Server.Application.Users.Commands;
 using Server.Application.Users.Commands.DTOs;
 using Server.Core.Results;
@@ -27,14 +28,14 @@ namespace Server.Application.Users.Handlers
             var auth = await _userRepository.GetAuthByEmailOrUserNameAsync(request.UsernameOrEmail, cancellationToken);
             if (auth is null)
             {
-                return Result<LoginUserDTO>.Failure("User not found", 404);
+                throw new NotFoundExeption("User not found");
             }
 
             // step 2: verify password
             var passwordVerificationResult = _hasher.Verify(auth.PasswordHash!, request.Password);
             if (!passwordVerificationResult)
             {
-                return Result<LoginUserDTO>.Failure("Invalid credentials", 401);
+                throw new UnAuthorisedExeption("Invalid credentials");
             }
 
             // step 3: fetch user profile

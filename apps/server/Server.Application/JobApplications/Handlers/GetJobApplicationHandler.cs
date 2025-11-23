@@ -2,6 +2,7 @@
 using MediatR;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.JobApplications.Queries;
 using Server.Application.JobApplications.Queries.DTOs;
 using Server.Core.Results;
@@ -23,7 +24,7 @@ namespace Server.Application.JobApplications.Handlers
             var application = await _jobApplicationRepository.GetByIdAsync(request.Id, cancellationToken);
             if (application is null)
             {
-                return Result<JobApplicationDetailDTO>.Failure("Job Application does not exists", 404);
+                throw new NotFoundExeption("Job Application Not Found.");
             }
 
             // step 2: create dto

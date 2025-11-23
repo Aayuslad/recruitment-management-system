@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.Notifications.Queries;
 using Server.Application.Notifications.Queries.DTOs;
 using Server.Core.Results;
@@ -25,7 +26,7 @@ namespace Server.Application.Notifications.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result<List<NotificationDetailDTO>>.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: fetch all notifications of user

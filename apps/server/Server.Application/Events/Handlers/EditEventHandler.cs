@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Events.Commands;
+using Server.Application.Exeptions;
 using Server.Core.Results;
 using Server.Domain.Entities;
 
@@ -26,14 +27,14 @@ namespace Server.Application.Events.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: fetch event
             var event_ = await _repository.GetByIdAsync(request.Id, cancellationToken);
             if (event_ is null)
             {
-                return Result.Failure("Event does not exist", 404);
+                throw new NotFoundExeption("Event Not Found");
             }
 
             // step 2: make changes

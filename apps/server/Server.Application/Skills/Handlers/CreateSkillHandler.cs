@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Http;
 
+using Server.Application.Exeptions;
 using Server.Application.Skills.Commands;
 using Server.Core.Results;
 using Server.Domain.Entities;
@@ -25,14 +26,14 @@ namespace Server.Application.Skills.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: check alredy existing skill with name
             var nameResult = await _skillRepository.ExistsByNameAsync(command.Name, cancellationToken);
             if (nameResult)
             {
-                return Result.Failure("Skill with this name alredy exists", 409);
+                throw new ConflictExeption($"Skill with name {command.Name} already exists.");
             }
 
             // step 2: create and persist entiry

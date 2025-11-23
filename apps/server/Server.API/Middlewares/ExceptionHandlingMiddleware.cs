@@ -1,4 +1,7 @@
-﻿namespace Server.API.Middlewares
+﻿using Server.Application.Exeptions;
+using Server.Domain.Exeptions;
+
+namespace Server.API.Middlewares
 {
     public class ExceptionHandlingMiddleware
     {
@@ -20,12 +23,37 @@
             catch (FluentValidation.ValidationException ex)
             {
                 context.Response.StatusCode = 400;
-
-                //await context.Response.WriteAsJsonAsync(
-                //    new { error = ex.Errors.Select(e => new { Field = e.PropertyName, Message = e.ErrorMessage }) }
-                //);
-
                 await context.Response.WriteAsJsonAsync(new { error = ex.Errors.First().ErrorMessage });
+            }
+            catch (UnAuthorisedExeption ex)
+            {
+                context.Response.StatusCode = 401;
+                await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+            }
+            catch (ForbiddenExeption ex)
+            {
+                context.Response.StatusCode = 403;
+                await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+            }
+            catch (NotFoundExeption ex)
+            {
+                context.Response.StatusCode = 404;
+                await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+            }
+            catch (BadRequestExeption ex)
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+            }
+            catch (ConflictExeption ex)
+            {
+                context.Response.StatusCode = 409;
+                await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+            }
+            catch (DomainExeption ex)
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsJsonAsync(new { error = ex.Message });
             }
             catch (Exception ex)
             {
@@ -34,7 +62,6 @@
                     context.Request.Path, ex
                 );
 
-                context.Response.ContentType = "application/json";
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsJsonAsync(new { error = "Internal Server Error" });
             }

@@ -4,6 +4,7 @@ using MediatR;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Candidates.Queries;
 using Server.Application.Candidates.Queries.DTOs;
+using Server.Application.Exeptions;
 using Server.Core.Results;
 
 namespace Server.Application.Candidates.Handlers
@@ -23,7 +24,7 @@ namespace Server.Application.Candidates.Handlers
             var candidate = await _candidateRepository.GetByIdAsync(request.Id, cancellationToken);
             if (candidate == null)
             {
-                return Result<CandidateDetailDTO>.Failure("Candidate not found", 404);
+                throw new NotFoundExeption("Candidate Not Found");
             }
 
             // step 2: map dto

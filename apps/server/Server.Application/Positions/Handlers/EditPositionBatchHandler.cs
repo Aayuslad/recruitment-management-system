@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.Positions.Commands;
 using Server.Core.Results;
 using Server.Domain.Entities;
@@ -26,14 +27,14 @@ namespace Server.Application.Positions.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: fetch positinoBatch
             var positionBatch = await _positionBatchRepository.GetByIdAsync(command.PositionBatchId, cancellationToken);
             if (positionBatch == null)
             {
-                return Result.Failure("Position does not exist", 404);
+                throw new NotFoundExeption("Position Not Found.");
             }
 
             // step 2: update entity

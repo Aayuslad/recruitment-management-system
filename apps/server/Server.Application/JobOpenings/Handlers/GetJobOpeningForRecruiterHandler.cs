@@ -2,6 +2,7 @@
 using MediatR;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.JobOpenings.Queries;
 using Server.Application.JobOpenings.Queries.DTOs;
 using Server.Core.Results;
@@ -24,7 +25,7 @@ namespace Server.Application.JobOpenings.Handlers
             var jo = await _jobOpeningRepository.GetByIdAsync(request.JobOpeningId, cancellationToken);
             if (jo == null)
             {
-                return Result<JobOpeningDetailDTO>.Failure("Job opening not found", 404);
+                throw new NotFoundExeption("Job Opening Not Found.");
             }
 
             // step 2: map dto

@@ -18,7 +18,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(u => u.ContactNumber)
                 .HasConversion(
                     contactNumberVO => contactNumberVO.ToString(),
-                    contactNumber => ContactNumber.Create(contactNumber).Value!
+                    contactNumber => ContactNumber.Create(contactNumber)!
                 )
                 .IsRequired()
                 .HasMaxLength(20)
@@ -29,7 +29,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(a => a.Email)
                 .HasConversion(
                     emailVO => emailVO.ToString(),
-                    email => Email.Create(email).Value!
+                    email => Email.Create(email)!
                 )
                 .IsRequired()
                 .HasMaxLength(256)

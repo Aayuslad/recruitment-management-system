@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.Positions.Queries;
 using Server.Application.Positions.Queries.DTOs;
 using Server.Application.Positions.Queries.DTOs.PositionBatchDTOs;
@@ -24,7 +25,7 @@ namespace Server.Application.Positions.Handlers
             var batch = await _batchRepository.GetByIdAsync(query.BatchId, cancellationToken);
             if (batch == null)
             {
-                return Result<PositionBatchDetailDTO>.Failure("Position batch does not exist", 404);
+                throw new NotFoundExeption("Position Batch Not Found.");
             }
 
             // step 2: make dto

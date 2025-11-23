@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.Roles.Commands;
 using Server.Core.Results;
 
@@ -25,14 +26,14 @@ namespace Server.Application.Roles.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: fetch the role
             var role = await _rolesRepository.GetByIdAsync(request.Id, cancellationToken);
             if (role is null)
             {
-                return Result.Failure("Role does not exist", 404);
+                throw new NotFoundExeption("Role Not Found.");
             }
 
             // step 2: update

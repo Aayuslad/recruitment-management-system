@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Exeptions;
 using Server.Application.Interviews.Commands;
 using Server.Core.Results;
 using Server.Domain.Entities;
@@ -26,27 +27,27 @@ namespace Server.Application.Interviews.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                return Result.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: fetch the interviw
             var interview = await _interviewRespository.GetByIdAsync(request.InterviewId, cancellationToken);
             if (interview is null)
             {
-                return Result.Failure("interview does not exist", 404);
+                throw new NotFoundExeption("Interview Not Found");
             }
 
             // step 2: check if feedback exists
             var feedback = interview.Feedbacks.FirstOrDefault(x => x.Id == request.FeedbackId);
             if (feedback is null)
             {
-                return Result.Failure("Feedback does not exist", 404);
+                throw new NotFoundExeption("Feedback Not Found");
             }
 
             // step 3: authorise (only feedback creator can edit)
             if (feedback.GivenById != Guid.Parse(userIdString))
             {
-                return Result.Failure("Unauthorised to feedback edit", 401);
+                throw new ForbiddenExeption("not allowed to edit this feedback");
             }
 
             // step 4: update feedback

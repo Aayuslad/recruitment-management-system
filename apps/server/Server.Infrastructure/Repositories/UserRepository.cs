@@ -41,7 +41,7 @@ namespace Server.Infrastructure.Repositories
 
         Task<Auth?> IUserRepository.GetAuthByEmailOrUserNameAsync(string emailOrUserName, CancellationToken cancellationToken)
         {
-            var emailVO = Email.Create(emailOrUserName).Value!;
+            var emailVO = Email.Create(emailOrUserName)!;
             return _context.Auths
                 .FirstOrDefaultAsync(a => a.UserName == emailOrUserName || a.Email == emailVO, cancellationToken);
         }

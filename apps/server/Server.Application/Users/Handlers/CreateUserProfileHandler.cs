@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Abstractions.Services;
+using Server.Application.Exeptions;
 using Server.Application.Users.Commands;
 using Server.Application.Users.Commands.DTOs;
 using Server.Core.Results;
@@ -31,28 +32,23 @@ namespace Server.Application.Users.Handlers
             var userName = _httpContextAccessor.HttpContext?.User.FindFirst("userName")?.Value;
             if (authId is null)
             {
-                return Result<CreateUserProfileDTO>.Failure("Unauthorised", 401);
+                throw new UnAuthorisedExeption();
             }
 
             // step 1: check if profile is already there for the auth
             var result = await _userRepository.ProfileExistsByAuthIdAsync(Guid.Parse(authId), cancellationToken);
             if (result == true)
             {
-                return Result<CreateUserProfileDTO>.Failure("A profile already exists for this user.", 409);
+                throw new ConflictExeption("User profile already exists.");
             }
 
             // step 2: create all VOs
-            var contactNumResult = ContactNumber.Create(request.ContactNumber);
-            if (contactNumResult.IsSuccess == false)
-            {
-                return Result<CreateUserProfileDTO>.Failure(contactNumResult.ErrorMessage ?? "Invalid contact number", contactNumResult.StatusCode);
-            }
-            var contactNumber = contactNumResult.Value!;
+            var contactNumber = ContactNumber.Create(request.ContactNumber);
 
             // step 3: check if user with same contact number exists
             if (await _userRepository.ProfileExistsByContactNumberAsync(contactNumber, cancellationToken))
             {
-                return Result<CreateUserProfileDTO>.Failure("User with the same contact number already exists.", 409);
+                throw new ConflictExeption("User with same contact number already exists.");
             }
 
             // step 4: create user entity

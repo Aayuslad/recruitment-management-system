@@ -12,6 +12,7 @@ namespace Server.Application.Users.Queries
             AuthId = authId;
         }
 
+        //TODO: extact from token and remove from here
         public Guid AuthId { get; set; }
     }
 }
