@@ -45,7 +45,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetJobOpeningsForRecruiter(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetJobOpenings(CancellationToken cancellationToken)
         {
             var query = new GetJobOpeningsForRecruiterQuery();
             var result = await _mediator.Send(query, cancellationToken);
@@ -53,7 +53,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetJobOpeningForRecruiter(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetJobOpening(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetJobOpeningForRecruiterQuery(id);
             var result = await _mediator.Send(query, cancellationToken);

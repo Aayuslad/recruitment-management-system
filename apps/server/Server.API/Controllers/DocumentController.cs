@@ -37,7 +37,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDesignations(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetDocumentTypes(CancellationToken cancellationToken)
         {
             var query = new GetDocumentTypesQuery();
             var result = await _mediator.Send(query, cancellationToken);

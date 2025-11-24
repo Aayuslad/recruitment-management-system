@@ -7,29 +7,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
-// get designations
-export function useGetDesignations() {
-    return useQuery({
-        queryKey: ['designations'],
-        queryFn: async (): Promise<Designation[]> => {
-            const { data } = await axios.get('/designation');
-            return data;
-        },
-    });
-}
-
-// get designation with id
-export function useGetDesignation(id: string) {
-    return useQuery({
-        queryKey: ['designation', id],
-        queryFn: async (): Promise<Designation | undefined> => {
-            const { data } = await axios.get(`/designation/${id}`);
-            return data;
-        },
-    });
-}
-
-// create designation
 export function useCreateDesignation() {
     const queryClient = useQueryClient();
 
@@ -54,7 +31,6 @@ export function useCreateDesignation() {
     });
 }
 
-// eidt designation
 export function useEditDesignation() {
     const queryClient = useQueryClient();
 
@@ -64,9 +40,12 @@ export function useEditDesignation() {
         ): Promise<void> => {
             await axios.put(`/designation/${payload.id}`, payload);
         },
-        onSuccess: () => {
+        onSuccess: (_, variables) => {
             toast.success('Designation Edited');
             queryClient.invalidateQueries({ queryKey: ['designations'] });
+            queryClient.invalidateQueries({
+                queryKey: ['designation', variables.id],
+            });
         },
         onError: (error: AxiosError<{ error: string }>) => {
             toast.error(
@@ -79,7 +58,6 @@ export function useEditDesignation() {
     });
 }
 
-// delete designation
 export function useDeleteDesignation() {
     const queryClient = useQueryClient();
 
@@ -98,6 +76,26 @@ export function useDeleteDesignation() {
                     'Designation Not Deleted'
             );
             console.error('Designation deletion failed:', error);
+        },
+    });
+}
+
+export function useGetDesignation(id: string) {
+    return useQuery({
+        queryKey: ['designation', id],
+        queryFn: async (): Promise<Designation | null> => {
+            const { data } = await axios.get(`/designation/${id}`);
+            return data;
+        },
+    });
+}
+
+export function useGetDesignations() {
+    return useQuery({
+        queryKey: ['designations'],
+        queryFn: async (): Promise<Designation[]> => {
+            const { data } = await axios.get('/designation');
+            return data;
         },
     });
 }

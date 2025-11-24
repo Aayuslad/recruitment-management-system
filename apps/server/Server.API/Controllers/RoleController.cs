@@ -45,7 +45,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDesignations(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetRoles(CancellationToken cancellationToken)
         {
             var query = new GetRolesQuery();
             var result = await _mediator.Send(query, cancellationToken);

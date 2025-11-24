@@ -1,4 +1,4 @@
-import { useCreateDesignation } from '@/api/designation';
+import { useCreateDesignation } from '@/api/designation-api';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,

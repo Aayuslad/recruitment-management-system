@@ -9,7 +9,7 @@ import type { RegisterUserCommandCorrected } from '@/types/user-types';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { useRegisterUser } from '@/api/user';
+import { useRegisterUser } from '@/api/user-api';
 
 const registerFormSchema = z.object({
     userName: z.string().min(1, 'Username is required'),

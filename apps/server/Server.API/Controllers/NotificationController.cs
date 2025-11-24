@@ -21,7 +21,7 @@ namespace Server.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPut]
+        [HttpPut("/mark-as-read")]
         public async Task<IActionResult> MarkNotificationsAsRead([FromBody] MarkNotificationsAsReadCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);

@@ -120,9 +120,10 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
-        [HttpPut("roles")]
-        public async Task<IActionResult> EditUserRoles([FromBody] EditUserRolesCommand command, CancellationToken cancellationToken)
+        [HttpPut("{id:guid}/roles")]
+        public async Task<IActionResult> EditUserRoles(Guid id, [FromBody] EditUserRolesCommand command, CancellationToken cancellationToken)
         {
+            command.UserId = id;
             var result = await _mediator.Send(command, cancellationToken);
             return result.ToActionResult(this);
         }

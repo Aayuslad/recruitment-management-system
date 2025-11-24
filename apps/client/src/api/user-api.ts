@@ -1,5 +1,6 @@
 import type {
     CreateUserCommandCorrected,
+    EditUserRolesCommandCorrected,
     LoginUserCommandCorrected,
     RegisterUserCommandCorrected,
     User,
@@ -9,7 +10,6 @@ import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-// register user
 export function useRegisterUser() {
     const navigate = useNavigate();
 
@@ -33,7 +33,6 @@ export function useRegisterUser() {
     });
 }
 
-// create user
 export function useCreateUser() {
     const navigate = useNavigate();
 
@@ -41,7 +40,7 @@ export function useCreateUser() {
         mutationFn: async (
             payload: CreateUserCommandCorrected
         ): Promise<void> => {
-            const { data } = await axios.post('/user/createUser', payload);
+            const { data } = await axios.post('/user/user-profile', payload);
             return data;
         },
         onSuccess: () => {
@@ -58,7 +57,6 @@ export function useCreateUser() {
     });
 }
 
-// login user
 export function useLoginUser() {
     const navigate = useNavigate();
 
@@ -82,7 +80,6 @@ export function useLoginUser() {
     });
 }
 
-// logout user
 export function useLogoutUser() {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -98,7 +95,31 @@ export function useLogoutUser() {
     });
 }
 
-// get user
+export function useEditUserRoles() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (
+            payload: EditUserRolesCommandCorrected
+        ): Promise<void> => {
+            await axios.put(`/user/${payload.userId}/roles`, payload);
+        },
+        onSuccess: () => {
+            toast.success('User Roles Updated');
+            //TODO add invalidation here, when you areate get all users route for admin
+            queryClient.invalidateQueries({ queryKey: [''] });
+        },
+        onError: (error: AxiosError<{ error: string }>) => {
+            toast.error(
+                error.response?.data?.error ||
+                    error.message ||
+                    'User Roles Not Updated'
+            );
+            console.error('User role update failed:', error);
+        },
+    });
+}
+
 export function useGetUser() {
     const navigate = useNavigate();
 

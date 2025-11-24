@@ -1,4 +1,4 @@
-import { useCreateUser } from '@/api/user';
+import { useCreateUser } from '@/api/user-api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

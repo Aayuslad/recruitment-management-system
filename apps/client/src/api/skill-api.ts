@@ -7,14 +7,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
-// create skill
 export function useCreateSkill() {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: async (
             payload: CreateSkillCommandCorrected
-        ): Promise<undefined> => {
+        ): Promise<void> => {
             await axios.post('/skill', payload);
         },
         onSuccess: () => {
@@ -32,18 +31,6 @@ export function useCreateSkill() {
     });
 }
 
-// get a skill
-export function useGetSkill(id: string) {
-    return useQuery({
-        queryKey: ['skill', id],
-        queryFn: async (): Promise<Skill | undefined> => {
-            const { data } = await axios.get(`/skill/${id}`);
-            return data;
-        },
-    });
-}
-
-// edit a skill
 export function useEditSkill() {
     const queryClient = useQueryClient();
 
@@ -68,18 +55,6 @@ export function useEditSkill() {
     });
 }
 
-// get skill in bulk
-export function useGetSkills() {
-    return useQuery({
-        queryKey: ['skills'],
-        queryFn: async (): Promise<Skill[] | undefined> => {
-            const { data } = await axios.get('/skill');
-            return data;
-        },
-    });
-}
-
-// delete a skill
 export function useDeleteSkill() {
     const queryClient = useQueryClient();
 
@@ -98,6 +73,26 @@ export function useDeleteSkill() {
                     'Skill Not Deleted'
             );
             console.error('Skill deletion failed:', error);
+        },
+    });
+}
+
+export function useGetSkill(id: string) {
+    return useQuery({
+        queryKey: ['skill', id],
+        queryFn: async (): Promise<Skill | null> => {
+            const { data } = await axios.get(`/skill/${id}`);
+            return data;
+        },
+    });
+}
+
+export function useGetSkills() {
+    return useQuery({
+        queryKey: ['skills'],
+        queryFn: async (): Promise<Skill[]> => {
+            const { data } = await axios.get('/skill');
+            return data;
         },
     });
 }
