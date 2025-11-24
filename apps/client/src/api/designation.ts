@@ -1,6 +1,6 @@
 import type {
     CreateDesignationCommandCorrected,
-    DesignationDTO,
+    Designation,
     EditDesignationCommandCorrected,
 } from '@/types/designation-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 export function useGetDesignations() {
     return useQuery({
         queryKey: ['designations'],
-        queryFn: async (): Promise<DesignationDTO[]> => {
+        queryFn: async (): Promise<Designation[]> => {
             const { data } = await axios.get('/designation');
             return data;
         },
@@ -22,7 +22,7 @@ export function useGetDesignations() {
 export function useGetDesignation(id: string) {
     return useQuery({
         queryKey: ['designation', id],
-        queryFn: async (): Promise<DesignationDTO | undefined> => {
+        queryFn: async (): Promise<Designation | undefined> => {
             const { data } = await axios.get(`/designation/${id}`);
             return data;
         },

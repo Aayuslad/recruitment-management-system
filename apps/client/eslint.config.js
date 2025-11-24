@@ -15,6 +15,7 @@ export default tseslint.config([
         'node_modules',
         'generated',
         'src/components/ui',
+        'src/types/generated/api.d.ts'
     ]),
 
     {

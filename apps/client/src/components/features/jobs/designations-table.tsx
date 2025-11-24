@@ -34,9 +34,9 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { useAppStore } from '@/store';
-import type { DesignationDTO } from '@/types/designation-types';
+import type { Designation } from '@/types/designation-types';
 
-const columns: ColumnDef<DesignationDTO>[] = [
+const columns: ColumnDef<Designation>[] = [
     // {
     //     id: 'select',
     //     header: ({ table }) => (
@@ -127,11 +127,7 @@ const columns: ColumnDef<DesignationDTO>[] = [
     },
 ];
 
-function DesignationActionsCell({
-    designation,
-}: {
-    designation: DesignationDTO;
-}) {
+function DesignationActionsCell({ designation }: { designation: Designation }) {
     const openEditDialog = useAppStore((s) => s.openEditDialog);
     const deleteDesignationMutation = useDeleteDesignation();
 
@@ -180,7 +176,7 @@ export function DesignationsTable() {
     const { data, isLoading, isError } = useGetDesignations();
 
     const table = useReactTable({
-        data: data as DesignationDTO[],
+        data: data as Designation[],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,

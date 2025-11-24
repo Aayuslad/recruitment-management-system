@@ -41,9 +41,10 @@ namespace Server.Domain.Entities.Positions
                 throw new ArgumentException("Invalid status change — Position is Closed");
             }
 
+            Status = PositionStatus.OnHold;
+
             var history = PositionStatusMoveHistory.Create(Id, PositionStatus.OnHold, comments, updatedBy);
             StatusMoveHistories.Add(history);
-            Status = PositionStatus.OnHold;
         }
 
         public void ReOpen(Guid updatedBy, string? comments)
@@ -53,8 +54,9 @@ namespace Server.Domain.Entities.Positions
                 throw new ArgumentException("Invalid status change — already Open");
             }
 
-            var history = PositionStatusMoveHistory.Create(Id, PositionStatus.Open, comments, updatedBy);
             Status = PositionStatus.Open;
+
+            var history = PositionStatusMoveHistory.Create(Id, PositionStatus.Open, comments, updatedBy);
             StatusMoveHistories.Add(history);
         }
 
@@ -65,24 +67,26 @@ namespace Server.Domain.Entities.Positions
                 throw new ArgumentException("Invalid status change — already Closed");
             }
 
+            Status = PositionStatus.Closed;
+            ClosedByCandidate = closedByCandidate;
+
             string comments = $"position is closed by candidate id: {closedByCandidate}";
             var history = PositionStatusMoveHistory.Create(Id, PositionStatus.Closed, comments, updatedBy);
-            ClosedByCandidate = closedByCandidate;
-            Status = PositionStatus.Closed;
             StatusMoveHistories.Add(history);
         }
 
-        public void CloseWithoutCandidate(string closureReason, Guid updatedBy)
+        public void CloseWithoutCandidate(string? closureReason, Guid updatedBy)
         {
             if (Status == PositionStatus.Closed)
             {
                 throw new ArgumentException("Invalid status change — already Closed");
             }
 
+            ClosureReason = closureReason;
+            Status = PositionStatus.Closed;
+
             string comments = $"Closed without candidate with reason: {closureReason}";
             var history = PositionStatusMoveHistory.Create(Id, PositionStatus.Closed, comments, updatedBy);
-            Status = PositionStatus.Closed;
-            ClosureReason = closureReason;
             StatusMoveHistories.Add(history);
         }
     }

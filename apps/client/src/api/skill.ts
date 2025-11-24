@@ -1,7 +1,7 @@
 import type {
     CreateSkillCommandCorrected,
     EditSkillCommandCorrected,
-    SkillDTO,
+    Skill,
 } from '@/types/skill-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
@@ -36,7 +36,7 @@ export function useCreateSkill() {
 export function useGetSkill(id: string) {
     return useQuery({
         queryKey: ['skill', id],
-        queryFn: async (): Promise<SkillDTO | undefined> => {
+        queryFn: async (): Promise<Skill | undefined> => {
             const { data } = await axios.get(`/skill/${id}`);
             return data;
         },
@@ -72,7 +72,7 @@ export function useEditSkill() {
 export function useGetSkills() {
     return useQuery({
         queryKey: ['skills'],
-        queryFn: async (): Promise<SkillDTO[] | undefined> => {
+        queryFn: async (): Promise<Skill[] | undefined> => {
             const { data } = await axios.get('/skill');
             return data;
         },

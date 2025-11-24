@@ -48,10 +48,6 @@ namespace Server.Application.Aggregates.Designations.Handlers
                     Name = ds.Skill.Name,
                     MinExperienceYears = ds.MinExperienceYears,
                 }).ToList(),
-                CreatedBy = designation.CreatedBy,
-                CreatedAt = designation.CreatedAt,
-                LastUpdatedBy = designation.LastUpdatedBy,
-                LastUpdatedAt = designation.LastUpdatedAt
             };
 
             // step 3: return success

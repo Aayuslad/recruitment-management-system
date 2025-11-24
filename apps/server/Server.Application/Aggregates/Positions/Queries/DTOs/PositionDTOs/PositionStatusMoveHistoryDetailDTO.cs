@@ -10,6 +10,6 @@ namespace Server.Application.Aggregates.Positions.Queries.DTOs.PositionDTOs
         public string? Comments { get; set; }
         public DateTime MovedAt { get; set; }
         public Guid? MovedById { get; set; }
-        public string MovedByUserName { get; set; } = null!;
+        public string? MovedByUserName { get; set; } = null!;
     }
 }

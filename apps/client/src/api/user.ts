@@ -2,7 +2,7 @@ import type {
     CreateUserCommandCorrected,
     LoginUserCommandCorrected,
     RegisterUserCommandCorrected,
-    UserDTO,
+    User,
 } from '@/types/user-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
@@ -104,7 +104,7 @@ export function useGetUser() {
 
     return useQuery({
         queryKey: ['user'],
-        queryFn: async (): Promise<UserDTO | undefined> => {
+        queryFn: async (): Promise<User | undefined> => {
             try {
                 const { data } = await axios.get('/user/me');
                 return data;

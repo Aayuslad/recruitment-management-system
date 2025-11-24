@@ -1,25 +1,29 @@
+import type { Gender, UserStatus } from './enums';
 import type { components } from './generated/api';
 
-export interface UserDTO {
+export interface User {
+    isProfileCompleted: boolean;
     authId: string;
-    userId: string;
+    userId?: string | null;
     userName: string;
     email: string;
-    firstName: string;
-    middleName?: string;
-    lastName: string;
-    status?: UserStatus;
-    contactNumber: string;
-    IsContactNumberVerified?: boolean;
-    Gender?: components['schemas']['Gender'];
-    dob: string;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    status?: UserStatus | null;
+    contactNumber?: string | null;
+    isContactNumberVerified?: boolean | null;
+    gender?: Gender | null;
+    dob?: string | null;
+    roles: {
+        id: string;
+        name: string;
+    }[];
 }
 
-type UserStatus = 'OnHold' | 'Active' | 'Inactive' | 'Pending';
-
 export type CreateUserCommandCorrected = Omit<
-    components['schemas']['CreateUserCommand'],
-    'firstName' | 'lastName' | 'dob'
+    components['schemas']['CreateUserProfileCommand'],
+    'firstName' | 'lastName' | 'dob' | 'contactNumber'
 > & {
     firstName: string;
     dob: string;
@@ -42,4 +46,18 @@ export type LoginUserCommandCorrected = Omit<
 > & {
     usernameOrEmail: string;
     password: string;
+};
+
+export type EditUserRolesCommandCorrected = Omit<
+    components['schemas']['EditUserRolesCommand'],
+    'userId' | 'roles'
+> & {
+    userId: string;
+    roles: (Omit<
+        components['schemas']['UserRolesDTO'],
+        'roleId' | 'assignedBy'
+    > & {
+        roleId: string;
+        assignedBy?: string | null;
+    })[];
 };

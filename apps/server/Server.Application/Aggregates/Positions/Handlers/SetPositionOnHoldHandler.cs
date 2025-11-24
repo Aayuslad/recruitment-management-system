@@ -36,7 +36,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
             }
 
             // step 2: make move
-            position.PutOnHold(Guid.Parse(userIdString), command.comments);
+            position.PutOnHold(Guid.Parse(userIdString), command.Comments);
 
             // step 3: persist move
             await _positionRepository.UpdateAsync(position, cancellationToken);

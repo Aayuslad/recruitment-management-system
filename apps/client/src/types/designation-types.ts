@@ -1,20 +1,17 @@
+import type { SkillType } from './enums';
 import type { components } from './generated/api';
 
-export interface DesignationDTO {
+export interface Designation {
     id: string;
     name: string;
     description: string;
     designationSkills: DesignationSkillDTO[];
-    createdBy?: string;
-    createdAt?: string;
-    lastUpdatedBy?: string;
-    lastUpdatedAt?: string;
 }
 
 export interface DesignationSkillDTO {
     skillId: string;
     name: string;
-    skillType: string;
+    skillType: SkillType;
     minExperienceYears: number;
 }
 

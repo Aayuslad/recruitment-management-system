@@ -17,6 +17,7 @@ namespace Server.Application.Aggregates.Positions.Queries.DTOs.PositionDTOs
         public string? ClosureReason { get; set; }
         public List<SkillDetailDTO> Skills { get; set; } = new List<SkillDetailDTO>();
         public List<ReviewersDetailDTO> Reviewers { get; set; } = new List<ReviewersDetailDTO>();
-        public List<PositionStatusMoveHistoryDetailDTO> MoveHistory { get; set; } = new List<PositionStatusMoveHistoryDetailDTO>();
+        public List<PositionStatusMoveHistoryDetailDTO> MoveHistory { get; set; } =
+            new List<PositionStatusMoveHistoryDetailDTO>();
     }
 }
