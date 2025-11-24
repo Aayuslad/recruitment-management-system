@@ -13,7 +13,10 @@ import {
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-react';
 import * as React from 'react';
 
-import { useDeleteDesignation, useGetDesignations } from '@/api/designation-api';
+import {
+    useDeleteDesignation,
+    useGetDesignations,
+} from '@/api/designation-api';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,

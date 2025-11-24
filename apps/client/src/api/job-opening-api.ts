@@ -39,10 +39,7 @@ export function useEditJobOpening() {
         mutationFn: async (
             payload: EditJobOpeningCommandCorrected
         ): Promise<void> => {
-            await axios.put(
-                `/job-opening/${payload.jobOpeningId}`,
-                payload
-            );
+            await axios.put(`/job-opening/${payload.jobOpeningId}`, payload);
         },
         onSuccess: (_, variables) => {
             toast.success('Job opening updated');

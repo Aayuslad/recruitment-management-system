@@ -1,4 +1,7 @@
-import type { MarkNotificationsAsReadCommandCorrected, Notification } from '@/types/notification-types';
+import type {
+    MarkNotificationsAsReadCommandCorrected,
+    Notification,
+} from '@/types/notification-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { toast } from 'sonner';
