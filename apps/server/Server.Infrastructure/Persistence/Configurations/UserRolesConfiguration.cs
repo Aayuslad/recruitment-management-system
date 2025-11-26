@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Server.Domain.Entities;
+using Server.Domain.Entities.Users;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
@@ -11,22 +11,13 @@ namespace Server.Infrastructure.Persistence.Configurations
         {
             builder.ToTable("UserRole");
 
-            builder.HasKey(ur => ur.Id); // using Guid as PK for simplicity
+            builder.HasKey(x => new { x.UserId, x.RoleId });
 
-            builder.Property(ur => ur.UserId).IsRequired();
-            builder.Property(ur => ur.RoleId).IsRequired();
-            builder.Property(ur => ur.AssignedBy).IsRequired();
-            builder.Property(ur => ur.AssignedAt).IsRequired();
+            builder.Property(ur => ur.AssignedAt)
+                .IsRequired();
 
-            // indexes
-            builder.HasIndex(ur => ur.UserId);
-            builder.HasIndex(ur => ur.RoleId);
-
-            // relationships
-
-            // User - Role ( n : m )
             builder.HasOne(x => x.User)
-                .WithMany()
+                .WithMany(x => x.Roles)
                 .IsRequired()
                 .HasForeignKey(ur => ur.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -36,6 +27,12 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .IsRequired()
                 .HasForeignKey(ur => ur.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(x => x.AssignedByUser)
+                .WithMany()
+                .IsRequired()
+                .HasForeignKey(ur => ur.AssignedBy)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

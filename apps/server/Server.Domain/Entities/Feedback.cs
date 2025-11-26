@@ -1,4 +1,7 @@
 ﻿using Server.Core.Entities;
+using Server.Domain.Entities.Interviews;
+using Server.Domain.Entities.JobApplications;
+using Server.Domain.Entities.Users;
 using Server.Domain.Enums;
 
 namespace Server.Domain.Entities
@@ -25,7 +28,7 @@ namespace Server.Domain.Entities
             Comment = comment;
             Rating = rating;
 
-            SkillFeedbacks = skillFeedbacks.ToList();
+            SkillFeedbacks = skillFeedbacks.ToHashSet();
         }
 
         public Guid? JobApplicationId { get; private set; }

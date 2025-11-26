@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Server.Domain.Entities;
+using Server.Domain.Entities.Designations;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
@@ -14,14 +14,11 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("Designation");
 
             builder.HasKey(d => d.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.Property(d => d.Name)
                 .IsRequired()
                 .HasMaxLength(50);
-
-            builder.Property(d => d.Description)
-                .IsRequired()
-                .HasMaxLength(500);
         }
     }
 }

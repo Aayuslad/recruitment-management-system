@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Server.Domain.Entities;
+using Server.Domain.Entities.Events;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
@@ -14,6 +14,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("Event");
 
             builder.HasKey(e => e.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.Property(e => e.Name)
                 .IsRequired();

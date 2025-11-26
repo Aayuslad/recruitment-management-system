@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using Server.Application.Abstractions.Repositories;
-using Server.Domain.Entities;
+using Server.Domain.Entities.Designations;
 using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories
@@ -46,7 +46,7 @@ namespace Server.Infrastructure.Repositories
 
         Task<bool> IDesignationRepository.ExistsByNameAsync(string name, CancellationToken cancellationToken)
         {
-            return _context.Designations.AnyAsync(x => x.Name == name);
+            return _context.Designations.AnyAsync(x => x.Name == name, cancellationToken);
         }
     }
 }

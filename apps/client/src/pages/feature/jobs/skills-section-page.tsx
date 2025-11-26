@@ -1,11 +1,11 @@
-import { CreateSkillDialog } from '@/components/features/jobs/creare-skill-dialog';
-import { EditSkillDialog } from '@/components/features/jobs/edit-skill-dialog';
-import { SkillsTable } from '@/components/features/jobs/skills-table';
+// import { CreateSkillDialog } from '@/components/features/jobs/creare-skill-dialog';
+// import { EditSkillDialog } from '@/components/features/jobs/edit-skill-dialog';
+// import { SkillsTable } from '@/components/features/jobs/skills-table';
 
 function SkillsSectionPage() {
     return (
         <div className=" h-full">
-            <div className="bg-popover dark:bg-popover h-[100px] w-full flex items-center">
+            {/* <div className="bg-popover dark:bg-popover h-[100px] w-full flex items-center">
                 <div className="px-10 flex-1">
                     <h1 className="text-2xl font-bold">Skills</h1>
                     <p>
@@ -26,7 +26,7 @@ function SkillsSectionPage() {
                 </div>
 
                 <EditSkillDialog />
-            </div>
+            </div> */}
         </div>
     );
 }

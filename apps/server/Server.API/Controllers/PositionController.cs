@@ -3,8 +3,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Server.Application.Positions.Commands;
-using Server.Application.Positions.Queries;
+using Server.Application.Aggregates.Positions.Commands;
+using Server.Application.Aggregates.Positions.Queries;
 using Server.Core.Extensions;
 
 namespace Server.API.Controllers

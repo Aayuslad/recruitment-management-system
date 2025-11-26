@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using Server.Application.Abstractions.Repositories;
-using Server.Domain.Entities;
+using Server.Domain.Entities.Positions;
 using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories
@@ -33,7 +33,7 @@ namespace Server.Infrastructure.Repositories
                 .Include(x => x.Designation)
                     .ThenInclude(x => x.DesignationSkills)
                         .ThenInclude(x => x.Skill)
-                .Include(x => x.PositionBatchReviewers)
+                .Include(x => x.Reviewers)
                     .ThenInclude(x => x.ReviewerUser)
                         .ThenInclude(x => x.Auth)
                 .Include(x => x.SkillOverRides)

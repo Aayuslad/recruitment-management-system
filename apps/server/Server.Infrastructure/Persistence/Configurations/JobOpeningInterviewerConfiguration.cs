@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Server.Domain.Entities;
+using Server.Domain.Entities.JobOpenings;
+using Server.Domain.Entities.Users;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
@@ -12,6 +13,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("JobOpeningInterviewer");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.HasOne<JobOpening>(x => x.JobOpening)
                 .WithMany(x => x.JobOpeningInterviewers)

@@ -1,4 +1,4 @@
-﻿using Server.Domain.Entities;
+﻿using Server.Domain.Entities.JobApplications;
 
 namespace Server.Application.Abstractions.Repositories
 {

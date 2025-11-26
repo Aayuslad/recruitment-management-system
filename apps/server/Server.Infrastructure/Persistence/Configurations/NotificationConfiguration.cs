@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Server.Domain.Entities;
+using Server.Domain.Entities.Notifications;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
@@ -12,9 +12,10 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("Notification");
 
             builder.HasKey(e => e.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.HasOne(x => x.User)
-                .WithMany(x => x.Notifications)
+                .WithMany()
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 

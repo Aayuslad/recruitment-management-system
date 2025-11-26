@@ -3,8 +3,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Server.Application.JobOpenings.Commands;
-using Server.Application.JobOpenings.Queries;
+using Server.Application.Aggregates.JobOpenings.Commands;
+using Server.Application.Aggregates.JobOpenings.Queries;
 using Server.Core.Extensions;
 
 namespace Server.API.Controllers
@@ -45,7 +45,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetJobOpeningsForRecruiter(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetJobOpenings(CancellationToken cancellationToken)
         {
             var query = new GetJobOpeningsForRecruiterQuery();
             var result = await _mediator.Send(query, cancellationToken);
@@ -53,25 +53,9 @@ namespace Server.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetJobOpeningForRecruiter(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetJobOpening(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetJobOpeningForRecruiterQuery(id);
-            var result = await _mediator.Send(query, cancellationToken);
-            return result.ToActionResult(this);
-        }
-
-        [HttpGet("for-candidate")]
-        public async Task<IActionResult> GetJobOpeningsForCandidate(CancellationToken cancellationToken)
-        {
-            var query = new GetJobOpeningsForCandidateQuery();
-            var result = await _mediator.Send(query, cancellationToken);
-            return result.ToActionResult(this);
-        }
-
-        [HttpGet("for-candidate/{id:guid}")]
-        public async Task<IActionResult> GetJobOpeningForCandidate(Guid id, CancellationToken cancellationToken)
-        {
-            var query = new GetJobOpeningForCandiateQuery(id);
             var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }

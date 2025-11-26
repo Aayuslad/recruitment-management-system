@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    '/api/designation': {
+    "/api/candidate": {
         parameters: {
             query?: never;
             header?: never;
@@ -39,9 +39,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    'application/json': components['schemas']['CreateDesignationCommand'];
-                    'text/json': components['schemas']['CreateDesignationCommand'];
-                    'application/*+json': components['schemas']['CreateDesignationCommand'];
+                    "application/json": components["schemas"]["CreateCandidateCommand"];
+                    "text/json": components["schemas"]["CreateCandidateCommand"];
+                    "application/*+json": components["schemas"]["CreateCandidateCommand"];
                 };
             };
             responses: {
@@ -60,7 +60,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/designation/{id}': {
+    "/api/candidate/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -98,9 +98,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    'application/json': components['schemas']['EditDesignationCommand'];
-                    'text/json': components['schemas']['EditDesignationCommand'];
-                    'application/*+json': components['schemas']['EditDesignationCommand'];
+                    "application/json": components["schemas"]["EditCandidateCommand"];
+                    "text/json": components["schemas"]["EditCandidateCommand"];
+                    "application/*+json": components["schemas"]["EditCandidateCommand"];
                 };
             };
             responses: {
@@ -139,7 +139,120 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/job-opening': {
+    "/api/candidate/verify-bg/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/bulk/exel-doc": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateCandidatesWithExelDocCommand"];
+                    "text/json": components["schemas"]["CreateCandidatesWithExelDocCommand"];
+                    "application/*+json": components["schemas"]["CreateCandidatesWithExelDocCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/resume-doc": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateCandidateWithResumeDocCommand"];
+                    "text/json": components["schemas"]["CreateCandidateWithResumeDocCommand"];
+                    "application/*+json": components["schemas"]["CreateCandidateWithResumeDocCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/designation": {
         parameters: {
             query?: never;
             header?: never;
@@ -174,9 +287,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    'application/json': components['schemas']['CreateJobOpeningCommand'];
-                    'text/json': components['schemas']['CreateJobOpeningCommand'];
-                    'application/*+json': components['schemas']['CreateJobOpeningCommand'];
+                    "application/json": components["schemas"]["CreateDesignationCommand"];
+                    "text/json": components["schemas"]["CreateDesignationCommand"];
+                    "application/*+json": components["schemas"]["CreateDesignationCommand"];
                 };
             };
             responses: {
@@ -195,7 +308,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/job-opening/{id}': {
+    "/api/designation/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -233,9 +346,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    'application/json': components['schemas']['EditJobOpeningCommand'];
-                    'text/json': components['schemas']['EditJobOpeningCommand'];
-                    'application/*+json': components['schemas']['EditJobOpeningCommand'];
+                    "application/json": components["schemas"]["EditDesignationCommand"];
+                    "text/json": components["schemas"]["EditDesignationCommand"];
+                    "application/*+json": components["schemas"]["EditDesignationCommand"];
                 };
             };
             responses: {
@@ -274,75 +387,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/job-opening/for-candidate': {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    '/api/job-opening/for-candidate/{id}': {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    '/api/position/batch': {
+    "/api/document": {
         parameters: {
             query?: never;
             header?: never;
@@ -377,9 +422,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    'application/json': components['schemas']['CreatePositionBatchCommand'];
-                    'text/json': components['schemas']['CreatePositionBatchCommand'];
-                    'application/*+json': components['schemas']['CreatePositionBatchCommand'];
+                    "application/json": components["schemas"]["CreateDocumentTypeCommand"];
+                    "text/json": components["schemas"]["CreateDocumentTypeCommand"];
+                    "application/*+json": components["schemas"]["CreateDocumentTypeCommand"];
                 };
             };
             responses: {
@@ -398,59 +443,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/position/batch/{id}': {
+    "/api/document/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    'application/json': components['schemas']['EditPositionBatchCommand'];
-                    'text/json': components['schemas']['EditPositionBatchCommand'];
-                    'application/*+json': components['schemas']['EditPositionBatchCommand'];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        get?: never;
+        put?: never;
         post?: never;
         delete: {
             parameters: {
@@ -477,7 +478,96 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/close/{id}': {
+    "/api/employee": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/event": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateEventCommand"];
+                    "text/json": components["schemas"]["CreateEventCommand"];
+                    "application/*+json": components["schemas"]["CreateEventCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/event/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -496,9 +586,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    'application/json': components['schemas']['ClosePositionCommand'];
-                    'text/json': components['schemas']['ClosePositionCommand'];
-                    'application/*+json': components['schemas']['ClosePositionCommand'];
+                    "application/json": components["schemas"]["EditEventCommand"];
+                    "text/json": components["schemas"]["EditEventCommand"];
+                    "application/*+json": components["schemas"]["EditEventCommand"];
                 };
             };
             responses: {
@@ -512,13 +602,451 @@ export interface paths {
             };
         };
         post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/interview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateInterviewCommand"];
+                    "text/json": components["schemas"]["CreateInterviewCommand"];
+                    "application/*+json": components["schemas"]["CreateInterviewCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    '/onHold/{id}': {
+    "/api/interview/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["EditInterviewCommand"];
+                    "text/json": components["schemas"]["EditInterviewCommand"];
+                    "application/*+json": components["schemas"]["EditInterviewCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/interview/{id}/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateInterviewFeedbackCommand"];
+                    "text/json": components["schemas"]["CreateInterviewFeedbackCommand"];
+                    "application/*+json": components["schemas"]["CreateInterviewFeedbackCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/interview/{interviewId}/feedback/{feedbackId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    interviewId: string;
+                    feedbackId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["EditInterviewFeedbackCommand"];
+                    "text/json": components["schemas"]["EditInterviewFeedbackCommand"];
+                    "application/*+json": components["schemas"]["EditInterviewFeedbackCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    interviewId: string;
+                    feedbackId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-application": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateJobApplicationCommand"];
+                    "text/json": components["schemas"]["CreateJobApplicationCommand"];
+                    "application/*+json": components["schemas"]["CreateJobApplicationCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-application/bulk": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateJobApplicationsCommand"];
+                    "text/json": components["schemas"]["CreateJobApplicationsCommand"];
+                    "application/*+json": components["schemas"]["CreateJobApplicationsCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-application/{id}/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateJobApplicationFeedbackCommand"];
+                    "text/json": components["schemas"]["CreateJobApplicationFeedbackCommand"];
+                    "application/*+json": components["schemas"]["CreateJobApplicationFeedbackCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-application/{applicationId}/feedback/{feedbackId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    applicationId: string;
+                    feedbackId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["EditJobApplicationFeedbackCommand"];
+                    "text/json": components["schemas"]["EditJobApplicationFeedbackCommand"];
+                    "application/*+json": components["schemas"]["EditJobApplicationFeedbackCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    applicationId: string;
+                    feedbackId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-application/{id}/move-status": {
         parameters: {
             query?: never;
             header?: never;
@@ -537,9 +1065,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    'application/json': components['schemas']['SetPositionOnHoldCommand'];
-                    'text/json': components['schemas']['SetPositionOnHoldCommand'];
-                    'application/*+json': components['schemas']['SetPositionOnHoldCommand'];
+                    "application/json": components["schemas"]["MoveJobApplicationStatusCommand"];
+                    "text/json": components["schemas"]["MoveJobApplicationStatusCommand"];
+                    "application/*+json": components["schemas"]["MoveJobApplicationStatusCommand"];
                 };
             };
             responses: {
@@ -559,7 +1087,469 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/position/{id}': {
+    "/api/job-application/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-opening": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateJobOpeningCommand"];
+                    "text/json": components["schemas"]["CreateJobOpeningCommand"];
+                    "application/*+json": components["schemas"]["CreateJobOpeningCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-opening/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["EditJobOpeningCommand"];
+                    "text/json": components["schemas"]["EditJobOpeningCommand"];
+                    "application/*+json": components["schemas"]["EditJobOpeningCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/notification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["MarkNotificationsAsReadCommand"];
+                    "text/json": components["schemas"]["MarkNotificationsAsReadCommand"];
+                    "application/*+json": components["schemas"]["MarkNotificationsAsReadCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/position/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreatePositionBatchCommand"];
+                    "text/json": components["schemas"]["CreatePositionBatchCommand"];
+                    "application/*+json": components["schemas"]["CreatePositionBatchCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/position/batch/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["EditPositionBatchCommand"];
+                    "text/json": components["schemas"]["EditPositionBatchCommand"];
+                    "application/*+json": components["schemas"]["EditPositionBatchCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/close/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["ClosePositionCommand"];
+                    "text/json": components["schemas"]["ClosePositionCommand"];
+                    "application/*+json": components["schemas"]["ClosePositionCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/onHold/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["SetPositionOnHoldCommand"];
+                    "text/json": components["schemas"]["SetPositionOnHoldCommand"];
+                    "application/*+json": components["schemas"]["SetPositionOnHoldCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/position/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -594,7 +1584,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/position': {
+    "/api/position": {
         parameters: {
             query?: never;
             header?: never;
@@ -627,7 +1617,123 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/': {
+    "/api/role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateRoleCommand"];
+                    "text/json": components["schemas"]["CreateRoleCommand"];
+                    "application/*+json": components["schemas"]["CreateRoleCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/role/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["EditRoleCommand"];
+                    "text/json": components["schemas"]["EditRoleCommand"];
+                    "application/*+json": components["schemas"]["EditRoleCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/": {
         parameters: {
             query?: never;
             header?: never;
@@ -649,7 +1755,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        'text/plain': string;
+                        "text/plain": string;
                     };
                 };
             };
@@ -662,7 +1768,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/skill': {
+    "/api/skill": {
         parameters: {
             query?: never;
             header?: never;
@@ -697,9 +1803,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    'application/json': components['schemas']['CreateSkillCommand'];
-                    'text/json': components['schemas']['CreateSkillCommand'];
-                    'application/*+json': components['schemas']['CreateSkillCommand'];
+                    "application/json": components["schemas"]["CreateSkillCommand"];
+                    "text/json": components["schemas"]["CreateSkillCommand"];
+                    "application/*+json": components["schemas"]["CreateSkillCommand"];
                 };
             };
             responses: {
@@ -718,33 +1824,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/skill/{id}': {
+    "/api/skill/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        get?: never;
         put: {
             parameters: {
                 query?: never;
@@ -756,9 +1843,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    'application/json': components['schemas']['EditSkillCommand'];
-                    'text/json': components['schemas']['EditSkillCommand'];
-                    'application/*+json': components['schemas']['EditSkillCommand'];
+                    "application/json": components["schemas"]["EditSkillCommand"];
+                    "text/json": components["schemas"]["EditSkillCommand"];
+                    "application/*+json": components["schemas"]["EditSkillCommand"];
                 };
             };
             responses: {
@@ -797,7 +1884,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/user/register': {
+    "/api/user/register": {
         parameters: {
             query?: never;
             header?: never;
@@ -815,9 +1902,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    'application/json': components['schemas']['RegisterUserCommand'];
-                    'text/json': components['schemas']['RegisterUserCommand'];
-                    'application/*+json': components['schemas']['RegisterUserCommand'];
+                    "application/json": components["schemas"]["RegisterUserCommand"];
+                    "text/json": components["schemas"]["RegisterUserCommand"];
+                    "application/*+json": components["schemas"]["RegisterUserCommand"];
                 };
             };
             responses: {
@@ -836,7 +1923,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/user/login': {
+    "/api/user/login": {
         parameters: {
             query?: never;
             header?: never;
@@ -854,9 +1941,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    'application/json': components['schemas']['LoginUserCommand'];
-                    'text/json': components['schemas']['LoginUserCommand'];
-                    'application/*+json': components['schemas']['LoginUserCommand'];
+                    "application/json": components["schemas"]["LoginUserCommand"];
+                    "text/json": components["schemas"]["LoginUserCommand"];
+                    "application/*+json": components["schemas"]["LoginUserCommand"];
                 };
             };
             responses: {
@@ -875,7 +1962,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/user/logout': {
+    "/api/user/logout": {
         parameters: {
             query?: never;
             header?: never;
@@ -908,7 +1995,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/user/createUser': {
+    "/api/user/user-profile": {
         parameters: {
             query?: never;
             header?: never;
@@ -926,9 +2013,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    'application/json': components['schemas']['CreateUserCommand'];
-                    'text/json': components['schemas']['CreateUserCommand'];
-                    'application/*+json': components['schemas']['CreateUserCommand'];
+                    "application/json": components["schemas"]["CreateUserProfileCommand"];
+                    "text/json": components["schemas"]["CreateUserProfileCommand"];
+                    "application/*+json": components["schemas"]["CreateUserProfileCommand"];
                 };
             };
             responses: {
@@ -947,7 +2034,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    '/api/user/me': {
+    "/api/user/me": {
         parameters: {
             query?: never;
             header?: never;
@@ -980,35 +2067,130 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/user/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["EditUserRolesCommand"];
+                    "text/json": components["schemas"]["EditUserRolesCommand"];
+                    "application/*+json": components["schemas"]["EditUserRolesCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        CandidateSkillDTO: {
+            /** Format: uuid */
+            skillId?: string;
+        };
         ClosePositionCommand: {
             /** Format: uuid */
             positionId?: string;
             closureReason?: string | null;
         };
+        CreateCandidateCommand: {
+            email?: string | null;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            contactNumber?: string | null;
+            /** Format: date-time */
+            dob?: string;
+            resumeUrl?: string | null;
+            skills?: components["schemas"]["CandidateSkillDTO"][] | null;
+        };
+        CreateCandidateWithResumeDocCommand: Record<string, never>;
+        CreateCandidatesWithExelDocCommand: Record<string, never>;
         CreateDesignationCommand: {
             name?: string | null;
-            description?: string | null;
-            designationSkills?:
-                | components['schemas']['DesignationSkillDTO'][]
-                | null;
+            designationSkills?: components["schemas"]["DesignationSkillDTO"][] | null;
+        };
+        CreateDocumentTypeCommand: {
+            name?: string | null;
+        };
+        CreateEventCommand: {
+            name?: string | null;
+            type?: components["schemas"]["EventType"];
+            jobOpenings?: components["schemas"]["EventJobOpeningDTO"][] | null;
+        };
+        CreateInterviewCommand: {
+            /** Format: uuid */
+            jobApplicationId?: string;
+            /** Format: int32 */
+            roundNumber?: number;
+            interviewType?: components["schemas"]["InterviewType"];
+            /** Format: date-time */
+            scheduledAt?: string | null;
+            /** Format: int32 */
+            durationInMinutes?: number;
+            meetingLink?: string | null;
+            readonly participants?: components["schemas"]["InterviewParticipantDTO"][] | null;
+        };
+        CreateInterviewFeedbackCommand: {
+            /** Format: uuid */
+            interviewId?: string;
+            comment?: string | null;
+            /** Format: int32 */
+            rating?: number;
+            skillFeedbacks?: components["schemas"]["InterviewSkillFeedbackDTO"][] | null;
+        };
+        CreateJobApplicationCommand: {
+            /** Format: uuid */
+            candidateId?: string;
+            /** Format: uuid */
+            jobOpeningId?: string;
+        };
+        CreateJobApplicationFeedbackCommand: {
+            /** Format: uuid */
+            jobApplicationId?: string;
+            comment?: string | null;
+            /** Format: int32 */
+            rating?: number;
+            skillFeedbacks?: components["schemas"]["SkillFeedbackDTO"][] | null;
+        };
+        CreateJobApplicationsCommand: {
+            applications?: components["schemas"]["JobApplicationDTO"][] | null;
         };
         CreateJobOpeningCommand: {
             title?: string | null;
             description?: string | null;
-            type?: components['schemas']['JobOpeningType'];
+            type?: components["schemas"]["JobOpeningType"];
             /** Format: uuid */
             positionBatchId?: string;
-            interviewers?:
-                | components['schemas']['JobOpeningInterviewerDTO'][]
-                | null;
-            interviewRounds?:
-                | components['schemas']['InterviewRoundTemplateDTO'][]
-                | null;
-            skillOverRides?: components['schemas']['SkillOverRideDTO'][] | null;
+            interviewers?: components["schemas"]["JobOpeningInterviewerDTO"][] | null;
+            interviewRounds?: components["schemas"]["InterviewRoundTemplateDTO"][] | null;
+            skillOverRides?: components["schemas"]["SkillOverRideDTO"][] | null;
         };
         CreatePositionBatchCommand: {
             /** Format: int32 */
@@ -1021,55 +2203,111 @@ export interface components {
             minCTC?: number;
             /** Format: float */
             maxCTC?: number;
-            reviewers?: components['schemas']['PositionReviewersDTO'][] | null;
-            skillOverRides?:
-                | components['schemas']['PositionSkillOverRideDTO'][]
-                | null;
+            reviewers?: components["schemas"]["PositionReviewersDTO"][] | null;
+            skillOverRides?: components["schemas"]["PositionSkillOverRideDTO"][] | null;
         };
-        CreateSkillCommand: {
+        CreateRoleCommand: {
             name?: string | null;
             description?: string | null;
         };
-        CreateUserCommand: {
+        CreateSkillCommand: {
+            name?: string | null;
+        };
+        CreateUserProfileCommand: {
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
             contactNumber?: string | null;
-            gender?: components['schemas']['Gender'];
+            gender?: components["schemas"]["Gender"];
             /** Format: date-time */
             dob?: string;
         };
         DesignationSkillDTO: {
             /** Format: uuid */
             skillId?: string;
-            skillType?: components['schemas']['SkillType'];
+            skillType?: components["schemas"]["SkillType"];
             /** Format: float */
             minExperienceYears?: number | null;
+        };
+        DocumentDTO: {
+            /** Format: uuid */
+            id?: string | null;
+            /** Format: uuid */
+            documentTypeId?: string;
+            url?: string | null;
+        };
+        EditCandidateCommand: {
+            /** Format: uuid */
+            id?: string;
+            email?: string | null;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            contactNumber?: string | null;
+            /** Format: date-time */
+            dob?: string;
+            resumeUrl?: string | null;
+            skills?: components["schemas"]["CandidateSkillDTO"][] | null;
+            documents?: components["schemas"]["DocumentDTO"][] | null;
         };
         EditDesignationCommand: {
             /** Format: uuid */
             id?: string;
             name?: string | null;
-            description?: string | null;
-            designationSkills?:
-                | components['schemas']['DesignationSkillDTO'][]
-                | null;
+            designationSkills?: components["schemas"]["DesignationSkillDTO"][] | null;
+        };
+        EditEventCommand: {
+            /** Format: uuid */
+            id?: string;
+            name?: string | null;
+            type?: components["schemas"]["EventType"];
+            jobOpenings?: components["schemas"]["EventJobOpeningDTO"][] | null;
+        };
+        EditInterviewCommand: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: int32 */
+            roundNumber?: number;
+            interviewType?: components["schemas"]["InterviewType"];
+            /** Format: date-time */
+            scheduledAt?: string | null;
+            /** Format: int32 */
+            durationInMinutes?: number;
+            meetingLink?: string | null;
+            status?: components["schemas"]["InterviewStatus"];
+            participants?: components["schemas"]["InterviewParticipantDTO"][] | null;
+        };
+        EditInterviewFeedbackCommand: {
+            /** Format: uuid */
+            interviewId?: string;
+            /** Format: uuid */
+            feedbackId?: string;
+            comment?: string | null;
+            /** Format: int32 */
+            rating?: number;
+            skillFeedbacks?: components["schemas"]["InterviewSkillFeedbackDTO"][] | null;
+        };
+        EditJobApplicationFeedbackCommand: {
+            /** Format: uuid */
+            jobApplicationId?: string;
+            /** Format: uuid */
+            feedbackId?: string;
+            comment?: string | null;
+            /** Format: int32 */
+            rating?: number;
+            skillFeedbacks?: components["schemas"]["SkillFeedbackDTO"][] | null;
         };
         EditJobOpeningCommand: {
             /** Format: uuid */
             jobOpeningId?: string;
             title?: string | null;
             description?: string | null;
-            type?: components['schemas']['JobOpeningType'];
+            type?: components["schemas"]["JobOpeningType"];
             /** Format: uuid */
             positionBatchId?: string;
-            interviewers?:
-                | components['schemas']['JobOpeningInterviewerDTO'][]
-                | null;
-            interviewRounds?:
-                | components['schemas']['InterviewRoundTemplateDTO'][]
-                | null;
-            skillOverRides?: components['schemas']['SkillOverRideDTO'][] | null;
+            interviewers?: components["schemas"]["JobOpeningInterviewerDTO"][] | null;
+            interviewRounds?: components["schemas"]["InterviewRoundTemplateDTO"][] | null;
+            skillOverRides?: components["schemas"]["SkillOverRideDTO"][] | null;
         };
         EditPositionBatchCommand: {
             /** Format: uuid */
@@ -1082,35 +2320,51 @@ export interface components {
             minCTC?: number;
             /** Format: float */
             maxCTC?: number;
-            reviewers?: components['schemas']['PositionReviewersDTO'][] | null;
-            skillOverRides?:
-                | components['schemas']['PositionSkillOverRideDTO'][]
-                | null;
+            reviewers?: components["schemas"]["PositionReviewersDTO"][] | null;
+            skillOverRides?: components["schemas"]["PositionSkillOverRideDTO"][] | null;
         };
-        EditSkillCommand: {
+        EditRoleCommand: {
             /** Format: uuid */
             id?: string;
             name?: string | null;
             description?: string | null;
         };
+        EditSkillCommand: {
+            /** Format: uuid */
+            id?: string;
+            name?: string | null;
+        };
+        EditUserRolesCommand: {
+            /** Format: uuid */
+            userId?: string;
+            roles?: components["schemas"]["UserRolesDTO"][] | null;
+        };
+        EventJobOpeningDTO: {
+            /** Format: uuid */
+            jobOpeningId?: string;
+        };
         /** @enum {string} */
-        Gender: 'Male' | 'Female' | 'Other' | 'PreferNotToSay';
+        EventType: "WalkIn" | "CampusDrive";
+        /** @enum {string} */
+        Gender: "Male" | "Female" | "Other" | "PreferNotToSay";
         InterviewPanelRequirementDTO: {
             /** Format: uuid */
             id?: string | null;
             /** Format: uuid */
             jobOpeningInterviewTemplateId?: string | null;
-            role?: components['schemas']['InterviewParticipantRole'];
+            role?: components["schemas"]["InterviewParticipantRole"];
             /** Format: int32 */
             requirementCount?: number;
         };
+        InterviewParticipantDTO: {
+            /** Format: uuid */
+            id?: string | null;
+            /** Format: uuid */
+            userId?: string;
+            role?: components["schemas"]["InterviewParticipantRole"];
+        };
         /** @enum {string} */
-        InterviewParticipantRole:
-            | 'Interviewer'
-            | 'Observer'
-            | 'NoteTaker'
-            | 'HRRepresentative'
-            | 'HiringManager';
+        InterviewParticipantRole: "Interviewer" | "Observer" | "NoteTaker" | "HRRepresentative" | "HiringManager";
         InterviewRoundTemplateDTO: {
             /** Format: uuid */
             id?: string | null;
@@ -1119,25 +2373,53 @@ export interface components {
             roundNumber?: number;
             /** Format: int32 */
             durationInMinutes?: number;
-            type?: components['schemas']['InterviewType'];
-            requirements?:
-                | components['schemas']['InterviewPanelRequirementDTO'][]
-                | null;
+            type?: components["schemas"]["InterviewType"];
+            requirements?: components["schemas"]["InterviewPanelRequirementDTO"][] | null;
+        };
+        InterviewSkillFeedbackDTO: {
+            /** Format: uuid */
+            skillId?: string;
+            /** Format: int32 */
+            rating?: number;
+            /** Format: float */
+            assessedExpYears?: number | null;
         };
         /** @enum {string} */
-        InterviewType: 'Technical' | 'HR' | 'OnlineTest';
+        InterviewStatus: "Unscheduled" | "Scheduled" | "Completed";
+        /** @enum {string} */
+        InterviewType: "Technical" | "HR" | "OnlineTest";
+        JobApplicationDTO: {
+            /** Format: uuid */
+            candidateId?: string;
+            /** Format: uuid */
+            jobOpeningId?: string;
+        };
+        /** @enum {string} */
+        JobApplicationStatus: "Applied" | "Shortlisted" | "Interviwed" | "Offered" | "Rejected" | "Hired";
         JobOpeningInterviewerDTO: {
             /** Format: uuid */
             id?: string | null;
             /** Format: uuid */
             userId?: string;
-            role?: components['schemas']['InterviewParticipantRole'];
+            role?: components["schemas"]["InterviewParticipantRole"];
         };
         /** @enum {string} */
-        JobOpeningType: 'Normal' | 'CampusDrive' | 'WalkIn';
+        JobOpeningType: "Normal" | "CampusDrive" | "WalkIn";
         LoginUserCommand: {
             usernameOrEmail?: string | null;
             password?: string | null;
+        };
+        MarkNotificationsAsReadCommand: {
+            notifications?: components["schemas"]["NotificationDTO"][] | null;
+        };
+        MoveJobApplicationStatusCommand: {
+            /** Format: uuid */
+            id?: string;
+            moveTo?: components["schemas"]["JobApplicationStatus"];
+        };
+        NotificationDTO: {
+            /** Format: uuid */
+            id?: string;
         };
         PositionReviewersDTO: {
             /** Format: uuid */
@@ -1151,8 +2433,8 @@ export interface components {
             comments?: string | null;
             /** Format: float */
             minExperienceYears?: number;
-            type?: components['schemas']['SkillType'];
-            actionType?: components['schemas']['SkillActionType'];
+            type?: components["schemas"]["SkillType"];
+            actionType?: components["schemas"]["SkillActionType"];
         };
         RegisterUserCommand: {
             userName?: string | null;
@@ -1165,7 +2447,15 @@ export interface components {
             comments?: string | null;
         };
         /** @enum {string} */
-        SkillActionType: 'Add' | 'Remove' | 'Update';
+        SkillActionType: "Add" | "Remove" | "Update";
+        SkillFeedbackDTO: {
+            /** Format: uuid */
+            skillId?: string;
+            /** Format: int32 */
+            rating?: number;
+            /** Format: float */
+            assessedExpYears?: number | null;
+        };
         SkillOverRideDTO: {
             /** Format: uuid */
             id?: string | null;
@@ -1174,11 +2464,17 @@ export interface components {
             comments?: string | null;
             /** Format: float */
             minExperienceYears?: number;
-            type?: components['schemas']['SkillType'];
-            actionType?: components['schemas']['SkillActionType'];
+            type?: components["schemas"]["SkillType"];
+            actionType?: components["schemas"]["SkillActionType"];
         };
         /** @enum {string} */
-        SkillType: 'Required' | 'Preferred' | 'NiceToHave';
+        SkillType: "Required" | "Preferred" | "NiceToHave";
+        UserRolesDTO: {
+            /** Format: uuid */
+            roleId?: string;
+            /** Format: uuid */
+            assignedBy?: string | null;
+        };
     };
     responses: never;
     parameters: never;

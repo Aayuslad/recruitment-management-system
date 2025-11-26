@@ -1,4 +1,7 @@
 ﻿using Server.Core.Entities;
+using Server.Domain.Entities.JobOpenings;
+using Server.Domain.Entities.Positions;
+using Server.Domain.Entities.Skills;
 using Server.Domain.Enums;
 
 namespace Server.Domain.Entities

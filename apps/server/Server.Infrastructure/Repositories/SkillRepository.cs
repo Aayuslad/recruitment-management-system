@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using Server.Domain.Entities;
+using Server.Domain.Entities.Skills;
 using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories

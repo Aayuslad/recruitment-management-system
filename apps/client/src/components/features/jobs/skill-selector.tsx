@@ -1,6 +1,6 @@
 'use client';
 
-import { useGetSkills } from '@/api/skill';
+import { useGetSkills } from '@/api/skill-api';
 import { Badge } from '@/components/ui/badge';
 import {
     Command,

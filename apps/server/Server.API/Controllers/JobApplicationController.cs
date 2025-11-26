@@ -3,8 +3,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Server.Application.JobApplications.Commands;
-using Server.Application.JobApplications.Queries;
+using Server.Application.Aggregates.JobApplications.Commands;
+using Server.Application.Aggregates.JobApplications.Queries;
 using Server.Core.Extensions;
 
 namespace Server.API.Controllers

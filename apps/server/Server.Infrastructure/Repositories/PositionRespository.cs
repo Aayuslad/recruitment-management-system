@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using Server.Application.Abstractions.Repositories;
-using Server.Domain.Entities;
+using Server.Domain.Entities.Positions;
 using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories
@@ -17,17 +17,14 @@ namespace Server.Infrastructure.Repositories
 
         Task IPositionRepository.UpdateAsync(Position position, CancellationToken cancellationToken)
         {
-            // TEMP FIX
-            _context.Set<PositionStatusMoveHistory>().AddRange(position.PositionStatusMoveHistories);
-            // TODO: solve bug, somehow EF not traking the changes properly. it is updating insted of adding column in Hstory
             return _context.SaveChangesAsync(cancellationToken);
         }
 
         Task<Position?> IPositionRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return _context.Positions
-                .Include(x => x.PositionStatusMoveHistories)
-                    .ThenInclude(x => x.MovedBy.Auth)
+                .Include(x => x.StatusMoveHistories)
+                    .ThenInclude(x => x.MovedByUser.Auth)
                 .Include(x => x.PositionBatch)
                     .ThenInclude(x => x.SkillOverRides)
                         .ThenInclude(x => x.Skill)
@@ -36,7 +33,7 @@ namespace Server.Infrastructure.Repositories
                         .ThenInclude(x => x.DesignationSkills)
                             .ThenInclude(x => x.Skill)
                 .Include(x => x.PositionBatch)
-                    .ThenInclude(x => x.PositionBatchReviewers)
+                    .ThenInclude(x => x.Reviewers)
                         .ThenInclude(x => x.ReviewerUser)
                             .ThenInclude(x => x.Auth)
                 .AsTracking()
@@ -50,12 +47,12 @@ namespace Server.Infrastructure.Repositories
                     .ThenInclude(x => x.SkillOverRides)
                         .ThenInclude(x => x.Skill)
                 .Include(x => x.PositionBatch)
-                    .ThenInclude(x => x.PositionBatchReviewers)
+                    .ThenInclude(x => x.Reviewers)
                         .ThenInclude(x => x.ReviewerUser)
                             .ThenInclude(x => x.Auth)
                 .Include(x => x.PositionBatch)
                     .ThenInclude(x => x.Designation)
-                .Include(x => x.PositionStatusMoveHistories)
+                .Include(x => x.StatusMoveHistories)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }

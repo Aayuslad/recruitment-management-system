@@ -1,13 +1,8 @@
 import type { components } from './generated/api';
 
-export interface SkillDTO {
+export interface Skill {
     id: string;
     name: string;
-    description: string;
-    createdBy?: string;
-    createdAt?: string;
-    lastUpdatedBy?: string;
-    lastUpdatedAt?: string;
 }
 
 export type CreateSkillCommandCorrected = Omit<
@@ -15,7 +10,6 @@ export type CreateSkillCommandCorrected = Omit<
     'name' | 'descripttion'
 > & {
     name: string;
-    description: string;
 };
 
 export type EditSkillCommandCorrected = Omit<
@@ -24,5 +18,4 @@ export type EditSkillCommandCorrected = Omit<
 > & {
     id: string;
     name: string;
-    description: string;
 };

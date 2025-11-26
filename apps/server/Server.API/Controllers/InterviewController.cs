@@ -3,8 +3,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Server.Application.Interviews.Commands;
-using Server.Application.Interviews.Queries;
+using Server.Application.Aggregates.Interviews.Commands;
+using Server.Application.Aggregates.Interviews.Queries;
 using Server.Core.Extensions;
 
 namespace Server.API.Controllers

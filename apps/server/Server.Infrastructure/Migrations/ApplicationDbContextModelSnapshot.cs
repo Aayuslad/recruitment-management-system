@@ -25,7 +25,6 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.Auth", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -45,10 +44,6 @@ namespace Server.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
                         .HasColumnName("Email");
-
-                    b.Property<string>("GoogleId")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -93,7 +88,6 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.Candidate", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("BgVerifiedById")
@@ -171,7 +165,6 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.CandidateDocument", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("CandidateId")
@@ -217,7 +210,6 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.Designation", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -231,11 +223,6 @@ namespace Server.Infrastructure.Migrations
 
                     b.Property<Guid?>("DeletedBy")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -289,7 +276,29 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.DocumentType", b =>
                 {
                     b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastUpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastUpdatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -298,16 +307,62 @@ namespace Server.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("DeletedBy");
+
+                    b.HasIndex("LastUpdatedBy");
+
                     b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("DocumentType", (string)null);
                 });
 
+            modelBuilder.Entity("Server.Domain.Entities.Employee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ContactNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("ContactNumber");
+
+                    b.Property<Guid>("DesignationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Dob")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DesignationId");
+
+                    b.ToTable("Employee", (string)null);
+                });
+
             modelBuilder.Entity("Server.Domain.Entities.Event", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -370,7 +425,6 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.Feedback", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Comment")
@@ -406,10 +460,9 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.Interview", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("DurationMinutes")
+                    b.Property<int>("DurationInMinutes")
                         .HasColumnType("integer");
 
                     b.Property<int>("InterviewType")
@@ -437,10 +490,32 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("Interview", (string)null);
                 });
 
+            modelBuilder.Entity("Server.Domain.Entities.InterviewPanelRequirement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("InterviewTemplateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("RequiredCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InterviewTemplateId", "Role")
+                        .IsUnique();
+
+                    b.ToTable("InterviewPanelRequirement", (string)null);
+                });
+
             modelBuilder.Entity("Server.Domain.Entities.InterviewParticipant", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("InterviewId")
@@ -461,10 +536,38 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("InterviewParticipant", (string)null);
                 });
 
+            modelBuilder.Entity("Server.Domain.Entities.InterviewRoundTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DurationInMinutes")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("JobOpeningId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("RoundNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobOpeningId", "RoundNumber")
+                        .IsUnique();
+
+                    b.ToTable("InterviewRoundTemplate", (string)null);
+                });
+
             modelBuilder.Entity("Server.Domain.Entities.JobApplication", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("AppliedAt")
@@ -522,7 +625,6 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.JobApplicationStatusMoveHistory", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Comment")
@@ -553,7 +655,6 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.JobOpening", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -605,64 +706,9 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("JobOpening", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.JobOpeningInterviewPanelRequirement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("JobOpeningInterviewTemplateId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("RequiredCount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobOpeningInterviewTemplateId", "Role")
-                        .IsUnique();
-
-                    b.ToTable("JobOpeningInterviewPanelRequirement", (string)null);
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.JobOpeningInterviewRoundTemplate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<int>("DurationInMinutes")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("JobOpeningId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("RoundNumber")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobOpeningId", "RoundNumber")
-                        .IsUnique();
-
-                    b.ToTable("JobOpeningInterviewRoundTemplate", (string)null);
-                });
-
             modelBuilder.Entity("Server.Domain.Entities.JobOpeningInterviewer", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("JobOpeningId")
@@ -688,7 +734,6 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.Notification", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("FromUserId")
@@ -717,10 +762,9 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("Notification", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Position", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("BatchId")
@@ -745,10 +789,9 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("Position", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionBatch", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionsBatch", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -803,25 +846,24 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("PositionBatch", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionBatchReviewers", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionsBatchReviewer", b =>
                 {
                     b.Property<Guid>("PositionBatchId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ReviewerUserId")
+                    b.Property<Guid>("ReviewerId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("PositionBatchId", "ReviewerUserId");
+                    b.HasKey("PositionBatchId", "ReviewerId");
 
-                    b.HasIndex("ReviewerUserId");
+                    b.HasIndex("ReviewerId");
 
                     b.ToTable("PositionBatchReviewer", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionStatusMoveHistory", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionstatusMoveHistory", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Comments")
@@ -852,30 +894,6 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleName")
-                        .IsUnique();
-
-                    b.ToTable("Role", (string)null);
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.Skill", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -891,9 +909,55 @@ namespace Server.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastUpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastUpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("DeletedBy");
+
+                    b.HasIndex("LastUpdatedBy");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Role", (string)null);
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.Skill", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -946,7 +1010,6 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.SkillOverRide", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ActionType")
@@ -990,7 +1053,6 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("AuthId")
@@ -1074,8 +1136,10 @@ namespace Server.Infrastructure.Migrations
 
             modelBuilder.Entity("Server.Domain.Entities.UserRole", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RoleId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("AssignedAt")
@@ -1084,17 +1148,11 @@ namespace Server.Infrastructure.Migrations
                     b.Property<Guid>("AssignedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                    b.HasKey("UserId", "RoleId");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
+                    b.HasIndex("AssignedBy");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserRole", (string)null);
                 });
@@ -1235,6 +1293,41 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("Skill");
                 });
 
+            modelBuilder.Entity("Server.Domain.Entities.DocumentType", b =>
+                {
+                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("LastUpdatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.Employee", b =>
+                {
+                    b.HasOne("Server.Domain.Entities.Designation", "Designation")
+                        .WithMany()
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Designation");
+                });
+
             modelBuilder.Entity("Server.Domain.Entities.Event", b =>
                 {
                     b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
@@ -1262,7 +1355,7 @@ namespace Server.Infrastructure.Migrations
             modelBuilder.Entity("Server.Domain.Entities.EventJobOpening", b =>
                 {
                     b.HasOne("Server.Domain.Entities.Event", "Event")
-                        .WithMany("JobOpenings")
+                        .WithMany("EventJobOpenings")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1314,6 +1407,17 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("JobApplication");
                 });
 
+            modelBuilder.Entity("Server.Domain.Entities.InterviewPanelRequirement", b =>
+                {
+                    b.HasOne("Server.Domain.Entities.InterviewRoundTemplate", "InterviewRoundTemplate")
+                        .WithMany("PanelRequirements")
+                        .HasForeignKey("InterviewTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InterviewRoundTemplate");
+                });
+
             modelBuilder.Entity("Server.Domain.Entities.InterviewParticipant", b =>
                 {
                     b.HasOne("Server.Domain.Entities.Interview", "Interview")
@@ -1331,6 +1435,17 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("Interview");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.InterviewRoundTemplate", b =>
+                {
+                    b.HasOne("Server.Domain.Entities.JobOpening", "JobOpening")
+                        .WithMany("InterviewRounds")
+                        .HasForeignKey("JobOpeningId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JobOpening");
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.JobApplication", b =>
@@ -1409,7 +1524,7 @@ namespace Server.Infrastructure.Migrations
                         .HasForeignKey("LastUpdatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.PositionBatch", "PositionBatch")
+                    b.HasOne("Server.Domain.Entities.PositionsBatch", "PositionBatch")
                         .WithMany()
                         .HasForeignKey("PositionBatchId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1422,28 +1537,6 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("PositionBatch");
 
                     b.Navigation("UpdatedByUser");
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.JobOpeningInterviewPanelRequirement", b =>
-                {
-                    b.HasOne("Server.Domain.Entities.JobOpeningInterviewRoundTemplate", "InterviewRoundTemplate")
-                        .WithMany("PanelRequirements")
-                        .HasForeignKey("JobOpeningInterviewTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("InterviewRoundTemplate");
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.JobOpeningInterviewRoundTemplate", b =>
-                {
-                    b.HasOne("Server.Domain.Entities.JobOpening", "JobOpening")
-                        .WithMany("InterviewRounds")
-                        .HasForeignKey("JobOpeningId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("JobOpening");
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.JobOpeningInterviewer", b =>
@@ -1473,7 +1566,7 @@ namespace Server.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Server.Domain.Entities.User", "User")
-                        .WithMany("Notifications")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1483,9 +1576,9 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Position", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.PositionBatch", "PositionBatch")
+                    b.HasOne("Server.Domain.Entities.PositionsBatch", "PositionBatch")
                         .WithMany("Positions")
                         .HasForeignKey("BatchId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1501,7 +1594,7 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("PositionBatch");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionBatch", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionsBatch", b =>
                 {
                     b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
                         .WithMany()
@@ -1516,7 +1609,7 @@ namespace Server.Infrastructure.Migrations
                     b.HasOne("Server.Domain.Entities.Designation", "Designation")
                         .WithMany()
                         .HasForeignKey("DesignationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
@@ -1533,17 +1626,17 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("UpdatedByUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionBatchReviewers", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionsBatchReviewer", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.PositionBatch", "PositionBatch")
-                        .WithMany("PositionBatchReviewers")
+                    b.HasOne("Server.Domain.Entities.PositionsBatch", "PositionBatch")
+                        .WithMany("Reviewers")
                         .HasForeignKey("PositionBatchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Server.Domain.Entities.User", "ReviewerUser")
                         .WithMany()
-                        .HasForeignKey("ReviewerUserId")
+                        .HasForeignKey("ReviewerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1552,22 +1645,46 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("ReviewerUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionStatusMoveHistory", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionstatusMoveHistory", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.User", "MovedBy")
+                    b.HasOne("Server.Domain.Entities.User", "MovedByUser")
                         .WithMany()
                         .HasForeignKey("MovedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.Position", "Position")
-                        .WithMany("PositionStatusMoveHistories")
+                    b.HasOne("Server.Domain.Entities.Positions", "Position")
+                        .WithMany("StatusMoveHistories")
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MovedBy");
+                    b.Navigation("MovedByUser");
 
                     b.Navigation("Position");
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.Role", b =>
+                {
+                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("LastUpdatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("UpdatedByUser");
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.Skill", b =>
@@ -1620,7 +1737,7 @@ namespace Server.Infrastructure.Migrations
                         .HasForeignKey("JobOpeningId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Server.Domain.Entities.PositionBatch", "PositionBatch")
+                    b.HasOne("Server.Domain.Entities.PositionsBatch", "PositionBatch")
                         .WithMany("SkillOverRides")
                         .HasForeignKey("PositionBatchId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -1672,6 +1789,12 @@ namespace Server.Infrastructure.Migrations
 
             modelBuilder.Entity("Server.Domain.Entities.UserRole", b =>
                 {
+                    b.HasOne("Server.Domain.Entities.User", "AssignedByUser")
+                        .WithMany()
+                        .HasForeignKey("AssignedBy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Server.Domain.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
@@ -1679,10 +1802,12 @@ namespace Server.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Server.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AssignedByUser");
 
                     b.Navigation("Role");
 
@@ -1703,7 +1828,7 @@ namespace Server.Infrastructure.Migrations
 
             modelBuilder.Entity("Server.Domain.Entities.Event", b =>
                 {
-                    b.Navigation("JobOpenings");
+                    b.Navigation("EventJobOpenings");
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.Feedback", b =>
@@ -1716,6 +1841,11 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("Feedbacks");
 
                     b.Navigation("Participants");
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.InterviewRoundTemplate", b =>
+                {
+                    b.Navigation("PanelRequirements");
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.JobApplication", b =>
@@ -1734,28 +1864,23 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("SkillOverRides");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.JobOpeningInterviewRoundTemplate", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions", b =>
                 {
-                    b.Navigation("PanelRequirements");
+                    b.Navigation("StatusMoveHistories");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Position", b =>
+            modelBuilder.Entity("Server.Domain.Entities.PositionsBatch", b =>
                 {
-                    b.Navigation("PositionStatusMoveHistories");
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.PositionBatch", b =>
-                {
-                    b.Navigation("PositionBatchReviewers");
-
                     b.Navigation("Positions");
+
+                    b.Navigation("Reviewers");
 
                     b.Navigation("SkillOverRides");
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Notifications");
+                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,8 +3,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Server.Application.Skills.Commands;
-using Server.Application.Skills.Queries;
+using Server.Application.Aggregates.Skills.Commands;
+using Server.Application.Aggregates.Skills.Queries;
 using Server.Core.Extensions;
 
 namespace Server.API.Controllers
@@ -25,14 +25,6 @@ namespace Server.API.Controllers
         public async Task<IActionResult> CreateSkill([FromBody] CreateSkillCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
-            return result.ToActionResult(this);
-        }
-
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetSkill(Guid id, CancellationToken cancellationToken)
-        {
-            var query = new GetSkillQuery(id);
-            var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }
 

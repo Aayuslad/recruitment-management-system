@@ -71,7 +71,14 @@ namespace Server.API.Extensions
                                 ctx.Token = ctx.Request.Cookies["jwt"];
                             }
                             return Task.CompletedTask;
-                        }
+                        },
+
+                        //TODO: Learn RBAC and implement properly
+                        // OnTokenValidated = ctx =>
+                        // {
+                        //     ((ClaimsIdentity)ctx.Principal!.Identity!).AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                        //     return Task.CompletedTask;
+                        // }
                     };
                 });
 

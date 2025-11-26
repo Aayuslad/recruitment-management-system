@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Server.Domain.Entities;
+using Server.Domain.Entities.Candidates;
 using Server.Domain.ValueObjects;
 
 namespace Server.Infrastructure.Persistence.Configurations
@@ -15,11 +15,12 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("Candidate");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.Property(u => u.ContactNumber)
                 .HasConversion(
                     contactNumberVO => contactNumberVO.ToString(),
-                    contactNumber => ContactNumber.Create(contactNumber).Value!
+                    contactNumber => ContactNumber.Create(contactNumber)!
                 )
                 .IsRequired()
                 .HasMaxLength(20)
@@ -30,7 +31,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(a => a.Email)
                 .HasConversion(
                     emailVO => emailVO.ToString(),
-                    email => Email.Create(email).Value!
+                    email => Email.Create(email)!
                 )
                 .IsRequired()
                 .HasMaxLength(256)

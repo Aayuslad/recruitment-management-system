@@ -1,14 +1,14 @@
-import type { SkillDTO } from '@/types/skill-types';
+import type { Skill } from '@/types/skill-types';
 import type { StateCreator } from 'zustand';
 
 export type SkillStoreSliceType = {
-    editingSkill: SkillDTO | null;
+    editingSkill: Skill | null;
     editDialog: boolean;
 
-    openEditDialog: (skill: SkillDTO) => void;
+    openEditDialog: (skill: Skill) => void;
     closeEditDialog: () => void;
     setEditDialog: (state: boolean) => void;
-    updateEditingSkill: (updates: Partial<SkillDTO>) => void;
+    updateEditingSkill: (updates: Partial<Skill>) => void;
 };
 
 export const createSkillSlice: StateCreator<SkillStoreSliceType> = (set) => ({
@@ -27,7 +27,7 @@ export const createSkillSlice: StateCreator<SkillStoreSliceType> = (set) => ({
             editDialog: state,
         })),
 
-    updateEditingSkill: (updates: Partial<SkillDTO>) =>
+    updateEditingSkill: (updates: Partial<Skill>) =>
         set((state) => ({
             editingSkill: state.editingSkill
                 ? { ...state.editingSkill, ...updates }

@@ -3,8 +3,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Server.Application.Events.Commands;
-using Server.Application.Events.Queries;
+using Server.Application.Aggregates.Events.Commands;
+using Server.Application.Aggregates.Events.Queries;
 using Server.Core.Extensions;
 
 namespace Server.API.Controllers

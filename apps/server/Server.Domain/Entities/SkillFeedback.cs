@@ -1,4 +1,6 @@
-﻿namespace Server.Domain.Entities
+﻿using Server.Domain.Entities.Skills;
+
+namespace Server.Domain.Entities
 {
     public class SkillFeedback
     {

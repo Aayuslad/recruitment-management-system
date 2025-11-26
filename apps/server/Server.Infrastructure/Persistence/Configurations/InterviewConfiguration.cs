@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Server.Domain.Entities;
+using Server.Domain.Entities.Interviews;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
@@ -12,6 +12,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("Interview");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.Property(x => x.JobApplicationId)
                 .IsRequired();
@@ -22,7 +23,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(x => x.InterviewType)
                 .IsRequired();
 
-            builder.Property(x => x.DurationMinutes)
+            builder.Property(x => x.DurationInMinutes)
                 .IsRequired();
 
             builder.Property(x => x.Status)

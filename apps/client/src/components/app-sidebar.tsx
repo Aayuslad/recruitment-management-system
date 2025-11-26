@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import * as React from 'react';
 
-import { useGetUser } from '@/api/user';
+import { useGetUser } from '@/api/user-api';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {

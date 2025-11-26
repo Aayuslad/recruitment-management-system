@@ -4,15 +4,15 @@ using MediatR;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Server.Application.Aggregates.Designations.Commands;
+using Server.Application.Aggregates.Designations.Queries;
+using Server.Application.Aggregates.Designations.Validators;
+using Server.Application.Aggregates.Skills.Commands;
+using Server.Application.Aggregates.Skills.Queries;
+using Server.Application.Aggregates.Skills.Validators;
+using Server.Application.Aggregates.Users.Commands;
+using Server.Application.Aggregates.Users.Validators;
 using Server.Application.Common.Behaviors;
-using Server.Application.Designations.Commands;
-using Server.Application.Designations.Queries;
-using Server.Application.Designations.Validators;
-using Server.Application.Skills.Commands;
-using Server.Application.Skills.Queries;
-using Server.Application.Skills.Validators;
-using Server.Application.Users.Commands;
-using Server.Application.Users.Validators;
 
 namespace Server.Application
 {
@@ -25,8 +25,7 @@ namespace Server.Application
             // validators
             services.AddTransient<IValidator<RegisterUserCommand>, RegisterUserCommandValidator>();
             services.AddTransient<IValidator<LoginUserCommand>, LoginUserCommandValidator>();
-            services.AddTransient<IValidator<CreateUserCommand>, CreateUserCommandValidator>();
-            services.AddTransient<IValidator<GetSkillQuery>, GetSkillQueryValidator>();
+            services.AddTransient<IValidator<CreateUserProfileCommand>, CreateUserProfileCommandValidator>();
             services.AddTransient<IValidator<GetSkillsQuery>, GetSkillsQueryValidator>();
             services.AddTransient<IValidator<CreateSkillCommand>, CreateSkillCommandValidator>();
             services.AddTransient<IValidator<EditSkillCommand>, EditSkillCommandValidator>();
@@ -37,7 +36,7 @@ namespace Server.Application
             services.AddTransient<IValidator<EditDesignationCommand>, EditDesignationCommandValidator>();
             services.AddTransient<IValidator<DeleteDesignationCommand>, DeleteDesignationCommandValidator>();
 
-            //// pipeline
+            // pipeline
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             return services;

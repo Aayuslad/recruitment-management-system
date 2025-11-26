@@ -17,11 +17,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Candidates\Validators\" />
-    <Folder Include="Interviews\Validators\" />
-    <Folder Include="JobApplications\Validators\" />
-    <Folder Include="JobOpenings\Validators\" />
-    <Folder Include="Skills\Commands\DTOs\" />
+    <Folder Include="Aggregates\Candidates\Validators\" />
+    <Folder Include="Aggregates\Documents\Validators\" />
+    <Folder Include="Aggregates\Employees\Commands\" />
+    <Folder Include="Aggregates\Employees\Validators\" />
+    <Folder Include="Aggregates\Interviews\Validators\" />
+    <Folder Include="Aggregates\JobApplications\Validators\" />
+    <Folder Include="Aggregates\JobOpenings\Validators\" />
+    <Folder Include="Aggregates\Notifications\Validators\" />
+    <Folder Include="Aggregates\Roles\Commands\DTOs\" />
+    <Folder Include="Aggregates\Roles\Validators\" />
+    <Folder Include="Aggregates\Skills\Commands\DTOs\" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Server.Domain.Entities;
+using Server.Domain.Entities.Positions;
 
 namespace Server.Infrastructure.Persistence.Configurations
 {
@@ -14,6 +14,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.ToTable("PositionBatch");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             builder.Property(x => x.Description)
                 .IsRequired(false);
@@ -22,7 +23,7 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .WithMany()
                 .IsRequired()
                 .HasForeignKey(x => x.DesignationId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(x => x.JobLocation)
                 .IsRequired();

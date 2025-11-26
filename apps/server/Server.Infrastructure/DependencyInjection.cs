@@ -21,7 +21,6 @@ namespace Server.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
             // Register Repositories
-            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRolesRepository, RolesRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
@@ -33,6 +32,9 @@ namespace Server.Infrastructure
             services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
             services.AddScoped<IInterviewRespository, InterviewRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<IDocumentRepository, DocumentRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             // Register Services
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
