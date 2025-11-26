@@ -36,7 +36,7 @@ export function NavMain({
 }) {
     return (
         <SidebarGroup>
-            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+            <SidebarGroupLabel>Other</SidebarGroupLabel>
             <SidebarMenu className="font-semibold">
                 {items.map((item) => (
                     <Collapsible
