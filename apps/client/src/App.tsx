@@ -3,13 +3,26 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Route, Routes } from 'react-router-dom';
 import { queryClient } from './lib/query-client';
+import { EmployeesPage } from './pages/admin/employees-page';
+import { RolesPage } from './pages/admin/roles-page';
+import { UsersPage } from './pages/admin/users-page';
 import CreateUserPage from './pages/auth/create-user-page';
 import LoginPage from './pages/auth/login-page';
 import RegistrationPage from './pages/auth/registration-page';
+import { Index as CandidatesIndex } from './pages/candidates';
+import { DesignationsPage } from './pages/configuration/designations-page';
+import { DocumentTypesPage } from './pages/configuration/document-types-page';
+import { SkillsPage } from './pages/configuration/skills-page';
+import { Index as EventsIndex } from './pages/events';
 import DashBoardPage from './pages/feature/dashboard-page';
 import HomeLayout from './pages/home-layout';
+import { Index as InterviewsIndex } from './pages/interviews';
+import { Index as JobApplicationsIndex } from './pages/jobApplications';
+import { Index as JobOpeningsIndex } from './pages/jobOpenings';
 import LandingPage from './pages/landing-page';
 import NotFoundPage from './pages/not-found-page';
+import { Index as PositionsIndex } from './pages/positions';
+import { Index as ReportsAndAnalyticsIndex } from './pages/ReportsAndAnalytics';
 
 function App() {
     return (
@@ -20,7 +33,37 @@ function App() {
                 <Route path="/register" element={<RegistrationPage />} />
                 <Route path="/create-user" element={<CreateUserPage />} />
                 <Route path="/" element={<HomeLayout />}>
-                    <Route path="dashboard" element={<DashBoardPage />} />
+                    <Route index path="dashboard" element={<DashBoardPage />} />
+                    <Route path="job-openings" element={<JobOpeningsIndex />} />
+                    <Route path="candidates" element={<CandidatesIndex />} />
+                    <Route
+                        path="job-applications"
+                        element={<JobApplicationsIndex />}
+                    />
+                    <Route path="interviews" element={<InterviewsIndex />} />
+                    <Route path="positions" element={<PositionsIndex />} />
+                    <Route path="events" element={<EventsIndex />} />
+                    <Route
+                        path="reports-and-analytics"
+                        element={<ReportsAndAnalyticsIndex />}
+                    />
+
+                    <Route path="configuration">
+                        <Route path="skills" element={<SkillsPage />} />
+                        <Route
+                            path="designations"
+                            element={<DesignationsPage />}
+                        />
+                        <Route
+                            path="document-types"
+                            element={<DocumentTypesPage />}
+                        />
+                    </Route>
+                    <Route path="admin">
+                        <Route path="users" element={<UsersPage />} />
+                        <Route path="roles" element={<RolesPage />} />
+                        <Route path="employees" element={<EmployeesPage />} />
+                    </Route>
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>

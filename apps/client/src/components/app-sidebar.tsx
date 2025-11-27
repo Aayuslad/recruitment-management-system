@@ -15,7 +15,7 @@ import {
 import * as React from 'react';
 
 import { useGetUser } from '@/api/user-api';
-import { NavMain } from '@/components/nav-main';
+import { CollapsibleNavGroup } from '@/components/collapsible-nav-group';
 import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
@@ -23,7 +23,7 @@ import {
     SidebarFooter,
     SidebarRail,
 } from '@/components/ui/sidebar';
-import { NavGroup } from './nav-group';
+import { SimpleNavGroup } from './simple-nav-group';
 
 const data = {
     user: {
@@ -34,89 +34,89 @@ const data = {
     dashboard: [
         {
             name: 'Dashboard',
-            url: '#',
+            url: '/dashboard',
             icon: LayoutDashboard,
-        },
-    ],
-    navMain: [
-        {
-            title: 'Configurations',
-            url: '#',
-            icon: SlidersHorizontal,
-            isActive: false,
-            items: [
-                {
-                    title: 'Skills',
-                    url: '#',
-                },
-                {
-                    title: 'Designations',
-                    url: '#',
-                },
-                {
-                    title: 'Document Types',
-                    url: '#',
-                },
-            ],
-        },
-        {
-            title: 'Admin',
-            url: '#',
-            icon: Settings2,
-            isActive: false,
-            items: [
-                {
-                    title: 'Users',
-                    url: '#',
-                },
-                {
-                    title: 'Roles',
-                    url: '#',
-                },
-                {
-                    title: 'Employees',
-                    url: '#',
-                },
-            ],
         },
     ],
     coreWorkflows: [
         {
             name: 'Job Openings',
-            url: '#',
+            url: '/job-openings',
             icon: Briefcase,
         },
         {
             name: 'Candidates',
-            url: '#',
+            url: '/candidates',
             icon: UsersRound,
         },
         {
             name: 'Job Applications',
-            url: '#',
+            url: 'job-applications',
             icon: ClipboardList,
         },
         {
             name: 'Interviews',
-            url: '#',
+            url: 'interviews',
             icon: CalendarCheck,
         },
     ],
     supportingWorkflows: [
         {
             name: 'Positions',
-            url: '#',
+            url: 'positions',
             icon: Layers,
         },
         {
             name: 'Events',
-            url: '#',
+            url: 'events',
             icon: CalendarDays,
         },
         {
             name: 'Reports & Analytics',
-            url: '#',
+            url: 'reports-and-analytics',
             icon: BarChart3,
+        },
+    ],
+    other: [
+        {
+            title: 'Configurations',
+            url: 'configuration',
+            icon: SlidersHorizontal,
+            isActive: false,
+            items: [
+                {
+                    title: 'Skills',
+                    url: 'configuration/skills',
+                },
+                {
+                    title: 'Designations',
+                    url: 'configuration/designations',
+                },
+                {
+                    title: 'Document Types',
+                    url: 'configuration/document-types',
+                },
+            ],
+        },
+        {
+            title: 'Admin',
+            url: 'admin',
+            icon: Settings2,
+            isActive: false,
+            items: [
+                {
+                    title: 'Users',
+                    url: 'admin/users',
+                },
+                {
+                    title: 'Roles',
+                    url: 'admin/roles',
+                },
+                {
+                    title: 'Employees',
+                    url: 'admin/employees',
+                },
+            ],
         },
     ],
 };
@@ -131,16 +131,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return (
         <Sidebar collapsible="icon" {...props}>
             <SidebarContent className="pt-10">
-                <NavGroup Workflows={data.dashboard} />
-                <NavGroup
+                <SimpleNavGroup Workflows={data.dashboard} />
+                <SimpleNavGroup
                     Workflows={data.coreWorkflows}
                     title="Core Workflows"
                 />
-                <NavGroup
+                <SimpleNavGroup
                     Workflows={data.supportingWorkflows}
                     title="Supporting Workflows"
                 />
-                <NavMain items={data.navMain} />
+                <CollapsibleNavGroup items={data.other} title="Other" />
             </SidebarContent>
             <SidebarFooter>
                 <NavUser user={data.user} />

@@ -39,7 +39,7 @@ export const routes: RouteConfigType[] = [
     },
     {
         breadcrumb: 'Configurations',
-        path: 'configurations',
+        path: 'configuration',
         children: [
             {
                 breadcrumb: 'Skills',
