@@ -9,19 +9,19 @@ import { UsersPage } from './pages/admin/users-page';
 import CreateUserPage from './pages/auth/create-user-page';
 import LoginPage from './pages/auth/login-page';
 import RegistrationPage from './pages/auth/registration-page';
-import { Index as CandidatesIndex } from './pages/candidates';
+import { Index as CandidatesIndex } from './pages/candidate';
 import { DesignationsPage } from './pages/configuration/designations-page';
 import { DocumentTypesPage } from './pages/configuration/document-types-page';
 import { SkillsPage } from './pages/configuration/skills-page';
-import { Index as EventsIndex } from './pages/events';
-import DashBoardPage from './pages/feature/dashboard-page';
+import { Index as EventsIndex } from './pages/event';
+import { DashboardPage } from './pages/dashboard-page';
 import HomeLayout from './pages/home-layout';
-import { Index as InterviewsIndex } from './pages/interviews';
-import { Index as JobApplicationsIndex } from './pages/jobApplications';
-import { Index as JobOpeningsIndex } from './pages/jobOpenings';
+import { Index as InterviewsIndex } from './pages/interview';
+import { Index as JobApplicationsIndex } from './pages/jobApplication';
+import { Index as JobOpeningsIndex } from './pages/jobOpening';
 import LandingPage from './pages/landing-page';
 import NotFoundPage from './pages/not-found-page';
-import { Index as PositionsIndex } from './pages/positions';
+import { Index as PositionsIndex } from './pages/position';
 import { Index as ReportsAndAnalyticsIndex } from './pages/ReportsAndAnalytics';
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
                 <Route path="/register" element={<RegistrationPage />} />
                 <Route path="/create-user" element={<CreateUserPage />} />
                 <Route path="/" element={<HomeLayout />}>
-                    <Route index path="dashboard" element={<DashBoardPage />} />
+                    <Route index path="dashboard" element={<DashboardPage />} />
                     <Route path="job-openings" element={<JobOpeningsIndex />} />
                     <Route path="candidates" element={<CandidatesIndex />} />
                     <Route
@@ -70,7 +70,7 @@ function App() {
 
             {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
 
-            <Toaster position="top-center" />
+            <Toaster position="bottom-right" />
         </QueryClientProvider>
     );
 }

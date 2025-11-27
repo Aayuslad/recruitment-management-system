@@ -39,7 +39,7 @@ function AppHeader() {
                                 )}
 
                                 {index !== breadcrumbs.length - 1 && (
-                                    <BreadcrumbSeparator className="hidden md:block" />
+                                    <BreadcrumbSeparator className="hidden -mb-1 -mr-1 md:block" />
                                 )}
                             </BreadcrumbItem>
                         ))}
