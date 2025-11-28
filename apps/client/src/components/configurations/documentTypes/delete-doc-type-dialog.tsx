@@ -1,4 +1,4 @@
-import { useDeleteSkill } from '@/api/skill-api';
+import { useDeleteDocumentType } from '@/api/document-api';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -12,41 +12,41 @@ import {
 import { useAppStore } from '@/store';
 import { useShallow } from 'zustand/react/shallow';
 
-export function DeleteSkillDialog() {
+export function DeleteDocTypeDialog() {
     const {
-        skillDeleteTargetId,
-        isSkillDeleteDialogOpen,
-        closeSkillDeleteDialog,
-        setSkillDeleteDialogOpen,
+        documentTypeDeleteTargetId,
+        isDocumentTypeDeleteDialogOpen,
+        closeDocumentTypeDeleteDialog,
+        setDocumentTypeDeleteDialogOpen,
     } = useAppStore(
         useShallow((s) => ({
-            skillDeleteTargetId: s.skillDeleteTargetId,
-            isSkillDeleteDialogOpen: s.isSkillDeleteDialogOpen,
-            closeSkillDeleteDialog: s.closeSkillDeleteDialog,
-            setSkillDeleteDialogOpen: s.setSkillDeleteDialogOpen,
+            documentTypeDeleteTargetId: s.documentTypeDeleteTargetId,
+            isDocumentTypeDeleteDialogOpen: s.isDocumentTypeDeleteDialogOpen,
+            closeDocumentTypeDeleteDialog: s.closeDocumentTypeDeleteDialog,
+            setDocumentTypeDeleteDialogOpen: s.setDocumentTypeDeleteDialogOpen,
         }))
     );
-    const deleteSkillMutation = useDeleteSkill();
+    const deleteDocumentTypeMutation = useDeleteDocumentType();
 
     const submit = async (id: string) => {
-        deleteSkillMutation.mutate(id, {
+        deleteDocumentTypeMutation.mutate(id, {
             onSuccess: () => {
-                closeSkillDeleteDialog();
+                closeDocumentTypeDeleteDialog();
             },
         });
     };
 
     return (
         <Dialog
-            open={isSkillDeleteDialogOpen}
-            onOpenChange={setSkillDeleteDialogOpen}
+            open={isDocumentTypeDeleteDialogOpen}
+            onOpenChange={setDocumentTypeDeleteDialogOpen}
         >
             <DialogContent className="sm:max-w-[425px] space-y-2">
                 <DialogHeader className="space-y-2">
-                    <DialogTitle>Confirm Delete Skill</DialogTitle>
+                    <DialogTitle>Confirm Delete Document Type</DialogTitle>
                     <DialogDescription>
-                        This skill will be removed and this action cannot be
-                        undone.
+                        This document type will be removed and this action
+                        cannot be undone.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -54,7 +54,7 @@ export function DeleteSkillDialog() {
                     <DialogClose asChild className="flex-1">
                         <Button
                             variant="secondary"
-                            disabled={deleteSkillMutation.isPending}
+                            disabled={deleteDocumentTypeMutation.isPending}
                         >
                             Cancel
                         </Button>
@@ -63,8 +63,8 @@ export function DeleteSkillDialog() {
                         type="submit"
                         variant="default"
                         className="flex-1 bg-red-500 text-white hover:bg-red-600"
-                        onClick={() => submit(skillDeleteTargetId!)}
-                        disabled={deleteSkillMutation.isPending}
+                        onClick={() => submit(documentTypeDeleteTargetId!)}
+                        disabled={deleteDocumentTypeMutation.isPending}
                     >
                         Delete
                     </Button>

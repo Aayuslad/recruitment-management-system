@@ -2,55 +2,51 @@ import type { Skill } from '@/types/skill-types';
 import type { StateCreator } from 'zustand';
 
 export type SkillStoreSliceType = {
-    editingSkill: Skill | null;
-    editDialog: boolean;
-    deletingSkillId: string | null;
-    deleteDialog: boolean;
+    skillEditTarget: Skill | null;
+    isSkillEditDialogOpen: boolean;
+    skillDeleteTargetId: string | null;
+    isSkillDeleteDialogOpen: boolean;
 
-    openEditDialog: (skill: Skill) => void;
-    closeEditDialog: () => void;
-    setEditDialog: (state: boolean) => void;
-    updateEditingSkill: (updates: Partial<Skill>) => void;
-    openDeleteDialog: (skillId: string) => void;
-    closeDeleteDialog: () => void;
-    setDeleteDialog: (state: boolean) => void;
+    openSkillEditDialog: (skill: Skill | null) => void;
+    closeSkillEditDialog: () => void;
+    setSkillEditDialogOpen: (state: boolean) => void;
+    updateSkillEditTarget: (updates: Partial<Skill>) => void;
+
+    openSkillDeleteDialog: (skillId: string) => void;
+    closeSkillDeleteDialog: () => void;
+    setSkillDeleteDialogOpen: (state: boolean) => void;
 };
 
 export const createSkillSlice: StateCreator<SkillStoreSliceType> = (set) => ({
-    editingSkill: null,
-    editDialog: false,
-    deletingSkillId: null,
-    deleteDialog: false,
+    skillEditTarget: null,
+    isSkillEditDialogOpen: false,
+    skillDeleteTargetId: null,
+    isSkillDeleteDialogOpen: false,
 
-    openEditDialog: (skill) => {
-        set({ editingSkill: skill });
-        set({ editDialog: true });
+    openSkillEditDialog: (skill) => {
+        set({ skillEditTarget: skill, isSkillEditDialogOpen: true });
     },
 
-    closeEditDialog: () => set({ editingSkill: null, editDialog: false }),
+    closeSkillEditDialog: () =>
+        set({ skillEditTarget: null, isSkillEditDialogOpen: false }),
 
-    setEditDialog: (state) =>
-        set(() => ({
-            editDialog: state,
-        })),
+    setSkillEditDialogOpen: (state) =>
+        set(() => ({ isSkillEditDialogOpen: state })),
 
-    updateEditingSkill: (updates: Partial<Skill>) =>
+    updateSkillEditTarget: (updates: Partial<Skill>) =>
         set((state) => ({
-            editingSkill: state.editingSkill
-                ? { ...state.editingSkill, ...updates }
+            skillEditTarget: state.skillEditTarget
+                ? { ...state.skillEditTarget, ...updates }
                 : null,
         })),
 
-    openDeleteDialog: (skillId) => {
-        set({ deletingSkillId: skillId });
-        set({ deleteDialog: true });
+    openSkillDeleteDialog: (skillId) => {
+        set({ skillDeleteTargetId: skillId, isSkillDeleteDialogOpen: true });
     },
 
-    closeDeleteDialog: () =>
-        set({ deletingSkillId: null, deleteDialog: false }),
+    closeSkillDeleteDialog: () =>
+        set({ skillDeleteTargetId: null, isSkillDeleteDialogOpen: false }),
 
-    setDeleteDialog: (state) =>
-        set(() => ({
-            deleteDialog: state,
-        })),
+    setSkillDeleteDialogOpen: (state) =>
+        set(() => ({ isSkillDeleteDialogOpen: state })),
 });

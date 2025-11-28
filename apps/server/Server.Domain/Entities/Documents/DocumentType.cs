@@ -23,5 +23,11 @@ namespace Server.Domain.Entities.Documents
         {
             MarkAsDeleted(deletedBy);
         }
+
+        public void Update(string name, Guid updatedBy)
+        {
+            Name = name;
+            MarkAsUpdated(updatedBy);
+        }
     }
 }

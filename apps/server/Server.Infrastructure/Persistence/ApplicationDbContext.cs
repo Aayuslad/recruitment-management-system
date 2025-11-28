@@ -106,6 +106,9 @@ namespace Server.Infrastructure.Persistence
             modelBuilder.Entity<Event>().HasQueryFilter(x => !x.IsDeleted);
             modelBuilder.Entity<EventJobOpening>().HasQueryFilter(x => !x.Event.IsDeleted);
 
+            // document types
+            modelBuilder.Entity<DocumentType>().HasQueryFilter(x => !x.IsDeleted);
+
             base.OnModelCreating(modelBuilder);
         }
     }

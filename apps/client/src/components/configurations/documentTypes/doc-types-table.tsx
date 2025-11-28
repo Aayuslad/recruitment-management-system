@@ -13,7 +13,7 @@ import {
 import { ArrowUpDown, ChevronDown } from 'lucide-react';
 import * as React from 'react';
 
-import { useGetSkills } from '@/api/skill-api';
+import { useGetDocumentTypes } from '@/api/document-api';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -31,26 +31,27 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { useAppStore } from '@/store';
-import type { Skill } from '@/types/skill-types';
+import type { Document } from '@/types/document-types';
 import { useShallow } from 'zustand/react/shallow';
 
-export function SkillsTable() {
+export function DocTypesTable() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
-    const { openSkillEditDialog, openSkillDeleteDialog } = useAppStore(
-        useShallow((s) => ({
-            openSkillEditDialog: s.openSkillEditDialog,
-            openSkillDeleteDialog: s.openSkillDeleteDialog,
-        }))
-    );
+    const { openDocumentTypeEditDialog, openDocumentTypeDeleteDialog } =
+        useAppStore(
+            useShallow((s) => ({
+                openDocumentTypeEditDialog: s.openDocumentTypeEditDialog,
+                openDocumentTypeDeleteDialog: s.openDocumentTypeDeleteDialog,
+            }))
+        );
 
-    const { data, isLoading, isError } = useGetSkills();
+    const { data, isLoading, isError } = useGetDocumentTypes();
 
-    const columns: ColumnDef<Skill>[] = [
+    const columns: ColumnDef<Document>[] = [
         {
             accessorKey: 'name',
             header: ({ column }) => (
@@ -60,7 +61,7 @@ export function SkillsTable() {
                         column.toggleSorting(column.getIsSorted() === 'asc')
                     }
                 >
-                    Skill Name
+                    Document Type Name
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             ),
@@ -78,14 +79,16 @@ export function SkillsTable() {
                     <div className="flex gap-10 font-semibold">
                         <button
                             className="text-gray-400 hover:cursor-pointer"
-                            onClick={() => openSkillEditDialog(row.original)}
+                            onClick={() =>
+                                openDocumentTypeEditDialog(row.original)
+                            }
                         >
                             Edit
                         </button>
                         <button
                             className="text-destructive hover:cursor-pointer"
                             onClick={() =>
-                                openSkillDeleteDialog(row.original.id)
+                                openDocumentTypeDeleteDialog(row.original.id)
                             }
                         >
                             Delete
@@ -97,7 +100,7 @@ export function SkillsTable() {
     ];
 
     const table = useReactTable({
-        data: data as Skill[],
+        data: data as Document[],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -116,11 +119,11 @@ export function SkillsTable() {
     });
 
     if (isLoading) {
-        return <div>Loading Skills</div>;
+        return <div>Loading Document Types</div>;
     }
 
     if (isError) {
-        return <div>Error Loading Skills</div>;
+        return <div>Error Loading Document Types</div>;
     }
 
     return (
@@ -128,7 +131,7 @@ export function SkillsTable() {
             {/* header */}
             <div className="flex items-center py-4">
                 <Input
-                    placeholder="Filter skills..."
+                    placeholder="Filter Document Types..."
                     value={
                         (table.getColumn('name')?.getFilterValue() as string) ??
                         ''
@@ -213,7 +216,7 @@ export function SkillsTable() {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No Skills Found.
+                                    No Document Types Found.
                                 </TableCell>
                             </TableRow>
                         )}

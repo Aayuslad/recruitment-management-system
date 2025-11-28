@@ -1,4 +1,4 @@
-import { useEditSkill } from '@/api/skill-api';
+import { useCreateDocumentType } from '@/api/document-api';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -8,57 +8,40 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
+    DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAppStore } from '@/store';
-import type { EditSkillCommandCorrected } from '@/types/skill-types';
+import type { CreateDocumentTypeCommandCorrected } from '@/types/document-types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
-import { useShallow } from 'zustand/react/shallow';
 
-const editSkillFormSchema = z.object({
-    id: z.string().nonempty('Skill ID is required'),
+const createDocumentTypeFormSchema = z.object({
     name: z
         .string()
         .min(2, 'Name must be at least 2 characters long')
         .max(50, 'Name must be at most 50 characters long'),
-}) satisfies z.ZodType<EditSkillCommandCorrected>;
+}) satisfies z.ZodType<CreateDocumentTypeCommandCorrected>;
 
-export function EditSkillDialog() {
-    const {
-        skillEditTarget,
-        isSkillEditDialogOpen,
-        closeSkillEditDialog,
-        setSkillEditDialogOpen,
-    } = useAppStore(
-        useShallow((s) => ({
-            skillEditTarget: s.skillEditTarget,
-            isSkillEditDialogOpen: s.isSkillEditDialogOpen,
-            closeSkillEditDialog: s.closeSkillEditDialog,
-            setSkillEditDialogOpen: s.setSkillEditDialogOpen,
-        }))
-    );
+export function CreateDocTypeDialog() {
+    const [open, setOpen] = useState(false);
+    const createDocumentTypeMutation = useCreateDocumentType();
 
-    const editSkillMutation = useEditSkill();
-
-    const form = useForm<EditSkillCommandCorrected>({
-        resolver: zodResolver(editSkillFormSchema),
+    const form = useForm<CreateDocumentTypeCommandCorrected>({
+        resolver: zodResolver(createDocumentTypeFormSchema),
+        defaultValues: {
+            name: '',
+        },
     });
 
-    useEffect(() => {
-        form.setValue('id', skillEditTarget?.id || '');
-        form.setValue('name', skillEditTarget?.name || '');
-    }, [skillEditTarget, form]);
-
-    const onSubmit = async (data: EditSkillCommandCorrected) => {
-        editSkillMutation.mutate(data, {
+    const onSubmit = async (data: CreateDocumentTypeCommandCorrected) => {
+        createDocumentTypeMutation.mutate(data, {
             onSuccess: () => {
                 form.reset();
-                closeSkillEditDialog();
+                setOpen(false);
             },
         });
     };
@@ -69,26 +52,33 @@ export function EditSkillDialog() {
     };
 
     return (
-        <Dialog
-            open={isSkillEditDialogOpen}
-            onOpenChange={setSkillEditDialogOpen}
-        >
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button variant="secondary" className="border">
+                    Create Document Type
+                </Button>
+            </DialogTrigger>
+
             <DialogContent className="sm:max-w-[425px]">
                 <form
                     onSubmit={form.handleSubmit(onSubmit, onInvalid)}
                     className="grid gap-7"
                 >
                     <DialogHeader>
-                        <DialogTitle>Edit Skill</DialogTitle>
+                        <DialogTitle>Create Document Type</DialogTitle>
                         <DialogDescription>
-                            Edit the skill details and click Save.
+                            Enter the document type details and click Create.
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="grid gap-4">
                         <div className="grid gap-3">
                             <Label htmlFor="name">Name</Label>
-                            <Input id="name" {...form.register('name')} />
+                            <Input
+                                id="name"
+                                placeholder="Passport"
+                                {...form.register('name')}
+                            />
                         </div>
                     </div>
 
@@ -96,16 +86,16 @@ export function EditSkillDialog() {
                         <DialogClose asChild>
                             <Button
                                 variant="outline"
-                                disabled={editSkillMutation.isPending}
+                                disabled={createDocumentTypeMutation.isPending}
                             >
                                 Cancel
                             </Button>
                         </DialogClose>
                         <Button
                             type="submit"
-                            disabled={editSkillMutation.isPending}
+                            disabled={createDocumentTypeMutation.isPending}
                         >
-                            Save
+                            Create
                         </Button>
                     </DialogFooter>
                 </form>

@@ -1,4 +1,4 @@
-import { useEditSkill } from '@/api/skill-api';
+import { useEditDocumentType } from '@/api/document-api';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAppStore } from '@/store';
-import type { EditSkillCommandCorrected } from '@/types/skill-types';
+import type { EditDocumentTypeCommandCorrected } from '@/types/document-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -20,45 +20,45 @@ import { toast } from 'sonner';
 import z from 'zod';
 import { useShallow } from 'zustand/react/shallow';
 
-const editSkillFormSchema = z.object({
-    id: z.string().nonempty('Skill ID is required'),
+const editDocumentTypeFormSchema = z.object({
+    id: z.string().nonempty('Document ID is required'),
     name: z
         .string()
         .min(2, 'Name must be at least 2 characters long')
         .max(50, 'Name must be at most 50 characters long'),
-}) satisfies z.ZodType<EditSkillCommandCorrected>;
+}) satisfies z.ZodType<EditDocumentTypeCommandCorrected>;
 
-export function EditSkillDialog() {
+export function EditDocTypeDialog() {
     const {
-        skillEditTarget,
-        isSkillEditDialogOpen,
-        closeSkillEditDialog,
-        setSkillEditDialogOpen,
+        documentTypeEditTarget,
+        isDocumentTypeEditDialogOpen,
+        closeDocumentTypeEditDialog,
+        setDocumentTypeEditDialogOpen,
     } = useAppStore(
         useShallow((s) => ({
-            skillEditTarget: s.skillEditTarget,
-            isSkillEditDialogOpen: s.isSkillEditDialogOpen,
-            closeSkillEditDialog: s.closeSkillEditDialog,
-            setSkillEditDialogOpen: s.setSkillEditDialogOpen,
+            documentTypeEditTarget: s.documentTypeEditTarget,
+            isDocumentTypeEditDialogOpen: s.isDocumentTypeEditDialogOpen,
+            closeDocumentTypeEditDialog: s.closeDocumentTypeEditDialog,
+            setDocumentTypeEditDialogOpen: s.setDocumentTypeEditDialogOpen,
         }))
     );
 
-    const editSkillMutation = useEditSkill();
+    const editDocumentTypeMutation = useEditDocumentType();
 
-    const form = useForm<EditSkillCommandCorrected>({
-        resolver: zodResolver(editSkillFormSchema),
+    const form = useForm<EditDocumentTypeCommandCorrected>({
+        resolver: zodResolver(editDocumentTypeFormSchema),
     });
 
     useEffect(() => {
-        form.setValue('id', skillEditTarget?.id || '');
-        form.setValue('name', skillEditTarget?.name || '');
-    }, [skillEditTarget, form]);
+        form.setValue('id', documentTypeEditTarget?.id || '');
+        form.setValue('name', documentTypeEditTarget?.name || '');
+    }, [documentTypeEditTarget, form]);
 
-    const onSubmit = async (data: EditSkillCommandCorrected) => {
-        editSkillMutation.mutate(data, {
+    const onSubmit = async (data: EditDocumentTypeCommandCorrected) => {
+        editDocumentTypeMutation.mutate(data, {
             onSuccess: () => {
                 form.reset();
-                closeSkillEditDialog();
+                closeDocumentTypeEditDialog();
             },
         });
     };
@@ -70,8 +70,8 @@ export function EditSkillDialog() {
 
     return (
         <Dialog
-            open={isSkillEditDialogOpen}
-            onOpenChange={setSkillEditDialogOpen}
+            open={isDocumentTypeEditDialogOpen}
+            onOpenChange={setDocumentTypeEditDialogOpen}
         >
             <DialogContent className="sm:max-w-[425px]">
                 <form
@@ -79,9 +79,9 @@ export function EditSkillDialog() {
                     className="grid gap-7"
                 >
                     <DialogHeader>
-                        <DialogTitle>Edit Skill</DialogTitle>
+                        <DialogTitle>Edit Document Type</DialogTitle>
                         <DialogDescription>
-                            Edit the skill details and click Save.
+                            Edit the document type details and click Save.
                         </DialogDescription>
                     </DialogHeader>
 
@@ -96,14 +96,14 @@ export function EditSkillDialog() {
                         <DialogClose asChild>
                             <Button
                                 variant="outline"
-                                disabled={editSkillMutation.isPending}
+                                disabled={editDocumentTypeMutation.isPending}
                             >
                                 Cancel
                             </Button>
                         </DialogClose>
                         <Button
                             type="submit"
-                            disabled={editSkillMutation.isPending}
+                            disabled={editDocumentTypeMutation.isPending}
                         >
                             Save
                         </Button>

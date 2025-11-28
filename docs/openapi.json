@@ -382,6 +382,46 @@
       }
     },
     "/api/document/{id}": {
+      "put": {
+        "tags": [
+          "Document"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditDocumentTypeCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditDocumentTypeCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditDocumentTypeCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
       "delete": {
         "tags": [
           "Document"
@@ -1164,7 +1204,7 @@
         }
       }
     },
-    "/api/notification": {
+    "/mark-as-read": {
       "put": {
         "tags": [
           "Notification"
@@ -1193,7 +1233,9 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/notification": {
       "get": {
         "tags": [
           "Notification"
@@ -1793,10 +1835,21 @@
         }
       }
     },
-    "/api/user/roles": {
+    "/api/user/{id}/roles": {
       "put": {
         "tags": [
           "User"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
         ],
         "requestBody": {
           "content": {
@@ -2306,6 +2359,20 @@
             "items": {
               "$ref": "#/components/schemas/DesignationSkillDTO"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EditDocumentTypeCommand": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
             "nullable": true
           }
         },

@@ -1,5 +1,5 @@
 import { CreateDesignationDialog } from '@/components/configurations/designation/create-designation-dialog';
-import { DesignationsTable } from '@/components/configurations/designation/designations-table';
+// import { DesignationsTable } from '@/components/configurations/designation/designations-table';
 
 export function DesignationsPage() {
     return (
@@ -18,7 +18,7 @@ export function DesignationsPage() {
             </div>
 
             <div className="w-full flex justify-evenly pt-10">
-                <DesignationsTable />
+                {/* <DesignationsTable /> */}
 
                 {/* <EditSkillDialog /> */}
             </div>
