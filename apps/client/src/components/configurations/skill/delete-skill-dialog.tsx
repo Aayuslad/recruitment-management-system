@@ -15,15 +15,15 @@ import { useShallow } from 'zustand/react/shallow';
 export function DeleteSkillDialog() {
     const {
         skillDeleteTargetId,
-        isSkillDeleteDialogOpen,
+        skillDeleteDialog,
         closeSkillDeleteDialog,
-        setSkillDeleteDialogOpen,
+        setSkillDeleteDialog,
     } = useAppStore(
         useShallow((s) => ({
             skillDeleteTargetId: s.skillDeleteTargetId,
-            isSkillDeleteDialogOpen: s.isSkillDeleteDialogOpen,
+            skillDeleteDialog: s.skillDeleteDialog,
             closeSkillDeleteDialog: s.closeSkillDeleteDialog,
-            setSkillDeleteDialogOpen: s.setSkillDeleteDialogOpen,
+            setSkillDeleteDialog: s.setSkillDeleteDialog,
         }))
     );
     const deleteSkillMutation = useDeleteSkill();
@@ -37,10 +37,7 @@ export function DeleteSkillDialog() {
     };
 
     return (
-        <Dialog
-            open={isSkillDeleteDialogOpen}
-            onOpenChange={setSkillDeleteDialogOpen}
-        >
+        <Dialog open={skillDeleteDialog} onOpenChange={setSkillDeleteDialog}>
             <DialogContent className="sm:max-w-[425px] space-y-2">
                 <DialogHeader className="space-y-2">
                     <DialogTitle>Confirm Delete Skill</DialogTitle>

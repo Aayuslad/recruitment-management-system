@@ -1,5 +1,7 @@
 import { CreateDesignationDialog } from '@/components/configurations/designation/create-designation-dialog';
-// import { DesignationsTable } from '@/components/configurations/designation/designations-table';
+import { DeleteDesignationDialog } from '@/components/configurations/designation/delete-designation-dialog';
+import { DesignationsTable } from '@/components/configurations/designation/designations-table';
+import { DesignationDialog } from '@/components/configurations/designation/designation-dialog';
 
 export function DesignationsPage() {
     return (
@@ -12,15 +14,18 @@ export function DesignationsPage() {
                         required skills.
                     </p>
                 </div>
-                <div className="w-[200px]">
+                <div className="w-[230px] mb-4">
                     <CreateDesignationDialog />
                 </div>
             </div>
 
             <div className="w-full flex justify-evenly pt-10">
-                {/* <DesignationsTable /> */}
+                <div className="mr-12">
+                    <DesignationsTable />
+                </div>
 
-                {/* <EditSkillDialog /> */}
+                <DeleteDesignationDialog />
+                <DesignationDialog />
             </div>
         </div>
     );

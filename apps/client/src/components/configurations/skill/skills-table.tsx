@@ -41,14 +41,14 @@ export function SkillsTable() {
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
+
+    const { data, isLoading, isError } = useGetSkills();
     const { openSkillEditDialog, openSkillDeleteDialog } = useAppStore(
         useShallow((s) => ({
             openSkillEditDialog: s.openSkillEditDialog,
             openSkillDeleteDialog: s.openSkillDeleteDialog,
         }))
     );
-
-    const { data, isLoading, isError } = useGetSkills();
 
     const columns: ColumnDef<Skill>[] = [
         {

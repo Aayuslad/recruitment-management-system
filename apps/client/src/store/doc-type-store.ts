@@ -2,65 +2,64 @@ import type { Document } from '@/types/document-types';
 import type { StateCreator } from 'zustand';
 
 export type DocumentTypeStoreSliceType = {
-    documentTypeEditTarget: Document | null;
-    isDocumentTypeEditDialogOpen: boolean;
-    documentTypeDeleteTargetId: string | null;
-    isDocumentTypeDeleteDialogOpen: boolean;
+    docTypeEditTarget: Document | null;
+    docTypeEditDialog: boolean;
+    docTypeDeleteTargetId: string | null;
+    docTypeDeleteDialog: boolean;
 
-    openDocumentTypeEditDialog: (doc: Document | null) => void;
-    closeDocumentTypeEditDialog: () => void;
-    setDocumentTypeEditDialogOpen: (state: boolean) => void;
-    updateDocumentTypeEditTarget: (updates: Partial<Document>) => void;
+    openDocTypeEditDialog: (doc: Document | null) => void;
+    closeDocTypeEditDialog: () => void;
+    setDocTypeEditDialog: (state: boolean) => void;
+    updateDocTypeEditTarget: (updates: Partial<Document>) => void;
 
-    openDocumentTypeDeleteDialog: (id: string) => void;
-    closeDocumentTypeDeleteDialog: () => void;
-    setDocumentTypeDeleteDialogOpen: (state: boolean) => void;
+    openDocTypeDeleteDialog: (id: string) => void;
+    closeDocTypeDeleteDialog: () => void;
+    setDocTypeDeleteDialog: (state: boolean) => void;
 };
 
 export const createDocTypeSlice: StateCreator<DocumentTypeStoreSliceType> = (
     set
 ) => ({
-    documentTypeEditTarget: null,
-    isDocumentTypeEditDialogOpen: false,
-    documentTypeDeleteTargetId: null,
-    isDocumentTypeDeleteDialogOpen: false,
+    docTypeEditTarget: null,
+    docTypeEditDialog: false,
+    docTypeDeleteTargetId: null,
+    docTypeDeleteDialog: false,
 
-    openDocumentTypeEditDialog: (doc) => {
+    openDocTypeEditDialog: (doc) => {
         set({
-            documentTypeEditTarget: doc,
-            isDocumentTypeEditDialogOpen: true,
+            docTypeEditTarget: doc,
+            docTypeEditDialog: true,
         });
     },
 
-    closeDocumentTypeEditDialog: () =>
+    closeDocTypeEditDialog: () =>
         set({
-            documentTypeEditTarget: null,
-            isDocumentTypeEditDialogOpen: false,
+            docTypeEditTarget: null,
+            docTypeEditDialog: false,
         }),
 
-    setDocumentTypeEditDialogOpen: (state) =>
-        set(() => ({ isDocumentTypeEditDialogOpen: state })),
+    setDocTypeEditDialog: (state) => set(() => ({ docTypeEditDialog: state })),
 
-    updateDocumentTypeEditTarget: (updates: Partial<Document>) =>
+    updateDocTypeEditTarget: (updates: Partial<Document>) =>
         set((state) => ({
-            documentTypeEditTarget: state.documentTypeEditTarget
-                ? { ...state.documentTypeEditTarget, ...updates }
+            docTypeEditTarget: state.docTypeEditTarget
+                ? { ...state.docTypeEditTarget, ...updates }
                 : null,
         })),
 
-    openDocumentTypeDeleteDialog: (id) => {
+    openDocTypeDeleteDialog: (id) => {
         set({
-            documentTypeDeleteTargetId: id,
-            isDocumentTypeDeleteDialogOpen: true,
+            docTypeDeleteTargetId: id,
+            docTypeDeleteDialog: true,
         });
     },
 
-    closeDocumentTypeDeleteDialog: () =>
+    closeDocTypeDeleteDialog: () =>
         set({
-            documentTypeDeleteTargetId: null,
-            isDocumentTypeDeleteDialogOpen: false,
+            docTypeDeleteTargetId: null,
+            docTypeDeleteDialog: false,
         }),
 
-    setDocumentTypeDeleteDialogOpen: (state) =>
-        set(() => ({ isDocumentTypeDeleteDialogOpen: state })),
+    setDocTypeDeleteDialog: (state) =>
+        set(() => ({ docTypeDeleteDialog: state })),
 });

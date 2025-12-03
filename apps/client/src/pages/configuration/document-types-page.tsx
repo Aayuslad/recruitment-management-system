@@ -14,7 +14,7 @@ export function DocumentTypesPage() {
                         employees, and job applications.
                     </p>
                 </div>
-                <div className="w-[250px] border mb-4">
+                <div className="w-[250px] mb-4">
                     <CreateDocTypeDialog />
                 </div>
             </div>

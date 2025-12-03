@@ -28,12 +28,14 @@ namespace Server.Application.Aggregates.Designations.Handlers
                 throw new UnAuthorisedExeption();
             }
 
-            // step 1: check if designation with this name exists
+            // step 1: check if designation exists
             var designation = await _designationRepository.GetByIdAsync(command.Id, cancellationToken);
             if (designation == null)
             {
                 throw new NotFoundExeption($"Designation not found.");
             }
+
+            //TODO: if designation is used in any of Position or other parent entity, throw conflict exeption
 
             // step 2: delete designation
             designation.Delete(Guid.Parse(userIdString));

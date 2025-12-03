@@ -24,6 +24,8 @@ import {
     SidebarRail,
 } from '@/components/ui/sidebar';
 import { SimpleNavGroup } from './simple-nav-group';
+import { useAppStore } from '@/store';
+import { useShallow } from 'zustand/react/shallow';
 
 const data = {
     user: {
@@ -123,6 +125,11 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { data: user } = useGetUser();
+    const { toggleSidebar } = useAppStore(
+        useShallow((s) => ({
+            toggleSidebar: s.toggleSidebarState,
+        }))
+    );
 
     data.user.name = `${user?.firstName} ${user?.lastName}`;
     // eslint-disable-next-line
@@ -145,7 +152,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarFooter>
                 <NavUser user={data.user} />
             </SidebarFooter>
-            <SidebarRail />
+            <SidebarRail onClick={() => toggleSidebar()} />
         </Sidebar>
     );
 }

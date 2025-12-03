@@ -41,15 +41,14 @@ export function DocTypesTable() {
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
-    const { openDocumentTypeEditDialog, openDocumentTypeDeleteDialog } =
-        useAppStore(
-            useShallow((s) => ({
-                openDocumentTypeEditDialog: s.openDocumentTypeEditDialog,
-                openDocumentTypeDeleteDialog: s.openDocumentTypeDeleteDialog,
-            }))
-        );
 
     const { data, isLoading, isError } = useGetDocumentTypes();
+    const { openDocTypeEditDialog, openDocTypeDeleteDialog } = useAppStore(
+        useShallow((s) => ({
+            openDocTypeEditDialog: s.openDocTypeEditDialog,
+            openDocTypeDeleteDialog: s.openDocTypeDeleteDialog,
+        }))
+    );
 
     const columns: ColumnDef<Document>[] = [
         {
@@ -79,16 +78,14 @@ export function DocTypesTable() {
                     <div className="flex gap-10 font-semibold">
                         <button
                             className="text-gray-400 hover:cursor-pointer"
-                            onClick={() =>
-                                openDocumentTypeEditDialog(row.original)
-                            }
+                            onClick={() => openDocTypeEditDialog(row.original)}
                         >
                             Edit
                         </button>
                         <button
                             className="text-destructive hover:cursor-pointer"
                             onClick={() =>
-                                openDocumentTypeDeleteDialog(row.original.id)
+                                openDocTypeDeleteDialog(row.original.id)
                             }
                         >
                             Delete

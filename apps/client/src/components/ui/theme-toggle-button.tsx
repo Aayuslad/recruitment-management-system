@@ -1,18 +1,18 @@
 import { useAppStore } from '@/store';
+import { Moon, Sun } from 'lucide-react';
 import { Button } from './button';
-import { Sun, Moon } from 'lucide-react';
 
 export function ThemeToggleButton() {
-    const { dark, toggle } = useAppStore();
+    const { theme, toggleTheme } = useAppStore();
 
     return (
         <Button
             size="icon"
             variant="ghost"
-            onClick={toggle}
+            onClick={toggleTheme}
             className="flex items-center space-x-2 mx-3"
         >
-            {dark ? <Sun size={96} /> : <Moon size={96} />}
+            {theme === 'dark' ? <Sun size={96} /> : <Moon size={96} />}
         </Button>
     );
 }

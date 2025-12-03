@@ -4,7 +4,6 @@ import type { components } from './generated/api';
 export interface Designation {
     id: string;
     name: string;
-    description: string;
     designationSkills: DesignationSkillDTO[];
 }
 
@@ -17,26 +16,22 @@ export interface DesignationSkillDTO {
 
 export type CreateDesignationCommandCorrected = Omit<
     components['schemas']['CreateDesignationCommand'],
-    'name' | 'descripttion' | 'designationSkills'
+    'name' | 'designationSkills'
 > & {
     name: string;
-    description: string;
-    designationSkills:
-        | {
-              skillId: string;
-              skillType: 'Required' | 'Preferred' | 'NiceToHave';
-              minExperienceYears: number;
-          }[]
-        | null;
+    designationSkills: {
+        skillId: string;
+        skillType: 'Required' | 'Preferred' | 'NiceToHave';
+        minExperienceYears: number;
+    }[];
 };
 
 export type EditDesignationCommandCorrected = Omit<
     components['schemas']['EditDesignationCommand'],
-    'id' | 'name' | 'descripttion' | 'designationSkills'
+    'id' | 'name' | 'designationSkills'
 > & {
     id: string;
     name: string;
-    description: string;
     designationSkills: {
         skillId: string;
         skillType: 'Required' | 'Preferred' | 'NiceToHave';

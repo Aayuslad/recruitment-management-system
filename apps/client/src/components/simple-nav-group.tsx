@@ -23,7 +23,7 @@ export function SimpleNavGroup({
     return (
         <SidebarGroup>
             {title !== null && <SidebarGroupLabel>{title}</SidebarGroupLabel>}
-            <SidebarMenu>
+            <SidebarMenu className="font-semibold">
                 {Workflows.map((item) => (
                     <NavLink to={item.url} key={item.name}>
                         {({ isActive }) => (

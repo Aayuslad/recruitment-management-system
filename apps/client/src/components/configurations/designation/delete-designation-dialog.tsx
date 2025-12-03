@@ -1,4 +1,4 @@
-import { useDeleteDocumentType } from '@/api/document-api';
+import { useDeleteDesignation } from '@/api/designation-api';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -12,44 +12,41 @@ import {
 import { useAppStore } from '@/store';
 import { useShallow } from 'zustand/react/shallow';
 
-export function DeleteDocTypeDialog() {
+export function DeleteDesignationDialog() {
     const {
-        docTypeDeleteTargetId,
-        docTypeDeleteDialog,
-        closeDocTypeDeleteDialog,
-        setDocTypeDeleteDialog,
+        designationDeleteTargetId,
+        designationDeleteDialog,
+        closeDesignationDeleteDialog,
+        setDesignationDeleteDialog,
     } = useAppStore(
         useShallow((s) => ({
-            docTypeDeleteTargetId: s.docTypeDeleteTargetId,
-            docTypeDeleteDialog: s.docTypeDeleteDialog,
-            closeDocTypeDeleteDialog: s.closeDocTypeDeleteDialog,
-            setDocTypeDeleteDialog: s.setDocTypeDeleteDialog,
+            designationDeleteTargetId: s.designationDeleteTargetId,
+            designationDeleteDialog: s.designationDeleteDialog,
+            closeDesignationDeleteDialog: s.closeDesignationDeleteDialog,
+            setDesignationDeleteDialog: s.setDesignationDeleteDialog,
         }))
     );
-    const deleteDocumentTypeMutation = useDeleteDocumentType();
+    const deleteDesignationMutation = useDeleteDesignation();
 
-    const submit = async (id: string | null) => {
-        if (!id) {
-            return;
-        }
-        deleteDocumentTypeMutation.mutate(id, {
+    const submit = async (id: string) => {
+        deleteDesignationMutation.mutate(id, {
             onSuccess: () => {
-                closeDocTypeDeleteDialog();
+                closeDesignationDeleteDialog();
             },
         });
     };
 
     return (
         <Dialog
-            open={docTypeDeleteDialog}
-            onOpenChange={setDocTypeDeleteDialog}
+            open={designationDeleteDialog}
+            onOpenChange={setDesignationDeleteDialog}
         >
             <DialogContent className="sm:max-w-[425px] space-y-2">
                 <DialogHeader className="space-y-2">
-                    <DialogTitle>Confirm Delete Document Type</DialogTitle>
+                    <DialogTitle>Confirm Delete Designation</DialogTitle>
                     <DialogDescription>
-                        This document type will be removed and this action
-                        cannot be undone.
+                        This Designation will be removed and this action cannot
+                        be undone.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -57,7 +54,7 @@ export function DeleteDocTypeDialog() {
                     <DialogClose asChild className="flex-1">
                         <Button
                             variant="secondary"
-                            disabled={deleteDocumentTypeMutation.isPending}
+                            disabled={deleteDesignationMutation.isPending}
                         >
                             Cancel
                         </Button>
@@ -66,8 +63,8 @@ export function DeleteDocTypeDialog() {
                         type="submit"
                         variant="default"
                         className="flex-1 bg-red-500 text-white hover:bg-red-600"
-                        onClick={() => submit(docTypeDeleteTargetId)}
-                        disabled={deleteDocumentTypeMutation.isPending}
+                        onClick={() => submit(designationDeleteTargetId!)}
+                        disabled={deleteDesignationMutation.isPending}
                     >
                         Delete
                     </Button>

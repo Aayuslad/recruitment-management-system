@@ -30,16 +30,16 @@ const editDocumentTypeFormSchema = z.object({
 
 export function EditDocTypeDialog() {
     const {
-        documentTypeEditTarget,
-        isDocumentTypeEditDialogOpen,
-        closeDocumentTypeEditDialog,
-        setDocumentTypeEditDialogOpen,
+        docTypeEditTarget,
+        docTypeEditDialog,
+        closeDocTypeEditDialog,
+        setDocTypeEditDialog,
     } = useAppStore(
         useShallow((s) => ({
-            documentTypeEditTarget: s.documentTypeEditTarget,
-            isDocumentTypeEditDialogOpen: s.isDocumentTypeEditDialogOpen,
-            closeDocumentTypeEditDialog: s.closeDocumentTypeEditDialog,
-            setDocumentTypeEditDialogOpen: s.setDocumentTypeEditDialogOpen,
+            docTypeEditTarget: s.docTypeEditTarget,
+            docTypeEditDialog: s.docTypeEditDialog,
+            closeDocTypeEditDialog: s.closeDocTypeEditDialog,
+            setDocTypeEditDialog: s.setDocTypeEditDialog,
         }))
     );
 
@@ -50,15 +50,15 @@ export function EditDocTypeDialog() {
     });
 
     useEffect(() => {
-        form.setValue('id', documentTypeEditTarget?.id || '');
-        form.setValue('name', documentTypeEditTarget?.name || '');
-    }, [documentTypeEditTarget, form]);
+        form.setValue('id', docTypeEditTarget?.id || '');
+        form.setValue('name', docTypeEditTarget?.name || '');
+    }, [docTypeEditTarget, form]);
 
     const onSubmit = async (data: EditDocumentTypeCommandCorrected) => {
         editDocumentTypeMutation.mutate(data, {
             onSuccess: () => {
                 form.reset();
-                closeDocumentTypeEditDialog();
+                closeDocTypeEditDialog();
             },
         });
     };
@@ -69,10 +69,7 @@ export function EditDocTypeDialog() {
     };
 
     return (
-        <Dialog
-            open={isDocumentTypeEditDialogOpen}
-            onOpenChange={setDocumentTypeEditDialogOpen}
-        >
+        <Dialog open={docTypeEditDialog} onOpenChange={setDocTypeEditDialog}>
             <DialogContent className="sm:max-w-[425px]">
                 <form
                     onSubmit={form.handleSubmit(onSubmit, onInvalid)}

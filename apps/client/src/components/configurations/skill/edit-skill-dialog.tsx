@@ -31,15 +31,15 @@ const editSkillFormSchema = z.object({
 export function EditSkillDialog() {
     const {
         skillEditTarget,
-        isSkillEditDialogOpen,
+        skillEditDialog,
         closeSkillEditDialog,
-        setSkillEditDialogOpen,
+        setSkillEditDialog,
     } = useAppStore(
         useShallow((s) => ({
             skillEditTarget: s.skillEditTarget,
-            isSkillEditDialogOpen: s.isSkillEditDialogOpen,
+            skillEditDialog: s.skillEditDialog,
             closeSkillEditDialog: s.closeSkillEditDialog,
-            setSkillEditDialogOpen: s.setSkillEditDialogOpen,
+            setSkillEditDialog: s.setSkillEditDialog,
         }))
     );
 
@@ -69,10 +69,7 @@ export function EditSkillDialog() {
     };
 
     return (
-        <Dialog
-            open={isSkillEditDialogOpen}
-            onOpenChange={setSkillEditDialogOpen}
-        >
+        <Dialog open={skillEditDialog} onOpenChange={setSkillEditDialog}>
             <DialogContent className="sm:max-w-[425px]">
                 <form
                     onSubmit={form.handleSubmit(onSubmit, onInvalid)}
