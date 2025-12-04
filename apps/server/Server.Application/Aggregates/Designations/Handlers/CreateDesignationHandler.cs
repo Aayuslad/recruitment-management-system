@@ -40,7 +40,7 @@ namespace Server.Application.Aggregates.Designations.Handlers
             var newDesignationId = Guid.NewGuid();
 
             // create designation skills
-            var dSkills = command.DesignationSkills?.Select(
+            var dSkills = command.DesignationSkills.Select(
                     selector: x => DesignationSkill.Create(
                             designationId: newDesignationId,
                             skillId: x.SkillId,

@@ -1,6 +1,7 @@
 import type {
     Document,
     CreateDocumentTypeCommandCorrected,
+    EditDocumentTypeCommandCorrected,
 } from '@/types/document-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
@@ -26,6 +27,30 @@ export function useCreateDocumentType() {
                     'Document Not Created'
             );
             console.error('Document creation failed:', error);
+        },
+    });
+}
+
+export function useEditDocumentType() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (
+            payload: EditDocumentTypeCommandCorrected
+        ): Promise<undefined> => {
+            await axios.put(`/document/${payload.id}`, payload);
+        },
+        onSuccess: () => {
+            toast.success('Document Type Edited');
+            queryClient.invalidateQueries({ queryKey: ['documents'] });
+        },
+        onError: (error: AxiosError<{ error: string }>) => {
+            toast.error(
+                error.response?.data?.error ||
+                    error.message ||
+                    'Docyment Type Not Edited'
+            );
+            console.error('Document type editing failed:', error);
         },
     });
 }

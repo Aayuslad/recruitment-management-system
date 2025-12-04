@@ -1,4 +1,4 @@
-import { CreateUserForm } from '@/components/features/auth/create-user-form';
+import { CreateUserForm } from '@/components/auth/create-user-form';
 
 function CreateUserPage() {
     return (

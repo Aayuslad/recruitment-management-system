@@ -3,27 +3,26 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Route, Routes } from 'react-router-dom';
 import { queryClient } from './lib/query-client';
-import CandidatesPage from './pages/feature/candidates-page';
+import { EmployeesPage } from './pages/admin/employees-page';
+import { RolesPage } from './pages/admin/roles-page';
+import { UsersPage } from './pages/admin/users-page';
 import CreateUserPage from './pages/auth/create-user-page';
-import DashBoardPage from './pages/feature/dashboard-page';
-import HomeLayout from './pages/home-layout';
-import JobsPage from './pages/feature/jobs/jobs-page';
-import LandingPage from './pages/landing-page';
 import LoginPage from './pages/auth/login-page';
-import NotFoundPage from './pages/not-found-page';
 import RegistrationPage from './pages/auth/registration-page';
-import CandidateSubPage1 from './pages/feature/candidates-sub-page-1';
-import AdminSettingsPage from './pages/feature/admin-settings-page';
-import DocumentVerificationPage from './pages/feature/document-verification-page';
-import FeedbackAndEvaluationPage from './pages/feature/feedback-and-evaluation-page';
-import InterviewSchedulingPage from './pages/feature/interview-scheduling-page';
-import NotificationAndTasksPage from './pages/feature/notification-and-tasks-page';
-import ReportsAndAnalyticsPage from './pages/feature/reports-and-analytics-page';
-import ScreeningAndShortlistingPage from './pages/feature/screening-and-shortlisting-page';
-import OpeningsSectionPage from './pages/feature/jobs/openings-section-page';
-import PositionsSectionPage from './pages/feature/jobs/positions-section-page';
-import DesignationsSectionPage from './pages/feature/jobs/designations-section-page';
-import SkillsSectionPage from './pages/feature/jobs/skills-section-page';
+import { Index as CandidatesIndex } from './pages/candidate';
+import { DesignationsPage } from './pages/configuration/designations-page';
+import { DocumentTypesPage } from './pages/configuration/document-types-page';
+import { SkillsPage } from './pages/configuration/skills-page';
+import { Index as EventsIndex } from './pages/event';
+import { DashboardPage } from './pages/dashboard-page';
+import HomeLayout from './pages/home-layout';
+import { Index as InterviewsIndex } from './pages/interview';
+import { Index as JobApplicationsIndex } from './pages/jobApplication';
+import { Index as JobOpeningsIndex } from './pages/jobOpening';
+import LandingPage from './pages/landing-page';
+import NotFoundPage from './pages/not-found-page';
+import { Index as PositionsIndex } from './pages/position';
+import { Index as ReportsAndAnalyticsIndex } from './pages/ReportsAndAnalytics';
 
 function App() {
     return (
@@ -34,61 +33,44 @@ function App() {
                 <Route path="/register" element={<RegistrationPage />} />
                 <Route path="/create-user" element={<CreateUserPage />} />
                 <Route path="/" element={<HomeLayout />}>
-                    <Route path="dashboard" element={<DashBoardPage />} />
-                    <Route path="jobs" element={<JobsPage />} />
+                    <Route index path="dashboard" element={<DashboardPage />} />
+                    <Route path="job-openings" element={<JobOpeningsIndex />} />
+                    <Route path="candidates" element={<CandidatesIndex />} />
                     <Route
-                        path="jobs/openings"
-                        element={<OpeningsSectionPage />}
+                        path="job-applications"
+                        element={<JobApplicationsIndex />}
                     />
-                    <Route
-                        path="jobs/positions"
-                        element={<PositionsSectionPage />}
-                    />
-                    <Route
-                        path="jobs/designations"
-                        element={<DesignationsSectionPage />}
-                    />
-                    <Route path="jobs/skills" element={<SkillsSectionPage />} />
-                    <Route path="candidates" element={<CandidatesPage />} />
-                    <Route
-                        path="candidates/candidate-sub-page-1"
-                        element={<CandidateSubPage1 />}
-                    />
-                    <Route
-                        path="admin-settings"
-                        element={<AdminSettingsPage />}
-                    />
-                    <Route
-                        path="document-verification"
-                        element={<DocumentVerificationPage />}
-                    />
-                    <Route
-                        path="feedback-and-evaluation"
-                        element={<FeedbackAndEvaluationPage />}
-                    />
-                    <Route
-                        path="interview-scheduling"
-                        element={<InterviewSchedulingPage />}
-                    />
-                    <Route
-                        path="notification-and-tasks"
-                        element={<NotificationAndTasksPage />}
-                    />
+                    <Route path="interviews" element={<InterviewsIndex />} />
+                    <Route path="positions" element={<PositionsIndex />} />
+                    <Route path="events" element={<EventsIndex />} />
                     <Route
                         path="reports-and-analytics"
-                        element={<ReportsAndAnalyticsPage />}
+                        element={<ReportsAndAnalyticsIndex />}
                     />
-                    <Route
-                        path="screening-and-shortlisting"
-                        element={<ScreeningAndShortlistingPage />}
-                    />
+
+                    <Route path="configuration">
+                        <Route path="skills" element={<SkillsPage />} />
+                        <Route
+                            path="designations"
+                            element={<DesignationsPage />}
+                        />
+                        <Route
+                            path="document-types"
+                            element={<DocumentTypesPage />}
+                        />
+                    </Route>
+                    <Route path="admin">
+                        <Route path="users" element={<UsersPage />} />
+                        <Route path="roles" element={<RolesPage />} />
+                        <Route path="employees" element={<EmployeesPage />} />
+                    </Route>
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
 
             {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
 
-            <Toaster position="top-center" />
+            <Toaster position="bottom-right" />
         </QueryClientProvider>
     );
 }

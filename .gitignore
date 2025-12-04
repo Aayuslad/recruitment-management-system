@@ -1,5 +1,7 @@
 ###### .NET Core ######
 
+.vscode
+
 # Build
 bin/
 obj/

@@ -11,3 +11,11 @@ export type CreateDocumentTypeCommandCorrected = Omit<
 > & {
     name: string;
 };
+
+export type EditDocumentTypeCommandCorrected = Omit<
+    components['schemas']['EditDocumentTypeCommand'],
+    'name'
+> & {
+    id: string;
+    name: string;
+};

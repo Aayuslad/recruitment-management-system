@@ -28,6 +28,14 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> EditDocumentType(Guid id, [FromBody] EditDocumentTypeCommand command, CancellationToken cancellationToken)
+        {
+            command.Id = id;
+            var result = await _mediator.Send(command, cancellationToken);
+            return result.ToActionResult(this);
+        }
+
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteDocumentType(Guid id, CancellationToken cancellationToken)
         {

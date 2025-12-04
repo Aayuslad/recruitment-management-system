@@ -2,28 +2,30 @@
 
 import {
     BarChart3,
-    BellRing,
     Briefcase,
-    CalendarClock,
-    ClipboardCheck,
-    FileCheck2,
+    CalendarCheck,
+    CalendarDays,
+    ClipboardList,
+    Layers,
     LayoutDashboard,
-    SearchCheck,
-    UserCog,
-    Users,
+    Settings2,
+    SlidersHorizontal,
+    UsersRound,
 } from 'lucide-react';
 import * as React from 'react';
 
 import { useGetUser } from '@/api/user-api';
-import { NavMain } from '@/components/nav-main';
+import { CollapsibleNavGroup } from '@/components/collapsible-nav-group';
 import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
-    SidebarHeader,
     SidebarRail,
 } from '@/components/ui/sidebar';
+import { SimpleNavGroup } from './simple-nav-group';
+import { useAppStore } from '@/store';
+import { useShallow } from 'zustand/react/shallow';
 
 const data = {
     user: {
@@ -31,242 +33,103 @@ const data = {
         email: 'loading...',
         avatar: '/avatars/shadcn.jpg',
     },
-    // teams: [
-    //   {
-    //     name: "Acme Inc",
-    //     logo: GalleryVerticalEnd,
-    //     plan: "Enterprise",
-    //   },
-    //   {
-    //     name: "Acme Corp.",
-    //     logo: AudioWaveform,
-    //     plan: "Startup",
-    //   },
-    //   {
-    //     name: "Evil Corp.",
-    //     logo: Command,
-    //     plan: "Free",
-    //   },
-    // ],
-    navMain: [
+    dashboard: [
         {
-            title: 'Dashboard',
+            name: 'Dashboard',
             url: '/dashboard',
             icon: LayoutDashboard,
+        },
+    ],
+    coreWorkflows: [
+        {
+            name: 'Job Openings',
+            url: '/job-openings',
+            icon: Briefcase,
+        },
+        {
+            name: 'Candidates',
+            url: '/candidates',
+            icon: UsersRound,
+        },
+        {
+            name: 'Job Applications',
+            url: 'job-applications',
+            icon: ClipboardList,
+        },
+        {
+            name: 'Interviews',
+            url: 'interviews',
+            icon: CalendarCheck,
+        },
+    ],
+    supportingWorkflows: [
+        {
+            name: 'Positions',
+            url: 'positions',
+            icon: Layers,
+        },
+        {
+            name: 'Events',
+            url: 'events',
+            icon: CalendarDays,
+        },
+        {
+            name: 'Reports & Analytics',
+            url: 'reports-and-analytics',
+            icon: BarChart3,
+        },
+    ],
+    other: [
+        {
+            title: 'Configurations',
+            url: 'configuration',
+            icon: SlidersHorizontal,
             isActive: false,
             items: [
                 {
-                    title: 'sub page 1',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 2',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 3',
-                    url: '#',
-                },
-            ],
-        },
-        {
-            title: 'Jobs',
-            url: '/jobs',
-            icon: Briefcase,
-            items: [
-                {
-                    title: 'Openings',
-                    url: '/jobs/openings',
-                },
-                {
-                    title: 'Positions',
-                    url: '/jobs/positions',
+                    title: 'Skills',
+                    url: 'configuration/skills',
                 },
                 {
                     title: 'Designations',
-                    url: '/jobs/designations',
+                    url: 'configuration/designations',
                 },
                 {
-                    title: 'Skills',
-                    url: '/jobs/skills',
-                },
-            ],
-        },
-        {
-            title: 'Candidates',
-            url: '/candidates',
-            icon: Users,
-            items: [
-                {
-                    title: 'sub page 1 (Working)',
-                    url: '/candidates/candidate-sub-page-1',
-                },
-                {
-                    title: 'sub page 2',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 3',
-                    url: '#',
+                    title: 'Document Types',
+                    url: 'configuration/document-types',
                 },
             ],
         },
         {
-            title: 'Screening & Shortlisting',
-            url: 'screening-and-shortlisting',
-            icon: SearchCheck,
+            title: 'Admin',
+            url: 'admin',
+            icon: Settings2,
+            isActive: false,
             items: [
                 {
-                    title: 'sub page 1',
-                    url: '#',
+                    title: 'Users',
+                    url: 'admin/users',
                 },
                 {
-                    title: 'sub page 2',
-                    url: '#',
+                    title: 'Roles',
+                    url: 'admin/roles',
                 },
                 {
-                    title: 'sub page 3',
-                    url: '#',
-                },
-            ],
-        },
-        {
-            title: 'Interview Scheduling',
-            url: 'interview-scheduling',
-            icon: CalendarClock,
-            items: [
-                {
-                    title: 'sub page 1',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 2',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 3',
-                    url: '#',
-                },
-            ],
-        },
-        {
-            title: 'Feedback & Evaluation',
-            url: 'feedback-and-evaluation',
-            icon: ClipboardCheck,
-            items: [
-                {
-                    title: 'sub page 1',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 2',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 3',
-                    url: '#',
-                },
-            ],
-        },
-        {
-            title: 'Document Verification',
-            url: 'document-verification',
-            icon: FileCheck2,
-            items: [
-                {
-                    title: 'sub page 1',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 2',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 3',
-                    url: '#',
-                },
-            ],
-        },
-        {
-            title: 'Notifications & Tasks',
-            url: 'notification-and-tasks',
-            icon: BellRing,
-            items: [
-                {
-                    title: 'sub page 1',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 2',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 3',
-                    url: '#',
-                },
-            ],
-        },
-        {
-            title: 'Reports & Analytics',
-            url: 'reports-and-analytics',
-            icon: BarChart3,
-            items: [
-                {
-                    title: 'sub page 1',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 2',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 3',
-                    url: '#',
-                },
-            ],
-        },
-        {
-            title: 'Admin / Settings',
-            url: 'admin-settings',
-            icon: UserCog,
-            items: [
-                {
-                    title: 'sub page 1',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 2',
-                    url: '#',
-                },
-                {
-                    title: 'sub page 3',
-                    url: '#',
+                    title: 'Employees',
+                    url: 'admin/employees',
                 },
             ],
         },
     ],
-    // projects: [
-    //     {
-    //         name: 'Design Engineering',
-    //         url: '#',
-    //         icon: Frame as LucideIcon,
-    //     },
-    //     {
-    //         name: 'Sales & Marketing',
-    //         url: '#',
-    //         icon: PieChart as LucideIcon,
-    //     },
-    //     {
-    //         name: 'Travel',
-    //         url: '#',
-    //         // @ts-ignore
-    //         icon: Map as LucideIcon,
-    //     },
-    // ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { data: user } = useGetUser();
+    const { toggleSidebar } = useAppStore(
+        useShallow((s) => ({
+            toggleSidebar: s.toggleSidebarState,
+        }))
+    );
 
     data.user.name = `${user?.firstName} ${user?.lastName}`;
     // eslint-disable-next-line
@@ -274,17 +137,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
     return (
         <Sidebar collapsible="icon" {...props}>
-            <SidebarHeader>
-                {/* <TeamSwitcher teams={data.teams} /> */}
-            </SidebarHeader>
-            <SidebarContent>
-                <NavMain items={data.navMain} />
-                {/* <NavProjects projects={data.projects} /> */}
+            <SidebarContent className="pt-5">
+                <SimpleNavGroup Workflows={data.dashboard} />
+                <SimpleNavGroup
+                    Workflows={data.coreWorkflows}
+                    title="Core Workflows"
+                />
+                <SimpleNavGroup
+                    Workflows={data.supportingWorkflows}
+                    title="Supporting Workflows"
+                />
+                <CollapsibleNavGroup items={data.other} title="Other" />
             </SidebarContent>
             <SidebarFooter>
                 <NavUser user={data.user} />
             </SidebarFooter>
-            <SidebarRail />
+            <SidebarRail onClick={() => toggleSidebar()} />
         </Sidebar>
     );
 }

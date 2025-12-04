@@ -1,4 +1,4 @@
-import { RegistrationForm } from '@/components/features/auth/registration-form';
+import { RegistrationForm } from '@/components/auth/registration-form';
 
 function RegistrationPage() {
     return (

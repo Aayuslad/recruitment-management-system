@@ -80,7 +80,7 @@ format-fix-server:
 
 
 ############## Install dependencies for local setup ############+##
-.PHONY: install-all
+.PHONY: install
 
 install:
 	cd $(CLIENT) && npm install

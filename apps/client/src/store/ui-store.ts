@@ -1,29 +1,52 @@
 import type { StateCreator } from 'zustand';
 
+export const THEME_KEY = 'theme-preference';
+export const SIDEBAR_STATE_KEY = 'sidebar-state';
+
 export interface UiStoreSliceType {
-    dark: boolean;
-    toggle: () => void;
-    setDark: (value: boolean) => void;
+    sidebarState: 'opend' | 'closed';
+    theme: 'light' | 'dark';
+
+    toggleTheme: () => void;
+    setTheme: (theme: 'light' | 'dark') => void;
+    setSidebarState: (state: 'opend' | 'closed') => void;
+    toggleSidebarState: () => void;
 }
 
-export const THEME_KEY = 'theme-preference';
+export const createUiSlice: StateCreator<UiStoreSliceType> = (set, get) => ({
+    theme: 'dark',
+    sidebarState: 'closed',
 
-export const createUiSlice: StateCreator<UiStoreSliceType> = (set) => ({
-    dark: false,
+    toggleTheme: () => {
+        const currentTheme = get().theme;
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-    toggle: () =>
-        set((state) => {
-            const newTheme = !state.dark;
-            localStorage.setItem(THEME_KEY, newTheme ? 'dark' : 'light');
-            if (newTheme) document.documentElement.classList.add('dark');
-            else document.documentElement.classList.remove('dark');
-            return { dark: newTheme };
-        }),
-
-    setDark: (value: boolean) => {
-        localStorage.setItem(THEME_KEY, value ? 'dark' : 'light');
-        if (value) document.documentElement.classList.add('dark');
+        if (newTheme === 'dark') document.documentElement.classList.add('dark');
         else document.documentElement.classList.remove('dark');
-        set({ dark: value });
+
+        set({ theme: newTheme });
+
+        localStorage.setItem(THEME_KEY, newTheme);
+    },
+
+    setTheme: (newTheme) => {
+        if (newTheme === 'dark') document.documentElement.classList.add('dark');
+        else document.documentElement.classList.remove('dark');
+
+        set({ theme: newTheme });
+
+        localStorage.setItem(THEME_KEY, newTheme);
+    },
+
+    setSidebarState: (state) => {
+        set({ sidebarState: state });
+        localStorage.setItem(SIDEBAR_STATE_KEY, state);
+    },
+
+    toggleSidebarState: () => {
+        const state = get().sidebarState;
+        const newState = state === 'opend' ? 'closed' : 'opend';
+        set({ sidebarState: newState });
+        localStorage.setItem(SIDEBAR_STATE_KEY, newState);
     },
 });

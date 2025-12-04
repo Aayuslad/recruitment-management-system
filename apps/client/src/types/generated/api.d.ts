@@ -451,7 +451,32 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["EditDocumentTypeCommand"];
+                    "text/json": components["schemas"]["EditDocumentTypeCommand"];
+                    "application/*+json": components["schemas"]["EditDocumentTypeCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         post?: never;
         delete: {
             parameters: {
@@ -1276,6 +1301,45 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/mark-as-read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["MarkNotificationsAsReadCommand"];
+                    "text/json": components["schemas"]["MarkNotificationsAsReadCommand"];
+                    "application/*+json": components["schemas"]["MarkNotificationsAsReadCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/notification": {
         parameters: {
             query?: never;
@@ -1301,30 +1365,7 @@ export interface paths {
                 };
             };
         };
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["MarkNotificationsAsReadCommand"];
-                    "text/json": components["schemas"]["MarkNotificationsAsReadCommand"];
-                    "application/*+json": components["schemas"]["MarkNotificationsAsReadCommand"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -2067,7 +2108,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/user/roles": {
+    "/api/user/{id}/roles": {
         parameters: {
             query?: never;
             header?: never;
@@ -2079,7 +2120,9 @@ export interface paths {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    id: string;
+                };
                 cookie?: never;
             };
             requestBody?: {
@@ -2255,6 +2298,11 @@ export interface components {
             id?: string;
             name?: string | null;
             designationSkills?: components["schemas"]["DesignationSkillDTO"][] | null;
+        };
+        EditDocumentTypeCommand: {
+            /** Format: uuid */
+            id?: string;
+            name?: string | null;
         };
         EditEventCommand: {
             /** Format: uuid */

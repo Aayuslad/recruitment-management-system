@@ -2,18 +2,25 @@ import { useGetUser } from '@/api/user-api';
 import AppHeader from '@/components/app-header';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { useAppStore } from '@/store';
 import { Outlet } from 'react-router-dom';
+import { useShallow } from 'zustand/react/shallow';
 import LoadingPage from './loading-page';
 
 function HomeLayout() {
     const { isPending } = useGetUser();
+    const { sidebarState } = useAppStore(
+        useShallow((s) => ({
+            sidebarState: s.sidebarState,
+        }))
+    );
 
     if (isPending) {
         return <LoadingPage />;
     }
 
     return (
-        <SidebarProvider>
+        <SidebarProvider open={sidebarState === 'opend' ? true : false}>
             <AppSidebar />
             <SidebarInset>
                 <AppHeader />
