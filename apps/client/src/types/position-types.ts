@@ -48,6 +48,15 @@ export interface PositionSummary {
     closureReason?: string | null;
 }
 
+export interface BatchPositionsSummary {
+    batchId: string;
+    positionId: string;
+    status: PositionStatus;
+    clousedByCandidateId?: string | null;
+    closedByCandidateFullName?: string | null;
+    closureReason?: string | null;
+}
+
 export interface Position {
     batchId: string;
     positionId: string;
@@ -68,6 +77,7 @@ export interface Position {
 export interface ReviewerDetailDTO {
     reviewerUserId: string;
     reviewerUserName: string;
+    reviewerUserEmail: string;
 }
 
 export interface SkillDetailDTO {
@@ -82,8 +92,8 @@ export interface SkillOverRideDetailDTO {
     skillId: string;
     comments?: string | null;
     minExperienceYears: number;
-    type?: SkillType;
-    actionType?: SkillActionType;
+    type: SkillType;
+    actionType: SkillActionType;
 }
 
 export interface PositionStatusMoveHistoryDetailDTO {
@@ -139,8 +149,6 @@ export type CreatePositionBatchCommandCorrected = Omit<
 export type EditPositionBatchCommandCorrected = Omit<
     components['schemas']['EditPositionBatchCommand'],
     | 'positionBatchId'
-    | 'numberOfPositions'
-    | 'designationId'
     | 'minCTC'
     | 'maxCTC'
     | 'jobLocation'
@@ -148,8 +156,6 @@ export type EditPositionBatchCommandCorrected = Omit<
     | 'skillOverRides'
 > & {
     positionBatchId: string;
-    numberOfPositions: number;
-    designationId: string;
     minCTC: number;
     maxCTC: number;
     jobLocation: string;

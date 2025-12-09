@@ -8,8 +8,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAppStore } from '@/store';
 import { useShallow } from 'zustand/react/shallow';
-import { EditDialogBody } from './designation-dialog-edit-body';
-import { ViewDialogBody } from './designation-dialog-view-body';
+import { EditDialogBody } from './internal/designation-dialog-edit-body';
+import { ViewDialogBody } from './internal/designation-dialog-view-body';
 
 export function DesignationDialog() {
     const { designationDialog, designationDialogTab, setDesignationDialog } =

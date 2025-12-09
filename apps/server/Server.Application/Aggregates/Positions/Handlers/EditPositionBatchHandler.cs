@@ -65,7 +65,6 @@ namespace Server.Application.Aggregates.Positions.Handlers
             // update root entity
             positionBatch.Update(
                 updatedBy: Guid.Parse(userIdString),
-                designationId: command.DesignationId,
                 description: command.Description,
                 jobLocation: command.JobLocation,
                 minCTC: command.MinCTC,

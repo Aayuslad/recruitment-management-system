@@ -109,6 +109,7 @@ namespace Server.API.Controllers
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentUser()
         {
+            //TODO: for all endpoints: move userId extraction here in controller (pass it thurgh command/query), remove all HttpAccessor from application layer.
             var authIdString = _httpContextAccessor.HttpContext?.User.FindFirst("authId")?.Value;
 
             if (string.IsNullOrEmpty(authIdString) || !Guid.TryParse(authIdString, out Guid authId))
@@ -125,6 +126,24 @@ namespace Server.API.Controllers
         {
             command.UserId = id;
             var result = await _mediator.Send(command, cancellationToken);
+            return result.ToActionResult(this);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUsers(CancellationToken cancellationToken)
+        {
+            var query = new GetUsersQuery();
+            var result = await _mediator.Send(query, cancellationToken);
+            return result.ToActionResult(this);
+        }
+
+        [HttpGet("summary")]
+        [Authorize]
+        public async Task<IActionResult> GetUsersSummary(CancellationToken cancellationToken)
+        {
+            var query = new GetUsersSummaryQuery();
+            var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }
     }

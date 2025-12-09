@@ -94,5 +94,12 @@ namespace Server.API.Controllers
             var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }
+        [HttpGet("batch-positions/{id:Guid}")]
+        public async Task<IActionResult> GetBatchPositions(Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetBatchPositionsQuery(id);
+            var result = await _mediator.Send(query, cancellationToken);
+            return result.ToActionResult(this);
+        }
     }
 }

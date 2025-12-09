@@ -55,7 +55,7 @@ export function CreateDocTypeDialog() {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="secondary" className="border">
-                    Create Document Type
+                    + Create Document Type
                 </Button>
             </DialogTrigger>
 

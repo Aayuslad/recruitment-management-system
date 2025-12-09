@@ -63,7 +63,7 @@ export function CreateDesignationDialog() {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="secondary" className="border">
-                    Create Designation
+                    + Create Designation
                 </Button>
             </DialogTrigger>
 

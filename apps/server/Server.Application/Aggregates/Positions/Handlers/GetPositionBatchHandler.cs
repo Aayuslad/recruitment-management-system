@@ -91,6 +91,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
                     {
                         ReviewerUserId = reviewer.ReviewerId,
                         ReviewerUserName = reviewer.ReviewerUser.Auth.UserName,
+                        ReviewerUserEmail = reviewer.ReviewerUser.Auth.Email.ToString(),
                     };
                 }).ToList(),
                 Skills = skills,

@@ -21,6 +21,36 @@ export interface User {
     }[];
 }
 
+export interface UsersDetail {
+    userId: string;
+    authId: string;
+    userName: string;
+    email: string;
+    firstName: string;
+    middleName?: string | null;
+    lastName: string;
+    status: UserStatus;
+    contactNumber: string;
+    isContactNumberVerified: boolean;
+    gender: Gender;
+    dob: string;
+    roles: {
+        id: string;
+        name: string;
+    }[];
+}
+
+export interface UsersSummary {
+    userId: string;
+    userName: string;
+    email: string;
+    firstName: string;
+    middleName?: string | null;
+    lastName: string;
+    contactNumber: string;
+    gender: Gender;
+}
+
 export type CreateUserCommandCorrected = Omit<
     components['schemas']['CreateUserProfileCommand'],
     'firstName' | 'lastName' | 'dob' | 'contactNumber'

@@ -1,4 +1,5 @@
 ﻿
+
 using Microsoft.EntityFrameworkCore;
 
 using Server.Application.Abstractions.Repositories;
@@ -41,9 +42,12 @@ namespace Server.Infrastructure.Repositories
 
         Task<Auth?> IUserRepository.GetAuthByEmailOrUserNameAsync(string emailOrUserName, CancellationToken cancellationToken)
         {
-            var emailVO = Email.Create(emailOrUserName)!;
+            var emailVO = Email.SafeCreate(emailOrUserName);
             return _context.Auths
-                .FirstOrDefaultAsync(a => a.UserName == emailOrUserName || a.Email == emailVO, cancellationToken);
+                .FirstOrDefaultAsync(
+                    a => a.UserName == emailOrUserName || a.Email == emailVO,
+                    cancellationToken
+                );
         }
 
         // user profile (user table)
@@ -83,6 +87,16 @@ namespace Server.Infrastructure.Repositories
         Task<bool> IUserRepository.ProfileExistsByContactNumberAsync(ContactNumber contactNumber, CancellationToken cancellationToken)
         {
             return _context.Users.AnyAsync(x => x.ContactNumber == contactNumber, cancellationToken);
+        }
+
+        public Task<List<User>> GetUsersAsync(CancellationToken cancellationToken)
+        {
+            return _context.Users
+                .AsNoTracking()
+                .Include(x => x.Auth)
+                .Include(x => x.Roles)
+                    .ThenInclude(x => x.Role)
+                .ToListAsync(cancellationToken);
         }
     }
 }

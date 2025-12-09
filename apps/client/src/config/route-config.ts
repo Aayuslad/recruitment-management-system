@@ -28,6 +28,12 @@ export const routes: RouteConfigType[] = [
     {
         breadcrumb: 'Positions',
         path: 'positions',
+        children: [
+            {
+                breadcrumb: 'Batch',
+                path: 'batch/:id',
+            },
+        ],
     },
     {
         breadcrumb: 'Reports & Analytics',

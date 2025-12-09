@@ -56,5 +56,14 @@ namespace Server.Infrastructure.Repositories
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }
+
+        public Task<List<Position>> GetAllByBatchIdAsync(Guid batchId, CancellationToken cancellationToken)
+        {
+            return _context.Positions
+                .Where(x => x.BatchId == batchId)
+                .Include(x => x.Candidate)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
     }
 }

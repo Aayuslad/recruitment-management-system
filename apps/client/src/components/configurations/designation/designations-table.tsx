@@ -33,6 +33,7 @@ import {
 import type { Designation } from '@/types/designation-types';
 import { useAppStore } from '@/store';
 import { useShallow } from 'zustand/react/shallow';
+import { Spinner } from '@/components/ui/spinner';
 
 export function DesignationsTable() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -137,8 +138,18 @@ export function DesignationsTable() {
         },
     });
 
-    if (isLoading) return <div>Loading Designations...</div>;
-    if (isError) return <div>Error Loading Designations</div>;
+    if (isLoading)
+        return (
+            <div className="w-full h-[50vh] flex justify-center items-center">
+                <Spinner className="size-8" />
+            </div>
+        );
+    if (isError)
+        return (
+            <div className="w-full h-[50vh] flex justify-center items-center">
+                Error Loading Designations
+            </div>
+        );
 
     return (
         <div className="w-[800px]">

@@ -72,7 +72,6 @@ namespace Server.Domain.Entities.Positions
         }
 
         public void Update(
-            Guid designationId,
             string? description,
             string jobLocation,
             float minCTC,
@@ -82,7 +81,6 @@ namespace Server.Domain.Entities.Positions
             Guid updatedBy
         )
         {
-            DesignationId = designationId;
             Description = description;
             JobLocation = jobLocation;
             MinCTC = minCTC;

@@ -65,7 +65,7 @@ export function CreateSkillDialog() {
                     className="grid gap-7"
                 >
                     <DialogHeader>
-                        <DialogTitle>Create Skill</DialogTitle>
+                        <DialogTitle>+ Create Skill</DialogTitle>
                         <DialogDescription>
                             Enter the skill details and click Create.
                         </DialogDescription>

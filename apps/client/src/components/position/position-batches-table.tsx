@@ -10,10 +10,10 @@ import {
     useReactTable,
     type VisibilityState,
 } from '@tanstack/react-table';
-import { ArrowUpDown, ChevronDown } from 'lucide-react';
+import { ChevronDown, Copy } from 'lucide-react';
 import * as React from 'react';
 
-import { useGetDocumentTypes } from '@/api/document-api';
+import { useGetPositionBatches } from '@/api/position-api';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -30,12 +30,13 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { useAppStore } from '@/store';
-import type { Document } from '@/types/document-types';
-import { useShallow } from 'zustand/react/shallow';
-import { Spinner } from '@/components/ui/spinner';
+import type { PositionBatchSummary } from '@/types/position-types';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { Spinner } from '../ui/spinner';
 
-export function DocTypesTable() {
+export function PositionBatchesTable() {
+    const navigate = useNavigate();
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
@@ -43,62 +44,101 @@ export function DocTypesTable() {
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
-    const { data, isLoading, isError } = useGetDocumentTypes();
-    const { openDocTypeEditDialog, openDocTypeDeleteDialog } = useAppStore(
-        useShallow((s) => ({
-            openDocTypeEditDialog: s.openDocTypeEditDialog,
-            openDocTypeDeleteDialog: s.openDocTypeDeleteDialog,
-        }))
-    );
+    const { data, isLoading, isError } = useGetPositionBatches();
 
-    const columns: ColumnDef<Document>[] = [
+    const columns: ColumnDef<PositionBatchSummary>[] = [
         {
-            accessorKey: 'name',
-            header: ({ column }) => (
-                <Button
-                    variant="ghost"
-                    onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === 'asc')
-                    }
-                >
-                    Document Type Name
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            ),
+            accessorKey: 'designationName',
+            header: () => <div className="w-[200px] ml-4">Designation</div>,
             cell: ({ row }) => (
-                <div className="font-medium pl-4 w-[300px]">
-                    {row.getValue('name')}
+                <div
+                    className="font-medium pl-4 hover:cursor-pointer hover:underline"
+                    onClick={() => navigate('/configuration/designations')}
+                >
+                    {row.original.designationName}
                 </div>
             ),
         },
         {
-            accessorKey: 'actions',
-            header: 'Actions',
-            cell: ({ row }) => {
-                return (
-                    <div className="flex gap-10 font-semibold">
-                        <button
-                            className="text-gray-400 hover:cursor-pointer"
-                            onClick={() => openDocTypeEditDialog(row.original)}
-                        >
-                            Edit
-                        </button>
-                        <button
-                            className="text-destructive hover:cursor-pointer"
-                            onClick={() =>
-                                openDocTypeDeleteDialog(row.original.id)
-                            }
-                        >
-                            Delete
-                        </button>
-                    </div>
-                );
-            },
+            id: 'Batch Id',
+            header: 'Batch Id',
+            cell: ({ row }) => (
+                <div className="font-medium w-[150px] relative group">
+                    <span className="text-sm font-mono">
+                        {row.original.batchId.slice(0, 6).toUpperCase()}...
+                    </span>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigator.clipboard.writeText(row.original.batchId);
+                            toast.success('Copied to clipboard');
+                        }}
+                        className="text-muted-foreground hover:text-foreground hover:cursor-pointer"
+                        title="Copy full ID"
+                    >
+                        <Copy size={16} />
+                    </button>
+                </div>
+            ),
+        },
+        {
+            id: 'location',
+            header: 'Location',
+            cell: ({ row }) => (
+                <div className="font-medium w-[180px]">
+                    {row.original.jobLocation}
+                </div>
+            ),
+        },
+        {
+            id: 'ctc-range',
+            header: 'CTC Range',
+            cell: ({ row }) => (
+                <div className="font-medium w-[100px]">
+                    {row.original.minCTC} - {row.original.maxCTC} LPA
+                </div>
+            ),
+        },
+        {
+            id: 'positions',
+            header: 'Positions',
+            cell: ({ row }) => (
+                <div className="font-medium w-[80px]">
+                    {row.original.positionsCount}
+                </div>
+            ),
+        },
+        {
+            id: 'closed-positions',
+            header: 'Closed',
+            cell: ({ row }) => (
+                <div className="font-medium w-[80px]">
+                    {row.original.closedPositionsCount}
+                </div>
+            ),
+        },
+        {
+            id: 'on-hold-positions',
+            header: 'On Hold',
+            cell: ({ row }) => (
+                <div className="font-medium w-[80px]">
+                    {row.original.positionsOnHoldCount}
+                </div>
+            ),
+        },
+        {
+            id: 'created-by',
+            header: 'Created By',
+            cell: ({ row }) => (
+                <div className="font-medium w-[150px]">
+                    {row.original.createdByUserName || '—'}
+                </div>
+            ),
         },
     ];
 
     const table = useReactTable({
-        data: data as Document[],
+        data: data as PositionBatchSummary[],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -116,38 +156,33 @@ export function DocTypesTable() {
         },
     });
 
-    if (isLoading) {
+    if (isLoading)
         return (
-            <div className="w-full h-[50vh] flex justify-center items-center">
+            <div className="h-[50vh] flex justify-center items-center">
                 <Spinner className="size-8" />
             </div>
         );
-    }
-
-    if (isError) {
-        return (
-            <div className="w-full h-[50vh] flex justify-center items-center">
-                Error Loading Document Types
-            </div>
-        );
-    }
+    if (isError) return <div>Error Loading Position Batches</div>;
 
     return (
-        <div className="w-[500px]">
+        <div className="w-full">
+            <h2 className="font-semibold text-xl">Position Batches:</h2>
+
             {/* header */}
             <div className="flex items-center py-4">
                 <Input
-                    placeholder="Filter Document Types..."
+                    placeholder="Filter position Batches with designation..."
                     value={
-                        (table.getColumn('name')?.getFilterValue() as string) ??
-                        ''
+                        (table
+                            .getColumn('designationName')
+                            ?.getFilterValue() as string) ?? ''
                     }
                     onChange={(event) =>
                         table
-                            .getColumn('name')
+                            .getColumn('designationName')
                             ?.setFilterValue(event.target.value)
                     }
-                    className="w-[250px]"
+                    className="max-w-sm"
                 />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -198,10 +233,15 @@ export function DocTypesTable() {
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {table?.getRowModel().rows?.length ? (
+                        {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
+                                    onClick={() =>
+                                        navigate(
+                                            `/positions/batch/${row.original.batchId}`
+                                        )
+                                    }
                                     data-state={
                                         row.getIsSelected() && 'selected'
                                     }
@@ -222,7 +262,7 @@ export function DocTypesTable() {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No Document Types Found.
+                                    No Position Batches Found.
                                 </TableCell>
                             </TableRow>
                         )}

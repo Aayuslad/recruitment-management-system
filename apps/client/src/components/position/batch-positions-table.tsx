@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import {
     type ColumnDef,
     type ColumnFiltersState,
@@ -10,18 +11,19 @@ import {
     useReactTable,
     type VisibilityState,
 } from '@tanstack/react-table';
-import { ArrowUpDown, ChevronDown } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import * as React from 'react';
 
-import { useGetDocumentTypes } from '@/api/document-api';
+import { useGetBatchPositions } from '@/api/position-api';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
@@ -30,12 +32,14 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { useAppStore } from '@/store';
-import type { Document } from '@/types/document-types';
-import { useShallow } from 'zustand/react/shallow';
-import { Spinner } from '@/components/ui/spinner';
+import type { BatchPositionsSummary } from '@/types/position-types';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { Spinner } from '../ui/spinner';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
-export function DocTypesTable() {
+export function BatchPositionsTable({ batchId }: { batchId: string }) {
+    const navigate = useNavigate();
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
@@ -43,62 +47,99 @@ export function DocTypesTable() {
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
-    const { data, isLoading, isError } = useGetDocumentTypes();
-    const { openDocTypeEditDialog, openDocTypeDeleteDialog } = useAppStore(
-        useShallow((s) => ({
-            openDocTypeEditDialog: s.openDocTypeEditDialog,
-            openDocTypeDeleteDialog: s.openDocTypeDeleteDialog,
-        }))
-    );
+    const { data, isLoading, isError } = useGetBatchPositions(batchId);
 
-    const columns: ColumnDef<Document>[] = [
+    const columns: ColumnDef<BatchPositionsSummary>[] = [
         {
-            accessorKey: 'name',
-            header: ({ column }) => (
-                <Button
-                    variant="ghost"
-                    onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === 'asc')
-                    }
-                >
-                    Document Type Name
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            ),
+            id: 'position-id',
+            header: 'Position Id',
             cell: ({ row }) => (
-                <div className="font-medium pl-4 w-[300px]">
-                    {row.getValue('name')}
+                <div className="font-medium w-[70px]  relative group">
+                    <Tooltip>
+                        <TooltipContent>Click to Copy</TooltipContent>
+                        <TooltipTrigger className="cursor-pointer">
+                            <div
+                                className="font-medium"
+                                onClick={() => {
+                                    toast.success('Copied to clipboard');
+                                    navigator.clipboard.writeText(
+                                        row.original.positionId
+                                    );
+                                }}
+                            >
+                                {row.original.positionId.slice(0, 6)}...
+                            </div>
+                        </TooltipTrigger>
+                    </Tooltip>
                 </div>
             ),
         },
         {
-            accessorKey: 'actions',
-            header: 'Actions',
-            cell: ({ row }) => {
+            id: 'status',
+            header: () => {
+                return <div className="w-[80px] -mr-10">Status</div>;
+            },
+            cell: ({ row }) => (
+                <div className="font-medium w-[70px]">
+                    {row.original.status}
+                </div>
+            ),
+        },
+        {
+            id: 'candidate-or-closure-reason',
+            header: () => {
                 return (
-                    <div className="flex gap-10 font-semibold">
-                        <button
-                            className="text-gray-400 hover:cursor-pointer"
-                            onClick={() => openDocTypeEditDialog(row.original)}
-                        >
-                            Edit
-                        </button>
-                        <button
-                            className="text-destructive hover:cursor-pointer"
-                            onClick={() =>
-                                openDocTypeDeleteDialog(row.original.id)
-                            }
-                        >
-                            Delete
-                        </button>
+                    <div className="w-[170px] -mr-5">
+                        Candidate Name / Closure Reason
                     </div>
+                );
+            },
+            cell: ({ row }) => (
+                <div className="font-medium">
+                    {row.original.closedByCandidateFullName !== null &&
+                    row.original.closedByCandidateFullName !== undefined ? (
+                        <span className="text-muted-foreground">
+                            {row.original.closedByCandidateFullName}
+                        </span>
+                    ) : row.original.closureReason !== null &&
+                      row.original.closureReason !== undefined ? (
+                        <span className="text-muted-foreground">
+                            {row.original.closureReason}
+                        </span>
+                    ) : (
+                        <span>-</span>
+                    )}
+                </div>
+            ),
+        },
+        {
+            id: 'actions',
+            enableHiding: false,
+            cell: () => {
+                return (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild className="-mr-4 ">
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        // TODO: complete these actions
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>Put On Hold</DropdownMenuItem>
+                            <DropdownMenuItem>Delete</DropdownMenuItem>
+                            <DropdownMenuItem>Close</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 );
             },
         },
     ];
 
     const table = useReactTable({
-        data: data as Document[],
+        data: data as BatchPositionsSummary[],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -116,65 +157,21 @@ export function DocTypesTable() {
         },
     });
 
-    if (isLoading) {
+    if (isLoading)
         return (
-            <div className="w-full h-[50vh] flex justify-center items-center">
+            <div className="w-full h-[30vh] flex justify-center items-center">
                 <Spinner className="size-8" />
             </div>
         );
-    }
-
-    if (isError) {
+    if (isError)
         return (
-            <div className="w-full h-[50vh] flex justify-center items-center">
-                Error Loading Document Types
+            <div className="w-full h-[30vh] flex justify-center items-center">
+                Error Loading Position Batches
             </div>
         );
-    }
 
     return (
-        <div className="w-[500px]">
-            {/* header */}
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder="Filter Document Types..."
-                    value={
-                        (table.getColumn('name')?.getFilterValue() as string) ??
-                        ''
-                    }
-                    onChange={(event) =>
-                        table
-                            .getColumn('name')
-                            ?.setFilterValue(event.target.value)
-                    }
-                    className="w-[250px]"
-                />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => (
-                                <DropdownMenuCheckboxItem
-                                    key={column.id}
-                                    className="capitalize"
-                                    checked={column.getIsVisible()}
-                                    onCheckedChange={(value) =>
-                                        column.toggleVisibility(!!value)
-                                    }
-                                >
-                                    {column.id}
-                                </DropdownMenuCheckboxItem>
-                            ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
-
+        <div className="w-[540px] mx-auto">
             {/* table */}
             <div className="overflow-hidden rounded-md border">
                 <Table>
@@ -198,10 +195,15 @@ export function DocTypesTable() {
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {table?.getRowModel().rows?.length ? (
+                        {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
+                                    onClick={() =>
+                                        navigate(
+                                            `/positions/batch/${row.original.batchId}`
+                                        )
+                                    }
                                     data-state={
                                         row.getIsSelected() && 'selected'
                                     }
@@ -222,7 +224,7 @@ export function DocTypesTable() {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No Document Types Found.
+                                    No Position Batches Found.
                                 </TableCell>
                             </TableRow>
                         )}

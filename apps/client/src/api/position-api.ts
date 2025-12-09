@@ -7,6 +7,7 @@ import type {
     EditPositionBatchCommandCorrected,
     ClosePositionCommandCorrected,
     SetPositionOnHoldCommandCorrected,
+    BatchPositionsSummary,
 } from '@/types/position-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
@@ -177,6 +178,18 @@ export function useGetPositions() {
         queryKey: ['positions'],
         queryFn: async (): Promise<PositionSummary[]> => {
             const { data } = await axios.get('/position');
+            return data;
+        },
+    });
+}
+
+export function useGetBatchPositions(batchId: string) {
+    return useQuery({
+        queryKey: ['batch-positions', batchId],
+        queryFn: async (): Promise<BatchPositionsSummary[]> => {
+            const { data } = await axios.get(
+                `/position/batch-positions/${batchId}`
+            );
             return data;
         },
     });

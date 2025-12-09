@@ -9,7 +9,6 @@ namespace Server.Application.Aggregates.Positions.Commands
     {
         public Guid PositionBatchId { get; set; }
         public string? Description { get; set; }
-        public Guid DesignationId { get; set; }
         public string JobLocation { get; set; } = null!;
         public float MinCTC { get; set; }
         public float MaxCTC { get; set; }
