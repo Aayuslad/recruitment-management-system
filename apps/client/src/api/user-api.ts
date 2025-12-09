@@ -4,6 +4,8 @@ import type {
     LoginUserCommandCorrected,
     RegisterUserCommandCorrected,
     User,
+    UsersDetail,
+    UsersSummary,
 } from '@/types/user-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
@@ -106,8 +108,7 @@ export function useEditUserRoles() {
         },
         onSuccess: () => {
             toast.success('User Roles Updated');
-            //TODO add invalidation here, when you areate get all users route for admin
-            queryClient.invalidateQueries({ queryKey: [''] });
+            queryClient.invalidateQueries({ queryKey: ['users'] });
         },
         onError: (error: AxiosError<{ error: string }>) => {
             toast.error(
@@ -132,6 +133,26 @@ export function useGetUser() {
             } catch {
                 navigate('/login');
             }
+        },
+    });
+}
+
+export function useGetUsers() {
+    return useQuery({
+        queryKey: ['users'],
+        queryFn: async (): Promise<UsersDetail[]> => {
+            const { data } = await axios.get('/user');
+            return data;
+        },
+    });
+}
+
+export function useGetUsersSummary() {
+    return useQuery({
+        queryKey: ['users-summary'],
+        queryFn: async (): Promise<UsersSummary[]> => {
+            const { data } = await axios.get('/user/summary');
+            return data;
         },
     });
 }

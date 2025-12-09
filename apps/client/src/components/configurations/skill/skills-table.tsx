@@ -33,6 +33,7 @@ import {
 import { useAppStore } from '@/store';
 import type { Skill } from '@/types/skill-types';
 import { useShallow } from 'zustand/react/shallow';
+import { Spinner } from '@/components/ui/spinner';
 
 export function SkillsTable() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -116,11 +117,19 @@ export function SkillsTable() {
     });
 
     if (isLoading) {
-        return <div>Loading Skills</div>;
+        return (
+            <div className="w-full h-[50vh] flex justify-center items-center">
+                <Spinner className="size-8" />
+            </div>
+        );
     }
 
     if (isError) {
-        return <div>Error Loading Skills</div>;
+        return (
+            <div className="w-full h-[50vh] flex justify-center items-center">
+                Error Loading Skills
+            </div>
+        );
     }
 
     return (

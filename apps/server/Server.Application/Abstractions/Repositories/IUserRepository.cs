@@ -19,5 +19,8 @@ namespace Server.Application.Abstractions.Repositories
         Task<User?> GetProfileByAuthIdAsync(Guid authId, CancellationToken cancellationToken);
         Task<bool> ProfileExistsByAuthIdAsync(Guid authId, CancellationToken cancellationToken);
         Task<bool> ProfileExistsByContactNumberAsync(ContactNumber contactNumber, CancellationToken cancellationToken);
+
+        // both (user/auth) combined
+        Task<List<User>> GetUsersAsync(CancellationToken cancellationToken);
     }
 }

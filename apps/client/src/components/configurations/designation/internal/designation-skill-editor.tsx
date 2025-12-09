@@ -1,5 +1,5 @@
 import { useGetSkills } from '@/api/skill-api';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
     Command,
     CommandEmpty,
@@ -169,14 +169,14 @@ export function DesignationSkillEditor({
                 </div>
 
                 <PopoverTrigger asChild>
-                    <Badge
-                        variant="outline"
+                    <Button
+                        variant="ghost"
                         role="combobox"
                         aria-expanded={open}
-                        className="justify-between hover:cursor-pointer text-sm text-semibold px-3 pr-4 py-1 pb-1.5 mx-auto mt-3"
+                        className="justify-between hover:cursor-pointer mx-auto mt-3"
                     >
                         + Add Skill
-                    </Badge>
+                    </Button>
                 </PopoverTrigger>
 
                 <PopoverContent className="w-[200px] p-0">

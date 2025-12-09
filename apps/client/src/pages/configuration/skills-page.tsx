@@ -1,4 +1,4 @@
-import { CreateSkillDialog } from '@/components/configurations/skill/creare-skill-dialog';
+import { CreateSkillDialog } from '@/components/configurations/skill/create-skill-dialog';
 import { DeleteSkillDialog } from '@/components/configurations/skill/delete-skill-dialog';
 import { EditSkillDialog } from '@/components/configurations/skill/edit-skill-dialog';
 import { SkillsTable } from '@/components/configurations/skill/skills-table';

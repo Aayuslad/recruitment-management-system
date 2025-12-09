@@ -31,6 +31,20 @@ namespace Server.Domain.ValueObjects
             return new Email(email);
         }
 
+        /// <summary>
+        /// Should not be used in general !
+        /// </summary>
+        public static Email? SafeCreate(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return null;
+
+            if (!_emailRegex.IsMatch(email))
+                return null;
+
+            return new Email(email);
+        }
+
         protected override IEnumerable<object?> GetEqualityComponents()
         {
             yield return Address.ToLowerInvariant();

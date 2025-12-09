@@ -1491,6 +1491,29 @@
         }
       }
     },
+    "/api/position/batch-positions/{id}": {
+      "get": {
+        "tags": [
+          "Position"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/role": {
       "post": {
         "tags": [
@@ -1870,6 +1893,30 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/user/summary": {
+      "get": {
+        "tags": [
+          "User"
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -2556,10 +2603,6 @@
           "description": {
             "type": "string",
             "nullable": true
-          },
-          "designationId": {
-            "type": "string",
-            "format": "uuid"
           },
           "jobLocation": {
             "type": "string",

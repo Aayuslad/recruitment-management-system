@@ -23,6 +23,7 @@ import LandingPage from './pages/landing-page';
 import NotFoundPage from './pages/not-found-page';
 import { Index as PositionsIndex } from './pages/position';
 import { Index as ReportsAndAnalyticsIndex } from './pages/ReportsAndAnalytics';
+import { PositionBatchDetailsPage } from './pages/position/position-batch-details-page';
 
 function App() {
     return (
@@ -41,7 +42,14 @@ function App() {
                         element={<JobApplicationsIndex />}
                     />
                     <Route path="interviews" element={<InterviewsIndex />} />
-                    <Route path="positions" element={<PositionsIndex />} />
+
+                    <Route path="positions">
+                        <Route index element={<PositionsIndex />} />
+                        <Route
+                            path="batch/:id"
+                            element={<PositionBatchDetailsPage />}
+                        />
+                    </Route>
                     <Route path="events" element={<EventsIndex />} />
                     <Route
                         path="reports-and-analytics"

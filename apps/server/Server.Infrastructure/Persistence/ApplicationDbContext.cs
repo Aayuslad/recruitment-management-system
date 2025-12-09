@@ -58,56 +58,97 @@ namespace Server.Infrastructure.Persistence
 
             // Global soft-delete filters for all auditable 
 
-            // user Aggregate 
-            // #TODO: update/fix the filters here, once you resolve User Aggregate 
-            modelBuilder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);
-            modelBuilder.Entity<Auth>().HasQueryFilter(a => !a.IsDeleted);
-            modelBuilder.Entity<UserRole>().HasQueryFilter(ur => !ur.User.IsDeleted);
+            // user Aggregate
+            // TODO: update/fix the filters here, once you resolve User Aggregate 
+            modelBuilder.Entity<User>()
+                .HasQueryFilter(u => !u.IsDeleted);
+
+            modelBuilder.Entity<Auth>()
+                .HasQueryFilter(a => !a.IsDeleted);
+
+            modelBuilder.Entity<UserRole>()
+                .HasQueryFilter(ur => !ur.User.IsDeleted);
 
             // skill Aggregate
-            modelBuilder.Entity<Skill>().HasQueryFilter(s => !s.IsDeleted);
+            modelBuilder.Entity<Skill>()
+                .HasQueryFilter(s => !s.IsDeleted);
 
             // designation Aggregate
-            modelBuilder.Entity<Designation>().HasQueryFilter(d => !d.IsDeleted);
-            modelBuilder.Entity<DesignationSkill>().HasQueryFilter(x => !x.Designation.IsDeleted);
+            modelBuilder.Entity<Designation>()
+                .HasQueryFilter(d => !d.IsDeleted);
 
-            modelBuilder.Entity<DesignationSkill>().HasQueryFilter(x => !x.Skill.IsDeleted);
+            modelBuilder.Entity<DesignationSkill>()
+                .HasQueryFilter(x =>
+                    !x.Designation.IsDeleted &&
+                    !x.Skill.IsDeleted);
 
             // PositionBatch Aggregate
-            modelBuilder.Entity<PositionBatch>().HasQueryFilter(a => !a.IsDeleted);
+            modelBuilder.Entity<PositionBatch>()
+                .HasQueryFilter(x =>
+                    !x.IsDeleted &&
+                    !x.Designation.IsDeleted);
 
-            modelBuilder.Entity<PositionBatchReviewer>().HasQueryFilter(x => !x.PositionBatch.IsDeleted);
-            modelBuilder.Entity<Position>().HasQueryFilter(x => !x.PositionBatch.IsDeleted);
-            //modelBuilder.Entity<SkillOverRide>().HasQueryFilter(x => !x.PositionBatch.IsDeleted);
-            modelBuilder.Entity<PositionStatusMoveHistory>().HasQueryFilter(x => !x.Position.PositionBatch.IsDeleted);
+            modelBuilder.Entity<PositionBatchReviewer>()
+                .HasQueryFilter(x =>
+                    !x.PositionBatch.IsDeleted);
 
-            modelBuilder.Entity<SkillOverRide>().HasQueryFilter(x => !x.Skill.IsDeleted);
-            modelBuilder.Entity<PositionBatch>().HasQueryFilter(x => !x.Designation.IsDeleted);
+            modelBuilder.Entity<Position>()
+                .HasQueryFilter(x => !x.PositionBatch.IsDeleted);
+
+            modelBuilder.Entity<PositionStatusMoveHistory>()
+                .HasQueryFilter(x =>
+                    !x.Position.PositionBatch.IsDeleted);
+
+            modelBuilder.Entity<SkillOverRide>()
+                .HasQueryFilter(x => !x.Skill.IsDeleted);
 
             // candidate Aggregate
-            // TODO: add dependent entitues for safety
-            modelBuilder.Entity<Candidate>().HasQueryFilter(d => !d.IsDeleted);
-            modelBuilder.Entity<CandidateDocument>().HasQueryFilter(d => !d.Candidate.IsDeleted);
-            modelBuilder.Entity<CandidateSkill>().HasQueryFilter(x => x.Candidate.IsDeleted);
+            // TODO: add dependent entities for safety
+            modelBuilder.Entity<Candidate>()
+                .HasQueryFilter(x => !x.IsDeleted);
+
+            modelBuilder.Entity<CandidateDocument>()
+                .HasQueryFilter(x => !x.Candidate.IsDeleted);
+
+            modelBuilder.Entity<CandidateSkill>()
+                .HasQueryFilter(x => !x.Candidate.IsDeleted);
 
             // job opening aggregate
             // TODO: complete filters here...
-            modelBuilder.Entity<JobOpening>().HasQueryFilter(x => !x.IsDeleted);
-            modelBuilder.Entity<JobOpeningInterviewer>().HasQueryFilter(x => !x.JobOpening.IsDeleted);
-            modelBuilder.Entity<InterviewRoundTemplate>().HasQueryFilter(x => !x.JobOpening.IsDeleted);
-            modelBuilder.Entity<InterviewPanelRequirement>().HasQueryFilter(x => !x.InterviewRoundTemplate.JobOpening.IsDeleted);
+            modelBuilder.Entity<JobOpening>()
+                .HasQueryFilter(x => !x.IsDeleted);
+
+            modelBuilder.Entity<JobOpeningInterviewer>()
+                .HasQueryFilter(x => !x.JobOpening.IsDeleted);
+
+            modelBuilder.Entity<InterviewRoundTemplate>()
+                .HasQueryFilter(x => !x.JobOpening.IsDeleted);
+
+            modelBuilder.Entity<InterviewPanelRequirement>()
+                .HasQueryFilter(x => !x.InterviewRoundTemplate.JobOpening.IsDeleted);
 
             // job application
-            modelBuilder.Entity<JobApplication>().HasQueryFilter(x => !x.IsDeleted);
-            modelBuilder.Entity<JobApplicationStatusMoveHistory>().HasQueryFilter(x => !x.JobApplication.IsDeleted);
-            modelBuilder.Entity<Interview>().HasQueryFilter(x => !x.JobApplication.IsDeleted);
+            modelBuilder.Entity<JobApplication>()
+                .HasQueryFilter(x => !x.IsDeleted);
+
+            modelBuilder.Entity<JobApplicationStatusMoveHistory>()
+                .HasQueryFilter(x => !x.JobApplication.IsDeleted);
+
+            modelBuilder.Entity<Interview>()
+                .HasQueryFilter(x => !x.JobApplication.IsDeleted);
 
             // event
-            modelBuilder.Entity<Event>().HasQueryFilter(x => !x.IsDeleted);
-            modelBuilder.Entity<EventJobOpening>().HasQueryFilter(x => !x.Event.IsDeleted);
+            modelBuilder.Entity<Event>()
+                .HasQueryFilter(x => !x.IsDeleted);
+
+            modelBuilder.Entity<EventJobOpening>()
+                .HasQueryFilter(x =>
+                    !x.Event.IsDeleted &&
+                    !x.JobOpening.IsDeleted);
 
             // document types
-            modelBuilder.Entity<DocumentType>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<DocumentType>()
+                .HasQueryFilter(x => !x.IsDeleted);
 
             base.OnModelCreating(modelBuilder);
         }
