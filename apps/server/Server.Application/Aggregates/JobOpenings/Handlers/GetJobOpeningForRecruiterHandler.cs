@@ -121,6 +121,7 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                         Id = x.Id,
                         UserId = x.UserId,
                         UserName = x.InterviewerUser.Auth.UserName,
+                        Email = x.InterviewerUser.Auth.Email.ToString(),
                         Role = x.Role,
                     }
                 ).ToList();
@@ -139,7 +140,7 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                                 {
                                     Id = x.Id,
                                     Role = x.Role,
-                                    RequiredCount = x.RequiredCount,
+                                    RequirementCount = x.RequiredCount,
                                 }
                             ).ToList()
                     }
@@ -155,6 +156,11 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                 PositionBatchId = jo.PositionBatchId,
                 DesignationId = jo.PositionBatch.DesignationId,
                 DesignationName = jo.PositionBatch.Designation.Name,
+                JobLocation = jo.PositionBatch.JobLocation,
+                MinCTC = jo.PositionBatch.MinCTC,
+                MaxCTC = jo.PositionBatch.MaxCTC,
+                PositionsCount = jo.PositionBatch.Positions.Count,
+                ClosedPositionsCount = jo.PositionBatch.Positions.Count(x => x.Status == PositionStatus.Closed),
                 Skills = skills,
                 SkillOverRides = joSkillOverRides,
                 Interviewers = interviewers,

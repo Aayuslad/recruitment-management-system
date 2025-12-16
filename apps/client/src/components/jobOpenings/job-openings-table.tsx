@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import {
     type ColumnDef,
     type ColumnFiltersState,
@@ -11,19 +10,18 @@ import {
     useReactTable,
     type VisibilityState,
 } from '@tanstack/react-table';
-import { Copy, MoreHorizontal } from 'lucide-react';
+import { ChevronDown, Copy } from 'lucide-react';
 import * as React from 'react';
 
-import { useGetBatchPositions } from '@/api/position-api';
+import { useGetJobOpenings } from '@/api/job-opening-api';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
+    DropdownMenuCheckboxItem,
     DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,
@@ -32,12 +30,12 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import type { BatchPositionsSummary } from '@/types/position-types';
+import type { JobOpeningSummary } from '@/types/job-opening-types';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
 import { Spinner } from '../ui/spinner';
+import { toast } from 'sonner';
 
-export function BatchPositionsTable({ batchId }: { batchId: string }) {
+export function JobOpeningsTable() {
     const navigate = useNavigate();
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
@@ -46,22 +44,28 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
-    const { data, isLoading, isError } = useGetBatchPositions(batchId);
+    const { data, isLoading, isError } = useGetJobOpenings();
 
-    const columns: ColumnDef<BatchPositionsSummary>[] = [
+    const columns: ColumnDef<JobOpeningSummary>[] = [
         {
-            id: 'position-id',
-            header: () => {
-                return <div className="ml-2">Position Id</div>;
-            },
+            accessorKey: 'title',
+            header: () => <div className="w-[200px] ml-4">Title</div>,
             cell: ({ row }) => (
-                <div className="ml-2 from-sm font-mono w-[70px]">
-                    {row.original.positionId.slice(0, 6).toUpperCase()}...
+                <div className="font-medium pl-4">{row.original.title}</div>
+            ),
+        },
+        {
+            id: 'id',
+            header: 'Opening Id',
+            cell: ({ row }) => (
+                <div className="font-medium w-[100px] relative group">
+                    <span className="text-sm font-mono">
+                        {row.original.id.slice(0, 6).toUpperCase()}...
+                    </span>
                     <button
-                        onClick={() => {
-                            navigator.clipboard.writeText(
-                                row.original.positionId
-                            );
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigator.clipboard.writeText(row.original.id);
                             toast.success('Copied to clipboard');
                         }}
                         className="text-muted-foreground hover:text-foreground hover:cursor-pointer"
@@ -73,69 +77,56 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
             ),
         },
         {
-            id: 'status',
-            header: () => {
-                return <div className="w-min ">Status</div>;
-            },
+            accessorKey: 'designationName',
+            header: () => <div className="w-[150px] ml-4">Designation</div>,
             cell: ({ row }) => (
-                <div className="font-medium w-min">{row.original.status}</div>
-            ),
-        },
-        {
-            id: 'candidate-or-closure-reason',
-            header: () => {
-                return (
-                    <div className="w-[170px] -mr-5">
-                        Candidate Name / Closure Reason
-                    </div>
-                );
-            },
-            cell: ({ row }) => (
-                <div className="font-medium">
-                    {row.original.closedByCandidateFullName !== null &&
-                    row.original.closedByCandidateFullName !== undefined ? (
-                        <span className="text-muted-foreground">
-                            {row.original.closedByCandidateFullName}
-                        </span>
-                    ) : row.original.closureReason !== null &&
-                      row.original.closureReason !== undefined ? (
-                        <span className="text-muted-foreground">
-                            {row.original.closureReason}
-                        </span>
-                    ) : (
-                        <span>–</span>
-                    )}
+                <div
+                    className="font-medium pl-4 hover:cursor-pointer hover:underline"
+                    onClick={() => navigate('/configuration/designations')}
+                >
+                    {row.original.designationName}
                 </div>
             ),
         },
         {
-            id: 'actions',
-            enableHiding: false,
-            cell: () => {
-                return (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild className="-mr-4 ">
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        {/* // TODO: complete these actions */}
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>Put On Hold</DropdownMenuItem>
-                            <DropdownMenuItem>Delete</DropdownMenuItem>
-                            <DropdownMenuItem>Close</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                );
-            },
+            id: 'type',
+            header: 'Opening Type',
+            cell: ({ row }) => (
+                <div className="font-medium w-[130px]">{row.original.type}</div>
+            ),
+        },
+        {
+            id: 'interview-rounds',
+            header: 'Interview Rounds',
+            cell: ({ row }) => (
+                <div className="font-medium w-[180px]">
+                    {`${row.original.interviewRounds.map((r) => `#${r.roundNumber} ${r.type}`).join(', ')}` ||
+                        '—'}
+                </div>
+            ),
+        },
+        {
+            id: 'location',
+            header: 'Location',
+            cell: ({ row }) => (
+                <div className="font-medium w-[150px]">
+                    {row.original.jobLocation}
+                </div>
+            ),
+        },
+        {
+            id: 'created-by',
+            header: 'Created By',
+            cell: ({ row }) => (
+                <div className="font-medium w-[130px]">
+                    {row.original.createdByUserName || '—'}
+                </div>
+            ),
         },
     ];
 
     const table = useReactTable({
-        data: data as BatchPositionsSummary[],
+        data: data as JobOpeningSummary[],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -155,19 +146,58 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
 
     if (isLoading)
         return (
-            <div className="w-full h-[30vh] flex justify-center items-center">
+            <div className="h-[50vh] flex justify-center items-center">
                 <Spinner className="size-8" />
             </div>
         );
-    if (isError)
-        return (
-            <div className="w-full h-[30vh] flex justify-center items-center">
-                Error Loading Position Batches
-            </div>
-        );
+    if (isError) return <div>Error Loading Job Openings</div>;
 
     return (
-        <div className="w-[540px] mx-auto">
+        <div className="w-full">
+            <h2 className="font-semibold text-xl">Job Openings:</h2>
+
+            {/* header */}
+            <div className="flex items-center py-4">
+                <Input
+                    placeholder="Filter job openings with title..."
+                    value={
+                        (table
+                            .getColumn('title')
+                            ?.getFilterValue() as string) ?? ''
+                    }
+                    onChange={(event) =>
+                        table
+                            .getColumn('title')
+                            ?.setFilterValue(event.target.value)
+                    }
+                    className="max-w-sm"
+                />
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="ml-auto">
+                            Columns <ChevronDown className="ml-2 h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        {table
+                            .getAllColumns()
+                            .filter((column) => column.getCanHide())
+                            .map((column) => (
+                                <DropdownMenuCheckboxItem
+                                    key={column.id}
+                                    className="capitalize"
+                                    checked={column.getIsVisible()}
+                                    onCheckedChange={(value) =>
+                                        column.toggleVisibility(!!value)
+                                    }
+                                >
+                                    {column.id}
+                                </DropdownMenuCheckboxItem>
+                            ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+
             {/* table */}
             <div className="overflow-hidden rounded-md border">
                 <Table>
@@ -197,7 +227,7 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
                                     key={row.id}
                                     onClick={() =>
                                         navigate(
-                                            `/positions/batch/${row.original.batchId}`
+                                            `/job-openings/opening/${row.original.id}`
                                         )
                                     }
                                     data-state={
@@ -220,7 +250,7 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No Position Batches Found.
+                                    No Job Openins Found.
                                 </TableCell>
                             </TableRow>
                         )}

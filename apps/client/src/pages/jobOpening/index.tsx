@@ -1,3 +1,29 @@
+import { CreateJobOpeningSheet } from '@/components/jobOpenings/create-job-opening-sheet';
+import { JobOpeningsTable } from '@/components/jobOpenings/job-openings-table';
+
 export function Index() {
-    return <div>Job Openings Page</div>;
+    return (
+        <div className=" h-full">
+            <div className="bg-muted dark:bg-slate-800/40 h-[100px] w-full flex items-center">
+                <div className="px-10 flex-1">
+                    <h1 className="text-2xl font-bold">Job Openings</h1>
+                    <p>
+                        Manage all active and upcoming job openings created from
+                        position batches.
+                    </p>
+                </div>
+                <div className="w-[230px] mb-4">
+                    <CreateJobOpeningSheet />
+                </div>
+            </div>
+
+            <div className="w-full flex justify-evenly pt-10">
+                <div className="w-full flex flex-col items-center">
+                    <div className="mr-12 w-fit">
+                        <JobOpeningsTable />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }

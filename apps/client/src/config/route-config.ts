@@ -10,8 +10,14 @@ export const routes: RouteConfigType[] = [
         path: 'dashboard',
     },
     {
-        breadcrumb: 'Job Applications',
-        path: 'job-applications',
+        breadcrumb: 'Job Openings',
+        path: 'job-openings',
+        children: [
+            {
+                breadcrumb: 'Opening',
+                path: 'opening/:id',
+            },
+        ],
     },
     {
         breadcrumb: 'Candidates',

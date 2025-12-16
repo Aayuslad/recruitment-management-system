@@ -23,8 +23,6 @@ export function Index() {
                         <PositionBatchesTable />
                     </div>
                 </div>
-
-                {/* // create edit sheets */}
             </div>
         </div>
     );

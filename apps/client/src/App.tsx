@@ -24,6 +24,7 @@ import NotFoundPage from './pages/not-found-page';
 import { Index as PositionsIndex } from './pages/position';
 import { Index as ReportsAndAnalyticsIndex } from './pages/ReportsAndAnalytics';
 import { PositionBatchDetailsPage } from './pages/position/position-batch-details-page';
+import { JobOpeningDetailPage } from './pages/jobOpening/job-opening-details-page';
 
 function App() {
     return (
@@ -35,7 +36,13 @@ function App() {
                 <Route path="/create-user" element={<CreateUserPage />} />
                 <Route path="/" element={<HomeLayout />}>
                     <Route index path="dashboard" element={<DashboardPage />} />
-                    <Route path="job-openings" element={<JobOpeningsIndex />} />
+                    <Route path="job-openings">
+                        <Route index element={<JobOpeningsIndex />} />
+                        <Route
+                            path="opening/:id"
+                            element={<JobOpeningDetailPage />}
+                        />
+                    </Route>
                     <Route path="candidates" element={<CandidatesIndex />} />
                     <Route
                         path="job-applications"

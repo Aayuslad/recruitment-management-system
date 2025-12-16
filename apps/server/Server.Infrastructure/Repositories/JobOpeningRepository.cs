@@ -39,6 +39,8 @@ namespace Server.Infrastructure.Repositories
                         .ThenInclude(x => x.DesignationSkills)
                             .ThenInclude(x => x.Skill)
                 .Include(x => x.PositionBatch)
+                    .ThenInclude(x => x.Positions)
+                .Include(x => x.PositionBatch)
                     .ThenInclude(x => x.SkillOverRides)
                         .ThenInclude(x => x.Skill)
                 .Include(x => x.InterviewRounds)
@@ -55,6 +57,8 @@ namespace Server.Infrastructure.Repositories
                 .Include(x => x.PositionBatch)
                     .ThenInclude(x => x.Designation)
                 .Include(x => x.InterviewRounds)
+                .Include(x => x.CreatedByUser!)
+                    .ThenInclude(x => x.Auth)
                 .ToListAsync(cancellationToken);
         }
     }
