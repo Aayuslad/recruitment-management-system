@@ -11,7 +11,7 @@ import {
     useReactTable,
     type VisibilityState,
 } from '@tanstack/react-table';
-import { MoreHorizontal } from 'lucide-react';
+import { Copy, MoreHorizontal } from 'lucide-react';
 import * as React from 'react';
 
 import { useGetBatchPositions } from '@/api/position-api';
@@ -36,7 +36,6 @@ import type { BatchPositionsSummary } from '@/types/position-types';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Spinner } from '../ui/spinner';
-import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 export function BatchPositionsTable({ batchId }: { batchId: string }) {
     const navigate = useNavigate();
@@ -52,37 +51,34 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
     const columns: ColumnDef<BatchPositionsSummary>[] = [
         {
             id: 'position-id',
-            header: 'Position Id',
+            header: () => {
+                return <div className="ml-2">Position Id</div>;
+            },
             cell: ({ row }) => (
-                <div className="font-medium w-[70px]  relative group">
-                    <Tooltip>
-                        <TooltipContent>Click to Copy</TooltipContent>
-                        <TooltipTrigger className="cursor-pointer">
-                            <div
-                                className="font-medium"
-                                onClick={() => {
-                                    toast.success('Copied to clipboard');
-                                    navigator.clipboard.writeText(
-                                        row.original.positionId
-                                    );
-                                }}
-                            >
-                                {row.original.positionId.slice(0, 6)}...
-                            </div>
-                        </TooltipTrigger>
-                    </Tooltip>
+                <div className="ml-2 from-sm font-mono w-[70px]">
+                    {row.original.positionId.slice(0, 6).toUpperCase()}...
+                    <button
+                        onClick={() => {
+                            navigator.clipboard.writeText(
+                                row.original.positionId
+                            );
+                            toast.success('Copied to clipboard');
+                        }}
+                        className="text-muted-foreground hover:text-foreground hover:cursor-pointer"
+                        title="Copy full ID"
+                    >
+                        <Copy size={16} />
+                    </button>
                 </div>
             ),
         },
         {
             id: 'status',
             header: () => {
-                return <div className="w-[80px] -mr-10">Status</div>;
+                return <div className="w-min ">Status</div>;
             },
             cell: ({ row }) => (
-                <div className="font-medium w-[70px]">
-                    {row.original.status}
-                </div>
+                <div className="font-medium w-min">{row.original.status}</div>
             ),
         },
         {
@@ -107,7 +103,7 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
                             {row.original.closureReason}
                         </span>
                     ) : (
-                        <span>-</span>
+                        <span>–</span>
                     )}
                 </div>
             ),
@@ -124,7 +120,7 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
                                 <MoreHorizontal />
                             </Button>
                         </DropdownMenuTrigger>
-                        // TODO: complete these actions
+                        {/* // TODO: complete these actions */}
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />

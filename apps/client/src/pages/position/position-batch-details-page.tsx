@@ -12,7 +12,6 @@ import {
     ItemDescription,
     ItemGroup,
     ItemMedia,
-    ItemSeparator,
     ItemTitle,
 } from '@/components/ui/item';
 import { SIDEBAR_WIDTH } from '@/components/ui/sidebar';
@@ -74,7 +73,7 @@ export const PositionBatchDetailsPage = () => {
                     width: `calc(100vw - ${SIDEBAR_WIDTH} - ${sidebarState === 'opend' ? '80px' : '0px'})`,
                 }}
             >
-                <div className="flex-[55%] px-5 pt-8 space-y-7">
+                <div className="flex-[50%] px-5 pt-8 space-y-7">
                     <div className="space-y-4">
                         <h3 className="font-semibold text-lg">Batch Details</h3>
 
@@ -84,21 +83,23 @@ export const PositionBatchDetailsPage = () => {
                                 <span className="text-sm text-muted-foreground">
                                     ID
                                 </span>
-                                <span className="text-sm font-mono">
+                                <div className="text-sm font-mono">
                                     {data.batchId.slice(0, 6).toUpperCase()}...
-                                </span>
-                                <button
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(
-                                            data.batchId
-                                        );
-                                        toast.success('Copied to clipboard');
-                                    }}
-                                    className="text-muted-foreground hover:text-foreground hover:cursor-pointer"
-                                    title="Copy full ID"
-                                >
-                                    <Copy size={16} />
-                                </button>
+                                    <button
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(
+                                                data.batchId
+                                            );
+                                            toast.success(
+                                                'Copied to clipboard'
+                                            );
+                                        }}
+                                        className="text-muted-foreground hover:text-foreground hover:cursor-pointer"
+                                        title="Copy full ID"
+                                    >
+                                        <Copy size={16} />
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Designation */}
@@ -279,11 +280,11 @@ export const PositionBatchDetailsPage = () => {
                         <div className="ml-1">
                             <div className="flex w-full max-w-md flex-col gap-6">
                                 <ItemGroup>
-                                    {data?.reviewers.map((person, index) => (
+                                    {data?.reviewers.map((person) => (
                                         <React.Fragment
                                             key={person.reviewerUserId}
                                         >
-                                            <Item>
+                                            <Item className=" py-1.5 px-0">
                                                 <ItemMedia>
                                                     <Avatar>
                                                         {/* <AvatarImage
@@ -297,7 +298,7 @@ export const PositionBatchDetailsPage = () => {
                                                         </AvatarFallback>
                                                     </Avatar>
                                                 </ItemMedia>
-                                                <ItemContent className="gap-1">
+                                                <ItemContent className="gap-0">
                                                     <ItemTitle>
                                                         {
                                                             person.reviewerUserName
@@ -319,10 +320,6 @@ export const PositionBatchDetailsPage = () => {
                                                     </Button>
                                                 </ItemActions>
                                             </Item>
-                                            {index !==
-                                                data?.reviewers.length - 1 && (
-                                                <ItemSeparator />
-                                            )}
                                         </React.Fragment>
                                     ))}
                                 </ItemGroup>
@@ -330,7 +327,7 @@ export const PositionBatchDetailsPage = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex-[45%] px-5 pt-8">
+                <div className="flex-[50%] px-5 pt-8">
                     <h3 className="font-semibold text-lg">Positions:</h3>
                     <div className="w-full mt-4">
                         <BatchPositionsTable batchId={id as string} />

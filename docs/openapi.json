@@ -589,6 +589,16 @@
             "description": "OK"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Interview"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/api/interview/{id}": {
@@ -791,6 +801,48 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/interview/{id}/move-status": {
+      "put": {
+        "tags": [
+          "Interview"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MoveInterviewStatusCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MoveInterviewStatusCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/MoveInterviewStatusCommand"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1970,6 +2022,9 @@
             "type": "string",
             "nullable": true
           },
+          "gender": {
+            "$ref": "#/components/schemas/Gender"
+          },
           "contactNumber": {
             "type": "string",
             "nullable": true
@@ -1977,6 +2032,10 @@
           "dob": {
             "type": "string",
             "format": "date-time"
+          },
+          "collegeName": {
+            "type": "string",
+            "nullable": true
           },
           "resumeUrl": {
             "type": "string",
@@ -2361,6 +2420,9 @@
             "type": "string",
             "nullable": true
           },
+          "gender": {
+            "$ref": "#/components/schemas/Gender"
+          },
           "contactNumber": {
             "type": "string",
             "nullable": true
@@ -2368,6 +2430,10 @@
           "dob": {
             "type": "string",
             "format": "date-time"
+          },
+          "collegeName": {
+            "type": "string",
+            "nullable": true
           },
           "resumeUrl": {
             "type": "string",
@@ -2813,7 +2879,7 @@
       },
       "InterviewStatus": {
         "enum": [
-          "Unscheduled",
+          "NotScheduled",
           "Scheduled",
           "Completed"
         ],
@@ -2845,10 +2911,18 @@
         "enum": [
           "Applied",
           "Shortlisted",
-          "Interviwed",
+          "Interviewed",
           "Offered",
-          "Rejected",
-          "Hired"
+          "Hired",
+          "OnHold",
+          "Rejected"
+        ],
+        "type": "string"
+      },
+      "JobApplicationStatusActions": {
+        "enum": [
+          "UnHold",
+          "RollBack"
         ],
         "type": "string"
       },
@@ -2905,6 +2979,28 @@
         },
         "additionalProperties": false
       },
+      "MoveInterviewStatusCommand": {
+        "type": "object",
+        "properties": {
+          "interviewId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "moveTo": {
+            "$ref": "#/components/schemas/InterviewStatus"
+          },
+          "meetingLink": {
+            "type": "string",
+            "nullable": true
+          },
+          "scheduledAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "MoveJobApplicationStatusCommand": {
         "type": "object",
         "properties": {
@@ -2914,6 +3010,9 @@
           },
           "moveTo": {
             "$ref": "#/components/schemas/JobApplicationStatus"
+          },
+          "action": {
+            "$ref": "#/components/schemas/JobApplicationStatusActions"
           }
         },
         "additionalProperties": false

@@ -25,6 +25,11 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .HasForeignKey(x => x.CandidateId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.HasOne(x => x.VerifiedByUser)
+                .WithMany()
+                .HasForeignKey(x => x.VerifiedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(x => x.DocumentType)
                 .WithMany()
                 .HasForeignKey(x => x.DocumentTypeId)

@@ -75,99 +75,97 @@ export function DesignationSkillEditor({
 
     return (
         <div className="flex flex-col">
-            <Popover open={open} onOpenChange={setOpen}>
-                <div className="rounded-xl overflow-hidden">
-                    <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto border rounded-xl p-2 px-2.5">
-                        {fields?.map((skill) => (
-                            <div
-                                key={skill.skillId}
-                                className="flex items-center justify-between w-full gap-4 pr-1 -mr-2 py-1 pb-1.5"
-                            >
-                                <span className="text-left w-full max-w-[180px] text-wrap">
-                                    {
-                                        skills?.find(
-                                            (x) => x.skillId === skill.skillId
-                                        )?.skillName
+            <div className="rounded-xl overflow-hidden">
+                <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto border rounded-xl p-2 px-2.5">
+                    {fields?.map((skill) => (
+                        <div
+                            key={skill.skillId}
+                            className="flex items-center justify-between w-full gap-4 pr-1 -mr-2 py-1 pb-1.5"
+                        >
+                            <span className="text-left w-full max-w-[180px] text-wrap">
+                                {
+                                    skills?.find(
+                                        (x) => x.skillId === skill.skillId
+                                    )?.skillName
+                                }
+                            </span>
+
+                            <div className="ml-auto">
+                                <Select
+                                    value={skill.skillType}
+                                    onValueChange={(newValue: SkillType) =>
+                                        update(fields.indexOf(skill), {
+                                            ...skill,
+                                            skillType: newValue,
+                                        })
                                     }
-                                </span>
-
-                                <div className="ml-auto">
-                                    <Select
-                                        value={skill.skillType}
-                                        onValueChange={(newValue: SkillType) =>
-                                            update(fields.indexOf(skill), {
-                                                ...skill,
-                                                skillType: newValue,
-                                            })
-                                        }
-                                    >
-                                        <SelectTrigger
-                                            className="px-2 text-sm"
-                                            style={{ height: '28px' }}
-                                        >
-                                            <SelectValue placeholder="Select Type" />
-                                        </SelectTrigger>
-
-                                        <SelectContent className="text-sm">
-                                            <SelectItem value="Required">
-                                                Required
-                                            </SelectItem>
-                                            <SelectItem value="Preferred">
-                                                Preferred
-                                            </SelectItem>
-                                            <SelectItem value="NiceToHave">
-                                                Nice To Have
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                    <label
-                                        htmlFor="minExperienceYears"
-                                        className="text-sm text-muted-foreground"
-                                    >
-                                        Exp:
-                                    </label>
-                                    <Input
-                                        id="minExperienceYears"
-                                        type="text"
-                                        value={skill.minExperienceYears}
-                                        onChange={(e) => {
-                                            update(fields.indexOf(skill), {
-                                                ...skill,
-                                                minExperienceYears: Number(
-                                                    e.target.value
-                                                ),
-                                            });
-                                        }}
-                                        className="w-8 h-8 px-2 text-sm"
-                                        placeholder="0"
-                                        style={{ height: '28px' }}
-                                        min={0}
-                                        max={50}
-                                    />
-                                </div>
-
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        remove(fields.indexOf(skill))
-                                    }
-                                    className="ml-1 rounded-full hover:bg-muted hover:cursor-pointer"
                                 >
-                                    <X className="h-4 w-4" />
-                                </button>
-                            </div>
-                        ))}
-                        {fields?.length === 0 && (
-                            <div className="text-center text-muted-foreground py-10">
-                                No skill selected
-                            </div>
-                        )}
-                    </div>
-                </div>
+                                    <SelectTrigger
+                                        className="px-2 text-sm"
+                                        style={{ height: '28px' }}
+                                    >
+                                        <SelectValue placeholder="Select Type" />
+                                    </SelectTrigger>
 
+                                    <SelectContent className="text-sm">
+                                        <SelectItem value="Required">
+                                            Required
+                                        </SelectItem>
+                                        <SelectItem value="Preferred">
+                                            Preferred
+                                        </SelectItem>
+                                        <SelectItem value="NiceToHave">
+                                            Nice To Have
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                <label
+                                    htmlFor="minExperienceYears"
+                                    className="text-sm text-muted-foreground"
+                                >
+                                    Exp:
+                                </label>
+                                <Input
+                                    id="minExperienceYears"
+                                    type="text"
+                                    value={skill.minExperienceYears}
+                                    onChange={(e) => {
+                                        update(fields.indexOf(skill), {
+                                            ...skill,
+                                            minExperienceYears: Number(
+                                                e.target.value
+                                            ),
+                                        });
+                                    }}
+                                    className="w-8 h-8 px-2 text-sm"
+                                    placeholder="0"
+                                    style={{ height: '28px' }}
+                                    min={0}
+                                    max={50}
+                                />
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={() => remove(fields.indexOf(skill))}
+                                className="ml-1 rounded-full hover:bg-muted hover:cursor-pointer"
+                            >
+                                <X className="h-4 w-4" />
+                            </button>
+                        </div>
+                    ))}
+                    {fields?.length === 0 && (
+                        <div className="text-center text-muted-foreground py-10">
+                            No skill selected
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button
                         variant="ghost"

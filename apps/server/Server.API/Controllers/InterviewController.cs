@@ -61,6 +61,14 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
+        [HttpPut("{id:guid}/move-status")]
+        public async Task<IActionResult> MoveInterviewStatus(Guid id, [FromBody] MoveInterviewStatusCommand command, CancellationToken cancellationToken)
+        {
+            command.InterviewId = id;
+            var result = await _mediator.Send(command, cancellationToken);
+            return result.ToActionResult(this);
+        }
+
         [HttpDelete("{interviewId:guid}/feedback/{feedbackId:guid}")]
         public async Task<IActionResult> DeletInterviewStageFeedback(Guid interviewId, Guid feedbackId, CancellationToken cancellationToken)
         {
@@ -73,6 +81,14 @@ namespace Server.API.Controllers
         public async Task<IActionResult> GetInterview(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetInterviewQuery(id);
+            var result = await _mediator.Send(query, cancellationToken);
+            return result.ToActionResult(this);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Getinterviews(CancellationToken cancellationToken)
+        {
+            var query = new GetinterviewsQuery();
             var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }

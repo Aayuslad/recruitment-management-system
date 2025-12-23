@@ -12,7 +12,7 @@ namespace Server.Domain.Entities.JobApplications
            Guid? id,
            Guid jobApplicationId,
            JobApplicationStatus statusMovedTo,
-           Guid movedById,
+           Guid? movedById,
            string? comment
         ) : base(id ?? Guid.NewGuid())
         {
@@ -25,18 +25,18 @@ namespace Server.Domain.Entities.JobApplications
 
         public Guid JobApplicationId { get; private set; }
         public JobApplicationStatus StatusMovedTo { get; private set; }
-        public Guid MovedById { get; private set; }
+        public Guid? MovedById { get; private set; }
         public DateTime MovedAt { get; private set; }
         public string? Comment { get; private set; }
 
         public JobApplication JobApplication { get; private set; } = null!;
-        public User MovedByUser { get; private set; } = null!;
+        public User? MovedByUser { get; private set; } = null!;
 
         public static JobApplicationStatusMoveHistory Create(
             Guid? id,
             Guid jobApplicationId,
             JobApplicationStatus statusMovedTo,
-            Guid movedById,
+            Guid? movedById,
             string? comment
         )
         {

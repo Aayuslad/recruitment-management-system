@@ -13,6 +13,9 @@ export interface JobOpeningSummary {
     type: JobOpeningType;
     designationId: string;
     designationName: string;
+    jobLocation: string;
+    createdById: string;
+    createdByUserName: string;
     interviewRounds: InterviewRoundTemplateSummaryDTO[];
 }
 
@@ -24,6 +27,11 @@ export interface JobOpening {
     positionBatchId: string;
     designationId: string;
     designationName: string;
+    jobLocation: string;
+    minCTC: number;
+    maxCTC: number;
+    positionsCount: number;
+    closedPositionsCount: number;
     skills: SkillDetailDTO[];
     skillOverRides: SkillOverRideDetailDTO[];
     interviewers: JobOpeningInterviewerDetailDTO[];
@@ -50,13 +58,14 @@ export interface JobOpeningInterviewerDetailDTO {
     id: string;
     userId: string;
     userName: string;
+    email: string;
     role: InterviewParticipantRole;
 }
 
 export interface InterviewPanelRequirementDetailDTO {
     id?: string | null;
     role: InterviewParticipantRole;
-    requiredCount: number;
+    requirementCount: number;
 }
 
 export interface InterviewRoundTemplateDetailDTO {
@@ -78,7 +87,6 @@ export type CreateJobOpeningCommandCorrected = Omit<
     | 'title'
     | 'type'
     | 'positionBatchId'
-    | 'designationId'
     | 'interviewers'
     | 'interviewRounds'
     | 'skillOverRides'
@@ -86,13 +94,12 @@ export type CreateJobOpeningCommandCorrected = Omit<
     title: string;
     type: components['schemas']['JobOpeningType'];
     positionBatchId: string;
-    designationId: string;
     interviewers: (Omit<
         components['schemas']['JobOpeningInterviewerDTO'],
         'userId' | 'role'
     > & {
         userId: string;
-        role: InterviewParticipantRole;
+        role: components['schemas']['InterviewParticipantRole'];
     })[];
     interviewRounds: (Omit<
         components['schemas']['InterviewRoundTemplateDTO'],

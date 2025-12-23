@@ -47,7 +47,8 @@ namespace Server.Application.Aggregates.Candidates.Handlers
                         DocumentTypeId = x.DocumentTypeId,
                         DocumentName = x.DocumentType.Name,
                         IsVerified = x.IsVerified,
-                        VerifiedBy = x.VerifiedBy
+                        VerifiedById = x.VerifiedById,
+                        VerifiedByUserName = x.VerifiedByUser?.Auth.UserName
                     }
                 ).ToList();
 
@@ -59,12 +60,15 @@ namespace Server.Application.Aggregates.Candidates.Handlers
                 FirstName = candidate.FirstName,
                 MiddleName = candidate.MiddleName,
                 LastName = candidate.LastName,
+                Gender = candidate.Gender,
                 ContactNumber = candidate.ContactNumber.ToString(),
                 Dob = candidate.Dob,
+                CollegeName = candidate.CollegeName,
                 ResumeUrl = candidate.ResumeUrl,
                 IsBgVerificationCompleted = candidate.IsBgVerificationCompleted,
                 BgVerificationCompletedById = candidate.BgVerifiedById,
                 BgVerificationCompletedByUserName = candidate.BgVerifiedByUser?.Auth.UserName,
+                CreatedAt = candidate.CreatedAt,
                 Skills = skillDtos,
                 Documents = documentDtos
             };

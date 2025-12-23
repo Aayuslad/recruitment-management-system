@@ -8,6 +8,7 @@ namespace Server.Application.Aggregates.JobApplications.Commands
     public class MoveJobApplicationStatusCommand : IRequest<Result>
     {
         public Guid Id { get; set; }
-        public JobApplicationStatus MoveTo { get; set; }
+        public JobApplicationStatus? MoveTo { get; set; }
+        public JobApplicationStatusActions? Action { get; set; }
     }
 }

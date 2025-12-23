@@ -100,5 +100,19 @@ namespace Server.Domain.Entities.JobApplications
 
             Status = moveTo;
         }
+
+        public void MoveStatusBySystem(JobApplicationStatus moveTo)
+        {
+            var moveHistory = JobApplicationStatusMoveHistory.Create(
+                    id: null,
+                    jobApplicationId: Id,
+                    statusMovedTo: moveTo,
+                    movedById: null,
+                    comment: null
+                );
+            StatusMoveHistories.Add(moveHistory);
+
+            Status = moveTo;
+        }
     }
 }

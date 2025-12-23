@@ -88,6 +88,12 @@ namespace Server.Domain.Entities.Interviews
             SyncParticipants(participants);
         }
 
+        public void Schedule(DateTime? scheduledAt, string? meetingLink)
+        {
+            ScheduledAt = scheduledAt;
+            MeetingLink = meetingLink;
+        }
+
         public void AddFeedback(Feedback feedback)
         {
             if (feedback is null) return;
@@ -138,6 +144,11 @@ namespace Server.Domain.Entities.Interviews
                 if (!Participants.Any(x => x.Id == p.Id))
                     Participants.Add(p);
             }
+        }
+
+        public void MoveStatus(InterviewStatus moveTo)
+        {
+            Status = moveTo;
         }
     }
 }

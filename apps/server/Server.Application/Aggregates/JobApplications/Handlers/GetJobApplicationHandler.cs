@@ -6,6 +6,7 @@ using Server.Application.Aggregates.JobApplications.Queries;
 using Server.Application.Aggregates.JobApplications.Queries.DTOs;
 using Server.Application.Exeptions;
 using Server.Core.Results;
+using Server.Domain.Enums;
 
 namespace Server.Application.Aggregates.JobApplications.Handlers
 {
@@ -37,13 +38,31 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
                 Designation = application.JobOpening.PositionBatch.Designation.Name,
                 AppliedAt = application.AppliedAt,
                 Status = application.Status,
-                Feedbacks = application.Feedbacks.Select(
+                JobApplicationFeedbacks = application.Feedbacks.Where(x => x.Stage == FeedbackStage.Review).Select(
                         selector: x => new FeedbackDetailDTO
                         {
                             Id = x.Id,
                             GivenById = x.GivenById,
                             GivenByName = x.GivenByUser.Auth.UserName,
-                            Stage = x.Stage,
+                            Comment = x.Comment,
+                            Rating = x.Rating,
+                            SkillFeedbacks = x.SkillFeedbacks.Select(
+                                    selector: x => new SkillFeedbackDetailDTO
+                                    {
+                                        SkillId = x.SkillId,
+                                        SkillName = x.Skill.Name,
+                                        Rating = x.Rating,
+                                        AssessedExpYears = x.AssessedExpYears,
+                                    }
+                                ).ToList(),
+                        }
+                    ).ToList(),
+                InterviewFeedbacks = application.Feedbacks.Where(x => x.Stage == FeedbackStage.Interview).Select(
+                        selector: x => new FeedbackDetailDTO
+                        {
+                            Id = x.Id,
+                            GivenById = x.GivenById,
+                            GivenByName = x.GivenByUser.Auth.UserName,
                             Comment = x.Comment,
                             Rating = x.Rating,
                             SkillFeedbacks = x.SkillFeedbacks.Select(
@@ -63,7 +82,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
                             Id = x.Id,
                             StatusMovedTo = x.StatusMovedTo,
                             MovedById = x.MovedById,
-                            MovedByName = x.MovedByUser.Auth.UserName,
+                            MovedByName = x.MovedByUser?.Auth.UserName ?? "System",
                             MovedAt = x.MovedAt,
                             Comment = x.Comment,
                         }

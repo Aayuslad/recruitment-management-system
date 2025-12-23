@@ -3,7 +3,7 @@
     public class SkillFeedbackDetailDTO
     {
         public Guid SkillId { get; set; }
-        public string SkillName { get; set; } = string.Empty;
+        public string SkillName { get; set; } = null!;
         public int Rating { get; set; }
         public float? AssessedExpYears { get; set; }
     }

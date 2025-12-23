@@ -33,6 +33,9 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                     Type = jo.Type,
                     DesignationId = jo.PositionBatch.DesignationId,
                     DesignationName = jo.PositionBatch.Designation.Name,
+                    JobLocation = jo.PositionBatch.JobLocation,
+                    CreatedById = jo.CreatedBy,
+                    CreatedByUserName = jo.CreatedByUser?.Auth.UserName,
                     InterviewRounds = jo.InterviewRounds.Select(
                             selector: x => new InterviewRoundTemplateSummaryDetailDTO
                             {

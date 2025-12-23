@@ -6,6 +6,7 @@ import type {
     CreateJobApplicationFeedbackCommandCorrected,
     EditJobApplicationFeedbackCommandCorrected,
     MoveJobApplicationStatusCommandCorrected,
+    JobOpeningApplicationSummary,
 } from '@/types/job-application-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
@@ -133,7 +134,15 @@ export function useMoveJobApplicationStatus() {
         },
         onSuccess: (_, variables) => {
             toast.success('Job application status moved');
-            queryClient.invalidateQueries({ queryKey: ['job-applications'] });
+            queryClient.invalidateQueries({
+                queryKey: ['job-applications'],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ['interviews'],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ['position-batches'],
+            });
             queryClient.invalidateQueries({
                 queryKey: ['job-application', variables.id],
             });
@@ -218,5 +227,18 @@ export function useGetJobApplications() {
             const { data } = await axios.get('/job-application');
             return data;
         },
+    });
+}
+
+export function useGetJobOpeningApplications(jobOpeningId: string) {
+    return useQuery({
+        queryKey: ['job-applications', jobOpeningId],
+        queryFn: async (): Promise<JobOpeningApplicationSummary[]> => {
+            const { data } = await axios.get(
+                `/job-application/for-job-opening/${jobOpeningId}`
+            );
+            return data;
+        },
+        enabled: !!jobOpeningId,
     });
 }

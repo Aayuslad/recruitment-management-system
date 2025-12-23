@@ -56,6 +56,7 @@ namespace Server.Application.Aggregates.Interviews.Handlers
             // create the feedback entity
             var feedback = Feedback.CreateForInterviewStage(
                     id: feedbackId,
+                    jobApplicationId: interview.JobApplicationId,
                     interviewId: interview.Id,
                     givenById: Guid.Parse(userIdString),
                     rating: request.Rating,

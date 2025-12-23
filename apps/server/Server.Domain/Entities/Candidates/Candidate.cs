@@ -1,6 +1,7 @@
 ﻿using Server.Core.Primitives;
 using Server.Domain.Entities.Abstractions;
 using Server.Domain.Entities.Users;
+using Server.Domain.Enums;
 using Server.Domain.ValueObjects;
 
 namespace Server.Domain.Entities.Candidates
@@ -16,8 +17,10 @@ namespace Server.Domain.Entities.Candidates
             string firstName,
             string? middleName,
             string lastName,
+            Gender gender,
             ContactNumber contactNumber,
             DateTime dob,
+            string collegeName,
             string resumeUrl,
             IEnumerable<CandidateSkill> skills
         ) : base(id ?? Guid.NewGuid(), createdBy)
@@ -26,8 +29,10 @@ namespace Server.Domain.Entities.Candidates
             FirstName = firstName;
             MiddleName = middleName;
             LastName = lastName;
+            Gender = gender;
             ContactNumber = contactNumber;
             Dob = dob;
+            CollegeName = collegeName;
             ResumeUrl = resumeUrl;
             IsBgVerificationCompleted = false;
             Skills = skills?.ToHashSet() ?? [];
@@ -37,8 +42,10 @@ namespace Server.Domain.Entities.Candidates
         public string FirstName { get; private set; } = null!;
         public string? MiddleName { get; private set; }
         public string LastName { get; private set; } = null!;
+        public Gender Gender { get; private set; } = Gender.PreferNotToSay;
         public ContactNumber ContactNumber { get; private set; } = null!;
         public DateTime Dob { get; private set; }
+        public string CollegeName { get; private set; } = null!;
         public string ResumeUrl { get; private set; } = null!;
         public bool IsBgVerificationCompleted { get; private set; }
         public Guid? BgVerifiedById { get; private set; }
@@ -53,8 +60,10 @@ namespace Server.Domain.Entities.Candidates
             string firstName,
             string? middleName,
             string lastName,
+            Gender gender,
             ContactNumber contactNumber,
             DateTime dob,
+            string collegeName,
             string resumeUrl,
             IEnumerable<CandidateSkill> skills
         )
@@ -66,8 +75,10 @@ namespace Server.Domain.Entities.Candidates
                 firstName,
                 middleName,
                 lastName,
+                gender,
                 contactNumber,
                 dob,
+                collegeName,
                 resumeUrl,
                 skills
             );
@@ -90,8 +101,10 @@ namespace Server.Domain.Entities.Candidates
             string firstName,
             string? middleName,
             string lastName,
+            Gender gender,
             ContactNumber contactNumber,
             DateTime dob,
+            string collegeName,
             string resumeUrl,
             IEnumerable<CandidateSkill> skills,
             IEnumerable<CandidateDocument> documents
@@ -101,8 +114,10 @@ namespace Server.Domain.Entities.Candidates
             FirstName = firstName;
             MiddleName = middleName;
             LastName = lastName;
+            Gender = gender;
             ContactNumber = contactNumber;
             Dob = dob;
+            CollegeName = collegeName;
             ResumeUrl = resumeUrl;
 
             SyncSkills(skills);

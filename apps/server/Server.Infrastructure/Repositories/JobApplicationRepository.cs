@@ -54,8 +54,13 @@ namespace Server.Infrastructure.Repositories
                 .Include(x => x.JobOpening)
                     .ThenInclude(x => x.PositionBatch)
                         .ThenInclude(x => x.Designation)
+                .Include(x => x.JobOpening)
+                    .ThenInclude(x => x.InterviewRounds)
+                        .ThenInclude(x => x.PanelRequirements)
+                .Include(x => x.JobOpening)
+                    .ThenInclude(x => x.JobOpeningInterviewers)
                 .Include(x => x.StatusMoveHistories)
-                    .ThenInclude(x => x.MovedByUser)
+                    .ThenInclude(x => x.MovedByUser!)
                         .ThenInclude(x => x.Auth)
                 .Include(x => x.Feedbacks)
                     .ThenInclude(x => x.SkillFeedbacks)
@@ -74,6 +79,16 @@ namespace Server.Infrastructure.Repositories
                 .Include(x => x.JobOpening)
                     .ThenInclude(x => x.PositionBatch)
                         .ThenInclude(x => x.Designation)
+                .Include(x => x.Feedbacks)
+                .ToListAsync(cancellationToken);
+        }
+
+        public Task<List<JobApplication>> GetAllByJobOpeningIdAsync(Guid jobOpeningId, CancellationToken cancellationToken)
+        {
+            return _context.JobApplications
+                .AsNoTracking()
+                .Where(x => x.JobOpeningId == jobOpeningId)
+                .Include(x => x.Candidate)
                 .ToListAsync(cancellationToken);
         }
     }

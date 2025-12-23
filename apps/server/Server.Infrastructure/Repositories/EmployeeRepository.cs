@@ -15,6 +15,12 @@ namespace Server.Infrastructure.Repositories
             _context = context;
         }
 
+        public Task AddAsync(Employee employee, CancellationToken cancellationToken)
+        {
+            _context.Employees.Add(employee);
+            return _context.SaveChangesAsync(cancellationToken);
+        }
+
         Task<List<Employee>> IEmployeeRepository.GetAllAsync(CancellationToken cancellationToken)
         {
             return _context.Employees

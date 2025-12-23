@@ -7,6 +7,7 @@
         public Guid DocumentTypeId { get; set; }
         public string DocumentName { get; set; } = null!;
         public bool IsVerified { get; set; }
-        public Guid? VerifiedBy { get; set; }
+        public Guid? VerifiedById { get; set; }
+        public string? VerifiedByUserName { get; set; }
     }
 }

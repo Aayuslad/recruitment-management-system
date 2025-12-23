@@ -37,6 +37,9 @@ namespace Server.Infrastructure.Repositories
                     .ThenInclude(x => x.Skill)
                 .Include(x => x.Documents)
                     .ThenInclude(x => x.DocumentType)
+                .Include(x => x.Documents)
+                    .ThenInclude(x => x.VerifiedByUser!)
+                        .ThenInclude(x => x.Auth)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 

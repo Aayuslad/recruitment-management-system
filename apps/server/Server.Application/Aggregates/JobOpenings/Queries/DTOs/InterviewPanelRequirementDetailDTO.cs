@@ -6,6 +6,6 @@ namespace Server.Application.Aggregates.JobOpenings.Queries.DTOs
     {
         public Guid? Id { get; set; }
         public InterviewParticipantRole Role { get; set; }
-        public int RequiredCount { get; set; }
+        public int RequirementCount { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 {
     public enum InterviewStatus
     {
-        Unscheduled = 0,
+        NotScheduled = 0,
         Scheduled = 1,
         Completed = 2,
     }

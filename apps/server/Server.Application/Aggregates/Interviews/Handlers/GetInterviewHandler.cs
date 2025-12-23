@@ -32,6 +32,10 @@ namespace Server.Application.Aggregates.Interviews.Handlers
             {
                 Id = interview.Id,
                 JobApplicationId = interview.JobApplicationId,
+                CandidateId = interview.JobApplication.CandidateId,
+                CandidateName = interview.JobApplication.Candidate.FirstName + " " + interview.JobApplication.Candidate.MiddleName + " " + interview.JobApplication.Candidate.LastName,
+                DesignationId = interview.JobApplication.JobOpening.PositionBatch.DesignationId,
+                DesignationName = interview.JobApplication.JobOpening.PositionBatch.Designation.Name,
                 RoundNumber = interview.RoundNumber,
                 InterviewType = interview.InterviewType,
                 ScheduledAt = interview.ScheduledAt,

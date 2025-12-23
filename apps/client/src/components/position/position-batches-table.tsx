@@ -53,7 +53,10 @@ export function PositionBatchesTable() {
             cell: ({ row }) => (
                 <div
                     className="font-medium pl-4 hover:cursor-pointer hover:underline"
-                    onClick={() => navigate('/configuration/designations')}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        navigate('/configuration/designations');
+                    }}
                 >
                     {row.original.designationName}
                 </div>

@@ -4,6 +4,8 @@ import type {
     EditInterviewCommandCorrected,
     CreateInterviewFeedbackCommandCorrected,
     EditInterviewFeedbackCommandCorrected,
+    InterviewSummary,
+    MoveInterviewStatusCommandCorrected,
 } from '@/types/interview-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
@@ -54,6 +56,39 @@ export function useEditInterview() {
                 error.response?.data?.error ||
                     error.message ||
                     'Failed to update interview'
+            );
+            console.error(error);
+        },
+    });
+}
+
+export function useMoveInterviewStatus() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (
+            payload: MoveInterviewStatusCommandCorrected
+        ): Promise<void> => {
+            await axios.put(
+                `/interview/${payload.interviewId}/move-status`,
+                payload
+            );
+        },
+        onSuccess: (_, variables) => {
+            toast.success('Interview status moved');
+            queryClient.invalidateQueries({ queryKey: ['interviews'] });
+            queryClient.invalidateQueries({
+                queryKey: ['interview', variables.interviewId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ['job-applications'],
+            });
+        },
+        onError: (error: AxiosError<{ error: string }>) => {
+            toast.error(
+                error.response?.data?.error ||
+                    error.message ||
+                    'Failed to Move interview status'
             );
             console.error(error);
         },
@@ -176,6 +211,16 @@ export function useGetInterview(id: string) {
         queryKey: ['interview', id],
         queryFn: async (): Promise<Interview | null> => {
             const { data } = await axios.get(`/interview/${id}`);
+            return data;
+        },
+    });
+}
+
+export function useGetInterviews() {
+    return useQuery({
+        queryKey: ['interviews'],
+        queryFn: async (): Promise<InterviewSummary[] | null> => {
+            const { data } = await axios.get('/interview');
             return data;
         },
     });
