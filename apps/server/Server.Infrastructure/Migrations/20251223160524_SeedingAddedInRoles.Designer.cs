@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Server.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using Server.Infrastructure.Persistence;
 namespace Server.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251223160524_SeedingAddedInRoles")]
+    partial class SeedingAddedInRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -891,59 +894,43 @@ namespace Server.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("084fae9a-d674-4e84-81f2-ef028625b31f"),
-                            CreatedAt = new DateTime(2025, 12, 23, 16, 33, 31, 449, DateTimeKind.Utc).AddTicks(12),
+                            Id = new Guid("68739ad8-2d01-4f10-91e9-32e8f91bcdb4"),
+                            CreatedAt = new DateTime(2025, 12, 23, 16, 5, 23, 240, DateTimeKind.Utc).AddTicks(1127),
                             Description = "Manages users, roles, and system-wide configurations.",
                             IsDeleted = false,
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = new Guid("a381734a-5fd3-439c-a264-0dc153f6d281"),
-                            CreatedAt = new DateTime(2025, 12, 23, 16, 33, 31, 449, DateTimeKind.Utc).AddTicks(21),
-                            Description = "Manages job openings, candidate profiles, interviews.",
+                            Id = new Guid("04ba6d0a-cdad-4152-b731-2492daf99031"),
+                            CreatedAt = new DateTime(2025, 12, 23, 16, 5, 23, 240, DateTimeKind.Utc).AddTicks(1135),
+                            Description = "Manages job openings, candidate profiles, interviews",
                             IsDeleted = false,
                             Name = "Recruiter"
                         },
                         new
                         {
-                            Id = new Guid("258d59d0-f98d-445d-9938-a0baea01b04d"),
-                            CreatedAt = new DateTime(2025, 12, 23, 16, 33, 31, 449, DateTimeKind.Utc).AddTicks(23),
+                            Id = new Guid("6a28cbe8-d7cd-487f-a07e-432668248501"),
+                            CreatedAt = new DateTime(2025, 12, 23, 16, 5, 23, 240, DateTimeKind.Utc).AddTicks(1138),
                             Description = "Provides interview feedback.",
                             IsDeleted = false,
                             Name = "Interviewer"
                         },
                         new
                         {
-                            Id = new Guid("7ebf0dcd-df29-4c68-856b-48852fe5e580"),
-                            CreatedAt = new DateTime(2025, 12, 23, 16, 33, 31, 449, DateTimeKind.Utc).AddTicks(24),
-                            Description = "Culture fit, final negotiation, documentation and background verification",
+                            Id = new Guid("3f8be536-933a-4e1b-b1f0-c21b64580edd"),
+                            CreatedAt = new DateTime(2025, 12, 23, 16, 5, 23, 240, DateTimeKind.Utc).AddTicks(1140),
+                            Description = "culture fit, final negotiation, documentation and background verification",
                             IsDeleted = false,
                             Name = "HR"
                         },
                         new
                         {
-                            Id = new Guid("741a84df-76e7-4293-8b51-f92159e8b023"),
-                            CreatedAt = new DateTime(2025, 12, 23, 16, 33, 31, 449, DateTimeKind.Utc).AddTicks(26),
+                            Id = new Guid("58cc596f-c36f-4ab2-8f94-5d8f932c3dc4"),
+                            CreatedAt = new DateTime(2025, 12, 23, 16, 5, 23, 240, DateTimeKind.Utc).AddTicks(1143),
                             Description = "Screens CVs and shortlists candidates.",
                             IsDeleted = false,
                             Name = "Reviewer"
-                        },
-                        new
-                        {
-                            Id = new Guid("694962eb-7fc0-42c6-8e20-96cf736cba25"),
-                            CreatedAt = new DateTime(2025, 12, 23, 16, 33, 31, 449, DateTimeKind.Utc).AddTicks(28),
-                            Description = "Views job openings, uploads CVs, and submits documents.",
-                            IsDeleted = false,
-                            Name = "Candidate"
-                        },
-                        new
-                        {
-                            Id = new Guid("010586be-8483-4cbd-932d-b786ca51f3fd"),
-                            CreatedAt = new DateTime(2025, 12, 23, 16, 33, 31, 449, DateTimeKind.Utc).AddTicks(29),
-                            Description = "Read-only access to all data.",
-                            IsDeleted = false,
-                            Name = "Viewer"
                         });
                 });
 

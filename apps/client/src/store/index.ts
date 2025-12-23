@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { createUserSlice, type UserStoreSliceType } from './user-store';
 import {
     createUiSlice,
     SIDEBAR_STATE_KEY,
@@ -19,21 +18,22 @@ import {
     createJobApplicationSlice,
     type JobApplicationStoreSliceType,
 } from './job-application-store';
+import { createAdminSlice, type AdminStoreSliceType } from './admin-store';
 
-type AppStoreTupe = UserStoreSliceType &
-    UiStoreSliceType &
+type AppStoreTupe = UiStoreSliceType &
     SkillStoreSliceType &
     DocumentTypeStoreSliceType &
     DesignationStoreSliceType &
-    JobApplicationStoreSliceType;
+    JobApplicationStoreSliceType &
+    AdminStoreSliceType;
 
 export const useAppStore = create<AppStoreTupe>((...args) => ({
-    ...createUserSlice(...args),
     ...createUiSlice(...args),
     ...createSkillSlice(...args),
     ...createDocTypeSlice(...args),
     ...createDesignationSlice(...args),
     ...createJobApplicationSlice(...args),
+    ...createAdminSlice(...args),
 }));
 
 // updating configs from localstorage

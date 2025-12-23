@@ -10,7 +10,7 @@ namespace Server.Domain.Entities.Roles
         private Role(
             string name,
             string? description,
-            Guid createdBy
+            Guid? createdBy
         ) : base(Guid.NewGuid(), createdBy)
         {
             Name = name;
@@ -23,7 +23,7 @@ namespace Server.Domain.Entities.Roles
         public static Role Create(
             string name,
             string? description,
-            Guid createdBy
+            Guid? createdBy
         )
         {
             return new Role(

@@ -150,6 +150,18 @@ namespace Server.Infrastructure.Persistence
             modelBuilder.Entity<DocumentType>()
                 .HasQueryFilter(x => !x.IsDeleted);
 
+
+            modelBuilder.Entity<Role>()
+                .HasData(
+                    Role.Create("Admin", "Manages users, roles, and system-wide configurations.", null),
+                    Role.Create("Recruiter", "Manages job openings, candidate profiles, interviews.", null),
+                    Role.Create("Interviewer", "Provides interview feedback.", null),
+                    Role.Create("HR", "Culture fit, final negotiation, documentation and background verification", null),
+                    Role.Create("Reviewer", "Screens CVs and shortlists candidates.", null),
+                    Role.Create("Candidate", "Views job openings, uploads CVs, and submits documents.", null),
+                    Role.Create("Viewer", "Read-only access to all data.", null)
+                );
+
             base.OnModelCreating(modelBuilder);
         }
     }

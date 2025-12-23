@@ -41,7 +41,8 @@ namespace Server.Application.Aggregates.Users.Handlers
                     Roles = user.Roles.Select(x => new UserRolesDTO
                     {
                         Id = x.RoleId,
-                        Name = x.Role.Name
+                        Name = x.Role.Name,
+                        AssignedBy = x.AssignedBy,
                     }
                     ).ToList(),
                 };
