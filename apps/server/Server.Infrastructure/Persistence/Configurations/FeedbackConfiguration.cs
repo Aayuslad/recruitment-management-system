@@ -26,11 +26,13 @@ namespace Server.Infrastructure.Persistence.Configurations
 
             builder.HasOne(x => x.JobApplication)
                 .WithMany(x => x.Feedbacks)
+                .IsRequired()
                 .HasForeignKey(x => x.JobApplicationId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.Interview)
                 .WithMany(x => x.Feedbacks)
+                .IsRequired(false)
                 .HasForeignKey(x => x.InterviewId)
                 .OnDelete(DeleteBehavior.Restrict);
 

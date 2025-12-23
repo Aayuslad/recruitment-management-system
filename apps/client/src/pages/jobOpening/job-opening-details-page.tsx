@@ -1,6 +1,7 @@
 import { useGetJobOpening } from '@/api/job-opening-api';
 import { DeleteJobOpeningDialog } from '@/components/jobOpenings/delete-job-opening-dialog';
 import { EditJobOpeningSheet } from '@/components/jobOpenings/edit-job-opening-sheet';
+import { JobOpeningApplicationsTable } from '@/components/jobOpenings/job-opening-applications-table';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -458,7 +459,7 @@ export const JobOpeningDetailPage = () => {
                 </div>
 
                 <div className="flex-[50%] px-5 pt-8">
-                    // Job Applications for this opening (table)
+                    <JobOpeningApplicationsTable jobOpeningId={data.id} />
                 </div>
             </div>
         </div>

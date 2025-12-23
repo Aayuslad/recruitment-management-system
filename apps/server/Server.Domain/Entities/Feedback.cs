@@ -12,7 +12,7 @@ namespace Server.Domain.Entities
 
         private Feedback(
             Guid? id,
-            Guid? jobApplicationId,
+            Guid jobApplicationId,
             Guid? interviewId,
             Guid givenById,
             FeedbackStage stage,
@@ -31,7 +31,7 @@ namespace Server.Domain.Entities
             SkillFeedbacks = skillFeedbacks.ToHashSet();
         }
 
-        public Guid? JobApplicationId { get; private set; }
+        public Guid JobApplicationId { get; private set; }
         public Guid? InterviewId { get; set; }
         public Guid GivenById { get; private set; }
         public FeedbackStage Stage { get; private set; }
@@ -45,7 +45,7 @@ namespace Server.Domain.Entities
 
         public static Feedback CreateForReviewStage(
             Guid? id,
-            Guid? jobApplicationId,
+            Guid jobApplicationId,
             Guid givenById,
             string? comment,
             int rating,
@@ -66,7 +66,8 @@ namespace Server.Domain.Entities
 
         public static Feedback CreateForInterviewStage(
             Guid? id,
-            Guid? interviewId,
+            Guid jobApplicationId,
+            Guid interviewId,
             Guid givenById,
             string? comment,
             int rating,
@@ -75,8 +76,8 @@ namespace Server.Domain.Entities
         {
             return new Feedback(
                 id,
+                jobApplicationId,
                 interviewId,
-                null,
                 givenById,
                 FeedbackStage.Interview,
                 comment,

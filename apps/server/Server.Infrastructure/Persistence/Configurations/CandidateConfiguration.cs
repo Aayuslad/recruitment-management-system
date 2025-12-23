@@ -47,7 +47,14 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(x => x.LastName)
                 .IsRequired();
 
+            builder.Property(x => x.Gender)
+                .HasConversion<string>()
+                .IsRequired();
+
             builder.Property(x => x.Dob)
+                .IsRequired();
+
+            builder.Property(x => x.CollegeName)
                 .IsRequired();
 
             builder.Property(x => x.ResumeUrl)

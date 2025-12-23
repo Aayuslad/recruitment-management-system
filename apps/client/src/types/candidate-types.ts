@@ -1,3 +1,4 @@
+import type { Gender } from './enums';
 import type { components } from './generated/api';
 
 export interface Candidate {
@@ -6,12 +7,15 @@ export interface Candidate {
     firstName: string;
     middleName?: string | null;
     lastName: string;
+    gender: Gender;
     contactNumber: string;
     dob: string;
+    collegeName: string;
     resumeUrl: string;
     isBgVerificationCompleted: boolean;
     bgVerificationCompletedById?: string | null;
     bgVerificationCompletedByUserName?: string | null;
+    createdAt: string;
     skills: CandidateSkillDetailDTO[];
     documents: CandidateDocumentDetailDTO[];
 }
@@ -27,7 +31,8 @@ export interface CandidateDocumentDetailDTO {
     documentTypeId: string;
     documentName: string;
     isVerified: boolean;
-    verifiedBy?: string | null;
+    verifiedById?: string | null;
+    verifiedByUserName?: string | null;
 }
 
 export interface CandidateSummary {
@@ -36,10 +41,13 @@ export interface CandidateSummary {
     firstName: string;
     middleName?: string | null;
     lastName: string;
+    gender: Gender;
     contactNumber: string;
     dob: string;
+    collegeName: string;
     resumeUrl: string;
     isBgVerificationCompleted: boolean;
+    createdAt: string;
 }
 
 export type CreateCandidateCommandCorrected = Omit<
@@ -50,6 +58,7 @@ export type CreateCandidateCommandCorrected = Omit<
     | 'lastName'
     | 'contactNumber'
     | 'dob'
+    | 'collegeName'
     | 'resumeUrl'
     | 'skills'
     | 'documents'
@@ -60,6 +69,7 @@ export type CreateCandidateCommandCorrected = Omit<
     lastName: string;
     contactNumber: string;
     dob: string;
+    collegeName: string;
     resumeUrl: string;
     skills: (Omit<components['schemas']['CandidateSkillDTO'], 'skillId'> & {
         skillId: string;
@@ -75,6 +85,7 @@ export type EditCandidateCommandCorrected = Omit<
     | 'lastName'
     | 'contactNumber'
     | 'dob'
+    | 'collegeName'
     | 'resumeUrl'
     | 'skills'
     | 'documents'
@@ -86,6 +97,7 @@ export type EditCandidateCommandCorrected = Omit<
     lastName: string;
     contactNumber: string;
     dob: string;
+    collegeName: string;
     resumeUrl: string;
     skills: (Omit<components['schemas']['CandidateSkillDTO'], 'skillId'> & {
         skillId: string;

@@ -22,76 +22,17 @@ namespace Server.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Server.Domain.Entities.Auth", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("Email");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<DateTime?>("LastLoginAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("LastUpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("LastUpdatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("PasswordHash")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("DeletedBy");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("LastUpdatedBy");
-
-                    b.HasIndex("UserName")
-                        .IsUnique();
-
-                    b.ToTable("Auth", (string)null);
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.Candidate", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Candidates.Candidate", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("BgVerifiedById")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("CollegeName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("ContactNumber")
                         .IsRequired()
@@ -121,6 +62,10 @@ namespace Server.Infrastructure.Migrations
                         .HasColumnName("Email");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -162,7 +107,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("Candidate", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.CandidateDocument", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Candidates.CandidateDocument", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -180,7 +125,7 @@ namespace Server.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("VerifiedBy")
+                    b.Property<Guid?>("VerifiedById")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -189,10 +134,12 @@ namespace Server.Infrastructure.Migrations
 
                     b.HasIndex("DocumentTypeId");
 
+                    b.HasIndex("VerifiedById");
+
                     b.ToTable("CandidateDocument", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.CandidateSkill", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Candidates.CandidateSkill", b =>
                 {
                     b.Property<Guid>("CandidateId")
                         .HasColumnType("uuid");
@@ -207,7 +154,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("CandidateSkill", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Designation", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Designations.Designation", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -251,7 +198,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("Designation", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.DesignationSkill", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Designations.DesignationSkill", b =>
                 {
                     b.Property<Guid>("DesignationId")
                         .HasColumnType("uuid");
@@ -273,7 +220,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("DesignationSkill", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.DocumentType", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Documents.DocumentType", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -319,7 +266,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("DocumentType", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Employee", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Employees.Employee", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -360,7 +307,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("Employee", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Event", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Events.Event", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -407,7 +354,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("Event", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.EventJobOpening", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Events.EventJobOpening", b =>
                 {
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
@@ -436,7 +383,7 @@ namespace Server.Infrastructure.Migrations
                     b.Property<Guid?>("InterviewId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("JobApplicationId")
+                    b.Property<Guid>("JobApplicationId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Rating")
@@ -457,7 +404,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("Feedback", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Interview", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Interviews.Interview", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -490,30 +437,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("Interview", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.InterviewPanelRequirement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("InterviewTemplateId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("RequiredCount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InterviewTemplateId", "Role")
-                        .IsUnique();
-
-                    b.ToTable("InterviewPanelRequirement", (string)null);
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.InterviewParticipant", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Interviews.InterviewParticipant", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -536,36 +460,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("InterviewParticipant", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.InterviewRoundTemplate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<int>("DurationInMinutes")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("JobOpeningId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("RoundNumber")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobOpeningId", "RoundNumber")
-                        .IsUnique();
-
-                    b.ToTable("InterviewRoundTemplate", (string)null);
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.JobApplication", b =>
+            modelBuilder.Entity("Server.Domain.Entities.JobApplications.JobApplication", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -622,7 +517,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("JobApplication", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.JobApplicationStatusMoveHistory", b =>
+            modelBuilder.Entity("Server.Domain.Entities.JobApplications.JobApplicationStatusMoveHistory", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -636,7 +531,7 @@ namespace Server.Infrastructure.Migrations
                     b.Property<DateTime>("MovedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("MovedById")
+                    b.Property<Guid?>("MovedById")
                         .HasColumnType("uuid");
 
                     b.Property<string>("StatusMovedTo")
@@ -652,7 +547,59 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("JobApplicationStatusMoveHistory", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.JobOpening", b =>
+            modelBuilder.Entity("Server.Domain.Entities.JobOpenings.InterviewPanelRequirement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("InterviewTemplateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("RequiredCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InterviewTemplateId", "Role")
+                        .IsUnique();
+
+                    b.ToTable("InterviewPanelRequirement", (string)null);
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.JobOpenings.InterviewRoundTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DurationInMinutes")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("JobOpeningId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("RoundNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobOpeningId", "RoundNumber")
+                        .IsUnique();
+
+                    b.ToTable("InterviewRoundTemplate", (string)null);
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.JobOpenings.JobOpening", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -706,7 +653,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("JobOpening", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.JobOpeningInterviewer", b =>
+            modelBuilder.Entity("Server.Domain.Entities.JobOpenings.JobOpeningInterviewer", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -731,7 +678,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("JobOpeningInterviewer", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Notification", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Notifications.Notification", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -762,7 +709,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("Notification", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Positions", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions.Position", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -789,7 +736,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("Position", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionsBatch", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions.PositionBatch", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -846,7 +793,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("PositionBatch", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionsBatchReviewer", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions.PositionBatchReviewer", b =>
                 {
                     b.Property<Guid>("PositionBatchId")
                         .HasColumnType("uuid");
@@ -861,7 +808,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("PositionBatchReviewer", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionstatusMoveHistory", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions.PositionStatusMoveHistory", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -891,7 +838,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("PositionStatusMoveHistory", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Role", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Roles.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -940,50 +887,6 @@ namespace Server.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Role", (string)null);
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.Skill", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<DateTime?>("LastUpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("LastUpdatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("DeletedBy");
-
-                    b.HasIndex("LastUpdatedBy");
-
-                    b.ToTable("Skill", (string)null);
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.SkillFeedback", b =>
@@ -1050,7 +953,114 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("SkillOverRide", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.User", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Skills.Skill", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastUpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastUpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("DeletedBy");
+
+                    b.HasIndex("LastUpdatedBy");
+
+                    b.ToTable("Skill", (string)null);
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.Users.Auth", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Email");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastLoginAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LastUpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastUpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("PasswordHash")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("DeletedBy");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("LastUpdatedBy");
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
+                    b.ToTable("Auth", (string)null);
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -1134,7 +1144,7 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("User", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.UserRole", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Users.UserRole", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -1157,48 +1167,24 @@ namespace Server.Infrastructure.Migrations
                     b.ToTable("UserRole", (string)null);
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Auth", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Candidates.Candidate", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
-                        .WithMany()
-                        .HasForeignKey("DeletedBy")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
-                        .WithMany()
-                        .HasForeignKey("LastUpdatedBy")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("DeletedByUser");
-
-                    b.Navigation("UpdatedByUser");
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.Candidate", b =>
-                {
-                    b.HasOne("Server.Domain.Entities.User", "BgVerifiedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "BgVerifiedByUser")
                         .WithMany()
                         .HasForeignKey("BgVerifiedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "DeletedByUser")
                         .WithMany()
                         .HasForeignKey("DeletedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "UpdatedByUser")
                         .WithMany()
                         .HasForeignKey("LastUpdatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1212,34 +1198,41 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("UpdatedByUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.CandidateDocument", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Candidates.CandidateDocument", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.Candidate", "Candidate")
+                    b.HasOne("Server.Domain.Entities.Candidates.Candidate", "Candidate")
                         .WithMany("Documents")
                         .HasForeignKey("CandidateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.DocumentType", "DocumentType")
+                    b.HasOne("Server.Domain.Entities.Documents.DocumentType", "DocumentType")
                         .WithMany()
                         .HasForeignKey("DocumentTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Server.Domain.Entities.Users.User", "VerifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("VerifiedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Candidate");
 
                     b.Navigation("DocumentType");
+
+                    b.Navigation("VerifiedByUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.CandidateSkill", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Candidates.CandidateSkill", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.Candidate", "Candidate")
+                    b.HasOne("Server.Domain.Entities.Candidates.Candidate", "Candidate")
                         .WithMany("Skills")
                         .HasForeignKey("CandidateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.Skill", "Skill")
+                    b.HasOne("Server.Domain.Entities.Skills.Skill", "Skill")
                         .WithMany()
                         .HasForeignKey("SkillId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1250,19 +1243,19 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("Skill");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Designation", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Designations.Designation", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "DeletedByUser")
                         .WithMany()
                         .HasForeignKey("DeletedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "UpdatedByUser")
                         .WithMany()
                         .HasForeignKey("LastUpdatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1274,15 +1267,15 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("UpdatedByUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.DesignationSkill", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Designations.DesignationSkill", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.Designation", "Designation")
+                    b.HasOne("Server.Domain.Entities.Designations.Designation", "Designation")
                         .WithMany("DesignationSkills")
                         .HasForeignKey("DesignationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.Skill", "Skill")
+                    b.HasOne("Server.Domain.Entities.Skills.Skill", "Skill")
                         .WithMany()
                         .HasForeignKey("SkillId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1293,19 +1286,19 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("Skill");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.DocumentType", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Documents.DocumentType", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "DeletedByUser")
                         .WithMany()
                         .HasForeignKey("DeletedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "UpdatedByUser")
                         .WithMany()
                         .HasForeignKey("LastUpdatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1317,9 +1310,9 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("UpdatedByUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Employee", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Employees.Employee", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.Designation", "Designation")
+                    b.HasOne("Server.Domain.Entities.Designations.Designation", "Designation")
                         .WithMany()
                         .HasForeignKey("DesignationId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1328,19 +1321,19 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("Designation");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Event", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Events.Event", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "DeletedByUser")
                         .WithMany()
                         .HasForeignKey("DeletedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "UpdatedByUser")
                         .WithMany()
                         .HasForeignKey("LastUpdatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1352,15 +1345,15 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("UpdatedByUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.EventJobOpening", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Events.EventJobOpening", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.Event", "Event")
+                    b.HasOne("Server.Domain.Entities.Events.Event", "Event")
                         .WithMany("EventJobOpenings")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.JobOpening", "JobOpening")
+                    b.HasOne("Server.Domain.Entities.JobOpenings.JobOpening", "JobOpening")
                         .WithMany()
                         .HasForeignKey("JobOpeningId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1373,21 +1366,22 @@ namespace Server.Infrastructure.Migrations
 
             modelBuilder.Entity("Server.Domain.Entities.Feedback", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.User", "GivenByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "GivenByUser")
                         .WithMany()
                         .HasForeignKey("GivenById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.Interview", "Interview")
+                    b.HasOne("Server.Domain.Entities.Interviews.Interview", "Interview")
                         .WithMany("Feedbacks")
                         .HasForeignKey("InterviewId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.JobApplication", "JobApplication")
+                    b.HasOne("Server.Domain.Entities.JobApplications.JobApplication", "JobApplication")
                         .WithMany("Feedbacks")
                         .HasForeignKey("JobApplicationId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("GivenByUser");
 
@@ -1396,9 +1390,9 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("JobApplication");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Interview", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Interviews.Interview", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.JobApplication", "JobApplication")
+                    b.HasOne("Server.Domain.Entities.JobApplications.JobApplication", "JobApplication")
                         .WithMany()
                         .HasForeignKey("JobApplicationId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1407,26 +1401,15 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("JobApplication");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.InterviewPanelRequirement", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Interviews.InterviewParticipant", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.InterviewRoundTemplate", "InterviewRoundTemplate")
-                        .WithMany("PanelRequirements")
-                        .HasForeignKey("InterviewTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("InterviewRoundTemplate");
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.InterviewParticipant", b =>
-                {
-                    b.HasOne("Server.Domain.Entities.Interview", "Interview")
+                    b.HasOne("Server.Domain.Entities.Interviews.Interview", "Interview")
                         .WithMany("Participants")
                         .HasForeignKey("InterviewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.User", "User")
+                    b.HasOne("Server.Domain.Entities.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1437,42 +1420,31 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.InterviewRoundTemplate", b =>
+            modelBuilder.Entity("Server.Domain.Entities.JobApplications.JobApplication", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.JobOpening", "JobOpening")
-                        .WithMany("InterviewRounds")
-                        .HasForeignKey("JobOpeningId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("JobOpening");
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.JobApplication", b =>
-                {
-                    b.HasOne("Server.Domain.Entities.Candidate", "Candidate")
+                    b.HasOne("Server.Domain.Entities.Candidates.Candidate", "Candidate")
                         .WithMany()
                         .HasForeignKey("CandidateId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "DeletedByUser")
                         .WithMany()
                         .HasForeignKey("DeletedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.JobOpening", "JobOpening")
+                    b.HasOne("Server.Domain.Entities.JobOpenings.JobOpening", "JobOpening")
                         .WithMany()
                         .HasForeignKey("JobOpeningId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "UpdatedByUser")
                         .WithMany()
                         .HasForeignKey("LastUpdatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1488,43 +1460,64 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("UpdatedByUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.JobApplicationStatusMoveHistory", b =>
+            modelBuilder.Entity("Server.Domain.Entities.JobApplications.JobApplicationStatusMoveHistory", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.JobApplication", "JobApplication")
+                    b.HasOne("Server.Domain.Entities.JobApplications.JobApplication", "JobApplication")
                         .WithMany("StatusMoveHistories")
                         .HasForeignKey("JobApplicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.User", "MovedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "MovedByUser")
                         .WithMany()
                         .HasForeignKey("MovedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("JobApplication");
 
                     b.Navigation("MovedByUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.JobOpening", b =>
+            modelBuilder.Entity("Server.Domain.Entities.JobOpenings.InterviewPanelRequirement", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                    b.HasOne("Server.Domain.Entities.JobOpenings.InterviewRoundTemplate", "InterviewRoundTemplate")
+                        .WithMany("PanelRequirements")
+                        .HasForeignKey("InterviewTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InterviewRoundTemplate");
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.JobOpenings.InterviewRoundTemplate", b =>
+                {
+                    b.HasOne("Server.Domain.Entities.JobOpenings.JobOpening", "JobOpening")
+                        .WithMany("InterviewRounds")
+                        .HasForeignKey("JobOpeningId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JobOpening");
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.JobOpenings.JobOpening", b =>
+                {
+                    b.HasOne("Server.Domain.Entities.Users.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "DeletedByUser")
                         .WithMany()
                         .HasForeignKey("DeletedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "UpdatedByUser")
                         .WithMany()
                         .HasForeignKey("LastUpdatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.PositionsBatch", "PositionBatch")
+                    b.HasOne("Server.Domain.Entities.Positions.PositionBatch", "PositionBatch")
                         .WithMany()
                         .HasForeignKey("PositionBatchId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1539,15 +1532,15 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("UpdatedByUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.JobOpeningInterviewer", b =>
+            modelBuilder.Entity("Server.Domain.Entities.JobOpenings.JobOpeningInterviewer", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.JobOpening", "JobOpening")
+                    b.HasOne("Server.Domain.Entities.JobOpenings.JobOpening", "JobOpening")
                         .WithMany("JobOpeningInterviewers")
                         .HasForeignKey("JobOpeningId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.User", "InterviewerUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "InterviewerUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1558,14 +1551,14 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("JobOpening");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Notification", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Notifications.Notification", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.User", "FromUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "FromUser")
                         .WithMany()
                         .HasForeignKey("FromUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "User")
+                    b.HasOne("Server.Domain.Entities.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1576,15 +1569,15 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Positions", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions.Position", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.PositionsBatch", "PositionBatch")
+                    b.HasOne("Server.Domain.Entities.Positions.PositionBatch", "PositionBatch")
                         .WithMany("Positions")
                         .HasForeignKey("BatchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.Candidate", "Candidate")
+                    b.HasOne("Server.Domain.Entities.Candidates.Candidate", "Candidate")
                         .WithMany()
                         .HasForeignKey("ClosedByCandidate")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1594,25 +1587,25 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("PositionBatch");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionsBatch", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions.PositionBatch", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "DeletedByUser")
                         .WithMany()
                         .HasForeignKey("DeletedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.Designation", "Designation")
+                    b.HasOne("Server.Domain.Entities.Designations.Designation", "Designation")
                         .WithMany()
                         .HasForeignKey("DesignationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "UpdatedByUser")
                         .WithMany()
                         .HasForeignKey("LastUpdatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1626,15 +1619,15 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("UpdatedByUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionsBatchReviewer", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions.PositionBatchReviewer", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.PositionsBatch", "PositionBatch")
+                    b.HasOne("Server.Domain.Entities.Positions.PositionBatch", "PositionBatch")
                         .WithMany("Reviewers")
                         .HasForeignKey("PositionBatchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.User", "ReviewerUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "ReviewerUser")
                         .WithMany()
                         .HasForeignKey("ReviewerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1645,14 +1638,14 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("ReviewerUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionstatusMoveHistory", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions.PositionStatusMoveHistory", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.User", "MovedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "MovedByUser")
                         .WithMany()
                         .HasForeignKey("MovedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.Positions", "Position")
+                    b.HasOne("Server.Domain.Entities.Positions.Position", "Position")
                         .WithMany("StatusMoveHistories")
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1663,43 +1656,19 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("Position");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Role", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Roles.Role", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "DeletedByUser")
                         .WithMany()
                         .HasForeignKey("DeletedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
-                        .WithMany()
-                        .HasForeignKey("LastUpdatedBy")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("DeletedByUser");
-
-                    b.Navigation("UpdatedByUser");
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.Skill", b =>
-                {
-                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
-                        .WithMany()
-                        .HasForeignKey("DeletedBy")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "UpdatedByUser")
                         .WithMany()
                         .HasForeignKey("LastUpdatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1719,7 +1688,7 @@ namespace Server.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.Skill", "Skill")
+                    b.HasOne("Server.Domain.Entities.Skills.Skill", "Skill")
                         .WithMany()
                         .HasForeignKey("SkillId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1732,17 +1701,17 @@ namespace Server.Infrastructure.Migrations
 
             modelBuilder.Entity("Server.Domain.Entities.SkillOverRide", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.JobOpening", "JobOpening")
+                    b.HasOne("Server.Domain.Entities.JobOpenings.JobOpening", "JobOpening")
                         .WithMany("SkillOverRides")
                         .HasForeignKey("JobOpeningId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Server.Domain.Entities.PositionsBatch", "PositionBatch")
+                    b.HasOne("Server.Domain.Entities.Positions.PositionBatch", "PositionBatch")
                         .WithMany("SkillOverRides")
                         .HasForeignKey("PositionBatchId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Server.Domain.Entities.Skill", "Skill")
+                    b.HasOne("Server.Domain.Entities.Skills.Skill", "Skill")
                         .WithMany()
                         .HasForeignKey("SkillId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1755,25 +1724,73 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("Skill");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.User", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Skills.Skill", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.Auth", "Auth")
-                        .WithOne()
-                        .HasForeignKey("Server.Domain.Entities.User", "AuthId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Server.Domain.Entities.User", "CreatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "DeletedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "DeletedByUser")
                         .WithMany()
                         .HasForeignKey("DeletedBy")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Domain.Entities.User", "UpdatedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("LastUpdatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.Users.Auth", b =>
+                {
+                    b.HasOne("Server.Domain.Entities.Users.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Server.Domain.Entities.Users.User", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Server.Domain.Entities.Users.User", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("LastUpdatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.Users.User", b =>
+                {
+                    b.HasOne("Server.Domain.Entities.Users.Auth", "Auth")
+                        .WithOne()
+                        .HasForeignKey("Server.Domain.Entities.Users.User", "AuthId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Domain.Entities.Users.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Server.Domain.Entities.Users.User", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Server.Domain.Entities.Users.User", "UpdatedByUser")
                         .WithMany()
                         .HasForeignKey("LastUpdatedBy")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1787,21 +1804,21 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("UpdatedByUser");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.UserRole", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Users.UserRole", b =>
                 {
-                    b.HasOne("Server.Domain.Entities.User", "AssignedByUser")
+                    b.HasOne("Server.Domain.Entities.Users.User", "AssignedByUser")
                         .WithMany()
                         .HasForeignKey("AssignedBy")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.Role", "Role")
+                    b.HasOne("Server.Domain.Entities.Roles.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Domain.Entities.User", "User")
+                    b.HasOne("Server.Domain.Entities.Users.User", "User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1814,19 +1831,19 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Candidate", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Candidates.Candidate", b =>
                 {
                     b.Navigation("Documents");
 
                     b.Navigation("Skills");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Designation", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Designations.Designation", b =>
                 {
                     b.Navigation("DesignationSkills");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Event", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Events.Event", b =>
                 {
                     b.Navigation("EventJobOpenings");
                 });
@@ -1836,26 +1853,26 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("SkillFeedbacks");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Interview", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Interviews.Interview", b =>
                 {
                     b.Navigation("Feedbacks");
 
                     b.Navigation("Participants");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.InterviewRoundTemplate", b =>
-                {
-                    b.Navigation("PanelRequirements");
-                });
-
-            modelBuilder.Entity("Server.Domain.Entities.JobApplication", b =>
+            modelBuilder.Entity("Server.Domain.Entities.JobApplications.JobApplication", b =>
                 {
                     b.Navigation("Feedbacks");
 
                     b.Navigation("StatusMoveHistories");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.JobOpening", b =>
+            modelBuilder.Entity("Server.Domain.Entities.JobOpenings.InterviewRoundTemplate", b =>
+                {
+                    b.Navigation("PanelRequirements");
+                });
+
+            modelBuilder.Entity("Server.Domain.Entities.JobOpenings.JobOpening", b =>
                 {
                     b.Navigation("InterviewRounds");
 
@@ -1864,12 +1881,12 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("SkillOverRides");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.Positions", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions.Position", b =>
                 {
                     b.Navigation("StatusMoveHistories");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.PositionsBatch", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Positions.PositionBatch", b =>
                 {
                     b.Navigation("Positions");
 
@@ -1878,7 +1895,7 @@ namespace Server.Infrastructure.Migrations
                     b.Navigation("SkillOverRides");
                 });
 
-            modelBuilder.Entity("Server.Domain.Entities.User", b =>
+            modelBuilder.Entity("Server.Domain.Entities.Users.User", b =>
                 {
                     b.Navigation("Roles");
                 });

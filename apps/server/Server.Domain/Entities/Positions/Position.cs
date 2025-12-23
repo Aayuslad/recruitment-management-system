@@ -1,11 +1,10 @@
 ﻿using Server.Core.Entities;
-using Server.Core.Primitives;
 using Server.Domain.Entities.Candidates;
 using Server.Domain.Enums;
 
 namespace Server.Domain.Entities.Positions
 {
-    public class Position : BaseEntity<Guid>, IAggregateRoot
+    public class Position : BaseEntity<Guid>
     {
         private Position() : base(Guid.Empty) { }
 
@@ -55,6 +54,8 @@ namespace Server.Domain.Entities.Positions
             }
 
             Status = PositionStatus.Open;
+            ClosedByCandidate = null;
+            ClosureReason = null;
 
             var history = PositionStatusMoveHistory.Create(Id, PositionStatus.Open, comments, updatedBy);
             StatusMoveHistories.Add(history);

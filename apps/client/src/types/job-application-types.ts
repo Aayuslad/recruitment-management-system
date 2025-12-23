@@ -12,6 +12,14 @@ export interface JobApplicationSummary {
     avgRating?: number | null;
 }
 
+export interface JobOpeningApplicationSummary {
+    id: string;
+    candidateId: string;
+    candidateName: string;
+    appliedAt: string;
+    status: JobApplicationStatus;
+}
+
 export interface JobApplication {
     id: string;
     candidateId: string;
@@ -21,7 +29,8 @@ export interface JobApplication {
     status: JobApplicationStatus;
     designation: string;
     avgRating?: number | null;
-    feedbacks: FeedbackDetailDTO[];
+    jobApplicationFeedbacks: FeedbackDetailDTO[];
+    interviewFeedbacks: FeedbackDetailDTO[];
     statusMoveHistories: StatusMoveHistoryDetailDTO[];
 }
 
@@ -112,5 +121,4 @@ export type MoveJobApplicationStatusCommandCorrected = Omit<
     'id' | 'moveTo'
 > & {
     id: string;
-    moveTo: components['schemas']['JobApplicationStatus'];
 };

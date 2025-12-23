@@ -93,12 +93,13 @@ export function useGetJobOpenings() {
     });
 }
 
-export function useGetJobOpening(id: string) {
+export function useGetJobOpening(id?: string) {
     return useQuery({
         queryKey: ['job-opening', id],
         queryFn: async (): Promise<JobOpening | null> => {
             const { data } = await axios.get(`/job-opening/${id}`);
             return data;
         },
+        enabled: !!id,
     });
 }

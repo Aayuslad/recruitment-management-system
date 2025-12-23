@@ -103,13 +103,14 @@ export function useVerifyCandidateBg() {
     });
 }
 
-export function useGetCandidate(id: string) {
-    return useQuery({
+export function useGetCandidate(id?: string) {
+    return useQuery<Candidate | null>({
         queryKey: ['candidate', id],
-        queryFn: async (): Promise<Candidate | null> => {
+        queryFn: async () => {
             const { data } = await axios.get(`/candidate/${id}`);
             return data;
         },
+        enabled: !!id,
     });
 }
 

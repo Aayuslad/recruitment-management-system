@@ -53,7 +53,7 @@ namespace Server.Application.Aggregates.Interviews.Handlers
                     scheduledAt: request.ScheduledAt,
                     durationInMinutes: request.DurationInMinutes,
                     meetingLink: request.MeetingLink,
-                    status: InterviewStatus.Unscheduled,
+                    status: InterviewStatus.NotScheduled,
                     participants: participants
                 );
 

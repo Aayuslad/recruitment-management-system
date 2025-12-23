@@ -69,8 +69,10 @@ namespace Server.Application.Aggregates.Candidates.Handlers
                 firstName: request.FirstName,
                 middleName: request.MiddleName,
                 lastName: request.LastName,
+                gender: request.Gender,
                 contactNumber: contactNumber,
                 dob: request.Dob,
+                collegeName: request.CollegeName,
                 resumeUrl: request.ResumeUrl,
                 skills: skills,
                 documents: documents

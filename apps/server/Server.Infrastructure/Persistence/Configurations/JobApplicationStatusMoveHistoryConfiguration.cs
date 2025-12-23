@@ -32,6 +32,7 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.HasOne(x => x.MovedByUser)
                 .WithMany()
                 .HasForeignKey(x => x.MovedById)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

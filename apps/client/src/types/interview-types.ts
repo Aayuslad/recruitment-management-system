@@ -6,9 +6,26 @@ import type {
 } from './enums';
 import type { components } from './generated/api';
 
+export interface InterviewSummary {
+    id: string;
+    candidateId: string;
+    candidateName: string;
+    designationId: string;
+    designationName: string;
+    roundNumber: number;
+    interviewType: InterviewType;
+    scheduledAt?: string | null;
+    durationInMinutes: number;
+    status: InterviewStatus;
+}
+
 export interface Interview {
     id: string;
     jobApplicationId: string;
+    candidateId: string;
+    candidateName: string;
+    designationId: string;
+    designationName: string;
     roundNumber: number;
     interviewType: InterviewType;
     scheduledAt?: string | null;
@@ -95,6 +112,15 @@ export type EditInterviewCommandCorrected = Omit<
         role: components['schemas']['InterviewParticipantRole'];
         id?: string | null;
     })[];
+};
+
+export type MoveInterviewStatusCommandCorrected = Omit<
+    components['schemas']['MoveInterviewStatusCommand'],
+    'interviewId' | 'moveTo' | 'scheduledAt'
+> & {
+    interviewId: string;
+    moveTo: components['schemas']['InterviewStatus'];
+    scheduledAt?: Date | null;
 };
 
 export type CreateInterviewFeedbackCommandCorrected = Omit<

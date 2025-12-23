@@ -1,5 +1,6 @@
 ﻿using Server.Core.Entities;
 using Server.Domain.Entities.Documents;
+using Server.Domain.Entities.Users;
 
 namespace Server.Domain.Entities.Candidates
 {
@@ -24,7 +25,8 @@ namespace Server.Domain.Entities.Candidates
         public Guid DocumentTypeId { get; private set; }
         public string Url { get; private set; } = null!;
         public bool IsVerified { get; private set; }
-        public Guid? VerifiedBy { get; private set; }
+        public Guid? VerifiedById { get; private set; }
+        public User? VerifiedByUser { get; private set; }
         public Candidate Candidate { get; private set; } = null!;
         public DocumentType DocumentType { get; private set; } = null!;
 
@@ -43,10 +45,10 @@ namespace Server.Domain.Entities.Candidates
             );
         }
 
-        public void MarkVerified(Guid verifiedBy)
+        public void MarkVerified(Guid verifiedById)
         {
             IsVerified = true;
-            VerifiedBy = verifiedBy;
+            VerifiedById = verifiedById;
         }
     }
 }

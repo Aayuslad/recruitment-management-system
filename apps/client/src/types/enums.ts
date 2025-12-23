@@ -59,9 +59,17 @@ export const JOB_APPLICATION_STATUS = {
     OFFERED: 'Offered',
     REJECTED: 'Rejected',
     HIRED: 'Hired',
+    ON_HOLD: 'OnHold',
 } as const;
 export type JobApplicationStatus =
     (typeof JOB_APPLICATION_STATUS)[keyof typeof JOB_APPLICATION_STATUS];
+
+export const JOB_APPLICATION_ACTION_TYPE = {
+    ROLL_BACK: 'RollBack',
+    UNHOLD: 'UnHold',
+} as const;
+export type JobApplicationActionType =
+    (typeof JOB_APPLICATION_ACTION_TYPE)[keyof typeof JOB_APPLICATION_ACTION_TYPE];
 
 export const INTERVIEW_TYPE = {
     TECHNICAL: 'Technical',
@@ -72,7 +80,7 @@ export type InterviewType =
     (typeof INTERVIEW_TYPE)[keyof typeof INTERVIEW_TYPE];
 
 export const INTERVIEW_STATUS = {
-    UNSCHEDULED: 'Unscheduled',
+    NOT_SCHEDULED: 'NotScheduled',
     SCHEDULED: 'Scheduled',
     COMPLETED: 'Completed',
 } as const;

@@ -25,6 +25,9 @@ import { Index as PositionsIndex } from './pages/position';
 import { Index as ReportsAndAnalyticsIndex } from './pages/ReportsAndAnalytics';
 import { PositionBatchDetailsPage } from './pages/position/position-batch-details-page';
 import { JobOpeningDetailPage } from './pages/jobOpening/job-opening-details-page';
+import { CandidateDetailsPage } from './pages/candidate/candidate-details-page';
+import { JobApplicationDetailsPage } from './pages/jobApplication/job-application-details-page';
+import { InterviewDetailsPage } from './pages/interview/interview-details-page';
 
 function App() {
     return (
@@ -43,12 +46,27 @@ function App() {
                             element={<JobOpeningDetailPage />}
                         />
                     </Route>
-                    <Route path="candidates" element={<CandidatesIndex />} />
-                    <Route
-                        path="job-applications"
-                        element={<JobApplicationsIndex />}
-                    />
-                    <Route path="interviews" element={<InterviewsIndex />} />
+                    <Route path="candidates">
+                        <Route index element={<CandidatesIndex />} />
+                        <Route
+                            path="candidate/:id"
+                            element={<CandidateDetailsPage />}
+                        />
+                    </Route>
+                    <Route path="job-applications">
+                        <Route index element={<JobApplicationsIndex />} />
+                        <Route
+                            path="application/:id"
+                            element={<JobApplicationDetailsPage />}
+                        />
+                    </Route>
+                    <Route path="interviews">
+                        <Route index element={<InterviewsIndex />} />
+                        <Route
+                            path="interview/:id"
+                            element={<InterviewDetailsPage />}
+                        />
+                    </Route>
 
                     <Route path="positions">
                         <Route index element={<PositionsIndex />} />

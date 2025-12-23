@@ -92,5 +92,13 @@ namespace Server.API.Controllers
             var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }
+
+        [HttpGet("for-job-opening/{jobOpeningId:guid}")]
+        public async Task<IActionResult> GetJobOpeningApplications(Guid jobOpeningId, CancellationToken cancellationToken)
+        {
+            var query = new GetJobOpeningApplicationsQuery(jobOpeningId);
+            var result = await _mediator.Send(query, cancellationToken);
+            return result.ToActionResult(this);
+        }
     }
 }

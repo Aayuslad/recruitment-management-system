@@ -4,9 +4,10 @@
     {
         Applied = 0,
         Shortlisted = 1,
-        Interviwed = 2,
+        Interviewed = 2,
         Offered = 3,
-        Rejected = 4,
-        Hired = 5
+        Hired = 4,
+        OnHold = 5,
+        Rejected = 6,
     }
 }

@@ -31,10 +31,13 @@ namespace Server.Application.Aggregates.Candidates.Handlers
                         FirstName = x.FirstName,
                         MiddleName = x.MiddleName,
                         LastName = x.LastName,
+                        Gender = x.Gender,
                         ContactNumber = x.ContactNumber.ToString(),
                         Dob = x.Dob,
+                        CollegeName = x.CollegeName,
                         ResumeUrl = x.ResumeUrl,
                         IsBgVerificationCompleted = x.IsBgVerificationCompleted,
+                        CreatedAt = x.CreatedAt
                     }
                 ).ToList();
 

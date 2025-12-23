@@ -12,7 +12,9 @@ namespace Server.Application.Aggregates.JobApplications.Queries.DTOs
         public JobApplicationStatus Status { get; set; }
         public string Designation { get; set; } = null!;
         public double? AvgRating { get; set; }
-        public List<FeedbackDetailDTO> Feedbacks { get; set; } =
+        public List<FeedbackDetailDTO> JobApplicationFeedbacks { get; set; } =
+            new List<FeedbackDetailDTO>();
+        public List<FeedbackDetailDTO> InterviewFeedbacks { get; set; } =
             new List<FeedbackDetailDTO>();
         public List<StatusMoveHistoryDetailDTO> StatusMoveHistories { get; set; } =
             new List<StatusMoveHistoryDetailDTO>();

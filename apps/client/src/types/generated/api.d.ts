@@ -659,7 +659,24 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         put?: never;
         post: {
             parameters: {
@@ -868,6 +885,47 @@ export interface paths {
                 };
             };
         };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/interview/{id}/move-status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["MoveInterviewStatusCommand"];
+                    "text/json": components["schemas"]["MoveInterviewStatusCommand"];
+                    "application/*+json": components["schemas"]["MoveInterviewStatusCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -2268,9 +2326,11 @@ export interface components {
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
+            gender?: components["schemas"]["Gender"];
             contactNumber?: string | null;
             /** Format: date-time */
             dob?: string;
+            collegeName?: string | null;
             resumeUrl?: string | null;
             skills?: components["schemas"]["CandidateSkillDTO"][] | null;
         };
@@ -2387,9 +2447,11 @@ export interface components {
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
+            gender?: components["schemas"]["Gender"];
             contactNumber?: string | null;
             /** Format: date-time */
             dob?: string;
+            collegeName?: string | null;
             resumeUrl?: string | null;
             skills?: components["schemas"]["CandidateSkillDTO"][] | null;
             documents?: components["schemas"]["DocumentDTO"][] | null;
@@ -2532,7 +2594,7 @@ export interface components {
             assessedExpYears?: number | null;
         };
         /** @enum {string} */
-        InterviewStatus: "Unscheduled" | "Scheduled" | "Completed";
+        InterviewStatus: "NotScheduled" | "Scheduled" | "Completed";
         /** @enum {string} */
         InterviewType: "Technical" | "HR" | "OnlineTest";
         JobApplicationDTO: {
@@ -2542,7 +2604,9 @@ export interface components {
             jobOpeningId?: string;
         };
         /** @enum {string} */
-        JobApplicationStatus: "Applied" | "Shortlisted" | "Interviwed" | "Offered" | "Rejected" | "Hired";
+        JobApplicationStatus: "Applied" | "Shortlisted" | "Interviewed" | "Offered" | "Hired" | "OnHold" | "Rejected";
+        /** @enum {string} */
+        JobApplicationStatusActions: "UnHold" | "RollBack";
         JobOpeningInterviewerDTO: {
             /** Format: uuid */
             id?: string | null;
@@ -2559,10 +2623,19 @@ export interface components {
         MarkNotificationsAsReadCommand: {
             notifications?: components["schemas"]["NotificationDTO"][] | null;
         };
+        MoveInterviewStatusCommand: {
+            /** Format: uuid */
+            interviewId?: string;
+            moveTo?: components["schemas"]["InterviewStatus"];
+            meetingLink?: string | null;
+            /** Format: date-time */
+            scheduledAt?: string | null;
+        };
         MoveJobApplicationStatusCommand: {
             /** Format: uuid */
             id?: string;
             moveTo?: components["schemas"]["JobApplicationStatus"];
+            action?: components["schemas"]["JobApplicationStatusActions"];
         };
         NotificationDTO: {
             /** Format: uuid */
