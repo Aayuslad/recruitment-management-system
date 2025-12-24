@@ -231,47 +231,6 @@ export const PositionBatchDetailsPage = () => {
                                         </Tooltip>
                                     );
                                 })}
-                            {data?.skills
-                                .filter((x) => x.skillType === 'NiceToHave')
-                                .map((x) => {
-                                    return (
-                                        <Tooltip key={x.skillId}>
-                                            <TooltipTrigger asChild>
-                                                <Badge
-                                                    variant="outline"
-                                                    className="border-slate-400 text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1"
-                                                >
-                                                    <span>{x.skillName}</span>
-                                                    {x.minExperienceYears !==
-                                                        0 && (
-                                                        <span className="text-xs -mb-1 pb-[1px] px-1.5 bg-accent rounded-2xl">
-                                                            {
-                                                                x.minExperienceYears
-                                                            }
-                                                        </span>
-                                                    )}
-                                                </Badge>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p className="space-x-1.5 mb-1">
-                                                    <span className="font-semibold">
-                                                        Type:
-                                                    </span>
-                                                    <span>{x.skillType}</span>
-                                                </p>
-                                                <p className="space-x-1.5">
-                                                    <span className="font-semibold">
-                                                        Minimum Experience
-                                                        years:
-                                                    </span>
-                                                    <span>
-                                                        {x.minExperienceYears}
-                                                    </span>
-                                                </p>
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    );
-                                })}
                         </div>
                     </div>
 

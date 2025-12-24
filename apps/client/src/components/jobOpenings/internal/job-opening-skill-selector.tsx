@@ -271,16 +271,13 @@ export const JobOpeningSkillSelector = ({
                         ...finalSkills.filter(
                             (x) => x.skillType === 'Preferred'
                         ),
-                        ...finalSkills.filter(
-                            (x) => x.skillType === 'NiceToHave'
-                        ),
                     ].map((x) => {
                         return (
                             <Tooltip key={x.skillId}>
                                 <TooltipTrigger asChild>
                                     <Badge
                                         variant="outline"
-                                        className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${x.skillType === 'Required' ? 'border-red-400' : ''} ${x.skillType === 'Preferred' ? 'border-blue-400' : ''} ${x.skillType === 'NiceToHave' ? 'border-slate-400' : ''}`}
+                                        className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${x.skillType === 'Required' ? 'border-red-400' : ''} ${x.skillType === 'Preferred' ? 'border-blue-400' : 'border-slate-400'}`}
                                     >
                                         <span>{x.skillName}</span>
                                         {x.minExperienceYears !== 0 && (
@@ -324,18 +321,13 @@ export const JobOpeningSkillSelector = ({
                                     (inheritedSkill) =>
                                         inheritedSkill.skillType === 'Preferred'
                                 ),
-                                ...inheritedSkills.filter(
-                                    (inheritedSkill) =>
-                                        inheritedSkill.skillType ===
-                                        'NiceToHave'
-                                ),
                             ].map((inheritedSkill) => {
                                 return (
                                     <Tooltip key={inheritedSkill.skillId}>
                                         <TooltipTrigger asChild>
                                             <Badge
                                                 variant="outline"
-                                                className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${inheritedSkill.skillType === 'Required' ? 'border-red-400' : ''} ${inheritedSkill.skillType === 'Preferred' ? 'border-blue-400' : ''} ${inheritedSkill.skillType === 'NiceToHave' ? 'border-slate-400' : ''}`}
+                                                className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${inheritedSkill.skillType === 'Required' ? 'border-red-400' : ''} ${inheritedSkill.skillType === 'Preferred' ? 'border-blue-400' : 'border-slate-400'}`}
                                             >
                                                 <span>
                                                     {inheritedSkill.skillName}
@@ -455,9 +447,6 @@ export const JobOpeningSkillSelector = ({
                                                     </SelectItem>
                                                     <SelectItem value="Preferred">
                                                         Preferred
-                                                    </SelectItem>
-                                                    <SelectItem value="NiceToHave">
-                                                        Nice To Have
                                                     </SelectItem>
                                                 </SelectContent>
                                             </Select>

@@ -1131,6 +1131,29 @@
         }
       }
     },
+    "/api/job-application/for-job-opening/{jobOpeningId}": {
+      "get": {
+        "tags": [
+          "JobApplication"
+        ],
+        "parameters": [
+          {
+            "name": "jobOpeningId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/job-opening": {
       "post": {
         "tags": [
@@ -3157,8 +3180,7 @@
       "SkillType": {
         "enum": [
           "Required",
-          "Preferred",
-          "NiceToHave"
+          "Preferred"
         ],
         "type": "string"
       },

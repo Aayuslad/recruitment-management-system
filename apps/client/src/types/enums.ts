@@ -17,7 +17,6 @@ export type Gender = (typeof GENDER)[keyof typeof GENDER];
 export const SKILL_TYPE = {
     REQUIRED: 'Required',
     PREFERRED: 'Preferred',
-    NICE_TO_HAVE: 'NiceToHave',
 } as const;
 export type SkillType = (typeof SKILL_TYPE)[keyof typeof SKILL_TYPE];
 

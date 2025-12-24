@@ -21,7 +21,7 @@ export type CreateDesignationCommandCorrected = Omit<
     name: string;
     designationSkills: {
         skillId: string;
-        skillType: 'Required' | 'Preferred' | 'NiceToHave';
+        skillType: SkillType;
         minExperienceYears: number;
     }[];
 };
@@ -34,7 +34,7 @@ export type EditDesignationCommandCorrected = Omit<
     name: string;
     designationSkills: {
         skillId: string;
-        skillType: 'Required' | 'Preferred' | 'NiceToHave';
+        skillType: SkillType;
         minExperienceYears: number;
     }[];
 };

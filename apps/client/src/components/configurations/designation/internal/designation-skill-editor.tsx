@@ -114,9 +114,6 @@ export function DesignationSkillEditor({
                                         <SelectItem value="Preferred">
                                             Preferred
                                         </SelectItem>
-                                        <SelectItem value="NiceToHave">
-                                            Nice To Have
-                                        </SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>

@@ -222,16 +222,13 @@ export const JobApplicationDetailsPage = () => {
                                         ...matchedSkills.filter(
                                             (x) => x.skillType === 'Preferred'
                                         ),
-                                        ...matchedSkills.filter(
-                                            (x) => x.skillType === 'NiceToHave'
-                                        ),
                                     ].map((skill) => {
                                         return (
                                             <Tooltip key={skill.skillId}>
                                                 <TooltipTrigger asChild>
                                                     <Badge
                                                         variant="outline"
-                                                        className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${skill.skillType === 'Required' ? 'border-red-400' : ''} ${skill.skillType === 'Preferred' ? 'border-blue-400' : ''} ${skill.skillType === 'NiceToHave' ? 'border-slate-400' : ''}`}
+                                                        className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${skill.skillType === 'Required' ? 'border-red-400' : ''} ${skill.skillType === 'Preferred' ? 'border-blue-400' : 'border-slate-400'}`}
                                                     >
                                                         <span>
                                                             {skill.skillName}
@@ -286,16 +283,13 @@ export const JobApplicationDetailsPage = () => {
                                         ...missingSkills.filter(
                                             (x) => x.skillType === 'Preferred'
                                         ),
-                                        ...missingSkills.filter(
-                                            (x) => x.skillType === 'NiceToHave'
-                                        ),
                                     ].map((x) => {
                                         return (
                                             <Tooltip key={x.skillId}>
                                                 <TooltipTrigger asChild>
                                                     <Badge
                                                         variant="outline"
-                                                        className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${x.skillType === 'Required' ? 'border-red-400' : ''} ${x.skillType === 'Preferred' ? 'border-blue-400' : ''} ${x.skillType === 'NiceToHave' ? 'border-slate-400' : ''}`}
+                                                        className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${x.skillType === 'Required' ? 'border-red-400' : ''} ${x.skillType === 'Preferred' ? 'border-blue-400' : 'border-slate-400'}`}
                                                     >
                                                         <span>
                                                             {x.skillName}

@@ -27,7 +27,7 @@ const createDesignationFormSchema = z.object({
     designationSkills: z
         .object({
             skillId: z.string(),
-            skillType: z.enum(['Required', 'Preferred', 'NiceToHave']),
+            skillType: z.enum(['Required', 'Preferred']),
             minExperienceYears: z.number().min(0).max(50),
         })
         .array(),

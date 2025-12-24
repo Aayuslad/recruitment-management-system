@@ -105,45 +105,6 @@ export const ViewDialogBody = () => {
                         )}
                     </div>
                 </div>
-                <div className="space-y-3">
-                    <h4>Nice To Have Skills</h4>
-                    <div>
-                        {designationViewTarget?.designationSkills
-                            .filter((x) => x.skillType === 'NiceToHave')
-                            .map((x) => {
-                                return (
-                                    <Tooltip key={x.skillId}>
-                                        <TooltipTrigger asChild>
-                                            <Badge
-                                                variant="outline"
-                                                className="text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1"
-                                            >
-                                                <span>{x.name}</span>
-                                                {x.minExperienceYears !== 0 && (
-                                                    <span className="text-xs -mb-1 pb-[1px] px-1.5 bg-accent rounded-2xl">
-                                                        {x.minExperienceYears}
-                                                    </span>
-                                                )}
-                                            </Badge>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            <p>
-                                                Minimum Experience years:{' '}
-                                                {x.minExperienceYears}
-                                            </p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                );
-                            })}
-                        {designationViewTarget?.designationSkills.filter(
-                            (x) => x.skillType === 'NiceToHave'
-                        ).length === 0 && (
-                            <div className="text-muted-foreground text-center text-sm">
-                                No skills with type 'Nice To Have'
-                            </div>
-                        )}
-                    </div>
-                </div>
             </div>
         </div>
     );

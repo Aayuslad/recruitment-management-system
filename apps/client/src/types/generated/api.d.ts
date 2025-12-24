@@ -1224,6 +1224,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/job-application/for-job-opening/{jobOpeningId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    jobOpeningId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/job-opening": {
         parameters: {
             query?: never;
@@ -2688,7 +2723,7 @@ export interface components {
             actionType?: components["schemas"]["SkillActionType"];
         };
         /** @enum {string} */
-        SkillType: "Required" | "Preferred" | "NiceToHave";
+        SkillType: "Required" | "Preferred";
         UserRolesDTO: {
             /** Format: uuid */
             roleId?: string;
