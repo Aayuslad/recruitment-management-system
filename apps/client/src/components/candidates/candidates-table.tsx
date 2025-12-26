@@ -35,6 +35,7 @@ import { useNavigate } from 'react-router-dom';
 import { Spinner } from '../ui/spinner';
 import { Checkbox } from '../ui/checkbox';
 import { ApplyToJobOpeningDialog } from './internal/apply-to-job-opening-dialog';
+import { useAccessChecker } from '@/hooks/use-has-access';
 
 export function CandidatesTable() {
     const navigate = useNavigate();
@@ -44,47 +45,55 @@ export function CandidatesTable() {
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
+    const canAccess = useAccessChecker();
 
     const { data, isLoading, isError } = useGetCandidates();
 
     const columns: ColumnDef<CandidateSummary>[] = [
-        {
-            id: 'select',
-            header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && 'indeterminate')
-                    }
-                    onCheckedChange={(value) =>
-                        table.toggleAllPageRowsSelected(!!value)
-                    }
-                    aria-label="Select all"
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    onClick={(e) => e.stopPropagation()}
-                    aria-label="Select row"
-                />
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
+        ...(canAccess(['Admin', 'Recruiter'])
+            ? ([
+                  {
+                      id: 'select',
+                      header: ({ table }) => (
+                          <Checkbox
+                              checked={
+                                  table.getIsAllPageRowsSelected() ||
+                                  (table.getIsSomePageRowsSelected() &&
+                                      'indeterminate')
+                              }
+                              onCheckedChange={(value) =>
+                                  table.toggleAllPageRowsSelected(!!value)
+                              }
+                              aria-label="Select all"
+                          />
+                      ),
+                      cell: ({ row }) => (
+                          <Checkbox
+                              checked={row.getIsSelected()}
+                              onCheckedChange={(value) =>
+                                  row.toggleSelected(!!value)
+                              }
+                              onClick={(e) => e.stopPropagation()}
+                              aria-label="Select row"
+                          />
+                      ),
+                      enableSorting: false,
+                      enableHiding: false,
+                  },
+              ] as ColumnDef<CandidateSummary>[])
+            : []),
         {
             accessorKey: 'name',
             header: () => <div className="w-[220px] ml-4">Name</div>,
             cell: ({ row }) => (
-                <div className="font-medium pl-4">
+                <div className="font-medium ml-4">
                     {`${row.original.firstName} ${row.original.middleName} ${row.original.lastName}`}
                 </div>
             ),
         },
         {
             accessorKey: 'collegeName',
-            header: () => <div className="w-[220px] ml-4">College</div>,
+            header: () => <div className="w-[220px]">College</div>,
             cell: ({ row }) => <div>{row.original.collegeName}</div>,
         },
         {
@@ -179,6 +188,7 @@ export function CandidatesTable() {
                         selectedCandidates={table
                             .getSelectedRowModel()
                             .rows.map((row) => ({ id: row.original.id }))}
+                        visibleTo={['Admin', 'Recruiter']}
                     />
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>

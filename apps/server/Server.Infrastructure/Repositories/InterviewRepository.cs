@@ -73,6 +73,7 @@ namespace Server.Infrastructure.Repositories
                    .ThenInclude(x => x.JobOpening)
                        .ThenInclude(x => x.PositionBatch)
                             .ThenInclude(x => x.Designation)
+               .Include(x => x.Participants)
                .ToListAsync(cancellationToken);
         }
 
@@ -86,6 +87,9 @@ namespace Server.Infrastructure.Repositories
                     .ThenInclude(x => x.JobOpening)
                         .ThenInclude(x => x.PositionBatch)
                             .ThenInclude(x => x.Designation)
+                .Include(x => x.Participants)
+                    .ThenInclude(x => x.User)
+                        .ThenInclude(x => x.Auth)
                 .Where(x => x.JobApplicationId == jobApplicationId)
                 .ToListAsync(cancellationToken);
         }

@@ -5,7 +5,7 @@ using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Interviews.Queries
 {
-    public class GetinterviewsQuery : IRequest<Result<List<InterviewSummaryDTO>>>
+    public class GetAssignedInterviewsQuery : IRequest<Result<List<InterviewSummaryDTO>>>
     {
     }
 }

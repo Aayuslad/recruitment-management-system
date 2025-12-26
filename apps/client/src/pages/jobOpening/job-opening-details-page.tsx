@@ -65,8 +65,14 @@ export const JobOpeningDetailPage = () => {
                     </div>
                 </div>
                 <div className="ml-auto mb-4 space-x-2">
-                    <EditJobOpeningSheet jobOpeningId={data.id} />
-                    <DeleteJobOpeningDialog id={data.id} />
+                    <EditJobOpeningSheet
+                        jobOpeningId={data.id}
+                        visibleTo={['Admin', 'Recruiter']}
+                    />
+                    <DeleteJobOpeningDialog
+                        jobOpeningId={data.id}
+                        visibleTo={['Admin']}
+                    />
                 </div>
             </div>
             <div

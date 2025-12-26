@@ -63,8 +63,14 @@ export const PositionBatchDetailsPage = () => {
                     </div>
                 </div>
                 <div className="ml-auto mb-4 space-x-2">
-                    <EditPositionBatchSheet positionBatchId={data.batchId} />
-                    <DeletePositionBatchDialog batchId={data.batchId} />
+                    <EditPositionBatchSheet
+                        positionBatchId={data.batchId}
+                        visibleTo={['Admin', 'Recruiter']}
+                    />
+                    <DeletePositionBatchDialog
+                        positionBatchId={data.batchId}
+                        visibleTo={['Admin']}
+                    />
                 </div>
             </div>
             <div

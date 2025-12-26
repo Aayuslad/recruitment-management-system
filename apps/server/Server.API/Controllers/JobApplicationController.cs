@@ -22,6 +22,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> CreateJobApplication([FromBody] CreateJobApplicationCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
@@ -29,6 +30,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost("bulk")]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> CreateJobApplications([FromBody] CreateJobApplicationsCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
@@ -36,6 +38,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost("{id:guid}/feedback")]
+        [Authorize(Roles = "Admin, Recruiter, Reviewer")]
         public async Task<IActionResult> CreateReviewStageFeedback(Guid id, [FromBody] CreateJobApplicationFeedbackCommand command, CancellationToken cancellationToken)
         {
             command.JobApplicationId = id;
@@ -45,6 +48,7 @@ namespace Server.API.Controllers
 
 
         [HttpPut("{applicationId:guid}/feedback/{feedbackId:guid}")]
+        [Authorize(Roles = "Admin, Recruiter, Reviewer")]
         public async Task<IActionResult> EditReviewStageFeedback(Guid applicationId, Guid feedbackId, [FromBody] EditJobApplicationFeedbackCommand command, CancellationToken cancellationToken)
         {
             command.JobApplicationId = applicationId;
@@ -54,6 +58,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("{id:guid}/move-status")]
+        [Authorize(Roles = "Admin, Recruiter, HR")]
         public async Task<IActionResult> MoveStatusJobApplication(Guid id, [FromBody] MoveJobApplicationStatusCommand command, CancellationToken cancellationToken)
         {
             command.Id = id;
@@ -62,6 +67,7 @@ namespace Server.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> DeleteJobApplication(Guid id, CancellationToken cancellationToken)
         {
             var command = new DeleteJobApplicationCommand(id);
@@ -70,6 +76,7 @@ namespace Server.API.Controllers
         }
 
         [HttpDelete("{applicationId:guid}/feedback/{feedbackId:guid}")]
+        [Authorize(Roles = "Admin, Recruiter, Reviewer")]
         public async Task<IActionResult> DeleteReviwStageFeedback(Guid applicationId, Guid feedbackId, CancellationToken cancellationToken)
         {
             var command = new DeleteJobApplicationFeedbackCommand(applicationId, feedbackId);
@@ -78,6 +85,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize(Roles = "Admin, Recruiter, HR, Reviewer, Interviewer, Viewer")]
         public async Task<IActionResult> GetJobApplication(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetJobApplicationQuery(id);
@@ -86,6 +94,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Recruiter, HR, Reviewer, Interviewer, Viewer")]
         public async Task<IActionResult> GetJobApplications(CancellationToken cancellationToken)
         {
             var query = new GetJobApplicationsQuery();
@@ -94,9 +103,19 @@ namespace Server.API.Controllers
         }
 
         [HttpGet("for-job-opening/{jobOpeningId:guid}")]
+        [Authorize(Roles = "Admin, Recruiter, Viewer")]
         public async Task<IActionResult> GetJobOpeningApplications(Guid jobOpeningId, CancellationToken cancellationToken)
         {
             var query = new GetJobOpeningApplicationsQuery(jobOpeningId);
+            var result = await _mediator.Send(query, cancellationToken);
+            return result.ToActionResult(this);
+        }
+
+        [HttpGet("to-review")]
+        [Authorize(Roles = "Reviewer")]
+        public async Task<IActionResult> GetJobApplicationsToReview(CancellationToken cancellationToken)
+        {
+            var query = new GetJobApplicationsToReviewQuery();
             var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }

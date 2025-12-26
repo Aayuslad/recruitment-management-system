@@ -24,6 +24,7 @@ import { TypeSelector } from './internal/job-opening-type-selector';
 import { Textarea } from '../ui/textarea';
 import { InterviewRoundSelector } from './internal/interview-round-selector';
 import { InterviewParticipantSelector } from './internal/interview-participant-selector';
+import { useAccessChecker } from '@/hooks/use-has-access';
 
 const CreateJobOpeningSheetSchema = z.object({
     title: z.string(),
@@ -72,8 +73,13 @@ const CreateJobOpeningSheetSchema = z.object({
     ),
 }) satisfies z.ZodType<CreateJobOpeningCommandCorrected>;
 
-export function CreateJobOpeningSheet() {
+type Props = {
+    visibleTo: string[];
+};
+
+export function CreateJobOpeningSheet({ visibleTo }: Props) {
     const [open, setOpen] = useState(false);
+    const canAccess = useAccessChecker();
     const createJobOpeningMutation = useCreateJobOpening();
 
     const form = useForm<z.infer<typeof CreateJobOpeningSheetSchema>>({
@@ -108,6 +114,8 @@ export function CreateJobOpeningSheet() {
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };
+
+    if (!canAccess(visibleTo)) return null;
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>

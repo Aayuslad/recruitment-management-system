@@ -1,12 +1,15 @@
-import { InterviewsTable } from '@/components/interviews/interviews-table';
+import { JobApplicationsTable } from '@/components/applicationReviews/job-applications-table';
 
 export function Index() {
     return (
         <div className=" h-full">
             <div className="bg-muted dark:bg-slate-800/40 h-[100px] w-full flex items-center">
                 <div className="px-10 flex-1">
-                    <h1 className="text-2xl font-bold">Interviews</h1>
-                    <p>View and complete interviews assigned to you.</p>
+                    <h1 className="text-2xl font-bold">Application Reviews</h1>
+                    <p>
+                        Review and evaluate job applications assigned to you for
+                        screening.
+                    </p>
                 </div>
                 <div className="w-[230px] mb-4">
                     {/* <CreateCandidateSheet /> */}
@@ -15,8 +18,9 @@ export function Index() {
 
             <div className="w-full flex justify-evenly pt-10 pr-10">
                 <div className="w-full flex flex-col items-center gap-8">
+                    {/* <JobApplicationIndexTabBar /> */}
                     <div className="">
-                        <InterviewsTable />
+                        <JobApplicationsTable />
                     </div>
                 </div>
             </div>

@@ -19,8 +19,10 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
 import { JobOpeningSelector } from './job-opening-selector';
+import { useAccessChecker } from '@/hooks/use-has-access';
 type Props = {
     selectedCandidates: { id: string }[];
+    visibleTo: string[];
 };
 
 const createJobApplicationsFormSchema = z.object({
@@ -32,11 +34,15 @@ const createJobApplicationsFormSchema = z.object({
     ),
 }) satisfies z.ZodType<CreateJobApplicationsCommandCorrected>;
 
-export function ApplyToJobOpeningDialog({ selectedCandidates }: Props) {
+export function ApplyToJobOpeningDialog({
+    selectedCandidates,
+    visibleTo,
+}: Props) {
     const [open, setOpen] = useState(false);
     const createJobApplications = useCreateJobApplications();
     const { data: jobOpenings, isLoading, isError } = useGetJobOpenings();
     const [selectedJobOpeningId, setSelectedJobOpeningId] = useState<string>();
+    const canAccess = useAccessChecker();
 
     const form = useForm<z.infer<typeof createJobApplicationsFormSchema>>({
         resolver: zodResolver(createJobApplicationsFormSchema),
@@ -68,6 +74,8 @@ export function ApplyToJobOpeningDialog({ selectedCandidates }: Props) {
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };
+
+    if (!canAccess(visibleTo)) return null;
 
     if (!jobOpenings && isLoading)
         return (

@@ -24,6 +24,7 @@ import { JobOpeningSkillSelector } from './internal/job-opening-skill-selector';
 import { InterviewRoundSelector } from './internal/interview-round-selector';
 import { InterviewParticipantSelector } from './internal/interview-participant-selector';
 import { Spinner } from '../ui/spinner';
+import { useAccessChecker } from '@/hooks/use-has-access';
 
 const EditJobOpeningSheetSchema = z.object({
     jobOpeningId: z.string(),
@@ -78,11 +79,13 @@ const EditJobOpeningSheetSchema = z.object({
 
 type Props = {
     jobOpeningId: string;
+    visibleTo: string[];
 };
 
-export function EditJobOpeningSheet({ jobOpeningId }: Props) {
+export function EditJobOpeningSheet({ jobOpeningId, visibleTo }: Props) {
     const [open, setOpen] = useState(false);
     const editJobOpeningMutation = useEditJobOpening();
+    const canAccess = useAccessChecker();
     const { data, isLoading, isError } = useGetJobOpening(jobOpeningId);
 
     const form = useForm<z.infer<typeof EditJobOpeningSheetSchema>>({
@@ -122,6 +125,8 @@ export function EditJobOpeningSheet({ jobOpeningId }: Props) {
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };
+
+    if (!canAccess(visibleTo)) return null;
 
     if (isLoading)
         return (

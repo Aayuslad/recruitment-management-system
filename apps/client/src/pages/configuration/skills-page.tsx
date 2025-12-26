@@ -15,7 +15,7 @@ export function SkillsPage() {
                     </p>
                 </div>
                 <div className="w-[200px] mb-4">
-                    <CreateSkillDialog />
+                    <CreateSkillDialog visibleTo={['Admin']} />
                 </div>
             </div>
 

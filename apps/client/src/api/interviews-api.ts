@@ -6,6 +6,7 @@ import type {
     EditInterviewFeedbackCommandCorrected,
     InterviewSummary,
     MoveInterviewStatusCommandCorrected,
+    InterviewSummaryForJobApplication,
 } from '@/types/interview-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
@@ -206,22 +207,38 @@ export function useDeleteInterviewFeedback() {
     });
 }
 
-export function useGetInterview(id: string) {
+export function useGetInterview(id?: string) {
     return useQuery({
         queryKey: ['interview', id],
         queryFn: async (): Promise<Interview | null> => {
             const { data } = await axios.get(`/interview/${id}`);
             return data;
         },
+        enabled: !!id,
     });
 }
 
-export function useGetInterviews() {
+export function useGetAssignedInterviews() {
     return useQuery({
-        queryKey: ['interviews'],
+        queryKey: ['assigned-interviews'],
         queryFn: async (): Promise<InterviewSummary[] | null> => {
-            const { data } = await axios.get('/interview');
+            const { data } = await axios.get('/interview/assigned');
             return data;
         },
+    });
+}
+
+export function useGetJobApplicationInterviews(jobApplicationId?: string) {
+    return useQuery({
+        queryKey: ['job-application-interviews', jobApplicationId],
+        queryFn: async (): Promise<
+            InterviewSummaryForJobApplication[] | null
+        > => {
+            const { data } = await axios.get(
+                `/interview/job-application/${jobApplicationId}`
+            );
+            return data;
+        },
+        enabled: !!jobApplicationId,
     });
 }

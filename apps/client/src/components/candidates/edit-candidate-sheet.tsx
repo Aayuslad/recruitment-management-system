@@ -30,9 +30,11 @@ import {
     SelectValue,
 } from '../ui/select';
 import type { Gender } from '@/types/enums';
+import { useAccessChecker } from '@/hooks/use-has-access';
 
 type Props = {
     candidateId: string;
+    visibleTo: string[];
 };
 
 const editCandidateFormSchema = z.object({
@@ -53,10 +55,11 @@ const editCandidateFormSchema = z.object({
     ),
 }) satisfies z.ZodType<EditCandidateCommandCorrected>;
 
-export function EditCandidateSheet({ candidateId }: Props) {
+export function EditCandidateSheet({ candidateId, visibleTo }: Props) {
     const [open, setOpen] = useState(false);
     const { data, isLoading, isError } = useGetCandidate(candidateId);
     const editCandidateMutation = useEditCandidate();
+    const canAccess = useAccessChecker();
 
     const form = useForm<z.infer<typeof editCandidateFormSchema>>({
         resolver: zodResolver(editCandidateFormSchema),
@@ -89,6 +92,8 @@ export function EditCandidateSheet({ candidateId }: Props) {
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };
+
+    if (!canAccess(visibleTo)) return null;
 
     if (isLoading)
         return (

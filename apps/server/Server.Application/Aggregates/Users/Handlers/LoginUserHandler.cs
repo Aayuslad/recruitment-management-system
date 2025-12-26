@@ -42,7 +42,7 @@ namespace Server.Application.Aggregates.Users.Handlers
             var user = await _userRepository.GetProfileByAuthIdAsync(auth.Id, cancellationToken);
 
             // step 3: generate token
-            var token = _jwtTokenGenerator.GenerateToken(auth.Id, user?.Id, auth.UserName);
+            var token = _jwtTokenGenerator.GenerateToken(auth.Id, user?.Id, auth.UserName, user?.Roles.Select(x => x.Role.Name).ToList());
 
             // step 4: return token
             var loginUserDto = new LoginUserDTO

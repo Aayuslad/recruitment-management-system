@@ -22,8 +22,8 @@ import z from 'zod';
 import { SkillFeedbackInput } from './skill-feedback-intput';
 
 type Props = {
-    jobApplicationId: string;
-    candidateId: string;
+    jobApplicationId?: string;
+    candidateId?: string;
 };
 
 const createFeedbackFormSchema = z.object({

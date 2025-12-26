@@ -17,7 +17,7 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 
-import { useGetJobApplications } from '@/api/job-application-api';
+import { useGetJobApplicationsToReview } from '@/api/job-application-api';
 import {
     Table,
     TableBody,
@@ -37,7 +37,7 @@ export const JobApplicationsTable = () => {
         {}
     );
     const [rowSelection, setRowSelection] = useState({});
-    const { data, isLoading, isError } = useGetJobApplications();
+    const { data, isLoading, isError } = useGetJobApplicationsToReview();
     // const { currentJobApplicationTab } = useAppStore(
     //     useShallow((s) => ({
     //         currentJobApplicationTab: s.currentJobApplicationTab,
@@ -185,7 +185,7 @@ export const JobApplicationsTable = () => {
                                     }
                                     onClick={() =>
                                         navigate(
-                                            `/job-applications/application/${row.original.id}`
+                                            `/application-reviews/application/${row.original.id}`
                                         )
                                     }
                                 >

@@ -19,13 +19,15 @@ import {
     type JobApplicationStoreSliceType,
 } from './job-application-store';
 import { createAdminSlice, type AdminStoreSliceType } from './admin-store';
+import { createAuthSlice, type AuthStoreSliceType } from './auth-store';
 
 type AppStoreTupe = UiStoreSliceType &
     SkillStoreSliceType &
     DocumentTypeStoreSliceType &
     DesignationStoreSliceType &
     JobApplicationStoreSliceType &
-    AdminStoreSliceType;
+    AdminStoreSliceType &
+    AuthStoreSliceType;
 
 export const useAppStore = create<AppStoreTupe>((...args) => ({
     ...createUiSlice(...args),
@@ -34,6 +36,7 @@ export const useAppStore = create<AppStoreTupe>((...args) => ({
     ...createDesignationSlice(...args),
     ...createJobApplicationSlice(...args),
     ...createAdminSlice(...args),
+    ...createAuthSlice(...args),
 }));
 
 // updating configs from localstorage

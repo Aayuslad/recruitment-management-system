@@ -8,18 +8,23 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
+import { useAccessChecker } from '@/hooks/use-has-access';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
-    id: string;
+    candidateId: string;
+    visibleTo: string[];
 }
 
-export function DeleteCandidateDialog({ id }: Props) {
+export function DeleteCandidateDialog({ candidateId, visibleTo }: Props) {
     const [open, setOpen] = useState(false);
     const deleteCandidateMutation = useDeleteCandidate();
+    const canAccess = useAccessChecker();
     const navigate = useNavigate();
+
+    if (!canAccess(visibleTo)) return null;
 
     return (
         <>
@@ -58,7 +63,7 @@ export function DeleteCandidateDialog({ id }: Props) {
                             variant="default"
                             className="flex-1 bg-red-500 text-white hover:bg-red-600"
                             onClick={() => {
-                                deleteCandidateMutation.mutate(id, {
+                                deleteCandidateMutation.mutate(candidateId, {
                                     onSuccess: () => {
                                         setOpen(false);
                                         navigate('/candidates');

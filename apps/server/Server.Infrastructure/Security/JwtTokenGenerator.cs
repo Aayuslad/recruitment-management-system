@@ -18,7 +18,7 @@ namespace Server.Infrastructure.Security
             _configuration = configuration;
         }
 
-        public string GenerateToken(Guid authId, Guid? userId, string? userName)
+        public string GenerateToken(Guid authId, Guid? userId, string? userName, IEnumerable<string>? roles = null)
         {
             var jwtKey = _configuration["Jwt:Key"];
             if (string.IsNullOrEmpty(jwtKey))
@@ -38,12 +38,19 @@ namespace Server.Infrastructure.Security
             if (!string.IsNullOrEmpty(userName))
                 claims.Add(new("userName", userName));
 
+            if (roles != null)
+            {
+                foreach (var role in roles)
+                {
+                    claims.Add(new(ClaimTypes.Role, role));
+                }
+            }
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddDays(30),
+                expires: DateTime.Now.AddHours(20),
                 signingCredentials: creds
              );
 

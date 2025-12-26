@@ -79,6 +79,9 @@ namespace Server.Infrastructure.Repositories
                 .Include(x => x.JobOpening)
                     .ThenInclude(x => x.PositionBatch)
                         .ThenInclude(x => x.Designation)
+                .Include(x => x.JobOpening)
+                    .ThenInclude(x => x.PositionBatch)
+                        .ThenInclude(x => x.Reviewers)
                 .Include(x => x.Feedbacks)
                 .ToListAsync(cancellationToken);
         }

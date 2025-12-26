@@ -50,6 +50,16 @@ export const routes: RouteConfigType[] = [
         ],
     },
     {
+        breadcrumb: 'Application Reviews',
+        path: 'application-reviews',
+        children: [
+            {
+                breadcrumb: 'Application Review',
+                path: 'application/:id',
+            },
+        ],
+    },
+    {
         breadcrumb: 'Positions',
         path: 'positions',
         children: [

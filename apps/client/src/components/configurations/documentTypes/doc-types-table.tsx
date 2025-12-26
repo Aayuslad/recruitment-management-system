@@ -10,18 +10,13 @@ import {
     useReactTable,
     type VisibilityState,
 } from '@tanstack/react-table';
-import { ArrowUpDown, ChevronDown } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import * as React from 'react';
 
 import { useGetDocumentTypes } from '@/api/document-api';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
 import {
     Table,
     TableBody,
@@ -30,10 +25,10 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { useAccessChecker } from '@/hooks/use-has-access';
 import { useAppStore } from '@/store';
 import type { Document } from '@/types/document-types';
 import { useShallow } from 'zustand/react/shallow';
-import { Spinner } from '@/components/ui/spinner';
 
 export function DocTypesTable() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -42,6 +37,7 @@ export function DocTypesTable() {
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
+    const canAccess = useAccessChecker();
 
     const { data, isLoading, isError } = useGetDocumentTypes();
     const { openDocTypeEditDialog, openDocTypeDeleteDialog } = useAppStore(
@@ -71,30 +67,38 @@ export function DocTypesTable() {
                 </div>
             ),
         },
-        {
-            accessorKey: 'actions',
-            header: 'Actions',
-            cell: ({ row }) => {
-                return (
-                    <div className="flex gap-10 font-semibold">
-                        <button
-                            className="text-gray-400 hover:cursor-pointer"
-                            onClick={() => openDocTypeEditDialog(row.original)}
-                        >
-                            Edit
-                        </button>
-                        <button
-                            className="text-destructive hover:cursor-pointer"
-                            onClick={() =>
-                                openDocTypeDeleteDialog(row.original.id)
-                            }
-                        >
-                            Delete
-                        </button>
-                    </div>
-                );
-            },
-        },
+        ...(canAccess(['Admin'])
+            ? ([
+                  {
+                      accessorKey: 'actions',
+                      header: () => <div className="w-[130px]">Actions</div>,
+                      cell: ({ row }) => {
+                          return (
+                              <div className="flex gap-10 font-semibold">
+                                  <button
+                                      className="text-gray-400 hover:cursor-pointer"
+                                      onClick={() =>
+                                          openDocTypeEditDialog(row.original)
+                                      }
+                                  >
+                                      Edit
+                                  </button>
+                                  <button
+                                      className="text-destructive hover:cursor-pointer"
+                                      onClick={() =>
+                                          openDocTypeDeleteDialog(
+                                              row.original.id
+                                          )
+                                      }
+                                  >
+                                      Delete
+                                  </button>
+                              </div>
+                          );
+                      },
+                  },
+              ] as ColumnDef<Document>[])
+            : []),
     ];
 
     const table = useReactTable({
@@ -133,7 +137,7 @@ export function DocTypesTable() {
     }
 
     return (
-        <div className="w-[500px]">
+        <div className="">
             {/* header */}
             <div className="flex items-center py-4">
                 <Input
@@ -149,30 +153,6 @@ export function DocTypesTable() {
                     }
                     className="w-[250px]"
                 />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => (
-                                <DropdownMenuCheckboxItem
-                                    key={column.id}
-                                    className="capitalize"
-                                    checked={column.getIsVisible()}
-                                    onCheckedChange={(value) =>
-                                        column.toggleVisibility(!!value)
-                                    }
-                                >
-                                    {column.id}
-                                </DropdownMenuCheckboxItem>
-                            ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
             </div>
 
             {/* table */}

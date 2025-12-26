@@ -13,7 +13,7 @@ export function Index() {
                     </p>
                 </div>
                 <div className="w-[230px] mb-4">
-                    <CreateJobOpeningSheet />
+                    <CreateJobOpeningSheet visibleTo={['Admin', 'Recruiter']} />
                 </div>
             </div>
 

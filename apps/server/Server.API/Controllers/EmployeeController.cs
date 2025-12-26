@@ -21,6 +21,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, HR, Viewer")]
         public async Task<IActionResult> GetEmployees(CancellationToken cancellationToken)
         {
             var query = new GetEmployeesQuery();

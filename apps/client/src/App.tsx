@@ -28,6 +28,8 @@ import { JobOpeningDetailPage } from './pages/jobOpening/job-opening-details-pag
 import { CandidateDetailsPage } from './pages/candidate/candidate-details-page';
 import { JobApplicationDetailsPage } from './pages/jobApplication/job-application-details-page';
 import { InterviewDetailsPage } from './pages/interview/interview-details-page';
+import { Index as ApplicationReviewIndex } from './pages/applicationReviews';
+import { ApplicationReviewsDetailsPage } from './pages/applicationReviews/application-reviews-details-page';
 
 function App() {
     return (
@@ -67,7 +69,13 @@ function App() {
                             element={<InterviewDetailsPage />}
                         />
                     </Route>
-
+                    <Route path="application-reviews">
+                        <Route index element={<ApplicationReviewIndex />} />
+                        <Route
+                            path="application/:id"
+                            element={<ApplicationReviewsDetailsPage />}
+                        />
+                    </Route>
                     <Route path="positions">
                         <Route index element={<PositionsIndex />} />
                         <Route

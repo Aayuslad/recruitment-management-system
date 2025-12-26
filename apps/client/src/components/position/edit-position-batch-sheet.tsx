@@ -22,6 +22,7 @@ import { Textarea } from '../ui/textarea';
 import { ReviewersSelector } from './internal/reviewers-selector';
 import { PositionSkillSelector } from './internal/position-skill-selector';
 import { Spinner } from '../ui/spinner';
+import { useAccessChecker } from '@/hooks/use-has-access';
 
 const editPositionBatchFormSchema = z.object({
     positionBatchId: z.string(),
@@ -46,13 +47,15 @@ const editPositionBatchFormSchema = z.object({
     ),
 }) satisfies z.ZodType<EditPositionBatchCommandCorrected>;
 
-export function EditPositionBatchSheet({
-    positionBatchId,
-}: {
+type Props = {
+    visibleTo: string[];
     positionBatchId: string;
-}) {
+};
+
+export function EditPositionBatchSheet({ positionBatchId, visibleTo }: Props) {
     const [open, setOpen] = useState(false);
     const editPositionBatchMutation = useEditPositionBatch();
+    const canAccess = useAccessChecker();
     const {
         data: positionBatch,
         isLoading,
@@ -75,18 +78,14 @@ export function EditPositionBatchSheet({
 
     useEffect(() => {
         if (positionBatch) {
-            form.setValue('positionBatchId', positionBatch.batchId);
-            form.setValue('description', positionBatch.description);
-            form.setValue('minCTC', positionBatch.minCTC);
-            form.setValue('maxCTC', positionBatch.maxCTC);
-            form.setValue('jobLocation', positionBatch.jobLocation);
-            form.setValue('reviewers', positionBatch.reviewers);
-            form.setValue('skillOverRides', positionBatch.skillOverRides);
+            form.reset(positionBatch);
+            form.setValue('positionBatchId', positionBatchId);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [positionBatch]);
 
     const onSubmit = async (data: EditPositionBatchCommandCorrected) => {
+        console.log('Submitting', data);
         editPositionBatchMutation.mutate(data, {
             onSuccess: () => {
                 form.reset();
@@ -96,6 +95,7 @@ export function EditPositionBatchSheet({
     };
 
     const onInvalid = (errors: typeof form.formState.errors) => {
+        console.log(errors);
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };
@@ -115,6 +115,8 @@ export function EditPositionBatchSheet({
             </div>
         );
     }
+
+    if (!canAccess(visibleTo)) return null;
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>

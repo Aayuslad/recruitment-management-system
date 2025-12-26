@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Claims;
+using System.Text;
 using System.Text.Json.Serialization;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -58,7 +59,8 @@ namespace Server.API.Extensions
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = config["Jwt:Issuer"],
                         ValidAudience = config["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                        RoleClaimType = ClaimTypes.Role
                     };
 
                     // to read token from cookie instead of Authorization header
@@ -72,13 +74,6 @@ namespace Server.API.Extensions
                             }
                             return Task.CompletedTask;
                         },
-
-                        //TODO: Learn RBAC and implement properly
-                        // OnTokenValidated = ctx =>
-                        // {
-                        //     ((ClaimsIdentity)ctx.Principal!.Identity!).AddClaim(new Claim(ClaimTypes.Role, "Admin"));
-                        //     return Task.CompletedTask;
-                        // }
                     };
                 });
 

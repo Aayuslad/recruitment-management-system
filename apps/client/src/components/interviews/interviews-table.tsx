@@ -12,7 +12,7 @@ import {
 } from '@tanstack/react-table';
 import * as React from 'react';
 
-import { useGetInterviews } from '@/api/interviews-api';
+import { useGetAssignedInterviews } from '@/api/interviews-api';
 import { Button } from '@/components/ui/button';
 import {
     Table,
@@ -36,7 +36,7 @@ export function InterviewsTable() {
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
-    const { data, isLoading, isError } = useGetInterviews();
+    const { data, isLoading, isError } = useGetAssignedInterviews();
 
     const columns: ColumnDef<InterviewSummary>[] = [
         {

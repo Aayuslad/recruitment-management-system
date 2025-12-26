@@ -21,7 +21,7 @@ import { Check, X } from 'lucide-react';
 import { useState } from 'react';
 
 type Props = {
-    candidateId: string;
+    candidateId?: string;
     skillFeedbacks: CreateJobApplicationFeedbackCommandCorrected['skillFeedbacks'];
     append: (
         skillFeedback: CreateJobApplicationFeedbackCommandCorrected['skillFeedbacks'][0]

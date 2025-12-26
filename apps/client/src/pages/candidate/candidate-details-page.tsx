@@ -44,8 +44,14 @@ export const CandidateDetailsPage = () => {
                     </div>
                 </div>
                 <div className="ml-auto mb-4 space-x-2">
-                    <EditCandidateSheet candidateId={data.id} />
-                    <DeleteCandidateDialog id={data.id} />
+                    <EditCandidateSheet
+                        candidateId={data.id}
+                        visibleTo={['Admin', 'Recruiter']}
+                    />
+                    <DeleteCandidateDialog
+                        candidateId={data.id}
+                        visibleTo={['Admin', 'Recruiter']}
+                    />
                 </div>
             </div>
             <div

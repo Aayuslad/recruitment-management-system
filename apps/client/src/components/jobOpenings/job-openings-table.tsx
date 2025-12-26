@@ -157,7 +157,7 @@ export function JobOpeningsTable() {
             <h2 className="font-semibold text-xl">Job Openings:</h2>
 
             {/* header */}
-            <div className="flex items-center py-4">
+            <div className="flex items-center justify-between py-4">
                 <Input
                     placeholder="Filter job openings with title..."
                     value={

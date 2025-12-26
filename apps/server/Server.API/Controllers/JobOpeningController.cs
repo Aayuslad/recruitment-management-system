@@ -10,7 +10,6 @@ using Server.Core.Extensions;
 namespace Server.API.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("api/job-opening")]
     public class JobOpeningController : ControllerBase
     {
@@ -22,6 +21,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> CreateJobOpening([FromBody] CreateJobOpeningCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
@@ -29,6 +29,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> EditJobOpening(Guid id, [FromBody] EditJobOpeningCommand command, CancellationToken cancellationToken)
         {
             command.JobOpeningId = id;
@@ -37,6 +38,7 @@ namespace Server.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteJobOpening(Guid id, CancellationToken cancellationToken)
         {
             var command = new DeleteJobOpeningCommand(id);
@@ -45,6 +47,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Recruiter, Viewer")]
         public async Task<IActionResult> GetJobOpenings(CancellationToken cancellationToken)
         {
             var query = new GetJobOpeningsForRecruiterQuery();
@@ -53,6 +56,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize(Roles = "Admin, Recruiter, Viewer, HR, Interviewer, Reviewer")]
         public async Task<IActionResult> GetJobOpening(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetJobOpeningForRecruiterQuery(id);

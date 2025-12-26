@@ -22,6 +22,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> CreateEvent([FromBody] CreateEventCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
@@ -29,6 +30,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> EditEvent(Guid id, [FromBody] EditEventCommand command, CancellationToken cancellationToken)
         {
             command.Id = id;
@@ -37,6 +39,7 @@ namespace Server.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteEvent(Guid id, CancellationToken cancellationToken)
         {
             var command = new DeleteEventCommand(id);
@@ -45,6 +48,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Recruiter, Viewer")]
         public async Task<IActionResult> GetEvents(CancellationToken cancellationToken)
         {
             var query = new GetEventsQuery();

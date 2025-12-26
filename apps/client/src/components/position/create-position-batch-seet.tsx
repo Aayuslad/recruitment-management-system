@@ -22,6 +22,7 @@ import { Textarea } from '../ui/textarea';
 import { DesignationSelector } from './internal/designation-selector';
 import { PositionSkillSelector } from './internal/position-skill-selector';
 import { ReviewersSelector } from './internal/reviewers-selector';
+import { useAccessChecker } from '@/hooks/use-has-access';
 
 const createPositionBatchFormSchema = z.object({
     numberOfPositions: z.number(),
@@ -46,8 +47,13 @@ const createPositionBatchFormSchema = z.object({
     ),
 }) satisfies z.ZodType<CreatePositionBatchCommandCorrected>;
 
-export function CreatePositionBatchSheet() {
+type Props = {
+    visibleTo: string[];
+};
+
+export function CreatePositionBatchSheet({ visibleTo }: Props) {
     const [open, setOpen] = useState(false);
+    const canAccess = useAccessChecker();
     const createPositionBatchMutation = useCreatePositionBatch();
 
     const form = useForm<z.infer<typeof createPositionBatchFormSchema>>({
@@ -77,6 +83,8 @@ export function CreatePositionBatchSheet() {
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };
+
+    if (!canAccess(visibleTo)) return null;
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>

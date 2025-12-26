@@ -22,6 +22,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> CreateCandidate([FromBody] CreateCandidateCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
@@ -29,6 +30,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> EditCandidate(Guid id, [FromBody] EditCandidateCommand command, CancellationToken cancellationToken)
         {
             command.Id = id;
@@ -37,6 +39,7 @@ namespace Server.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> DeleteCandidate(Guid id, CancellationToken cancellationToken)
         {
             var command = new DeleteCandidateCommand(id);
@@ -45,6 +48,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("verify-bg/{id:guid}")]
+        [Authorize(Roles = "Admin, HR")]
         public async Task<IActionResult> VerifyCandidateBg(Guid id, CancellationToken cancellationToken)
         {
             var command = new VerifyCandidateBgCommand(id);
@@ -53,6 +57,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost("/bulk/exel-doc")]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> CreateCandidatesWithExelDoc([FromBody] CreateCandidatesWithExelDocCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
@@ -60,6 +65,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost("/resume-doc")]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> CreateCandidateWithResumeDoc([FromBody] CreateCandidateWithResumeDocCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
@@ -67,6 +73,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize(Roles = "Admin, Recruiter, HR, Reviewer, Interviewer, Viewer")]
         public async Task<IActionResult> GetCandidate(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetCandidateQuery(id);
@@ -75,6 +82,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Recruiter, HR, Reviewer, Interviewer, Viewer")]
         public async Task<IActionResult> GetCandidates(CancellationToken cancellationToken)
         {
             var query = new GetCandidatesQuery();

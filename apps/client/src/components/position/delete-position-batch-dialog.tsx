@@ -8,20 +8,26 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
+import { useAccessChecker } from '@/hooks/use-has-access';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-interface DeletePositionBatchButtonProps {
-    batchId: string;
-}
+type Props = {
+    visibleTo: string[];
+    positionBatchId: string;
+};
 
 export function DeletePositionBatchDialog({
-    batchId,
-}: DeletePositionBatchButtonProps) {
+    positionBatchId,
+    visibleTo,
+}: Props) {
     const [open, setOpen] = useState(false);
     const deletePositionBatchMutation = useDeletePositionBatch();
+    const canAccess = useAccessChecker();
     const navigate = useNavigate();
+
+    if (!canAccess(visibleTo)) return null;
 
     return (
         <>
@@ -60,12 +66,15 @@ export function DeletePositionBatchDialog({
                             variant="default"
                             className="flex-1 bg-red-500 text-white hover:bg-red-600"
                             onClick={() => {
-                                deletePositionBatchMutation.mutate(batchId, {
-                                    onSuccess: () => {
-                                        setOpen(false);
-                                        navigate('/positions');
-                                    },
-                                });
+                                deletePositionBatchMutation.mutate(
+                                    positionBatchId,
+                                    {
+                                        onSuccess: () => {
+                                            setOpen(false);
+                                            navigate('/positions');
+                                        },
+                                    }
+                                );
                             }}
                             disabled={deletePositionBatchMutation.isPending}
                         >

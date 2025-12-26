@@ -242,3 +242,13 @@ export function useGetJobOpeningApplications(jobOpeningId: string) {
         enabled: !!jobOpeningId,
     });
 }
+
+export function useGetJobApplicationsToReview() {
+    return useQuery({
+        queryKey: ['job-applications-to-review'],
+        queryFn: async (): Promise<JobApplicationSummary[]> => {
+            const { data } = await axios.get('/job-application/to-review');
+            return data;
+        },
+    });
+}

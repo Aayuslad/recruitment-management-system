@@ -22,6 +22,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> CreateInterview([FromBody] CreateInterviewCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
@@ -29,6 +30,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> EditInterview(Guid id, [FromBody] EditInterviewCommand command, CancellationToken cancellationToken)
         {
             command.Id = id;
@@ -37,6 +39,7 @@ namespace Server.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> DeleteInterview(Guid id, CancellationToken cancellationToken)
         {
             var command = new DeleteInterviewCommand(id);
@@ -45,6 +48,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost("{id:guid}/feedback")]
+        [Authorize(Roles = "Admin, Recruiter, Interviewer")]
         public async Task<IActionResult> CreateInterviewStageFeedback(Guid id, [FromBody] CreateInterviewFeedbackCommand command, CancellationToken cancellationToken)
         {
             command.InterviewId = id;
@@ -53,6 +57,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("{interviewId:guid}/feedback/{feedbackId:guid}")]
+        [Authorize(Roles = "Admin, Recruiter, Interviewer")]
         public async Task<IActionResult> EditInterviewStageFeedback(Guid interviewId, Guid feedbackId, [FromBody] EditInterviewFeedbackCommand command, CancellationToken cancellationToken)
         {
             command.InterviewId = interviewId;
@@ -62,6 +67,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("{id:guid}/move-status")]
+        [Authorize(Roles = "Admin, Recruiter, Interviewer")]
         public async Task<IActionResult> MoveInterviewStatus(Guid id, [FromBody] MoveInterviewStatusCommand command, CancellationToken cancellationToken)
         {
             command.InterviewId = id;
@@ -70,6 +76,7 @@ namespace Server.API.Controllers
         }
 
         [HttpDelete("{interviewId:guid}/feedback/{feedbackId:guid}")]
+        [Authorize(Roles = "Admin, Recruiter, Interviewer")]
         public async Task<IActionResult> DeletInterviewStageFeedback(Guid interviewId, Guid feedbackId, CancellationToken cancellationToken)
         {
             var command = new DeleteInterviewFeedbackCommand(interviewId, feedbackId);
@@ -78,6 +85,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize(Roles = "Admin, Recruiter, HR, Interviewer, Viewer")]
         public async Task<IActionResult> GetInterview(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetInterviewQuery(id);
@@ -85,10 +93,20 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Getinterviews(CancellationToken cancellationToken)
+        [HttpGet("assigned")]
+        [Authorize(Roles = "Interviewer, Admin, Recruiter, HR")]
+        public async Task<IActionResult> GetAssignedInterviews(CancellationToken cancellationToken)
         {
-            var query = new GetinterviewsQuery();
+            var query = new GetAssignedInterviewsQuery();
+            var result = await _mediator.Send(query, cancellationToken);
+            return result.ToActionResult(this);
+        }
+
+        [HttpGet("job-application/{jobApplicationId:guid}")]
+        [Authorize(Roles = "Admin, Recruiter, HR, Viewer")]
+        public async Task<IActionResult> GetJobApplicationInterviews(Guid jobApplicationId, CancellationToken cancellationToken)
+        {
+            var query = new GetJobApplicationInterviewsQuery(jobApplicationId);
             var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }

@@ -13,7 +13,9 @@ export function Index() {
                     </p>
                 </div>
                 <div className="w-[230px] mb-4">
-                    <CreatePositionBatchSheet />
+                    <CreatePositionBatchSheet
+                        visibleTo={['Admin', 'Recruiter']}
+                    />
                 </div>
             </div>
 
