@@ -3,7 +3,6 @@ import { BatchPositionsTable } from '@/components/position/batch-positions-table
 import { DeletePositionBatchDialog } from '@/components/position/delete-position-batch-dialog';
 import { EditPositionBatchSheet } from '@/components/position/edit-position-batch-sheet';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     Item,
@@ -11,10 +10,10 @@ import {
     ItemContent,
     ItemDescription,
     ItemGroup,
-    ItemMedia,
     ItemTitle,
 } from '@/components/ui/item';
 import { SIDEBAR_WIDTH } from '@/components/ui/sidebar';
+import { SkillPill } from '@/components/ui/skill-pill';
 import { Spinner } from '@/components/ui/spinner';
 import {
     Tooltip,
@@ -22,14 +21,14 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useAppStore } from '@/store';
-import { Copy, ExternalLink } from 'lucide-react';
+import { ExternalLink, Info } from 'lucide-react';
 import React from 'react';
-import { useParams } from 'react-router';
-import { toast } from 'sonner';
+import { useNavigate, useParams } from 'react-router';
 import { useShallow } from 'zustand/react/shallow';
 
 export const PositionBatchDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const { sidebarState } = useAppStore(
         useShallow((s) => ({
             sidebarState: s.sidebarState,
@@ -83,13 +82,13 @@ export const PositionBatchDetailsPage = () => {
                     <div className="space-y-4">
                         <h3 className="font-semibold text-lg">Batch Details</h3>
 
-                        <div className="space-y-2">
+                        <div className="space-y-2 text-sm">
                             {/* ID Row */}
-                            <div className="grid grid-cols-[110px_1fr_1fr] items-start gap-2">
-                                <span className="text-sm text-muted-foreground">
+                            {/* <div className="grid grid-cols-[110px_1fr_1fr] items-start gap-2">
+                                <span className="text-muted-foreground">
                                     ID
                                 </span>
-                                <div className="text-sm font-mono">
+                                <div className="font-mono">
                                     {data.batchId.slice(0, 6).toUpperCase()}...
                                     <button
                                         onClick={() => {
@@ -106,34 +105,38 @@ export const PositionBatchDetailsPage = () => {
                                         <Copy size={16} />
                                     </button>
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* Designation */}
                             <div className="grid grid-cols-[110px_1fr] items-start gap-2">
-                                <span className="text-sm text-muted-foreground">
+                                <span className="text-muted-foreground">
                                     Designation
                                 </span>
-                                <span className="text-sm">
+                                <span
+                                    className="hover:cursor-pointer hover:underline"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate('/configuration/designations');
+                                    }}
+                                >
                                     {data.designationName}
                                 </span>
                             </div>
 
                             {/* Location */}
                             <div className="grid grid-cols-[110px_1fr] items-start gap-2">
-                                <span className="text-sm text-muted-foreground">
+                                <span className=" text-muted-foreground">
                                     Location
                                 </span>
-                                <span className="text-sm">
-                                    {data.jobLocation}
-                                </span>
+                                <span className="">{data.jobLocation}</span>
                             </div>
 
                             {/* CTC */}
                             <div className="grid grid-cols-[110px_1fr] items-start gap-2">
-                                <span className="text-sm text-muted-foreground">
+                                <span className=" text-muted-foreground">
                                     CTC Range
                                 </span>
-                                <span className="text-sm">
+                                <span className="">
                                     {data.minCTC} – {data.maxCTC} LPA
                                 </span>
                             </div>
@@ -141,128 +144,107 @@ export const PositionBatchDetailsPage = () => {
                             {/* Description */}
                             {data.description && (
                                 <div className="grid grid-cols-[110px_1fr] items-start gap-2">
-                                    <span className="text-sm text-muted-foreground">
+                                    <span className=" text-muted-foreground">
                                         Description
                                     </span>
-                                    <span className="text-sm">
-                                        {data.description}
-                                    </span>
+                                    <span className="">{data.description}</span>
                                 </div>
                             )}
+
+                            <div className="grid grid-cols-[110px_1fr] items-start gap-2">
+                                <span className=" text-muted-foreground">
+                                    Creation
+                                </span>
+                                <span className="">
+                                    By{' '}
+                                    <span className="underline">
+                                        {data.createdByUserName}
+                                    </span>{' '}
+                                    on{' '}
+                                    <span className="font-">
+                                        {new Date(
+                                            data.createdAt
+                                        ).toLocaleDateString()}
+                                    </span>
+                                </span>
+                            </div>
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <h3 className="font-semibold text-lg">Skills</h3>
+                        <h3 className="font-semibold text-lg">
+                            Skills Criteria
+                        </h3>
                         <div className="ml-1">
                             {data?.skills
                                 .filter((x) => x.skillType === 'Required')
                                 .map((x) => {
                                     return (
-                                        <Tooltip key={x.skillId}>
-                                            <TooltipTrigger asChild>
-                                                <Badge
-                                                    variant="outline"
-                                                    className="border-red-400 text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1"
-                                                >
-                                                    <span>{x.skillName}</span>
-                                                    {x.minExperienceYears !==
-                                                        0 && (
-                                                        <span className="text-xs -mb-1 pb-[1px] px-1.5 bg-accent rounded-2xl">
-                                                            {
-                                                                x.minExperienceYears
-                                                            }
-                                                        </span>
-                                                    )}
-                                                </Badge>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p className="space-x-1.5 mb-1">
-                                                    <span className="font-semibold">
-                                                        Type:
-                                                    </span>
-                                                    <span>{x.skillType}</span>
-                                                </p>
-                                                <p className="space-x-1.5">
-                                                    <span className="font-semibold">
-                                                        Minimum Experience
-                                                        years:
-                                                    </span>
-                                                    <span>
-                                                        {x.minExperienceYears}
-                                                    </span>
-                                                </p>
-                                            </TooltipContent>
-                                        </Tooltip>
+                                        <SkillPill
+                                            id={x.skillId}
+                                            name={x.skillName}
+                                            type={x.skillType}
+                                            minExperienceYears={
+                                                x.minExperienceYears
+                                            }
+                                        />
                                     );
                                 })}
                             {data?.skills
                                 .filter((x) => x.skillType === 'Preferred')
                                 .map((x) => {
                                     return (
-                                        <Tooltip key={x.skillId}>
-                                            <TooltipTrigger asChild>
-                                                <Badge
-                                                    variant="outline"
-                                                    className="border-blue-400 text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1"
-                                                >
-                                                    <span>{x.skillName}</span>
-                                                    {x.minExperienceYears !==
-                                                        0 && (
-                                                        <span className="text-xs -mb-1 pb-[1px] px-1.5 bg-accent rounded-2xl">
-                                                            {
-                                                                x.minExperienceYears
-                                                            }
-                                                        </span>
-                                                    )}
-                                                </Badge>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p className="space-x-1.5 mb-1">
-                                                    <span className="font-semibold">
-                                                        Type:
-                                                    </span>
-                                                    <span>{x.skillType}</span>
-                                                </p>
-                                                <p className="space-x-1.5">
-                                                    <span className="font-semibold">
-                                                        Minimum Experience
-                                                        years:
-                                                    </span>
-                                                    <span>
-                                                        {x.minExperienceYears}
-                                                    </span>
-                                                </p>
-                                            </TooltipContent>
-                                        </Tooltip>
+                                        <SkillPill
+                                            id={x.skillId}
+                                            name={x.skillName}
+                                            type={x.skillType}
+                                            minExperienceYears={
+                                                x.minExperienceYears
+                                            }
+                                        />
                                     );
                                 })}
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <h3 className="font-semibold text-lg">Reviewers</h3>
+                    <div className="space-y-2 w-[450px]">
+                        <div className="flex justify-between items-center">
+                            <h3 className="font-semibold text-lg flex items-center gap-1">
+                                <span>Reviewers</span>
+                                <span>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Info className="w-4 h-4" />
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p className="text-wrap max-w-[200px] font-semibold">
+                                                Assigned Reviewers will be able
+                                                to review job applications for
+                                                this position batch
+                                            </p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </span>
+                            </h3>
+                            <p className="text-sm">
+                                {data.reviewers.length} Assigned
+                            </p>
+                        </div>
                         <div className="ml-1">
-                            <div className="flex w-full max-w-md flex-col gap-6">
+                            <div className="flex w-full  flex-col gap-6">
                                 <ItemGroup>
                                     {data?.reviewers.map((person) => (
                                         <React.Fragment
                                             key={person.reviewerUserId}
                                         >
-                                            <Item className=" py-1.5 px-0">
-                                                <ItemMedia>
-                                                    <Avatar>
-                                                        {/* <AvatarImage
-                                                            src={person.avatar}
-                                                            className="grayscale"
-                                                        /> */}
-                                                        <AvatarFallback>
-                                                            {person.reviewerUserName.charAt(
-                                                                0
-                                                            )}
-                                                        </AvatarFallback>
-                                                    </Avatar>
-                                                </ItemMedia>
+                                            <Item className="py-1.5 px-0 flex items-center border">
+                                                <Avatar>
+                                                    <AvatarFallback className="text-lg pb-1">
+                                                        {person.reviewerUserName.charAt(
+                                                            0
+                                                        )}
+                                                    </AvatarFallback>
+                                                </Avatar>
                                                 <ItemContent className="gap-0">
                                                     <ItemTitle>
                                                         {
@@ -294,7 +276,17 @@ export const PositionBatchDetailsPage = () => {
                 </div>
                 <div className="flex-[50%] px-5 pt-8">
                     <h3 className="font-semibold text-lg">Positions:</h3>
-                    <div className="w-full mt-4">
+                    <div className="w-full mt-3">
+                        <div className="flex justify-around mb-3">
+                            <div>
+                                {data.positionsCount -
+                                    data.closedPositionsCount}{' '}
+                                Open
+                            </div>
+                            <div>{data.closedPositionsCount} Closed</div>
+                            <div>{data.positionsOnHoldCount} On Hold</div>
+                            <div>{data.positionsCount} Total</div>
+                        </div>
                         <BatchPositionsTable batchId={id as string} />
                     </div>
                 </div>

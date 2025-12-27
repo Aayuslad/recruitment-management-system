@@ -16,6 +16,9 @@ namespace Server.Application.Aggregates.JobOpenings.Queries.DTOs
         public float MaxCTC { get; set; }
         public int PositionsCount { get; set; }
         public int ClosedPositionsCount { get; set; }
+        public Guid? CreatedById { get; set; }
+        public string? CreatedByUserName { get; set; }
+        public DateTime CreatedAt { get; set; }
         public List<SkillDetailDTO> Skills { get; set; } = new List<SkillDetailDTO>();
         public List<SkillOverRideDetailDTO> SkillOverRides { get; set; } =
             new List<SkillOverRideDetailDTO>();

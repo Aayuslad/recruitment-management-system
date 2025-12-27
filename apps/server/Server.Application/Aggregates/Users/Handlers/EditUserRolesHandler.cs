@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Http;
@@ -35,6 +37,17 @@ namespace Server.Application.Aggregates.Users.Handlers
             if (user is null)
             {
                 throw new NotFoundExeption("User Not Found.");
+            }
+
+            // step 2: check if admin is trying to remove admin role
+            var isEditingAdminUser = user.Roles.Any(x => x.Role.Name == "Admin");
+            if (isEditingAdminUser)
+            {
+                var adminRoleId = user.Roles.First(x => x.Role.Name == "Admin").RoleId;
+                if (!request.Roles.Any(x => x.RoleId == adminRoleId))
+                {
+                    throw new ConflictExeption("You cannot remove admin role.");
+                }
             }
 
             // step 2: edit roles

@@ -58,7 +58,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("{id:guid}/move-status")]
-        [Authorize(Roles = "Admin, Recruiter, HR")]
+        [Authorize(Roles = "Admin, Recruiter, HR, Reviewer")]
         public async Task<IActionResult> MoveStatusJobApplication(Guid id, [FromBody] MoveJobApplicationStatusCommand command, CancellationToken cancellationToken)
         {
             command.Id = id;

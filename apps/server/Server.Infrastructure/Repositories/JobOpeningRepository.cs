@@ -47,6 +47,8 @@ namespace Server.Infrastructure.Repositories
                     .ThenInclude(x => x.PanelRequirements)
                 .Include(x => x.SkillOverRides)
                     .ThenInclude(x => x.Skill)
+                .Include(x => x.CreatedByUser!)
+                    .ThenInclude(x => x.Auth)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 

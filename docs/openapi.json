@@ -852,6 +852,29 @@
         }
       }
     },
+    "/api/interview/job-application/{jobApplicationId}": {
+      "get": {
+        "tags": [
+          "Interview"
+        ],
+        "parameters": [
+          {
+            "name": "jobApplicationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/job-application": {
       "post": {
         "tags": [
@@ -2854,11 +2877,10 @@
       },
       "InterviewParticipantRole": {
         "enum": [
-          "Interviewer",
+          "TechnicalInterviewer",
           "Observer",
           "NoteTaker",
-          "HRRepresentative",
-          "HiringManager"
+          "HRInterviewer"
         ],
         "type": "string"
       },

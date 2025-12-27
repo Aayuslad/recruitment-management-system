@@ -35,11 +35,10 @@ const CreateJobOpeningSheetSchema = z.object({
         z.object({
             userId: z.string(),
             role: z.enum([
-                'Interviewer',
+                'TechnicalInterviewer',
                 'Observer',
                 'NoteTaker',
-                'HRRepresentative',
-                'HiringManager',
+                'HRInterviewer',
             ]),
         })
     ),
@@ -51,11 +50,10 @@ const CreateJobOpeningSheetSchema = z.object({
             requirements: z.array(
                 z.object({
                     role: z.enum([
-                        'Interviewer',
+                        'TechnicalInterviewer',
                         'Observer',
                         'NoteTaker',
-                        'HRRepresentative',
-                        'HiringManager',
+                        'HRInterviewer',
                     ]),
                     requirementCount: z.number(),
                 })
@@ -209,11 +207,20 @@ export function CreateJobOpeningSheet({ visibleTo }: Props) {
                     </div>
 
                     <SheetFooter className="flex flex-row w-full">
-                        <Button type="submit" className="flex-1">
+                        <Button
+                            type="submit"
+                            className="flex-1"
+                            disabled={createJobOpeningMutation.isPending}
+                        >
                             Create Opening
                         </Button>
                         <SheetClose className="flex-1" asChild>
-                            <Button variant="outline">Close</Button>
+                            <Button
+                                variant="outline"
+                                disabled={createJobOpeningMutation.isPending}
+                            >
+                                Close
+                            </Button>
                         </SheetClose>
                     </SheetFooter>
                 </form>

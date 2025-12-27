@@ -3,6 +3,7 @@
 import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
+import { INTERVIEW_PARTICIPANT_ROLE } from '@/types/enums';
 import type { CreateJobOpeningCommandCorrected } from '@/types/job-opening-types';
 import { interviewParticipantRoleFormatConverter } from '@/util/interview-participant-role-format-converter';
 import { durationFormatConverter } from '@/util/interview-round-duration-format-converter';
@@ -56,7 +57,7 @@ export function InterviewRoundSelector({
                             roundNumber: roundNumber,
                             requirements: [
                                 {
-                                    role: 'Interviewer',
+                                    role: INTERVIEW_PARTICIPANT_ROLE.TECHNICAL_INTERVIEWER,
                                     requirementCount: 1,
                                 },
                             ],

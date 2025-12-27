@@ -14,5 +14,6 @@
         public int PositionsOnHoldCount { get; set; }
         public Guid? CreatedBy { get; set; }
         public string? CreatedByUserName { get; set; } = null!;
+        public DateTime CreatedAt { get; set; }
     }
 }

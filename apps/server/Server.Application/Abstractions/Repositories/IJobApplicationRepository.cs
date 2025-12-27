@@ -12,5 +12,7 @@ namespace Server.Application.Abstractions.Repositories
         Task<JobApplication?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
         Task<List<JobApplication>> GetAllAsync(CancellationToken cancellationToken);
         Task<List<JobApplication>> GetAllByJobOpeningIdAsync(Guid jobOpeningId, CancellationToken cancellationToken);
+        Task<int> GetApplicationsCountByJobOpeningIdAsync(Guid jobOpeningId, CancellationToken cancellationToken);
+        Task<List<JobApplication>> GetApplicationsByCandidateIdAsync(Guid candidateId, CancellationToken cancellationToken);
     }
 }

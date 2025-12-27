@@ -22,7 +22,10 @@ import { cn } from '@/lib/utils';
 import type { CreateJobOpeningCommandCorrected } from '@/types/job-opening-types';
 import { Label } from '../../ui/label';
 import { InterviewParticipantRoleSelector } from './interview-participant-role-selector';
-import type { InterviewParticipantRole } from '@/types/enums';
+import {
+    INTERVIEW_PARTICIPANT_ROLE,
+    type InterviewParticipantRole,
+} from '@/types/enums';
 
 type Props = {
     fealds: CreateJobOpeningCommandCorrected['interviewers'];
@@ -80,7 +83,7 @@ export function InterviewParticipantSelector({
                                             onSelect={(currentValue) => {
                                                 append({
                                                     userId: currentValue,
-                                                    role: 'Interviewer',
+                                                    role: INTERVIEW_PARTICIPANT_ROLE.TECHNICAL_INTERVIEWER,
                                                 });
                                                 setOpen(false);
                                             }}

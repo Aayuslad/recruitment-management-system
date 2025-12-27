@@ -36,11 +36,10 @@ const EditJobOpeningSheetSchema = z.object({
         z.object({
             userId: z.string(),
             role: z.enum([
-                'Interviewer',
+                'TechnicalInterviewer',
                 'Observer',
                 'NoteTaker',
-                'HRRepresentative',
-                'HiringManager',
+                'HRInterviewer',
             ]),
         })
     ),
@@ -54,11 +53,10 @@ const EditJobOpeningSheetSchema = z.object({
                 z.object({
                     id: z.string().optional().nullable(),
                     role: z.enum([
-                        'Interviewer',
+                        'TechnicalInterviewer',
                         'Observer',
                         'NoteTaker',
-                        'HRRepresentative',
-                        'HiringManager',
+                        'HRInterviewer',
                     ]),
                     requirementCount: z.number(),
                 })
@@ -93,8 +91,16 @@ export function EditJobOpeningSheet({ jobOpeningId, visibleTo }: Props) {
     });
 
     useEffect(() => {
-        if (data) form.reset(data);
-        form.setValue('jobOpeningId', jobOpeningId);
+        if (data) {
+            form.reset(data);
+            form.setValue('jobOpeningId', jobOpeningId);
+            form.setValue(
+                'interviewRounds',
+                data.interviewRounds.sort(
+                    (a, b) => a.roundNumber - b.roundNumber
+                )
+            );
+        }
     }, [data, form, jobOpeningId]);
 
     const skillOverRidesFealdArray = useFieldArray({
@@ -220,11 +226,20 @@ export function EditJobOpeningSheet({ jobOpeningId, visibleTo }: Props) {
                     </div>
 
                     <SheetFooter className="flex flex-row w-full">
-                        <Button type="submit" className="flex-1">
+                        <Button
+                            type="submit"
+                            className="flex-1"
+                            disabled={editJobOpeningMutation.isPending}
+                        >
                             Save
                         </Button>
                         <SheetClose className="flex-1" asChild>
-                            <Button variant="outline">Close</Button>
+                            <Button
+                                variant="outline"
+                                disabled={editJobOpeningMutation.isPending}
+                            >
+                                Close
+                            </Button>
                         </SheetClose>
                     </SheetFooter>
                 </form>

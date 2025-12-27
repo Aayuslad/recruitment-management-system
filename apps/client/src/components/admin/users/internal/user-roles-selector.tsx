@@ -70,45 +70,55 @@ export function UserRolesSelector({
                             <CommandList>
                                 <CommandEmpty>No roles found.</CommandEmpty>
                                 <CommandGroup>
-                                    {roles?.map((role) => (
-                                        <CommandItem
-                                            key={role.id}
-                                            value={role.name}
-                                            onSelect={() => {
-                                                const exists = userRoles.find(
-                                                    (x) => x.roleId === role.id
-                                                );
+                                    {roles?.map((role) => {
+                                        if (role.name === 'Admin') {
+                                            return null;
+                                        }
 
-                                                if (exists) {
-                                                    const index =
-                                                        userRoles.findIndex(
+                                        return (
+                                            <CommandItem
+                                                key={role.id}
+                                                value={role.name}
+                                                onSelect={() => {
+                                                    const exists =
+                                                        userRoles.find(
                                                             (x) =>
                                                                 x.roleId ===
                                                                 role.id
                                                         );
-                                                    removedRoles(index);
-                                                } else {
-                                                    appendedRoles({
-                                                        roleId: role.id,
-                                                        assignedBy: null,
-                                                    });
-                                                }
-                                            }}
-                                        >
-                                            {role.name}
-                                            <Check
-                                                className={cn(
-                                                    'ml-auto',
-                                                    userRoles.some(
-                                                        (x) =>
-                                                            x.roleId === role.id
-                                                    )
-                                                        ? 'opacity-100'
-                                                        : 'opacity-0'
-                                                )}
-                                            />
-                                        </CommandItem>
-                                    ))}
+
+                                                    if (exists) {
+                                                        const index =
+                                                            userRoles.findIndex(
+                                                                (x) =>
+                                                                    x.roleId ===
+                                                                    role.id
+                                                            );
+                                                        removedRoles(index);
+                                                    } else {
+                                                        appendedRoles({
+                                                            roleId: role.id,
+                                                            assignedBy: null,
+                                                        });
+                                                    }
+                                                }}
+                                            >
+                                                {role.name}
+                                                <Check
+                                                    className={cn(
+                                                        'ml-auto',
+                                                        userRoles.some(
+                                                            (x) =>
+                                                                x.roleId ===
+                                                                role.id
+                                                        )
+                                                            ? 'opacity-100'
+                                                            : 'opacity-0'
+                                                    )}
+                                                />
+                                            </CommandItem>
+                                        );
+                                    })}
                                 </CommandGroup>
                             </CommandList>
                         </Command>
@@ -127,9 +137,11 @@ export function UserRolesSelector({
                             <Badge variant="secondary" className="mr-2 text-sm">
                                 {role?.name}
                             </Badge>
+
                             <Button
                                 variant="ghost"
                                 size="sm"
+                                disabled={role?.name === 'Admin'}
                                 onClick={() => {
                                     const index = userRoles.findIndex(
                                         (x) => x.roleId === userRole.roleId

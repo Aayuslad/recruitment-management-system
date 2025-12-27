@@ -1,11 +1,11 @@
-import { JobApplicationsTable } from '@/components/applicationReviews/job-applications-table';
+import { JobApplicationsTable } from '@/components/screenings/job-applications-table';
 
 export function Index() {
     return (
         <div className=" h-full">
             <div className="bg-muted dark:bg-slate-800/40 h-[100px] w-full flex items-center">
                 <div className="px-10 flex-1">
-                    <h1 className="text-2xl font-bold">Application Reviews</h1>
+                    <h1 className="text-2xl font-bold">Screenings</h1>
                     <p>
                         Review and evaluate job applications assigned to you for
                         screening.
@@ -16,7 +16,7 @@ export function Index() {
                 </div>
             </div>
 
-            <div className="w-full flex justify-evenly pt-10 pr-10">
+            <div className="w-full flex justify-evenly pt-8 pr-10">
                 <div className="w-full flex flex-col items-center gap-8">
                     {/* <JobApplicationIndexTabBar /> */}
                     <div className="">

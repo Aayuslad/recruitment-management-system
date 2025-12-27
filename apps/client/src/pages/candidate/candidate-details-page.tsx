@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { SIDEBAR_WIDTH } from '@/components/ui/sidebar';
 import { Spinner } from '@/components/ui/spinner';
 import { useAppStore } from '@/store';
+import { timeAgo } from '@/util/time-ago';
 import { ExternalLink } from 'lucide-react';
 import { useParams } from 'react-router';
 import { useShallow } from 'zustand/react/shallow';
@@ -81,14 +82,14 @@ export const CandidateDetailsPage = () => {
                                 <span className="text-sm">{data.gender}</span>
                             </div>
 
-                            <div className="grid grid-cols-[150px_1fr] items-start gap-2">
+                            {/* <div className="grid grid-cols-[150px_1fr] items-start gap-2">
                                 <span className="text-sm text-muted-foreground">
                                     Date of Birth
                                 </span>
                                 <span className="text-sm">
                                     {new Date(data.dob).toLocaleDateString()}
                                 </span>
-                            </div>
+                            </div> */}
 
                             <div></div>
                             <div></div>
@@ -160,6 +161,47 @@ export const CandidateDetailsPage = () => {
                                     </span>
                                 </div>
                             )}
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <h3 className="font-semibold text-lg">
+                            Job Applications
+                        </h3>
+                        <div className="ml-1 w-[400px]">
+                            {data?.jobApplications.length === 0 && (
+                                <div className="text-sm py-2 text-center w-full text-muted-foreground">
+                                    No job applications found
+                                </div>
+                            )}
+                            {data?.jobApplications.map((x) => {
+                                return (
+                                    <div className="flex justify-between text-sm items-center gap-2">
+                                        <span>
+                                            <span>{x.designationName}</span>
+                                            <span> – </span>
+                                            <span>{x.jobLocation}</span>
+                                        </span>
+                                        <span className="flex-1 text-right">
+                                            {timeAgo(x.appliedAt)}
+                                        </span>
+                                        <a
+                                            onClick={() =>
+                                                window.open(
+                                                    `/job-applications/application/${x.id}`,
+                                                    '_blank',
+                                                    'noopener,noreferrer'
+                                                )
+                                            }
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-1 text-sm underline hover:cursor-pointer"
+                                        >
+                                            <ExternalLink className="w-4 h-4" />
+                                        </a>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
 

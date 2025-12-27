@@ -14,6 +14,7 @@ export interface PositionBatchSummary {
     positionsOnHoldCount: number;
     createdBy?: string | null;
     createdByUserName?: string | null;
+    createdAt: string;
 }
 
 export interface PositionBatch {
@@ -30,6 +31,7 @@ export interface PositionBatch {
     createdBy?: string | null;
     createdByUserName?: string | null;
     reviewers: ReviewerDetailDTO[];
+    createdAt: string;
     skills: SkillDetailDTO[];
     skillOverRides: SkillOverRideDetailDTO[];
 }

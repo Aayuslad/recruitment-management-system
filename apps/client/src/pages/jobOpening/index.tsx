@@ -8,8 +8,7 @@ export function Index() {
                 <div className="px-10 flex-1">
                     <h1 className="text-2xl font-bold">Job Openings</h1>
                     <p>
-                        Manage all active and upcoming job openings created from
-                        position batches.
+                        Manage all job openings and their interview workflows.
                     </p>
                 </div>
                 <div className="w-[230px] mb-4">

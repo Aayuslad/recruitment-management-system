@@ -60,8 +60,8 @@ export const sidebarNavConfig = {
     ],
     myWork: [
         {
-            name: 'Application Reviews',
-            url: 'application-reviews',
+            name: 'Screenings',
+            url: 'screenings',
             icon: CalendarCheck,
             roles: ['Reviewer'],
         },

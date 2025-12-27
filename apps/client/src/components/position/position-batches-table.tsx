@@ -10,17 +10,10 @@ import {
     useReactTable,
     type VisibilityState,
 } from '@tanstack/react-table';
-import { ChevronDown, Copy } from 'lucide-react';
 import * as React from 'react';
 
 import { useGetPositionBatches } from '@/api/position-api';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import {
     Table,
@@ -31,8 +24,8 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import type { PositionBatchSummary } from '@/types/position-types';
+import { timeAgo } from '@/util/time-ago';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
 import { Spinner } from '../ui/spinner';
 
 export function PositionBatchesTable() {
@@ -49,99 +42,79 @@ export function PositionBatchesTable() {
     const columns: ColumnDef<PositionBatchSummary>[] = [
         {
             accessorKey: 'designationName',
-            header: () => <div className="w-[200px] ml-4">Designation</div>,
+            header: () => <div className="min-w-[150px] ml-4">Designation</div>,
             cell: ({ row }) => (
-                <div
-                    className="font-medium pl-4 hover:cursor-pointer hover:underline"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        navigate('/configuration/designations');
-                    }}
-                >
-                    {row.original.designationName}
-                </div>
-            ),
-        },
-        {
-            id: 'Batch Id',
-            header: 'Batch Id',
-            cell: ({ row }) => (
-                <div className="font-medium w-[150px] relative group">
-                    <span className="text-sm font-mono">
-                        {row.original.batchId.slice(0, 6).toUpperCase()}...
-                    </span>
-                    <button
+                <div className="font-medium pl-4">
+                    <span
+                        className="hover:cursor-pointer hover:underline"
                         onClick={(e) => {
                             e.stopPropagation();
-                            navigator.clipboard.writeText(row.original.batchId);
-                            toast.success('Copied to clipboard');
+                            navigate('/configuration/designations');
                         }}
-                        className="text-muted-foreground hover:text-foreground hover:cursor-pointer"
-                        title="Copy full ID"
                     >
-                        <Copy size={16} />
-                    </button>
+                        {row.original.designationName}
+                    </span>
                 </div>
             ),
         },
         {
             id: 'location',
-            header: 'Location',
+            header: () => <div className="min-w-[150px]">Location</div>,
             cell: ({ row }) => (
-                <div className="font-medium w-[180px]">
-                    {row.original.jobLocation}
-                </div>
+                <div className="font-medium">{row.original.jobLocation}</div>
             ),
         },
         {
             id: 'ctc-range',
-            header: 'CTC Range',
+            header: () => <div className="min-w-[110px]">CTC Range</div>,
             cell: ({ row }) => (
-                <div className="font-medium w-[100px]">
+                <div className="font-medium">
                     {row.original.minCTC} - {row.original.maxCTC} LPA
                 </div>
             ),
         },
         {
             id: 'positions',
-            header: 'Positions',
+            header: () => (
+                <div className="w-[180px]">Positions (closed/total)</div>
+            ),
             cell: ({ row }) => (
-                <div className="font-medium w-[80px]">
+                <div className="font-medium">
+                    {row.original.closedPositionsCount} /{' '}
                     {row.original.positionsCount}
                 </div>
             ),
         },
         {
-            id: 'closed-positions',
-            header: 'Closed',
+            id: 'positions',
+            header: () => <div className="w-[80px]">Status</div>,
             cell: ({ row }) => (
-                <div className="font-medium w-[80px]">
-                    {row.original.closedPositionsCount}
+                <div className="font-medium">
+                    {row.original.closedPositionsCount <
+                    row.original.positionsCount
+                        ? 'Open'
+                        : 'Closed'}
                 </div>
             ),
         },
         {
-            id: 'on-hold-positions',
-            header: 'On Hold',
+            id: 'created-at',
+            header: () => <div className="min-w-[150px]">Created</div>,
             cell: ({ row }) => (
-                <div className="font-medium w-[80px]">
-                    {row.original.positionsOnHoldCount}
-                </div>
-            ),
-        },
-        {
-            id: 'created-by',
-            header: 'Created By',
-            cell: ({ row }) => (
-                <div className="font-medium w-[150px]">
-                    {row.original.createdByUserName || '—'}
+                <div className="font-medium">
+                    {timeAgo(row.original.createdAt)}
                 </div>
             ),
         },
     ];
 
     const table = useReactTable({
-        data: data as PositionBatchSummary[],
+        data:
+            (data?.sort(
+                (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+            ) as PositionBatchSummary[]) ?? [],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -187,40 +160,16 @@ export function PositionBatchesTable() {
                     }
                     className="max-w-sm"
                 />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => (
-                                <DropdownMenuCheckboxItem
-                                    key={column.id}
-                                    className="capitalize"
-                                    checked={column.getIsVisible()}
-                                    onCheckedChange={(value) =>
-                                        column.toggleVisibility(!!value)
-                                    }
-                                >
-                                    {column.id}
-                                </DropdownMenuCheckboxItem>
-                            ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
             </div>
 
             {/* table */}
             <div className="overflow-hidden rounded-md border">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-border">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id}>
+                                {headerGroup.headers.map((header, index) => (
+                                    <TableHead key={index}>
                                         {(() => {
                                             if (header.isPlaceholder) {
                                                 return null;
@@ -249,14 +198,16 @@ export function PositionBatchesTable() {
                                         row.getIsSelected() && 'selected'
                                     }
                                 >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    ))}
+                                    {row
+                                        .getVisibleCells()
+                                        .map((cell, index) => (
+                                            <TableCell key={index}>
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </TableCell>
+                                        ))}
                                 </TableRow>
                             ))
                         ) : (
@@ -274,7 +225,34 @@ export function PositionBatchesTable() {
             </div>
 
             {/* footer */}
-            <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="flex items-center justify-between space-x-2 py-4">
+                <div className="text-muted-foreground flex grow justify-end text-sm mr-5 whitespace-nowrap">
+                    <p
+                        className="text-muted-foreground text-sm whitespace-nowrap"
+                        aria-live="polite"
+                    >
+                        <span className="text-foreground">
+                            {table.getState().pagination.pageIndex *
+                                table.getState().pagination.pageSize +
+                                1}
+                            -
+                            {Math.min(
+                                Math.max(
+                                    table.getState().pagination.pageIndex *
+                                        table.getState().pagination.pageSize +
+                                        table.getState().pagination.pageSize,
+                                    0
+                                ),
+                                table.getRowCount()
+                            )}
+                        </span>{' '}
+                        of{' '}
+                        <span className="text-foreground">
+                            {table.getRowCount().toString()}
+                        </span>
+                    </p>
+                </div>
+
                 <div className="space-x-2">
                     <Button
                         variant="outline"

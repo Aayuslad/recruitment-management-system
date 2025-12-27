@@ -103,7 +103,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet("job-application/{jobApplicationId:guid}")]
-        [Authorize(Roles = "Admin, Recruiter, HR, Viewer")]
+        [Authorize(Roles = "Admin, Recruiter, HR, Viewer, Interviewer, Reviewer")]
         public async Task<IActionResult> GetJobApplicationInterviews(Guid jobApplicationId, CancellationToken cancellationToken)
         {
             var query = new GetJobApplicationInterviewsQuery(jobApplicationId);

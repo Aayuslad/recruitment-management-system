@@ -12,6 +12,8 @@ namespace Server.Application.Aggregates.JobOpenings.Queries.DTOs
         public string JobLocation { get; set; } = null!;
         public Guid? CreatedById { get; set; }
         public string? CreatedByUserName { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public int ApplicationsCount { get; set; }
         public List<InterviewRoundTemplateSummaryDetailDTO> InterviewRounds { get; set; } =
             new List<InterviewRoundTemplateSummaryDetailDTO>();
     }

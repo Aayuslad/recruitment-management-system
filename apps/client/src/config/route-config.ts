@@ -50,11 +50,11 @@ export const routes: RouteConfigType[] = [
         ],
     },
     {
-        breadcrumb: 'Application Reviews',
-        path: 'application-reviews',
+        breadcrumb: 'Screenings',
+        path: 'screenings',
         children: [
             {
-                breadcrumb: 'Application Review',
+                breadcrumb: 'Job Application',
                 path: 'application/:id',
             },
         ],

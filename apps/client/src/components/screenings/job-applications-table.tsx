@@ -1,19 +1,23 @@
+'use client';
+
+import { useState } from 'react';
+
+import type {
+    ColumnDef,
+    ColumnFiltersState,
+    SortingState,
+    VisibilityState,
+} from '@tanstack/react-table';
 import {
-    type ColumnDef,
-    type ColumnFiltersState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    type SortingState,
     useReactTable,
-    type VisibilityState,
 } from '@tanstack/react-table';
-import * as React from 'react';
 
-import { useGetAssignedInterviews } from '@/api/interviews-api';
-import { Button } from '@/components/ui/button';
+import { useGetJobApplicationsToReview } from '@/api/job-application-api';
 import {
     Table,
     TableBody,
@@ -22,12 +26,14 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import type { InterviewSummary } from '@/types/interview-types';
-import { durationFormatConverter } from '@/util/interview-round-duration-format-converter';
+import {
+    JOB_APPLICATION_STATUS,
+    type JobApplicationStatus,
+} from '@/types/enums';
+import type { JobApplicationSummary } from '@/types/job-application-types';
+import { timeAgo } from '@/util/time-ago';
 import { useNavigate } from 'react-router-dom';
-import { Spinner } from '../ui/spinner';
-import { INTERVIEW_STATUS, type InterviewStatus } from '@/types/enums';
-import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
+import { Button } from '../ui/button';
 import { Label } from '../ui/label';
 import {
     Select,
@@ -36,93 +42,74 @@ import {
     SelectTrigger,
     SelectValue,
 } from '../ui/select';
+import { Spinner } from '../ui/spinner';
+import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 
-type TabType = { name: string; statesToShow: InterviewStatus[] };
+type TabType = { name: string; statesToShow: JobApplicationStatus[] };
 
 const tabs: TabType[] = [
     {
-        name: 'Upcomming',
-        statesToShow: [INTERVIEW_STATUS.SCHEDULED],
+        name: 'Pending Review',
+        statesToShow: [JOB_APPLICATION_STATUS.APPLIED],
     },
     {
-        name: 'To Be Sheduled',
-        statesToShow: [INTERVIEW_STATUS.NOT_SCHEDULED],
+        name: 'Shortlisted',
+        statesToShow: [JOB_APPLICATION_STATUS.SHORTLISTED],
     },
     {
-        name: 'Completed',
-        statesToShow: [INTERVIEW_STATUS.COMPLETED],
+        name: 'Rejected',
+        statesToShow: [JOB_APPLICATION_STATUS.REJECTED],
     },
 ];
 
-export function InterviewsTable() {
+export const JobApplicationsTable = () => {
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+        {}
+    );
+    const [rowSelection, setRowSelection] = useState({});
+    const [activeTab, setActiveTab] = useState<TabType>(tabs[0]);
+    const { data, isLoading, isError } = useGetJobApplicationsToReview();
     const navigate = useNavigate();
-    const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] =
-        React.useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({});
-    const [rowSelection, setRowSelection] = React.useState({});
-    const [activeTab, setActiveTab] = React.useState<TabType>(tabs[0]);
 
-    const { data, isLoading, isError } = useGetAssignedInterviews();
-
-    const columns: ColumnDef<InterviewSummary>[] = [
+    const columns: ColumnDef<JobApplicationSummary>[] = [
         {
             accessorKey: 'candidate-name',
-            header: () => <div className="w-[220px] ml-4">Candidate Name</div>,
+            header: () => {
+                return <div className="w-[250px] ml-4">Candidate Name</div>;
+            },
             cell: ({ row }) => (
-                <div className="font-medium pl-4">
+                <div className="font-medium ml-4">
                     {row.original.candidateName}
                 </div>
             ),
         },
         {
             accessorKey: 'designation-name',
-            header: () => <div className=" min-w-[150px]">Designation</div>,
-            cell: ({ row }) => (
-                <div>
-                    <span
-                        className="font-medium hover:cursor-pointer hover:underline"
-                        onClick={() => navigate('/configuration/designations')}
-                    >
-                        {row.original.designationName}
-                    </span>
-                </div>
-            ),
+            header: () => <div className="min-w-[130px]">Designation</div>,
+            cell: ({ row }) => <div>{row.original.designation}</div>,
         },
         {
-            id: 'round',
-            header: () => <div className="min-w-[120px]">Round</div>,
-            cell: ({ row }) => (
-                <div className="font-medium min-w-[130px]">
-                    {row.original.roundNumber}. {row.original.interviewType}
-                </div>
-            ),
+            accessorKey: 'avg-rating',
+            header: () => <div className="w-[100px]">Avg Rating</div>,
+            cell: ({ row }) => <div>{row.original.avgRating || '-'}</div>,
         },
         {
-            id: 'duration',
-            header: () => <div className="w-[150px]">Duration</div>,
-            cell: ({ row }) => (
-                <div className="font-medium w-[150px]">
-                    {durationFormatConverter(row.original.durationInMinutes)}
-                </div>
-            ),
+            id: 'status',
+            accessorKey: 'status',
+            header: () => <div className="w-[90px]">Status</div>,
+            cell: ({ row }) => <div>{row.original.status}</div>,
         },
         {
-            accessorKey: 'sheduled-At',
-            header: () => <div className="w-[160px]">Sheduled At</div>,
-            cell: ({ row }) => (
-                <div>
-                    {row.original.scheduledAt
-                        ? new Date(row.original.scheduledAt).toLocaleString()
-                        : '-'}
-                </div>
-            ),
+            accessorKey: 'applied-at',
+            header: () => <div className="w-[150px]">Applied</div>,
+            cell: ({ row }) => <div>{timeAgo(row.original.appliedAt)}</div>,
         },
     ];
 
     const table = useReactTable({
-        data: data as InterviewSummary[],
+        data: data ?? [],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -146,7 +133,7 @@ export function InterviewsTable() {
                 <Spinner className="size-8" />
             </div>
         );
-    if (isError) return <div>Error Loading Interviews</div>;
+    if (isError) return <div>Error Loading Job Openings</div>;
 
     return (
         <div className="w-full">
@@ -181,25 +168,24 @@ export function InterviewsTable() {
                 </Tabs>
             </div>
 
-            {/* table */}
-            <div className="overflow-hidden rounded-md border">
+            <div className="rounded-md border">
                 <Table>
                     <TableHeader className="bg-border">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id}>
-                                        {(() => {
-                                            if (header.isPlaceholder) {
-                                                return null;
-                                            }
-                                            return flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            );
-                                        })()}
-                                    </TableHead>
-                                ))}
+                                {headerGroup.headers.map((header) => {
+                                    return (
+                                        <TableHead key={header.id}>
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(
+                                                      header.column.columnDef
+                                                          .header,
+                                                      header.getContext()
+                                                  )}
+                                        </TableHead>
+                                    );
+                                })}
                             </TableRow>
                         ))}
                     </TableHeader>
@@ -221,13 +207,13 @@ export function InterviewsTable() {
                                 .map((row) => (
                                     <TableRow
                                         key={row.id}
-                                        onClick={() =>
-                                            navigate(
-                                                `/interviews/interview/${row.original.id}`
-                                            )
-                                        }
                                         data-state={
                                             row.getIsSelected() && 'selected'
+                                        }
+                                        onClick={() =>
+                                            navigate(
+                                                `/screenings/application/${row.original.id}`
+                                            )
                                         }
                                     >
                                         {row.getVisibleCells().map((cell) => (
@@ -246,7 +232,7 @@ export function InterviewsTable() {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No interviews Found.
+                                    No Job Applications Found
                                 </TableCell>
                             </TableRow>
                         )}
@@ -303,4 +289,4 @@ export function InterviewsTable() {
             </div>
         </div>
     );
-}
+};

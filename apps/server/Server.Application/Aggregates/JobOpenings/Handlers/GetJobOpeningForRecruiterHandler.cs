@@ -165,6 +165,9 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                 SkillOverRides = joSkillOverRides,
                 Interviewers = interviewers,
                 InterviewRounds = interviewRounds,
+                CreatedById = jo.CreatedBy,
+                CreatedByUserName = jo.CreatedByUser?.Auth.UserName,
+                CreatedAt = jo.CreatedAt,
             };
 
             // step 3: return result

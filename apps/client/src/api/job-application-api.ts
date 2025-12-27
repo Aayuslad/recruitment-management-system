@@ -144,6 +144,9 @@ export function useMoveJobApplicationStatus() {
                 queryKey: ['position-batches'],
             });
             queryClient.invalidateQueries({
+                queryKey: ['job-applications-to-review'],
+            });
+            queryClient.invalidateQueries({
                 queryKey: ['job-application', variables.id],
             });
         },

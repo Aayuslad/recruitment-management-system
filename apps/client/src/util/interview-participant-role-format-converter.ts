@@ -5,16 +5,14 @@ export function interviewParticipantRoleFormatConverter(
     count: number
 ) {
     switch (role) {
-        case 'Interviewer':
-            return count > 1 ? `${count} Interviewers` : `${count} Interviewer`;
-        case 'HiringManager':
+        case 'TechnicalInterviewer':
             return count > 1
-                ? `${count} Hiring Managers`
-                : `${count} Hiring Manager`;
-        case 'HRRepresentative':
+                ? `${count} Technical Interviewers`
+                : `${count} Technical Interviewer`;
+        case 'HRInterviewer':
             return count > 1
-                ? `${count} HR Representatives`
-                : `${count} HR Representative`;
+                ? `${count} HR Interviewers`
+                : `${count} HR Interviewer`;
         case 'NoteTaker':
             return count > 1 ? `${count} Note Takers` : `${count} Note Taker`;
         case 'Observer':

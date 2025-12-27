@@ -3,22 +3,27 @@ import { useGetJobApplicationInterviews } from '@/api/interviews-api';
 import { useGetJobApplication } from '@/api/job-application-api';
 import { useGetJobOpening } from '@/api/job-opening-api';
 import { AddFeedbackDialog } from '@/components/jobApplications/internal/add-feedback-dialog';
+import { ApplicationProgress } from '@/components/jobApplications/job-application-progress';
 import { MarkHiredButton } from '@/components/jobApplications/stateActionButtons/mark-hired';
 import { MarkOfferedButton } from '@/components/jobApplications/stateActionButtons/mark-offered';
 import { PutOnHoldButton } from '@/components/jobApplications/stateActionButtons/put-on-hold';
 import { RejectButton } from '@/components/jobApplications/stateActionButtons/reject';
 import { RollbackStatusButton } from '@/components/jobApplications/stateActionButtons/rollback-status';
 import { UnHoldButton } from '@/components/jobApplications/stateActionButtons/unhold';
-import { Badge } from '@/components/ui/badge';
-import { SIDEBAR_WIDTH } from '@/components/ui/sidebar';
-import { Spinner } from '@/components/ui/spinner';
 import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from '@/components/ui/tooltip';
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from '@/components/ui/accordion';
+import { SIDEBAR_WIDTH } from '@/components/ui/sidebar';
+import { SkillPill } from '@/components/ui/skill-pill';
+import { Spinner } from '@/components/ui/spinner';
 import { useAppStore } from '@/store';
-import { ExternalLink, MoveRight } from 'lucide-react';
+import { INTERVIEW_STATUS } from '@/types/enums';
+import { durationFormatConverter } from '@/util/interview-round-duration-format-converter';
+import { timeAgo } from '@/util/time-ago';
+import { ExternalLink } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useShallow } from 'zustand/react/shallow';
@@ -107,7 +112,7 @@ export const JobApplicationDetailsPage = () => {
 
     return (
         <div className="h-full flex flex-col mb-10">
-            <div className="h-40 flex items-center px-10 border-b">
+            <div className="h-45 flex items-center justify-between px-10 border-b">
                 <div className="space-y-1">
                     <div className="flex space-x-2">
                         <h1 className="text-2xl font-bold">Job Application</h1>
@@ -119,18 +124,13 @@ export const JobApplicationDetailsPage = () => {
                         <span>{jobApplication?.designation}</span>
                         <span>•</span>
                         <span>
-                            Applied on{' '}
-                            {new Date(
-                                jobApplication?.appliedAt ?? ''
-                            ).toLocaleDateString()}
+                            Applied {timeAgo(jobApplication?.appliedAt ?? '')}
                         </span>
                     </div>
                 </div>
 
-                <div className="ml-auto flex items-center gap-3">
-                    <span className="px-3 py-1 rounded-full text-sm font-semibold border">
-                        {jobApplication?.status}
-                    </span>
+                <div className="min-w-0 w-[400px] whitespace-nowrap mr-10">
+                    <ApplicationProgress status={jobApplication?.status} />
                 </div>
             </div>
 
@@ -142,45 +142,41 @@ export const JobApplicationDetailsPage = () => {
                     })`,
                 }}
             >
-                <div className="flex-[50%] px-5 pt-8 space-y-6 ">
-                    <div className="space-y-4">
-                        {/* <h3 className="font-semibold text-lg">Overview</h3> */}
-
+                <div className="flex-[50%] px-5 pt-8 space-y-8">
+                    <div className="space-y-4 mt-4">
                         <div className="flex flex-col gap-2">
-                            <div className="grid grid-cols-[180px_1fr] items-start gap-2">
-                                <span className="text-sm text-muted-foreground">
-                                    Candidate Name
-                                </span>
-                                <span className="text-sm">{`${candidate?.firstName} ${candidate?.middleName} ${candidate?.lastName}`}</span>
-                            </div>
-
-                            <div className="grid grid-cols-[180px_1fr] items-start gap-2">
-                                <span className="text-sm text-muted-foreground">
-                                    Resume
-                                </span>
-                                <a
-                                    href={candidate?.resumeUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 text-sm underline hover:cursor-pointer"
-                                >
-                                    <span className="text-sm">View Resume</span>
-                                    <ExternalLink className="w-4 h-4" />
-                                </a>
-                            </div>
                             <div className="grid grid-cols-[180px_1fr] items-start gap-2">
                                 <span className="text-sm text-muted-foreground">
                                     Candidate
                                 </span>
                                 <a
+                                    onClick={() =>
+                                        window.open(
+                                            `/candidates/candidate/${candidate?.id}`,
+                                            '_blank',
+                                            'noopener,noreferrer'
+                                        )
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex w-fit items-center gap-1 text-sm underline hover:cursor-pointer"
+                                >
+                                    <span className="text-sm">{`${candidate?.firstName} ${candidate?.middleName} ${candidate?.lastName}`}</span>
+                                    <ExternalLink className="w-4 h-4" />
+                                </a>
+                            </div>
+
+                            <div className="grid grid-cols-[180px_1fr] items-start gap-2">
+                                <span className="text-sm text-muted-foreground">
+                                    Candidate Resume
+                                </span>
+                                <a
                                     href={candidate?.resumeUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 text-sm underline hover:cursor-pointer"
+                                    className="inline-flex w-fit items-center gap-1 text-sm underline hover:cursor-pointer"
                                 >
-                                    <span className="text-sm">
-                                        View Candidate
-                                    </span>
+                                    <span className="text-sm">View Resume</span>
                                     <ExternalLink className="w-4 h-4" />
                                 </a>
                             </div>
@@ -189,27 +185,22 @@ export const JobApplicationDetailsPage = () => {
                                     Job Opening
                                 </span>
                                 <a
-                                    href={candidate?.resumeUrl}
+                                    onClick={() =>
+                                        window.open(
+                                            `/job-openings/opening/${jobOpening?.id}`,
+                                            '_blank',
+                                            'noopener,noreferrer'
+                                        )
+                                    }
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 text-sm underline hover:cursor-pointer"
+                                    className="inline-flex w-fit items-center gap-1 text-sm underline hover:cursor-pointer"
                                 >
                                     <span className="text-sm">
                                         View Job Opening
                                     </span>
                                     <ExternalLink className="w-4 h-4" />
                                 </a>
-                            </div>
-
-                            <div className="grid grid-cols-[180px_1fr] items-start gap-2">
-                                <span className="text-sm text-muted-foreground">
-                                    Average Feedback Rating
-                                </span>
-                                <span className="text-sm">
-                                    {jobApplication?.avgRating
-                                        ? `${jobApplication?.avgRating} / 10`
-                                        : 'N/A'}
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -218,11 +209,17 @@ export const JobApplicationDetailsPage = () => {
                         <h3 className="font-semibold text-lg">
                             Skill Evaluation
                         </h3>
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2.5">
                             <div className="space-y-1.5">
                                 <h4>Matched Skills</h4>
 
                                 <div>
+                                    {matchedSkills.length === 0 && (
+                                        <div className="w-[500px] text-sm pb-1 flex items-center justify-center text-muted-foreground">
+                                            No Matched Skills
+                                        </div>
+                                    )}
+
                                     {[
                                         ...matchedSkills.filter(
                                             (x) => x.skillType === 'Required'
@@ -232,49 +229,14 @@ export const JobApplicationDetailsPage = () => {
                                         ),
                                     ].map((skill) => {
                                         return (
-                                            <Tooltip key={skill.skillId}>
-                                                <TooltipTrigger asChild>
-                                                    <Badge
-                                                        variant="outline"
-                                                        className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${skill.skillType === 'Required' ? 'border-red-400' : ''} ${skill.skillType === 'Preferred' ? 'border-blue-400' : 'border-slate-400'}`}
-                                                    >
-                                                        <span>
-                                                            {skill.skillName}
-                                                        </span>
-                                                        {skill.minExperienceYears !==
-                                                            0 && (
-                                                            <span className="text-xs -mb-1 pb-[1px] px-1.5 bg-accent rounded-2xl">
-                                                                {
-                                                                    skill.minExperienceYears
-                                                                }
-                                                            </span>
-                                                        )}
-                                                    </Badge>
-                                                </TooltipTrigger>
-                                                <TooltipContent>
-                                                    <p className="space-x-1.5 mb-1">
-                                                        <span className="font-semibold">
-                                                            Skill Requirement
-                                                            Type:
-                                                        </span>
-                                                        <span>
-                                                            {skill.skillType}
-                                                        </span>
-                                                    </p>
-                                                    <p className="space-x-1.5">
-                                                        <span className="font-semibold">
-                                                            Required Minimum
-                                                            Experience:
-                                                        </span>
-                                                        <span>
-                                                            {
-                                                                skill.minExperienceYears
-                                                            }{' '}
-                                                            year
-                                                        </span>
-                                                    </p>
-                                                </TooltipContent>
-                                            </Tooltip>
+                                            <SkillPill
+                                                id={skill.skillId}
+                                                name={skill.skillName}
+                                                type={skill.skillType as string}
+                                                minExperienceYears={
+                                                    skill.minExperienceYears as number
+                                                }
+                                            />
                                         );
                                     })}
                                 </div>
@@ -284,6 +246,12 @@ export const JobApplicationDetailsPage = () => {
                                 <h4>Missing Skills</h4>
 
                                 <div>
+                                    {missingSkills.length === 0 && (
+                                        <div className="w-[500px] text-sm pb-1 flex items-center justify-center text-muted-foreground">
+                                            No Missing Skills
+                                        </div>
+                                    )}
+
                                     {[
                                         ...missingSkills.filter(
                                             (x) => x.skillType === 'Required'
@@ -291,51 +259,16 @@ export const JobApplicationDetailsPage = () => {
                                         ...missingSkills.filter(
                                             (x) => x.skillType === 'Preferred'
                                         ),
-                                    ].map((x) => {
+                                    ].map((skill) => {
                                         return (
-                                            <Tooltip key={x.skillId}>
-                                                <TooltipTrigger asChild>
-                                                    <Badge
-                                                        variant="outline"
-                                                        className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${x.skillType === 'Required' ? 'border-red-400' : ''} ${x.skillType === 'Preferred' ? 'border-blue-400' : 'border-slate-400'}`}
-                                                    >
-                                                        <span>
-                                                            {x.skillName}
-                                                        </span>
-                                                        {x.minExperienceYears !==
-                                                            0 && (
-                                                            <span className="text-xs -mb-1 pb-[1px] px-1.5 bg-accent rounded-2xl">
-                                                                {
-                                                                    x.minExperienceYears
-                                                                }
-                                                            </span>
-                                                        )}
-                                                    </Badge>
-                                                </TooltipTrigger>
-                                                <TooltipContent>
-                                                    <p className="space-x-1.5 mb-1">
-                                                        <span className="font-semibold">
-                                                            Skill Requirement
-                                                            Type:
-                                                        </span>
-                                                        <span>
-                                                            {x.skillType}
-                                                        </span>
-                                                    </p>
-                                                    <p className="space-x-1.5">
-                                                        <span className="font-semibold">
-                                                            Required Minimum
-                                                            Experience:
-                                                        </span>
-                                                        <span>
-                                                            {
-                                                                x.minExperienceYears
-                                                            }{' '}
-                                                            year
-                                                        </span>
-                                                    </p>
-                                                </TooltipContent>
-                                            </Tooltip>
+                                            <SkillPill
+                                                id={skill.skillId}
+                                                name={skill.skillName}
+                                                type={skill.skillType as string}
+                                                minExperienceYears={
+                                                    skill.minExperienceYears as number
+                                                }
+                                            />
                                         );
                                     })}
                                 </div>
@@ -345,14 +278,20 @@ export const JobApplicationDetailsPage = () => {
                                 <h4>Additional Skills</h4>
 
                                 <div>
-                                    {additionalSkills.map((x) => {
+                                    {additionalSkills.length === 0 && (
+                                        <div className="w-[500px] text-sm pb-1 flex items-center justify-center text-muted-foreground">
+                                            No Additional Skills
+                                        </div>
+                                    )}
+
+                                    {additionalSkills.map((skill) => {
                                         return (
-                                            <Badge
-                                                variant="outline"
-                                                className="text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1"
-                                            >
-                                                {x.skillName}
-                                            </Badge>
+                                            <SkillPill
+                                                id={skill.skillId}
+                                                name={skill.skillName}
+                                                type={null}
+                                                minExperienceYears={null}
+                                            />
                                         );
                                     })}
                                 </div>
@@ -363,59 +302,92 @@ export const JobApplicationDetailsPage = () => {
                     <div className="space-y-4">
                         <h3 className="font-semibold text-lg">Interviews</h3>
 
-                        <div>
-                            {interviews?.length === 0 && (
-                                <p className="text-center py-10 text-muted-foreground">
-                                    No interviews scheduled yet.
-                                </p>
-                            )}
-                            {interviews?.map((interview) => {
+                        {interviews?.length === 0 && (
+                            <div className="w-[500px] py-3 flex items-center justify-center text-muted-foreground">
+                                No Interviews Scheduled
+                            </div>
+                        )}
+
+                        <Accordion
+                            type="single"
+                            collapsible
+                            className="w-[550px] -mt-2"
+                        >
+                            {interviews?.map((x) => {
                                 return (
-                                    <div
-                                        key={interview.id}
-                                        className="border rounded-xl p-3 mb-3 flex flex-col gap-2"
-                                    >
-                                        <h4>
-                                            <span>
-                                                {interview.roundNumber}.{' '}
-                                                {interview.interviewType}
-                                            </span>
-                                        </h4>
-
-                                        <span>
-                                            Scheduled At:{' '}
-                                            {interview.scheduledAt}
-                                        </span>
-
-                                        <span>
-                                            Duration:{' '}
-                                            {interview.durationInMinutes}
-                                        </span>
-
-                                        <span>status: {interview.status}</span>
-
-                                        <div>
-                                            <h4>Participants:</h4>
-                                            {interview.participants.map(
-                                                (participant) => (
-                                                    <div
-                                                        key={participant.id}
-                                                        className="ml-4"
-                                                    >
+                                    <AccordionItem value={x.id}>
+                                        <AccordionTrigger className="hover:no-underline hover:cursor-pointer px-1 border-b rounded-none">
+                                            <div className="flex gap-2.5 w-full">
+                                                <span>
+                                                    Round {x.roundNumber}
+                                                </span>
+                                                <span>•</span>
+                                                <span>{x.interviewType}</span>
+                                                <span>•</span>
+                                                <span>
+                                                    {durationFormatConverter(
+                                                        x.durationInMinutes
+                                                    )}
+                                                </span>
+                                                <div className="ml-auto">
+                                                    {x.status ===
+                                                        INTERVIEW_STATUS.NOT_SCHEDULED && (
                                                         <span>
-                                                            {
-                                                                participant.participantUserName
-                                                            }{' '}
-                                                            ({participant.role})
+                                                            Not Scheduled
                                                         </span>
+                                                    )}
+
+                                                    {x.status ===
+                                                        INTERVIEW_STATUS.SCHEDULED && (
+                                                        <span>
+                                                            At{' '}
+                                                            {new Date(
+                                                                x.scheduledAt ??
+                                                                    ''
+                                                            ).toLocaleString()}
+                                                        </span>
+                                                    )}
+
+                                                    {x.status ===
+                                                        INTERVIEW_STATUS.COMPLETED && (
+                                                        <span>Completed</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </AccordionTrigger>
+                                        <AccordionContent className="flex flex-col gap-4 text-balance pt-2 pb-4 px-3">
+                                            <h4>Participannts:</h4>
+
+                                            <div className="space-y-1.5">
+                                                {x.participants.map((x) => {
+                                                    return (
+                                                        <div
+                                                            key={x.id}
+                                                            className="flex justify-between px-2"
+                                                        >
+                                                            <span>
+                                                                {
+                                                                    x.participantUserName
+                                                                }
+                                                            </span>
+                                                            <span>
+                                                                {x.role}
+                                                            </span>
+                                                        </div>
+                                                    );
+                                                })}
+                                                {x.participants.length ===
+                                                    0 && (
+                                                    <div className="text-muted-foreground w-full text-center">
+                                                        No participants
                                                     </div>
-                                                )
-                                            )}
-                                        </div>
-                                    </div>
+                                                )}
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
                                 );
                             })}
-                        </div>
+                        </Accordion>
                     </div>
                 </div>
 
@@ -425,17 +397,13 @@ export const JobApplicationDetailsPage = () => {
                             Status Actions
                         </h3>
 
-                        <div className="border rounded-xl p-3 flex gap-3">
+                        <div className="rounded-xl flex gap-3 justify-center">
                             {/* At 'APPLIED' state */}
                             {jobApplication?.status === 'Applied' && (
                                 <>
-                                    {/* <ShortlistButton
-                                        jobApplicationId={jobApplication.id}
-                                        visibleTo={['Admin', 'Reviewer']}
-                                    /> */}
                                     <RejectButton
                                         jobApplicationId={jobApplication.id}
-                                        visibleTo={['Admin', 'Reviewer']}
+                                        visibleTo={['Admin', 'Recruiter']}
                                     />
                                     <PutOnHoldButton
                                         jobApplicationId={jobApplication.id}
@@ -523,141 +491,112 @@ export const JobApplicationDetailsPage = () => {
                         </div>
                     </div>
 
-                    <div>
+                    <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <h3 className="font-semibold text-lg">
-                                Review Feedbacks
+                                Feedbacks{' '}
+                                <span className="text-muted-foreground">
+                                    {jobApplication?.avgRating
+                                        ? `(${jobApplication?.avgRating} / 10 Average)`
+                                        : ''}
+                                </span>
                             </h3>
 
                             <AddFeedbackDialog
                                 jobApplicationId={jobApplication?.id}
                                 candidateId={jobApplication?.candidateId}
+                                visibleTo={['Admin', 'Recruiter']}
                             />
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-3 max-h-[600px] overflow-y-auto">
                             {jobApplication?.jobApplicationFeedbacks.length ===
-                                0 && (
-                                <p className="text-center py-10 text-muted-foreground">
-                                    No feedbacks yet.
-                                </p>
-                            )}
+                                0 &&
+                                jobApplication?.interviewFeedbacks.length ===
+                                    0 && (
+                                    <p className="text-center py-10 text-muted-foreground">
+                                        No feedbacks yet.
+                                    </p>
+                                )}
 
-                            {jobApplication?.jobApplicationFeedbacks.map(
-                                (f) => (
-                                    <div
-                                        key={f.id}
-                                        className="border rounded-xl p-3 text-sm space-y-2"
-                                    >
-                                        <div className="flex justify-between">
-                                            <span className="font-medium">
-                                                Rating: {f.rating} / 10
-                                            </span>
-                                            <span>
-                                                Given by{' '}
-                                                <span className="text-muted-foreground">
-                                                    {f.givenByName}
-                                                </span>
-                                            </span>
-                                        </div>
-
-                                        <p className="text-muted-foreground">
-                                            {f.comment}
-                                        </p>
-
-                                        <div className="flex flex-wrap">
-                                            {f.skillFeedbacks.map((x) => {
-                                                return (
-                                                    <div className="border rounded-sm w-fit text- font-normal m-0.5 py-2 px-2 space-y-0.5">
-                                                        <div className="text-center font-semibold">
-                                                            {x.skillName}
-                                                        </div>
-                                                        <div className="font ml-1">
-                                                            <span>
-                                                                Rating:{' '}
-                                                            </span>
-                                                            <span>
-                                                                {x.rating}/10
-                                                            </span>
-                                                        </div>
-                                                        <div className="text-sm ml-1">
-                                                            <span>
-                                                                Assessed
-                                                                Exp.:{' '}
-                                                            </span>
-                                                            {x.assessedExpYears}{' '}
-                                                            Year
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                )
-                            )}
-                        </div>
-                    </div>
-
-                    <div>
-                        <div className="flex items-center justify-between">
-                            <h3 className="font-semibold text-lg">
-                                Interview Feedbacks
-                            </h3>
-                        </div>
-
-                        <div className="space-y-3">
-                            {jobApplication?.interviewFeedbacks.length ===
-                                0 && (
-                                <p className="text-center py-10 text-muted-foreground">
-                                    No feedbacks yet.
-                                </p>
-                            )}
-
-                            {jobApplication?.interviewFeedbacks.map((f) => (
+                            {[
+                                ...(jobApplication?.jobApplicationFeedbacks ??
+                                    []),
+                                ...(jobApplication?.interviewFeedbacks ?? []),
+                            ].map((f) => (
                                 <div
                                     key={f.id}
-                                    className="border rounded-xl p-3 text-sm space-y-2"
+                                    className="border rounded-lg p-4 space-y-3"
                                 >
-                                    <div className="flex justify-between">
-                                        <span className="font-medium">
-                                            Rating: {f.rating} / 10
-                                        </span>
-                                        <span>
-                                            Given by{' '}
-                                            <span className="text-muted-foreground">
-                                                {f.givenByName}
-                                            </span>
-                                        </span>
-                                    </div>
-
-                                    <p className="text-muted-foreground">
-                                        {f.comment}
-                                    </p>
-
-                                    <div className="flex flex-wrap">
-                                        {f.skillFeedbacks.map((x) => {
-                                            return (
-                                                <div className="border rounded-sm w-fit text- font-normal m-0.5 py-2 px-2 space-y-0.5">
-                                                    <div className="text-center font-semibold">
-                                                        {x.skillName}
-                                                    </div>
-                                                    <div className="font ml-1">
-                                                        <span>Rating: </span>
-                                                        <span>
-                                                            {x.rating}/10
-                                                        </span>
-                                                    </div>
-                                                    <div className="text-sm ml-1">
-                                                        <span>
-                                                            Assessed Exp.:{' '}
-                                                        </span>
-                                                        {x.assessedExpYears}{' '}
-                                                        Year
-                                                    </div>
+                                    <div className="flex items-start justify-between gap-4">
+                                        <div className="flex-1 space-y-1">
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-base font-semibold">
+                                                    {f.rating}/10
                                                 </div>
-                                            );
-                                        })}
+                                            </div>
+                                        </div>
+                                        <div className="text-right text-xs text-muted-foreground">
+                                            <div className="text-xs text-muted-foreground space-y-0.5">
+                                                <p>
+                                                    Given by{' '}
+                                                    <span className="font-medium">
+                                                        {f.givenByName}
+                                                    </span>
+                                                </p>
+                                                <p>
+                                                    While{' '}
+                                                    <span className="font-medium">
+                                                        {f.stage}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    {f.comment && (
+                                        <p className="text-sm leading-relaxed">
+                                            {f.comment}
+                                        </p>
+                                    )}
+
+                                    {f.skillFeedbacks.length > 0 && (
+                                        <div className="space-y-2 pt-2 border-t">
+                                            <p className="text-xs font-semibold text-muted-foreground">
+                                                Skills Assessed
+                                            </p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {f.skillFeedbacks.map((x) => (
+                                                    <div
+                                                        key={x.skillName}
+                                                        className="border rounded-md p-2.5 space-y-1 bg-muted/30"
+                                                    >
+                                                        <p className="font-medium text-sm">
+                                                            {x.skillName}
+                                                        </p>
+                                                        <div className="flex justify-between text-xs text-muted-foreground">
+                                                            <span>
+                                                                Rating:{' '}
+                                                                <span className="font-semibold">
+                                                                    {x.rating}
+                                                                    /10
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                        <div className="text-xs text-muted-foreground">
+                                                            Assessed Exp.:{' '}
+                                                            <span className="font-semibold">
+                                                                {
+                                                                    x.assessedExpYears
+                                                                }{' '}
+                                                                Year
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -674,45 +613,43 @@ export const JobApplicationDetailsPage = () => {
                     </p>
                 )}
 
-                <div className="flex flex-wrap gap-1 space-y-4">
+                <div className="flex flex-wrap gap-4 py-4">
                     {jobApplication?.statusMoveHistories
                         .sort(
                             (x, y) =>
                                 +new Date(x.movedAt) - +new Date(y.movedAt)
                         )
                         .map((h, index) => (
-                            <>
-                                <div
-                                    key={h.id}
-                                    className="border w-fit rounded-2xl p-3 text-sm text-center"
-                                >
-                                    <div className="font-medium text-center mb-2">
-                                        {h.statusMovedTo}
-                                    </div>
-
-                                    <div className="text-muted-foreground">
-                                        At{' '}
-                                        {new Date(h.movedAt).toLocaleString()}
-                                    </div>
-
-                                    <div className="text-muted-foreground">
-                                        by {h.movedByName}
-                                    </div>
-
-                                    {h.comment && <p>{h.comment}</p>}
-                                </div>
-
-                                {jobApplication.statusMoveHistories.length >
-                                    1 &&
-                                    index !==
+                            <div key={h.id} className="flex items-center gap-4">
+                                {/* Timeline dot and line */}
+                                <div className="flex items-center">
+                                    <div className="w-4 h-4 bg-foreground rounded-full border-4 border-background z-10" />
+                                    {index !==
                                         jobApplication.statusMoveHistories
                                             .length -
                                             1 && (
-                                        <div className="flex items-center">
-                                            <MoveRight className="text-muted-foreground" />
-                                        </div>
+                                        <div className="w-24 h-1 bg-muted mt-0" />
                                     )}
-                            </>
+                                </div>
+
+                                {/* Content */}
+                                <div>
+                                    <div className="font-semibold text-base">
+                                        {h.statusMovedTo}
+                                    </div>
+                                    <div className="text-sm text-muted-foreground">
+                                        {new Date(h.movedAt).toLocaleString()}
+                                    </div>
+                                    <div className="text-sm text-muted-foreground">
+                                        by {h.movedByName}
+                                    </div>
+                                    {h.comment && (
+                                        <p className="text-sm mt-1 italic text-muted-foreground">
+                                            "{h.comment}"
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
                         ))}
                 </div>
             </div>

@@ -52,7 +52,10 @@ export const InterviewDetailsPage = () => {
                     <div className="flex space-x-2">
                         <h1 className="text-2xl font-bold">Interview</h1>{' '}
                         <span className="px-3 py-1 rounded-full text-sm font-semibold border">
-                            {interview.status}
+                            {interview.status === 'Scheduled' && 'Upcomming'}
+                            {interview.status === 'NotScheduled' &&
+                                'To Be Scheduled'}
+                            {interview.status === 'Completed' && 'Completed'}
                         </span>
                     </div>
 
@@ -93,74 +96,11 @@ export const InterviewDetailsPage = () => {
                         <div className="flex flex-col gap-2">
                             <div className="grid grid-cols-[180px_1fr] items-start gap-2">
                                 <span className="text-sm text-muted-foreground">
-                                    Candidate Name
-                                </span>
-                                <span className="text-sm flex items-center gap-2">
-                                    {interview.candidateName}
-                                    <a
-                                        href={interview.candidateId}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-1 text-sm underline hover:cursor-pointer"
-                                    >
-                                        <ExternalLink className="w-4 h-4" />
-                                    </a>
-                                </span>
-                            </div>
-
-                            <div></div>
-                            <div></div>
-
-                            <div className="grid grid-cols-[180px_1fr] items-start gap-2">
-                                <span className="text-sm text-muted-foreground">
-                                    Job Application
-                                </span>
-                                <a
-                                    href={interview.jobApplicationId}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 text-sm underline hover:cursor-pointer"
-                                >
-                                    <span className="text-sm">
-                                        View Job Application
-                                    </span>
-                                    <ExternalLink className="w-4 h-4" />
-                                </a>
-                            </div>
-
-                            <div className="grid grid-cols-[180px_1fr] items-start gap-2">
-                                <span className="text-sm text-muted-foreground">
-                                    Designation
-                                </span>
-                                <span className="text-sm">
-                                    {interview.designationName}
-                                </span>
-                            </div>
-
-                            <div></div>
-                            <div></div>
-
-                            <div className="grid grid-cols-[180px_1fr] items-start gap-2">
-                                <span className="text-sm text-muted-foreground">
-                                    Round Details
-                                </span>
-
-                                <span className="text-sm">
-                                    {interview.roundNumber}.{' '}
-                                    {interview.interviewType} Round
-                                </span>
-                            </div>
-
-                            <div></div>
-                            <div></div>
-
-                            <div className="grid grid-cols-[180px_1fr] items-start gap-2">
-                                <span className="text-sm text-muted-foreground">
                                     Sheduled At
                                 </span>
 
                                 {interview.scheduledAt ? (
-                                    <span>
+                                    <span className="text-sm">
                                         {new Date(
                                             interview.scheduledAt
                                         ).toLocaleString()}
@@ -207,6 +147,55 @@ export const InterviewDetailsPage = () => {
                                 ) : (
                                     <span className="text-sm">-</span>
                                 )}
+                            </div>
+
+                            <div></div>
+                            <div></div>
+
+                            <div className="grid grid-cols-[180px_1fr] items-start gap-2">
+                                <span className="text-sm text-muted-foreground">
+                                    Candidate
+                                </span>
+                                <a
+                                    onClick={() =>
+                                        window.open(
+                                            `/candidates/candidate/${interview?.candidateId}`,
+                                            '_blank',
+                                            'noopener,noreferrer'
+                                        )
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex w-fit items-center gap-1 text-sm underline hover:cursor-pointer"
+                                >
+                                    <span className="text-sm">
+                                        {interview.candidateName}
+                                    </span>
+                                    <ExternalLink className="w-4 h-4" />
+                                </a>
+                            </div>
+
+                            <div className="grid grid-cols-[180px_1fr] items-start gap-2">
+                                <span className="text-sm text-muted-foreground">
+                                    Job Application
+                                </span>
+                                <a
+                                    onClick={() =>
+                                        window.open(
+                                            `/job-applications/application/${interview?.jobApplicationId}`,
+                                            '_blank',
+                                            'noopener,noreferrer'
+                                        )
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex w-fit items-center gap-1 text-sm underline hover:cursor-pointer"
+                                >
+                                    <span className="text-sm">
+                                        View Job Application
+                                    </span>
+                                    <ExternalLink className="w-4 h-4" />
+                                </a>
                             </div>
 
                             <div></div>
@@ -271,7 +260,7 @@ export const InterviewDetailsPage = () => {
                 </div>
 
                 <div className="flex-[50%] px-5 pt-8 space-y-6 ">
-                    <div>
+                    <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <h3 className="font-semibold text-lg">
                                 Interview Feedbacks
@@ -283,7 +272,7 @@ export const InterviewDetailsPage = () => {
                             />
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-3 max-h-[600px] overflow-y-auto ">
                             {interview.feedbacks.length === 0 && (
                                 <p className="text-center py-10 text-muted-foreground">
                                     No feedbacks yet.
@@ -293,48 +282,71 @@ export const InterviewDetailsPage = () => {
                             {interview.feedbacks.map((f) => (
                                 <div
                                     key={f.id}
-                                    className="border rounded-xl p-3 text-sm space-y-2"
+                                    className="border rounded-lg p-4 space-y-3"
                                 >
-                                    <div className="flex justify-between">
-                                        <span className="font-medium">
-                                            Rating: {f.rating} / 10
-                                        </span>
-                                        <span>
-                                            Given by{' '}
-                                            <span className="text-muted-foreground">
-                                                {f.givenByName}
-                                            </span>
-                                        </span>
-                                    </div>
-
-                                    <p className="text-muted-foreground">
-                                        {f.comment}
-                                    </p>
-
-                                    <div className="flex flex-wrap">
-                                        {f.skillFeedbacks.map((x) => {
-                                            return (
-                                                <div className="border rounded-sm w-fit text- font-normal m-0.5 py-2 px-2 space-y-0.5">
-                                                    <div className="text-center font-semibold">
-                                                        {x.skillName}
-                                                    </div>
-                                                    <div className="font ml-1">
-                                                        <span>Rating: </span>
-                                                        <span>
-                                                            {x.rating}/10
-                                                        </span>
-                                                    </div>
-                                                    <div className="text-sm ml-1">
-                                                        <span>
-                                                            Assessed Exp.:{' '}
-                                                        </span>
-                                                        {x.assessedExpYears}{' '}
-                                                        Year
-                                                    </div>
+                                    <div className="flex items-start justify-between gap-4">
+                                        <div className="flex-1 space-y-1">
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-base font-semibold">
+                                                    {f.rating}/10
                                                 </div>
-                                            );
-                                        })}
+                                            </div>
+                                        </div>
+                                        <div className="text-right text-xs text-muted-foreground">
+                                            <div className="text-xs text-muted-foreground space-y-0.5">
+                                                <p>
+                                                    Given by{' '}
+                                                    <span className="font-medium">
+                                                        {f.givenByName}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    {f.comment && (
+                                        <p className="text-sm leading-relaxed">
+                                            {f.comment}
+                                        </p>
+                                    )}
+
+                                    {f.skillFeedbacks.length > 0 && (
+                                        <div className="space-y-2 pt-2 border-t">
+                                            <p className="text-xs font-semibold text-muted-foreground">
+                                                Skills Assessed
+                                            </p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {f.skillFeedbacks.map((x) => (
+                                                    <div
+                                                        key={x.skillName}
+                                                        className="border rounded-md p-2.5 space-y-1 bg-muted/30"
+                                                    >
+                                                        <p className="font-medium text-sm">
+                                                            {x.skillName}
+                                                        </p>
+                                                        <div className="flex justify-between text-xs text-muted-foreground">
+                                                            <span>
+                                                                Rating:{' '}
+                                                                <span className="font-semibold">
+                                                                    {x.rating}
+                                                                    /10
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                        <div className="text-xs text-muted-foreground">
+                                                            Assessed Exp.:{' '}
+                                                            <span className="font-semibold">
+                                                                {
+                                                                    x.assessedExpYears
+                                                                }{' '}
+                                                                Year
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>

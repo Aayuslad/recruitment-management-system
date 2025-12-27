@@ -46,6 +46,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
                             GivenByName = x.GivenByUser.Auth.UserName,
                             Comment = x.Comment,
                             Rating = x.Rating,
+                            Stage = x.Stage,
                             SkillFeedbacks = x.SkillFeedbacks.Select(
                                     selector: x => new SkillFeedbackDetailDTO
                                     {
@@ -65,6 +66,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
                             GivenByName = x.GivenByUser.Auth.UserName,
                             Comment = x.Comment,
                             Rating = x.Rating,
+                            Stage = x.Stage,
                             SkillFeedbacks = x.SkillFeedbacks.Select(
                                     selector: x => new SkillFeedbackDetailDTO
                                     {

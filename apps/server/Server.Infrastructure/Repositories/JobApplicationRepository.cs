@@ -94,5 +94,22 @@ namespace Server.Infrastructure.Repositories
                 .Include(x => x.Candidate)
                 .ToListAsync(cancellationToken);
         }
+
+        public Task<int> GetApplicationsCountByJobOpeningIdAsync(Guid jobOpeningId, CancellationToken cancellationToken)
+        {
+            return _context.JobApplications
+                .AsNoTracking()
+                .Where(x => x.JobOpeningId == jobOpeningId)
+                .CountAsync(cancellationToken);
+        }
+
+        public Task<List<JobApplication>> GetApplicationsByCandidateIdAsync(Guid candidateId, CancellationToken cancellationToken)
+        {
+            return _context.JobApplications
+                .AsNoTracking()
+                .Where(x => x.CandidateId == candidateId)
+                .Include(x => x.JobOpening.PositionBatch.Designation)
+                .ToListAsync(cancellationToken);
+        }
     }
 }

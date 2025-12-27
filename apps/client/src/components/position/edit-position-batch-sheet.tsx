@@ -85,7 +85,6 @@ export function EditPositionBatchSheet({ positionBatchId, visibleTo }: Props) {
     }, [positionBatch]);
 
     const onSubmit = async (data: EditPositionBatchCommandCorrected) => {
-        console.log('Submitting', data);
         editPositionBatchMutation.mutate(data, {
             onSuccess: () => {
                 form.reset();
@@ -95,7 +94,6 @@ export function EditPositionBatchSheet({ positionBatchId, visibleTo }: Props) {
     };
 
     const onInvalid = (errors: typeof form.formState.errors) => {
-        console.log(errors);
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };

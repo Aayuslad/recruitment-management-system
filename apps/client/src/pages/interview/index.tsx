@@ -13,7 +13,7 @@ export function Index() {
                 </div>
             </div>
 
-            <div className="w-full flex justify-evenly pt-10 pr-10">
+            <div className="w-full flex justify-evenly pt-8 pr-10">
                 <div className="w-full flex flex-col items-center gap-8">
                     <div className="">
                         <InterviewsTable />

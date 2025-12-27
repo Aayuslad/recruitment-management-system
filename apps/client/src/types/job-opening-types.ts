@@ -16,6 +16,8 @@ export interface JobOpeningSummary {
     jobLocation: string;
     createdById: string;
     createdByUserName: string;
+    createdAt: string;
+    applicationsCount: number;
     interviewRounds: InterviewRoundTemplateSummaryDTO[];
 }
 
@@ -32,6 +34,9 @@ export interface JobOpening {
     maxCTC: number;
     positionsCount: number;
     closedPositionsCount: number;
+    createdById: string;
+    createdByUserName: string;
+    createdAt: string;
     skills: SkillDetailDTO[];
     skillOverRides: SkillOverRideDetailDTO[];
     interviewers: JobOpeningInterviewerDetailDTO[];

@@ -2,10 +2,9 @@
 {
     public enum InterviewParticipantRole
     {
-        Interviewer = 0,
+        TechnicalInterviewer = 0,
         Observer = 1,
         NoteTaker = 2,
-        HRRepresentative = 3,
-        HiringManager = 4,
+        HRInterviewer = 3,
     }
 }

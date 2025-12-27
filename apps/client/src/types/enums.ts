@@ -87,11 +87,10 @@ export type InterviewStatus =
     (typeof INTERVIEW_STATUS)[keyof typeof INTERVIEW_STATUS];
 
 export const INTERVIEW_PARTICIPANT_ROLE = {
-    INTERVIEWER: 'Interviewer',
+    TECHNICAL_INTERVIEWER: 'TechnicalInterviewer',
     OBSERVER: 'Observer',
     NOTE_TAKER: 'NoteTaker',
-    HR_REPRESENTATIVE: 'HRRepresentative',
-    HIRING_MANAGER: 'HiringManager',
+    HR_INTERVIEWER: 'HRInterviewer',
 } as const;
 export type InterviewParticipantRole =
     (typeof INTERVIEW_PARTICIPANT_ROLE)[keyof typeof INTERVIEW_PARTICIPANT_ROLE];
