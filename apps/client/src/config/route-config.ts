@@ -60,6 +60,16 @@ export const routes: RouteConfigType[] = [
         ],
     },
     {
+        breadcrumb: 'Verifications',
+        path: 'verifications',
+        children: [
+            {
+                breadcrumb: 'Candidate',
+                path: 'candidate/:id',
+            },
+        ],
+    },
+    {
         breadcrumb: 'Positions',
         path: 'positions',
         children: [

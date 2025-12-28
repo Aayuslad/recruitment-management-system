@@ -30,6 +30,8 @@ import { JobApplicationDetailsPage } from './pages/jobApplication/job-applicatio
 import { InterviewDetailsPage } from './pages/interview/interview-details-page';
 import { Index as ScreeningsIndex } from './pages/screenings';
 import { ScreeningApplicationDetailsPage } from './pages/screenings/screening-application-details-page';
+import { Index as VerificationsIndex } from './pages/verifications';
+import { VerificationCandidateDetailsPage } from './pages/verifications/verification-candidate-details-page';
 
 function App() {
     return (
@@ -76,6 +78,13 @@ function App() {
                             element={<ScreeningApplicationDetailsPage />}
                         />
                     </Route>
+                    <Route path="verifications">
+                        <Route index element={<VerificationsIndex />} />
+                        <Route
+                            path="candidate/:id"
+                            element={<VerificationCandidateDetailsPage />}
+                        />
+                    </Route>
                     <Route path="positions">
                         <Route index element={<PositionsIndex />} />
                         <Route
@@ -88,7 +97,6 @@ function App() {
                         path="reports-and-analytics"
                         element={<ReportsAndAnalyticsIndex />}
                     />
-
                     <Route path="configuration">
                         <Route path="skills" element={<SkillsPage />} />
                         <Route

@@ -48,6 +48,7 @@ export interface CandidateSummary {
     collegeName: string;
     resumeUrl: string;
     isBgVerificationCompleted: boolean;
+    isDocumentsVerified: boolean;
     jobApplications: JobApplicationSummaryforCandidate[];
     createdAt: string;
 }
@@ -126,4 +127,21 @@ export type EditCandidateCommandCorrected = Omit<
               url: string;
           })[]
         | null;
+};
+
+export type AddCandidateDocumentCommandCorrected = Omit<
+    components['schemas']['AddCandidateDocumentCommand'],
+    'id' | 'documentTypeId' | 'url'
+> & {
+    id: string;
+    documentTypeId: string;
+    url: string;
+};
+
+export type VerifyCandidateDocumentCommandCorrected = Omit<
+    components['schemas']['VerifyCandidateDocumentCommand'],
+    'candidateId' | 'documentId'
+> & {
+    candidateId: string;
+    documentId: string;
 };

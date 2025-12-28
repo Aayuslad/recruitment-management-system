@@ -47,6 +47,7 @@ namespace Server.Infrastructure.Repositories
         {
             return _context.Candidates
                .AsNoTracking()
+               .Include(x => x.Documents)
                .ToListAsync(cancellationToken);
         }
     }

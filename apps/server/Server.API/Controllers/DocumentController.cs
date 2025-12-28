@@ -48,7 +48,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, Recruiter, Viewer")]
+        [Authorize(Roles = "Admin, Recruiter, Viewer, HR")]
         public async Task<IActionResult> GetDocumentTypes(CancellationToken cancellationToken)
         {
             var query = new GetDocumentTypesQuery();
