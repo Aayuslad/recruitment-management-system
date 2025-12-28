@@ -15,6 +15,7 @@ namespace Server.Application.Aggregates.Candidates.Queries.DTOs
         public string CollegeName { get; set; } = null!;
         public string ResumeUrl { get; set; } = null!;
         public bool IsBgVerificationCompleted { get; set; }
+        public bool IsDocumentsVerified { get; set; }
         public List<JobApplicationSummaryForCandidateDTO> JobApplications { get; set; } =
             new List<JobApplicationSummaryForCandidateDTO>();
         public DateTime CreatedAt { get; set; }

@@ -47,6 +47,7 @@ namespace Server.Application.Aggregates.Candidates.Handlers
                          ResumeUrl = candidate.ResumeUrl,
                          IsBgVerificationCompleted = candidate.IsBgVerificationCompleted,
                          CreatedAt = candidate.CreatedAt,
+                         IsDocumentsVerified = candidate.Documents.All(x => x.IsVerified),
                          JobApplications = candidateJobApplications.Select(
                             selector: x => new JobApplicationSummaryForCandidateDTO
                             {

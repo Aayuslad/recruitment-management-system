@@ -252,6 +252,89 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/candidate/{candidateId}/verify-doc/{documentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    candidateId: string;
+                    documentId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["VerifyCandidateDocumentCommand"];
+                    "text/json": components["schemas"]["VerifyCandidateDocumentCommand"];
+                    "application/*+json": components["schemas"]["VerifyCandidateDocumentCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/candidate/{candidateId}/add-document": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    candidateId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["AddCandidateDocumentCommand"];
+                    "text/json": components["schemas"]["AddCandidateDocumentCommand"];
+                    "application/*+json": components["schemas"]["AddCandidateDocumentCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/designation": {
         parameters: {
             query?: never;
@@ -2431,6 +2514,13 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AddCandidateDocumentCommand: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            documentTypeId?: string;
+            url?: string | null;
+        };
         CandidateSkillDTO: {
             /** Format: uuid */
             skillId?: string;
@@ -2813,6 +2903,12 @@ export interface components {
             roleId?: string;
             /** Format: uuid */
             assignedBy?: string | null;
+        };
+        VerifyCandidateDocumentCommand: {
+            /** Format: uuid */
+            candidateId?: string;
+            /** Format: uuid */
+            documentId?: string;
         };
     };
     responses: never;

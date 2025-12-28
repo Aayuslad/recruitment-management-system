@@ -89,5 +89,24 @@ namespace Server.API.Controllers
             var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }
+
+        [HttpPut("{candidateId:guid}/verify-doc/{documentId:guid}")]
+        [Authorize(Roles = "Admin, HR")]
+        public async Task<IActionResult> VerifyCandidateBg(Guid candidateId, Guid documentId, [FromBody] VerifyCandidateDocumentCommand command, CancellationToken cancellationToken)
+        {
+            command.CandidateId = candidateId;
+            command.DocumentId = documentId;
+            var result = await _mediator.Send(command, cancellationToken);
+            return result.ToActionResult(this);
+        }
+
+        [HttpPut("{candidateId:guid}/add-document")]
+        [Authorize(Roles = "Admin, HR")]
+        public async Task<IActionResult> AddCandidateDocument(Guid candidateId, [FromBody] AddCandidateDocumentCommand command, CancellationToken cancellationToken)
+        {
+            command.Id = candidateId;
+            var result = await _mediator.Send(command, cancellationToken);
+            return result.ToActionResult(this);
+        }
     }
 }

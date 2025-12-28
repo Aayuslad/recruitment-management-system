@@ -1,8 +1,10 @@
 import type {
+    AddCandidateDocumentCommandCorrected,
     Candidate,
     CandidateSummary,
     CreateCandidateCommandCorrected,
     EditCandidateCommandCorrected,
+    VerifyCandidateDocumentCommandCorrected,
 } from '@/types/candidate-types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
@@ -97,6 +99,63 @@ export function useVerifyCandidateBg() {
                 error.response?.data?.error ||
                     error.message ||
                     'Failed to verify background'
+            );
+            console.error(error);
+        },
+    });
+}
+
+export function useVerifyDocument() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (
+            payload: VerifyCandidateDocumentCommandCorrected
+        ): Promise<void> => {
+            await axios.put(
+                `/candidate/${payload.candidateId}/verify-doc/${payload.documentId}`,
+                payload
+            );
+        },
+        onSuccess: (_, variables) => {
+            toast.success('Document verification updated');
+            queryClient.invalidateQueries({ queryKey: ['candidates'] });
+            queryClient.invalidateQueries({
+                queryKey: ['candidate', variables.candidateId],
+            });
+        },
+        onError: (error: AxiosError<{ error: string }>) => {
+            toast.error(
+                error.response?.data?.error ||
+                    error.message ||
+                    'Failed to verify document'
+            );
+            console.error(error);
+        },
+    });
+}
+
+export function useAddDocument() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (
+            payload: AddCandidateDocumentCommandCorrected
+        ): Promise<void> => {
+            await axios.put(`/candidate/${payload.id}/add-document`, payload);
+        },
+        onSuccess: (_, variables) => {
+            toast.success('Document verification updated');
+            queryClient.invalidateQueries({ queryKey: ['candidates'] });
+            queryClient.invalidateQueries({
+                queryKey: ['candidate', variables.id],
+            });
+        },
+        onError: (error: AxiosError<{ error: string }>) => {
+            toast.error(
+                error.response?.data?.error ||
+                    error.message ||
+                    'Failed to verify document'
             );
             console.error(error);
         },

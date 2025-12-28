@@ -71,6 +71,12 @@ export const sidebarNavConfig = {
             icon: CalendarCheck,
             roles: ['Interviewer', 'Admin', 'Recruiter', 'HR'],
         },
+        {
+            name: 'Verifications',
+            url: 'verifications',
+            icon: CalendarCheck,
+            roles: ['HR'],
+        },
     ],
     supportingWorkflows: [
         {
