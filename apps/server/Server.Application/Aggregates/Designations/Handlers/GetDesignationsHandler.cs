@@ -31,7 +31,6 @@ namespace Server.Application.Aggregates.Designations.Handlers
                     SkillId = ds.SkillId,
                     SkillType = ds.SkillType,
                     Name = ds.Skill.Name,
-                    MinExperienceYears = ds.MinExperienceYears,
                 }).ToList(),
             });
 

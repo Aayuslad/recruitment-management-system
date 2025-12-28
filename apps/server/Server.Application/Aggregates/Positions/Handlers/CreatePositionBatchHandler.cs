@@ -41,7 +41,6 @@ namespace Server.Application.Aggregates.Positions.Handlers
                             positionBatchId: newPositionBatchId,
                             skillId: x.SkillId,
                             comments: x.Comments,
-                            minExperienceYears: x.MinExperienceYears,
                             type: x.Type,
                             actionType: x.ActionType,
                             sourceType: SkillSourceType.Position

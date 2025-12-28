@@ -86,14 +86,12 @@ export interface SkillDetailDTO {
     skillId: string;
     skillName: string;
     skillType: SkillType;
-    minExperienceYears: number;
 }
 
 export interface SkillOverRideDetailDTO {
     id: string | null;
     skillId: string;
     comments?: string | null;
-    minExperienceYears: number;
     type: SkillType;
     actionType: SkillActionType;
 }
@@ -132,17 +130,11 @@ export type CreatePositionBatchCommandCorrected = Omit<
     })[];
     skillOverRides: (Omit<
         components['schemas']['PositionSkillOverRideDTO'],
-        | 'skillId'
-        | 'minExperienceYears'
-        | 'type'
-        | 'actionType'
-        | 'id'
-        | 'comments'
+        'skillId' | 'type' | 'actionType' | 'id' | 'comments'
     > & {
         id?: string | null;
         skillId: string;
         comments?: string | null;
-        minExperienceYears: number;
         type: components['schemas']['SkillType'];
         actionType: components['schemas']['SkillActionType'];
     })[];
@@ -169,17 +161,11 @@ export type EditPositionBatchCommandCorrected = Omit<
     })[];
     skillOverRides: (Omit<
         components['schemas']['PositionSkillOverRideDTO'],
-        | 'skillId'
-        | 'minExperienceYears'
-        | 'type'
-        | 'actionType'
-        | 'id'
-        | 'comments'
+        'skillId' | 'type' | 'actionType' | 'id' | 'comments'
     > & {
         id?: string | null;
         skillId: string;
         comments?: string | null;
-        minExperienceYears: number;
         type: components['schemas']['SkillType'];
         actionType: components['schemas']['SkillActionType'];
     })[];

@@ -17,9 +17,6 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .HasConversion<string>()
                 .IsRequired();
 
-            builder.Property(ds => ds.MinExperienceYears)
-                .IsRequired(false);
-
             builder.HasOne(x => x.Designation)
                 .WithMany(d => d.DesignationSkills)
                 .HasForeignKey(ds => ds.DesignationId)

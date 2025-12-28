@@ -44,8 +44,7 @@ namespace Server.Application.Aggregates.Designations.Handlers
                     selector: x => DesignationSkill.Create(
                             designationId: newDesignationId,
                             skillId: x.SkillId,
-                            skillType: x.SkillType,
-                            minExperienceYears: x.MinExperienceYears
+                            skillType: x.SkillType
                         )
                 ).ToList() ?? [];
 

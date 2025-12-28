@@ -233,9 +233,6 @@ export const JobApplicationDetailsPage = () => {
                                                 id={skill.skillId}
                                                 name={skill.skillName}
                                                 type={skill.skillType as string}
-                                                minExperienceYears={
-                                                    skill.minExperienceYears as number
-                                                }
                                             />
                                         );
                                     })}
@@ -265,9 +262,6 @@ export const JobApplicationDetailsPage = () => {
                                                 id={skill.skillId}
                                                 name={skill.skillName}
                                                 type={skill.skillType as string}
-                                                minExperienceYears={
-                                                    skill.minExperienceYears as number
-                                                }
                                             />
                                         );
                                     })}
@@ -290,7 +284,6 @@ export const JobApplicationDetailsPage = () => {
                                                 id={skill.skillId}
                                                 name={skill.skillName}
                                                 type={null}
-                                                minExperienceYears={null}
                                             />
                                         );
                                     })}

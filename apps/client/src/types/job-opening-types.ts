@@ -47,14 +47,12 @@ export interface SkillDetailDTO {
     skillId: string;
     skillName: string;
     skillType: SkillType;
-    minExperienceYears?: number | null;
 }
 
 export interface SkillOverRideDetailDTO {
     id: string;
     skillId: string;
     comments?: string | null;
-    minExperienceYears: number;
     type: SkillType;
     actionType: SkillActionType;
 }
@@ -123,10 +121,9 @@ export type CreateJobOpeningCommandCorrected = Omit<
     })[];
     skillOverRides: (Omit<
         components['schemas']['SkillOverRideDTO'],
-        'skillId' | 'minExperienceYears' | 'type' | 'actionType'
+        'skillId' | 'type' | 'actionType'
     > & {
         skillId: string;
-        minExperienceYears: number;
         type: components['schemas']['SkillType'];
         actionType: components['schemas']['SkillActionType'];
     })[];
@@ -170,10 +167,9 @@ export type EditJobOpeningCommandCorrected = Omit<
     })[];
     skillOverRides: (Omit<
         components['schemas']['SkillOverRideDTO'],
-        'skillId' | 'minExperienceYears' | 'type' | 'actionType'
+        'skillId' | 'type' | 'actionType'
     > & {
         skillId: string;
-        minExperienceYears: number;
         type: components['schemas']['SkillType'];
         actionType: components['schemas']['SkillActionType'];
     })[];

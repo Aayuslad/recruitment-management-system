@@ -26,7 +26,7 @@ namespace Server.Infrastructure.Persistence.Configurations
                 .WithMany()
                 .IsRequired()
                 .HasForeignKey(ur => ur.RoleId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.AssignedByUser)
                 .WithMany()

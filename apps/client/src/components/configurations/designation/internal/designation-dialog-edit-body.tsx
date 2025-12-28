@@ -23,7 +23,6 @@ const editDesignationFormSchema = z.object({
         .object({
             skillId: z.string(),
             skillType: z.enum(['Required', 'Preferred']),
-            minExperienceYears: z.number().min(0).max(50),
         })
         .array(),
 }) satisfies z.ZodType<EditDesignationCommandCorrected>;
@@ -57,7 +56,6 @@ export const EditDialogBody = () => {
             designationDialogTarget?.designationSkills.map((x) => ({
                 skillId: x.skillId,
                 skillType: x.skillType,
-                minExperienceYears: x.minExperienceYears,
             })) || []
         );
     }, [designationDialogTarget, setValue]);

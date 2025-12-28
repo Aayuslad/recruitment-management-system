@@ -2540,11 +2540,6 @@
           },
           "skillType": {
             "$ref": "#/components/schemas/SkillType"
-          },
-          "minExperienceYears": {
-            "type": "number",
-            "format": "float",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3223,10 +3218,6 @@
             "type": "string",
             "nullable": true
           },
-          "minExperienceYears": {
-            "type": "number",
-            "format": "float"
-          },
           "type": {
             "$ref": "#/components/schemas/SkillType"
           },
@@ -3310,10 +3301,6 @@
           "comments": {
             "type": "string",
             "nullable": true
-          },
-          "minExperienceYears": {
-            "type": "number",
-            "format": "float"
           },
           "type": {
             "$ref": "#/components/schemas/SkillType"
