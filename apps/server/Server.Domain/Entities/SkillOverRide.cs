@@ -16,7 +16,6 @@ namespace Server.Domain.Entities
             Guid? jobOpeningId,
             Guid skillId,
             string? comments,
-            float minExperienceYears,
             SkillType type,
             SkillActionType actionType,
             SkillSourceType sourceType
@@ -26,7 +25,6 @@ namespace Server.Domain.Entities
             JobOpeningId = jobOpeningId;
             SkillId = skillId;
             Comments = comments;
-            MinExperienceYears = minExperienceYears;
             Type = type;
             ActionType = actionType;
             SourceType = sourceType;
@@ -36,7 +34,6 @@ namespace Server.Domain.Entities
         public Guid? JobOpeningId { get; private set; }
         public Guid SkillId { get; private set; }
         public string? Comments { get; private set; } = string.Empty;
-        public float MinExperienceYears { get; private set; }
         public SkillType Type { get; private set; }
         public SkillActionType ActionType { get; private set; }
         public SkillSourceType SourceType { get; private set; }
@@ -49,7 +46,6 @@ namespace Server.Domain.Entities
             Guid jobOpeningId,
             Guid skillId,
             string? comments,
-            float minExperienceYears,
             SkillType type,
             SkillActionType actionType,
             SkillSourceType sourceType
@@ -61,7 +57,6 @@ namespace Server.Domain.Entities
                 jobOpeningId,
                 skillId,
                 comments,
-                minExperienceYears,
                 type,
                 actionType,
                 sourceType
@@ -73,7 +68,6 @@ namespace Server.Domain.Entities
             Guid positionBatchId,
             Guid skillId,
             string? comments,
-            float minExperienceYears,
             SkillType type,
             SkillActionType actionType,
             SkillSourceType sourceType
@@ -85,7 +79,6 @@ namespace Server.Domain.Entities
                 null,
                 skillId,
                 comments,
-                minExperienceYears,
                 type,
                 actionType,
                 sourceType
@@ -94,13 +87,11 @@ namespace Server.Domain.Entities
 
         public void Update(
             string? comments,
-            float minExperienceYears,
             SkillType type,
             SkillActionType actionType
         )
         {
             Comments = comments;
-            MinExperienceYears = minExperienceYears;
             Type = type;
             ActionType = actionType;
         }

@@ -184,9 +184,6 @@ export const PositionBatchDetailsPage = () => {
                                             id={x.skillId}
                                             name={x.skillName}
                                             type={x.skillType}
-                                            minExperienceYears={
-                                                x.minExperienceYears
-                                            }
                                         />
                                     );
                                 })}
@@ -198,9 +195,6 @@ export const PositionBatchDetailsPage = () => {
                                             id={x.skillId}
                                             name={x.skillName}
                                             type={x.skillType}
-                                            minExperienceYears={
-                                                x.minExperienceYears
-                                            }
                                         />
                                     );
                                 })}

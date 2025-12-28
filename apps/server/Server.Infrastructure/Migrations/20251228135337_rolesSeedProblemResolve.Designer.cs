@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Server.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using Server.Infrastructure.Persistence;
 namespace Server.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251228135337_rolesSeedProblemResolve")]
+    partial class rolesSeedProblemResolve
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -889,7 +892,7 @@ namespace Server.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("730a5c0e-76a2-4826-a192-3c584a367f82"),
-                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9510),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 53, 36, 571, DateTimeKind.Utc).AddTicks(8816),
                             Description = "Manages users, roles, and system-wide configurations.",
                             IsDeleted = false,
                             Name = "Admin"
@@ -897,7 +900,7 @@ namespace Server.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("d51ae472-657e-4b68-9c73-82be537ae083"),
-                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9516),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 53, 36, 571, DateTimeKind.Utc).AddTicks(8826),
                             Description = "Manages job openings, candidate profiles, interviews.",
                             IsDeleted = false,
                             Name = "Recruiter"
@@ -905,7 +908,7 @@ namespace Server.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("e8157fe7-7c8e-44ad-8440-891350dbc7e9"),
-                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9528),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 53, 36, 571, DateTimeKind.Utc).AddTicks(8838),
                             Description = "Provides interview feedback.",
                             IsDeleted = false,
                             Name = "Interviewer"
@@ -913,7 +916,7 @@ namespace Server.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("2508f54e-ab1f-481c-859f-4f1505533dfa"),
-                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9530),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 53, 36, 571, DateTimeKind.Utc).AddTicks(8844),
                             Description = "Culture fit, final negotiation, documentation and background verification",
                             IsDeleted = false,
                             Name = "HR"
@@ -921,7 +924,7 @@ namespace Server.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("761a2beb-ae68-4950-865b-98ea7eb7079a"),
-                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9533),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 53, 36, 571, DateTimeKind.Utc).AddTicks(8848),
                             Description = "Screens CVs and shortlists candidates.",
                             IsDeleted = false,
                             Name = "Reviewer"
@@ -929,7 +932,7 @@ namespace Server.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("78e3afbe-c2b2-459b-a114-1f23e4cd42f0"),
-                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9535),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 53, 36, 571, DateTimeKind.Utc).AddTicks(8852),
                             Description = "Views job openings, uploads CVs, and submits documents.",
                             IsDeleted = false,
                             Name = "Candidate"
@@ -937,7 +940,7 @@ namespace Server.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("8fd55f0f-8262-4781-ba7b-7124db6f147b"),
-                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9536),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 53, 36, 571, DateTimeKind.Utc).AddTicks(8854),
                             Description = "Read-only access to all data.",
                             IsDeleted = false,
                             Name = "Viewer"

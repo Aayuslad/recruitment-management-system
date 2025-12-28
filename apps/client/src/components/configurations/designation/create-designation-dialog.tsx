@@ -29,7 +29,6 @@ const createDesignationFormSchema = z.object({
         .object({
             skillId: z.string(),
             skillType: z.enum(['Required', 'Preferred']),
-            minExperienceYears: z.number().min(0).max(50),
         })
         .array(),
 }) satisfies z.ZodType<CreateDesignationCommandCorrected>;

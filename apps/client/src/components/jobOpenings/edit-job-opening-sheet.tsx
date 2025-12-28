@@ -68,7 +68,6 @@ const EditJobOpeningSheetSchema = z.object({
             id: z.string().optional().nullable(),
             skillId: z.string(),
             comments: z.string().optional().nullable(),
-            minExperienceYears: z.number(),
             type: z.enum(['Required', 'Preferred']),
             actionType: z.enum(['Add', 'Remove', 'Update']),
         })

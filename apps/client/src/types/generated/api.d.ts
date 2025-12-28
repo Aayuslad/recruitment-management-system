@@ -2639,8 +2639,6 @@ export interface components {
             /** Format: uuid */
             skillId?: string;
             skillType?: components["schemas"]["SkillType"];
-            /** Format: float */
-            minExperienceYears?: number | null;
         };
         DocumentDTO: {
             /** Format: uuid */
@@ -2860,8 +2858,6 @@ export interface components {
             /** Format: uuid */
             skillId?: string;
             comments?: string | null;
-            /** Format: float */
-            minExperienceYears?: number;
             type?: components["schemas"]["SkillType"];
             actionType?: components["schemas"]["SkillActionType"];
         };
@@ -2891,8 +2887,6 @@ export interface components {
             /** Format: uuid */
             skillId?: string;
             comments?: string | null;
-            /** Format: float */
-            minExperienceYears?: number;
             type?: components["schemas"]["SkillType"];
             actionType?: components["schemas"]["SkillActionType"];
         };

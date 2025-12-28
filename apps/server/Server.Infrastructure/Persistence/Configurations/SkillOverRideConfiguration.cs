@@ -35,9 +35,6 @@ namespace Server.Infrastructure.Persistence.Configurations
             builder.Property(x => x.Comments)
                 .IsRequired(false);
 
-            builder.Property(x => x.MinExperienceYears)
-                .IsRequired();
-
             builder.Property(x => x.Type)
                 .HasConversion<string>()
                 .IsRequired();

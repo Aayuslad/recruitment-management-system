@@ -40,7 +40,6 @@ const createPositionBatchFormSchema = z.object({
         z.object({
             skillId: z.string(),
             comments: z.string().optional().nullable(),
-            minExperienceYears: z.number(),
             type: z.enum(['Required', 'Preferred']),
             actionType: z.enum(['Add', 'Remove', 'Update']),
         })

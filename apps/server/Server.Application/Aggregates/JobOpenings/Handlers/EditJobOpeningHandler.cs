@@ -48,7 +48,6 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                             jobOpeningId: jobOpening.Id,
                             skillId: x.SkillId,
                             comments: x.Comments,
-                            minExperienceYears: x.MinExperienceYears,
                             type: x.Type,
                             actionType: x.ActionType,
                             sourceType: SkillSourceType.JobOpening

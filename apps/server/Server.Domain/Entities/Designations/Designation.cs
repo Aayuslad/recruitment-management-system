@@ -70,8 +70,7 @@ namespace Server.Domain.Entities.Designations
             {
                 var toUpdate = DesignationSkills.FirstOrDefault(x => x.SkillId == newSkill.SkillId);
                 toUpdate?.Update(
-                    newSkill.SkillType,
-                    newSkill.MinExperienceYears
+                    newSkill.SkillType
                 );
             }
 

@@ -11,7 +11,6 @@ import {
     CommandItem,
     CommandList,
 } from '@/components/ui/command';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
     Popover,
@@ -25,6 +24,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { SkillPill } from '@/components/ui/skill-pill';
 import {
     Tooltip,
     TooltipContent,
@@ -92,7 +92,6 @@ export const PositionSkillSelector = ({
         append({
             skillId: skill.id,
             type: 'Required',
-            minExperienceYears: 0,
             actionType: 'Add',
         });
 
@@ -114,7 +113,6 @@ export const PositionSkillSelector = ({
             skillId: inheritedSkill.skillId,
             comments: null,
             type: inheritedSkill.skillType,
-            minExperienceYears: inheritedSkill.minExperienceYears ?? 0,
             actionType: 'Remove',
         });
 
@@ -134,7 +132,6 @@ export const PositionSkillSelector = ({
             skillId: inheritedSkill.skillId,
             comments: null,
             type: inheritedSkill.skillType,
-            minExperienceYears: inheritedSkill.minExperienceYears ?? 0,
             actionType: 'Update',
         });
 
@@ -159,28 +156,6 @@ export const PositionSkillSelector = ({
                         ? {
                               ...s,
                               skillType: newValue,
-                          }
-                        : s
-                ) ?? []
-        );
-    };
-
-    const handleOverRideMinExperienceYearsChange = (
-        overRide: CreatePositionBatchCommandCorrected['skillOverRides'][0],
-        newValue: number
-    ) => {
-        update(skillOverRides.indexOf(overRide), {
-            ...overRide,
-            minExperienceYears: newValue,
-        });
-
-        setFinalSkills(
-            (prev) =>
-                prev?.map((s) =>
-                    s.skillId === overRide.skillId
-                        ? {
-                              ...s,
-                              minExperienceYears: newValue,
                           }
                         : s
                 ) ?? []
@@ -215,7 +190,6 @@ export const PositionSkillSelector = ({
                         skills?.find((x) => x.id === overRide.skillId)?.name ??
                         '',
                     skillType: overRide.type,
-                    minExperienceYears: overRide.minExperienceYears,
                 },
             ]);
         }
@@ -233,8 +207,6 @@ export const PositionSkillSelector = ({
                             skillId: overRide.skillId,
                             name: relativeDesignationSkill?.name,
                             skillType: relativeDesignationSkill.skillType,
-                            minExperienceYears:
-                                relativeDesignationSkill.minExperienceYears,
                         };
                     }
 
@@ -278,35 +250,11 @@ export const PositionSkillSelector = ({
                         ),
                     ].map((x) => {
                         return (
-                            <Tooltip key={x.skillId}>
-                                <TooltipTrigger asChild>
-                                    <Badge
-                                        variant="outline"
-                                        className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${x.skillType === 'Required' ? 'border-red-400' : ''} ${x.skillType === 'Preferred' ? 'border-blue-400' : 'border-slate-400'}`}
-                                    >
-                                        <span>{x.name}</span>
-                                        {x.minExperienceYears !== 0 && (
-                                            <span className="text-xs -mb-1 pb-[1px] px-1.5 bg-accent rounded-2xl">
-                                                {x.minExperienceYears}
-                                            </span>
-                                        )}
-                                    </Badge>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p className="space-x-1.5 mb-1">
-                                        <span className="font-semibold">
-                                            Type:
-                                        </span>
-                                        <span>{x.skillType}</span>
-                                    </p>
-                                    <p className="space-x-1.5">
-                                        <span className="font-semibold">
-                                            Minimum Experience years:
-                                        </span>
-                                        <span>{x.minExperienceYears}</span>
-                                    </p>
-                                </TooltipContent>
-                            </Tooltip>
+                            <SkillPill
+                                id={x.skillId}
+                                name={x.name}
+                                type={x.skillType}
+                            />
                         );
                     })}
                 </div>
@@ -332,19 +280,11 @@ export const PositionSkillSelector = ({
                                         <TooltipTrigger asChild>
                                             <Badge
                                                 variant="outline"
-                                                className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${inheritedSkill.skillType === 'Required' ? 'border-red-400' : ''} ${inheritedSkill.skillType === 'Preferred' ? 'border-blue-400' : 'border-slate-400'}`}
+                                                className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${inheritedSkill.skillType ? (inheritedSkill.skillType === 'Required' ? 'border-amber-950' : 'border-cyan-800') : ''}`}
                                             >
                                                 <span>
                                                     {inheritedSkill.name}
                                                 </span>
-                                                {inheritedSkill.minExperienceYears !==
-                                                    0 && (
-                                                    <span className="text-xs -mb-1 pb-[1px] px-1.5 bg-accent rounded-2xl">
-                                                        {
-                                                            inheritedSkill.minExperienceYears
-                                                        }
-                                                    </span>
-                                                )}
                                             </Badge>
                                         </TooltipTrigger>
                                         <TooltipContent>
@@ -354,16 +294,6 @@ export const PositionSkillSelector = ({
                                                 </span>
                                                 <span>
                                                     {inheritedSkill.skillType}
-                                                </span>
-                                            </p>
-                                            <p className="space-x-1.5">
-                                                <span className="font-semibold">
-                                                    Minimum Experience years:
-                                                </span>
-                                                <span>
-                                                    {
-                                                        inheritedSkill.minExperienceYears
-                                                    }
                                                 </span>
                                             </p>
                                             <div className="space-x-2 mt-1">
@@ -407,7 +337,7 @@ export const PositionSkillSelector = ({
                             />
                         </div>
                         <div className="border rounded-2xl">
-                            <div className="overflow-y-auto px-2 py-2">
+                            <div className="overflow-y-auto px-4 py-2">
                                 {skillOverRides?.map((overRide) => (
                                     <div
                                         key={overRide.skillId}
@@ -457,39 +387,8 @@ export const PositionSkillSelector = ({
                                             </Select>
                                         </div>
 
-                                        <div className="flex items-center gap-2">
-                                            <label
-                                                htmlFor="minExperienceYears"
-                                                className="text-sm text-muted-foreground"
-                                            >
-                                                Exp:
-                                            </label>
-                                            <Input
-                                                id="minExperienceYears"
-                                                type="text"
-                                                disabled={
-                                                    overRide.actionType ===
-                                                    'Remove'
-                                                }
-                                                value={
-                                                    overRide.minExperienceYears
-                                                }
-                                                onChange={(e) => {
-                                                    handleOverRideMinExperienceYearsChange(
-                                                        overRide,
-                                                        Number(e.target.value)
-                                                    );
-                                                }}
-                                                className="w-8 h-8 px-2 text-sm"
-                                                placeholder="0"
-                                                style={{ height: '28px' }}
-                                                min={0}
-                                                max={50}
-                                            />
-                                        </div>
-
                                         <div className="text-muted-foreground text-sm">
-                                            {overRide.actionType}
+                                            {overRide.actionType}ing
                                         </div>
 
                                         <button
