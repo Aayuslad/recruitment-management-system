@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Positions.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities;
 using Server.Domain.Entities.Positions;
@@ -28,14 +28,14 @@ namespace Server.Application.Aggregates.Positions.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: fetch positinoBatch
             var positionBatch = await _positionBatchRepository.GetByIdAsync(command.PositionBatchId, cancellationToken);
             if (positionBatch == null)
             {
-                throw new NotFoundExeption("Position Not Found.");
+                throw new NotFoundException("Position Not Found.");
             }
 
             // step 2: update entity
@@ -47,7 +47,6 @@ namespace Server.Application.Aggregates.Positions.Handlers
                             positionBatchId: positionBatch.Id,
                             skillId: x.SkillId,
                             comments: x.Comments,
-                            minExperienceYears: x.MinExperienceYears,
                             type: x.Type,
                             actionType: x.ActionType,
                             sourceType: SkillSourceType.Position

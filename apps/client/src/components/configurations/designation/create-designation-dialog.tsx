@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAccessChecker } from '@/hooks/use-has-access';
 import type { CreateDesignationCommandCorrected } from '@/types/designation-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -27,14 +28,18 @@ const createDesignationFormSchema = z.object({
     designationSkills: z
         .object({
             skillId: z.string(),
-            skillType: z.enum(['Required', 'Preferred', 'NiceToHave']),
-            minExperienceYears: z.number().min(0).max(50),
+            skillType: z.enum(['Required', 'Preferred']),
         })
         .array(),
 }) satisfies z.ZodType<CreateDesignationCommandCorrected>;
 
-export function CreateDesignationDialog() {
+type Props = {
+    visibleTo: string[];
+};
+
+export function CreateDesignationDialog({ visibleTo }: Props) {
     const [open, setOpen] = useState(false);
+    const canAccess = useAccessChecker();
     const createDesignationMutation = useCreateDesignation();
 
     const form = useForm<CreateDesignationCommandCorrected>({
@@ -58,6 +63,8 @@ export function CreateDesignationDialog() {
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };
+
+    if (!canAccess(visibleTo)) return null;
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

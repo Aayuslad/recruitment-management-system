@@ -28,7 +28,7 @@ namespace Server.Infrastructure.Persistence
         public DbSet<Skill> Skills { get; set; } = null!;
         public DbSet<Designation> Designations { get; set; } = null!;
         public DbSet<DesignationSkill> DesignationSkills { get; set; } = null!;
-        public DbSet<PositionBatch> PositionBatchs { get; set; } = null!;
+        public DbSet<PositionBatch> PositionBatches { get; set; } = null!;
         public DbSet<Position> Positions { get; set; } = null!;
         public DbSet<PositionBatchReviewer> PositionBatchReviewers { get; set; } = null!;
         public DbSet<PositionStatusMoveHistory> PositionStatusMoveHistories { get; set; } = null!;
@@ -149,6 +149,18 @@ namespace Server.Infrastructure.Persistence
             // document types
             modelBuilder.Entity<DocumentType>()
                 .HasQueryFilter(x => !x.IsDeleted);
+
+
+            modelBuilder.Entity<Role>()
+                .HasData(
+                    Role.Create("Admin", "Manages users, roles, and system-wide configurations.", null, Guid.Parse("730a5c0e-76a2-4826-a192-3c584a367f82")),
+                    Role.Create("Recruiter", "Manages job openings, candidate profiles, interviews.", null, Guid.Parse("d51ae472-657e-4b68-9c73-82be537ae083")),
+                    Role.Create("Interviewer", "Provides interview feedback.", null, Guid.Parse("e8157fe7-7c8e-44ad-8440-891350dbc7e9 ")),
+                    Role.Create("HR", "Culture fit, final negotiation, documentation and background verification", null, Guid.Parse("2508f54e-ab1f-481c-859f-4f1505533dfa")),
+                    Role.Create("Reviewer", "Screens CVs and shortlists candidates.", null, Guid.Parse("761a2beb-ae68-4950-865b-98ea7eb7079a")),
+                    Role.Create("Candidate", "Views job openings, uploads CVs, and submits documents.", null, Guid.Parse("78e3afbe-c2b2-459b-a114-1f23e4cd42f0 ")),
+                    Role.Create("Viewer", "Read-only access to all data.", null, Guid.Parse("8fd55f0f-8262-4781-ba7b-7124db6f147b"))
+                );
 
             base.OnModelCreating(modelBuilder);
         }

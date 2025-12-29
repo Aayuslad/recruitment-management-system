@@ -11,7 +11,7 @@ import {
     useReactTable,
     type VisibilityState,
 } from '@tanstack/react-table';
-import { Copy, MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import * as React from 'react';
 
 import { useGetBatchPositions } from '@/api/position-api';
@@ -34,7 +34,6 @@ import {
 } from '@/components/ui/table';
 import type { BatchPositionsSummary } from '@/types/position-types';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
 import { Spinner } from '../ui/spinner';
 
 export function BatchPositionsTable({ batchId }: { batchId: string }) {
@@ -49,27 +48,36 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
     const { data, isLoading, isError } = useGetBatchPositions(batchId);
 
     const columns: ColumnDef<BatchPositionsSummary>[] = [
+        // {
+        //     id: 'position-id',
+        //     header: () => {
+        //         return <div className="ml-2">Position Id</div>;
+        //     },
+        //     cell: ({ row }) => (
+        //         <div className="ml-2 from-sm font-mono w-[70px]">
+        //             {row.original.positionId.slice(0, 6).toUpperCase()}...
+        //             <button
+        //                 onClick={() => {
+        //                     navigator.clipboard.writeText(
+        //                         row.original.positionId
+        //                     );
+        //                     toast.success('Copied to clipboard');
+        //                 }}
+        //                 className="text-muted-foreground hover:text-foreground hover:cursor-pointer"
+        //                 title="Copy full ID"
+        //             >
+        //                 <Copy size={16} />
+        //             </button>
+        //         </div>
+        //     ),
+        // },
         {
-            id: 'position-id',
+            id: 'index',
             header: () => {
-                return <div className="ml-2">Position Id</div>;
+                return <div className="w-[20px] ml-4 ">Index</div>;
             },
             cell: ({ row }) => (
-                <div className="ml-2 from-sm font-mono w-[70px]">
-                    {row.original.positionId.slice(0, 6).toUpperCase()}...
-                    <button
-                        onClick={() => {
-                            navigator.clipboard.writeText(
-                                row.original.positionId
-                            );
-                            toast.success('Copied to clipboard');
-                        }}
-                        className="text-muted-foreground hover:text-foreground hover:cursor-pointer"
-                        title="Copy full ID"
-                    >
-                        <Copy size={16} />
-                    </button>
-                </div>
+                <div className="font-medium w-min ml-4">{row.index + 1}</div>
             ),
         },
         {

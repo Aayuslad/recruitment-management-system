@@ -17,6 +17,7 @@ export interface JobOpeningApplicationSummary {
     candidateId: string;
     candidateName: string;
     appliedAt: string;
+    avgRating?: number | null;
     status: JobApplicationStatus;
 }
 

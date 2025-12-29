@@ -20,7 +20,7 @@ function HomeLayout() {
     }
 
     return (
-        <SidebarProvider open={sidebarState === 'opend' ? true : false}>
+        <SidebarProvider open={sidebarState === 'opened' ? true : false}>
             <AppSidebar />
             <SidebarInset>
                 <AppHeader />

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Users.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.Users;
 
@@ -27,14 +27,25 @@ namespace Server.Application.Aggregates.Users.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
             if (string.IsNullOrEmpty(userIdString))
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: fetch user
             var user = await _userRepository.GetProfileByUserIdAsync(request.UserId, cancellationToken);
             if (user is null)
             {
-                throw new NotFoundExeption("User Not Found.");
+                throw new NotFoundException("User Not Found.");
+            }
+
+            // step 2: check if admin is trying to remove admin role
+            var isEditingAdminUser = user.Roles.Any(x => x.Role.Name == "Admin");
+            if (isEditingAdminUser)
+            {
+                var adminRoleId = user.Roles.First(x => x.Role.Name == "Admin").RoleId;
+                if (!request.Roles.Any(x => x.RoleId == adminRoleId))
+                {
+                    throw new ConflictException("You cannot remove admin role.");
+                }
             }
 
             // step 2: edit roles

@@ -4,7 +4,7 @@ using MediatR;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Candidates.Queries;
 using Server.Application.Aggregates.Candidates.Queries.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Candidates.Handlers
@@ -12,10 +12,12 @@ namespace Server.Application.Aggregates.Candidates.Handlers
     internal class GetCandidateHandler : IRequestHandler<GetCandidateQuery, Result<CandidateDetailDTO>>
     {
         private readonly ICandidateRepository _candidateRepository;
+        private readonly IJobApplicationRepository _jobApplicationRepository;
 
-        public GetCandidateHandler(ICandidateRepository candidateRepository)
+        public GetCandidateHandler(ICandidateRepository candidateRepository, IJobApplicationRepository jobApplicationRepository)
         {
             _candidateRepository = candidateRepository;
+            _jobApplicationRepository = jobApplicationRepository;
         }
 
         public async Task<Result<CandidateDetailDTO>> Handle(GetCandidateQuery request, CancellationToken cancellationToken)
@@ -24,8 +26,10 @@ namespace Server.Application.Aggregates.Candidates.Handlers
             var candidate = await _candidateRepository.GetByIdAsync(request.Id, cancellationToken);
             if (candidate == null)
             {
-                throw new NotFoundExeption("Candidate Not Found");
+                throw new NotFoundException("Candidate Not Found");
             }
+
+            var candidateJobApplications = await _jobApplicationRepository.GetApplicationsByCandidateIdAsync(candidate.Id, cancellationToken);
 
             // step 2: map dto
 
@@ -52,6 +56,18 @@ namespace Server.Application.Aggregates.Candidates.Handlers
                     }
                 ).ToList();
 
+            // job applications
+            var jobApplicationDtos = candidateJobApplications.Select(
+                    x => new JobApplicationDetailForCandidateDTO
+                    {
+                        Id = x.Id,
+                        DesignationName = x.JobOpening.PositionBatch.Designation.Name,
+                        AppliedAt = x.AppliedAt,
+                        JobLocation = x.JobOpening.PositionBatch.JobLocation,
+                        Status = x.Status,
+                    }
+            ).ToList();
+
             // aggregate root
             var candidateDto = new CandidateDetailDTO
             {
@@ -70,7 +86,8 @@ namespace Server.Application.Aggregates.Candidates.Handlers
                 BgVerificationCompletedByUserName = candidate.BgVerifiedByUser?.Auth.UserName,
                 CreatedAt = candidate.CreatedAt,
                 Skills = skillDtos,
-                Documents = documentDtos
+                Documents = documentDtos,
+                JobApplications = jobApplicationDtos
             };
 
             // step 3: return result

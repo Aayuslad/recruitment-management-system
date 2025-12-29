@@ -11,7 +11,6 @@ export interface DesignationSkillDTO {
     skillId: string;
     name: string;
     skillType: SkillType;
-    minExperienceYears: number;
 }
 
 export type CreateDesignationCommandCorrected = Omit<
@@ -21,8 +20,7 @@ export type CreateDesignationCommandCorrected = Omit<
     name: string;
     designationSkills: {
         skillId: string;
-        skillType: 'Required' | 'Preferred' | 'NiceToHave';
-        minExperienceYears: number;
+        skillType: components['schemas']['SkillType'];
     }[];
 };
 
@@ -34,7 +32,6 @@ export type EditDesignationCommandCorrected = Omit<
     name: string;
     designationSkills: {
         skillId: string;
-        skillType: 'Required' | 'Preferred' | 'NiceToHave';
-        minExperienceYears: number;
+        skillType: components['schemas']['SkillType'];
     }[];
 };

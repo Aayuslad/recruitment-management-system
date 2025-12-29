@@ -4,7 +4,7 @@ using MediatR;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.JobOpenings.Queries;
 using Server.Application.Aggregates.JobOpenings.Queries.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Enums;
 
@@ -25,7 +25,7 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
             var jo = await _jobOpeningRepository.GetByIdAsync(request.JobOpeningId, cancellationToken);
             if (jo == null)
             {
-                throw new NotFoundExeption("Job Opening Not Found.");
+                throw new NotFoundException("Job Opening Not Found.");
             }
 
             // step 2: map dto
@@ -37,7 +37,6 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                     SkillId = ds.SkillId,
                     SkillName = ds.Skill.Name,
                     SkillType = ds.SkillType,
-                    MinExperienceYears = ds.MinExperienceYears,
                 }
                 ).ToList();
 
@@ -51,7 +50,6 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                         {
                             SkillId = overRide.SkillId,
                             SkillName = overRide.Skill.Name,
-                            MinExperienceYears = overRide.MinExperienceYears,
                             SkillType = overRide.Type,
                         });
                         break;
@@ -60,7 +58,6 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                         var skill = skills.FirstOrDefault(x => x.SkillId == overRide.SkillId);
                         if (skill != null)
                         {
-                            skill.MinExperienceYears = overRide.MinExperienceYears;
                             skill.SkillType = overRide.Type;
                         }
                         break;
@@ -81,7 +78,6 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                         {
                             SkillId = overRide.SkillId,
                             SkillName = overRide.Skill.Name,
-                            MinExperienceYears = overRide.MinExperienceYears,
                             SkillType = overRide.Type,
                         });
                         break;
@@ -90,7 +86,6 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                         var skill = skills.FirstOrDefault(x => x.SkillId == overRide.SkillId);
                         if (skill != null)
                         {
-                            skill.MinExperienceYears = overRide.MinExperienceYears;
                             skill.SkillType = overRide.Type;
                         }
                         break;
@@ -108,7 +103,6 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                         Id = x.Id,
                         SkillId = x.SkillId,
                         Comments = x.Comments,
-                        MinExperienceYears = x.MinExperienceYears,
                         Type = x.Type,
                         ActionType = x.ActionType,
                     }
@@ -165,6 +159,9 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                 SkillOverRides = joSkillOverRides,
                 Interviewers = interviewers,
                 InterviewRounds = interviewRounds,
+                CreatedById = jo.CreatedBy,
+                CreatedByUserName = jo.CreatedByUser?.Auth.UserName,
+                CreatedAt = jo.CreatedAt,
             };
 
             // step 3: return result

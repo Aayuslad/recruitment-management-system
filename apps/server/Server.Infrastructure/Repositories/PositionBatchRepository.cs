@@ -17,7 +17,7 @@ namespace Server.Infrastructure.Repositories
 
         Task IPositionBatchRepository.AddAsync(PositionBatch positionBatch, CancellationToken cancellationToken)
         {
-            _context.PositionBatchs.Add(positionBatch);
+            _context.PositionBatches.Add(positionBatch);
             return _context.SaveChangesAsync(cancellationToken);
         }
 
@@ -28,7 +28,7 @@ namespace Server.Infrastructure.Repositories
 
         Task<PositionBatch?> IPositionBatchRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return _context.PositionBatchs
+            return _context.PositionBatches
                 .AsTracking()
                 .Include(x => x.Designation)
                     .ThenInclude(x => x.DesignationSkills)
@@ -46,7 +46,7 @@ namespace Server.Infrastructure.Repositories
 
         Task<List<PositionBatch>> IPositionBatchRepository.GetAllAsync(CancellationToken cancellationToken)
         {
-            return _context.PositionBatchs
+            return _context.PositionBatches
                 .AsNoTracking()
                 .Include(x => x.Designation)
                 .Include(x => x.Positions)

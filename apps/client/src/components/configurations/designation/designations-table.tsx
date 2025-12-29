@@ -10,18 +10,13 @@ import {
     useReactTable,
     type VisibilityState,
 } from '@tanstack/react-table';
-import { ArrowUpDown, ChevronDown } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import * as React from 'react';
 
 import { useGetDesignations } from '@/api/designation-api';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
 import {
     Table,
     TableBody,
@@ -30,10 +25,10 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import type { Designation } from '@/types/designation-types';
+import { useAccessChecker } from '@/hooks/use-has-access';
 import { useAppStore } from '@/store';
+import type { Designation } from '@/types/designation-types';
 import { useShallow } from 'zustand/react/shallow';
-import { Spinner } from '@/components/ui/spinner';
 
 export function DesignationsTable() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -42,6 +37,7 @@ export function DesignationsTable() {
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
+    const canAccess = useAccessChecker();
     const { openDesignationDialog, openDesignationDeleteDialog } = useAppStore(
         useShallow((s) => ({
             openDesignationDialog: s.openDesignationDialog,
@@ -89,34 +85,43 @@ export function DesignationsTable() {
                 );
             },
         },
-        {
-            accessorKey: 'actions',
-            header: 'Actions',
-            cell: ({ row }) => {
-                return (
-                    <div className="flex gap-10 font-semibold">
-                        <button
-                            className="text-gray-400 hover:cursor-pointer"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                openDesignationDialog('edit', row.original);
-                            }}
-                        >
-                            Edit
-                        </button>
-                        <button
-                            className="text-destructive hover:cursor-pointer"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                openDesignationDeleteDialog(row.original.id);
-                            }}
-                        >
-                            Delete
-                        </button>
-                    </div>
-                );
-            },
-        },
+        ...(canAccess(['Admin'])
+            ? ([
+                  {
+                      accessorKey: 'actions',
+                      header: () => <div className="w-[130px]">Actions</div>,
+                      cell: ({ row }) => {
+                          return (
+                              <div className="flex gap-10 font-semibold">
+                                  <button
+                                      className="text-gray-400 hover:cursor-pointer"
+                                      onClick={(e) => {
+                                          e.stopPropagation();
+                                          openDesignationDialog(
+                                              'edit',
+                                              row.original
+                                          );
+                                      }}
+                                  >
+                                      Edit
+                                  </button>
+                                  <button
+                                      className="text-destructive hover:cursor-pointer"
+                                      onClick={(e) => {
+                                          e.stopPropagation();
+                                          openDesignationDeleteDialog(
+                                              row.original.id
+                                          );
+                                      }}
+                                  >
+                                      Delete
+                                  </button>
+                              </div>
+                          );
+                      },
+                  },
+              ] as ColumnDef<Designation>[])
+            : []),
     ];
 
     const table = useReactTable({
@@ -168,30 +173,6 @@ export function DesignationsTable() {
                     }
                     className="max-w-sm"
                 />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => (
-                                <DropdownMenuCheckboxItem
-                                    key={column.id}
-                                    className="capitalize"
-                                    checked={column.getIsVisible()}
-                                    onCheckedChange={(value) =>
-                                        column.toggleVisibility(!!value)
-                                    }
-                                >
-                                    {column.id}
-                                </DropdownMenuCheckboxItem>
-                            ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
             </div>
 
             {/* table */}

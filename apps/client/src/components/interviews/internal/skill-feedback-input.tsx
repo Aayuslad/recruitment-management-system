@@ -162,7 +162,7 @@ export const SkillFeedbackInput = ({
                                 </div>
 
                                 <div className="flex items-center gap-1.5">
-                                    <Label>Assesed Experience:</Label>
+                                    <Label>Assessed Experience:</Label>
                                     <Input
                                         type="number"
                                         step={1}

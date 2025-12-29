@@ -1,3 +1,4 @@
+import { useAppStore } from '@/store';
 import type {
     CreateUserCommandCorrected,
     EditUserRolesCommandCorrected,
@@ -11,6 +12,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useShallow } from 'zustand/react/shallow';
 
 export function useRegisterUser() {
     const navigate = useNavigate();
@@ -123,12 +125,18 @@ export function useEditUserRoles() {
 
 export function useGetUser() {
     const navigate = useNavigate();
+    const { setUserRoles } = useAppStore(
+        useShallow((s) => ({
+            setUserRoles: s.setUserRoles,
+        }))
+    );
 
     return useQuery({
         queryKey: ['user'],
         queryFn: async (): Promise<User | undefined> => {
             try {
                 const { data } = await axios.get('/user/me');
+                setUserRoles(data.roles.map((r: { name: string }) => r.name));
                 return data;
             } catch {
                 navigate('/login');

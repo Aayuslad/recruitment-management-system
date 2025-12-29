@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Interviews.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Enums;
 
@@ -13,13 +13,13 @@ namespace Server.Application.Aggregates.Interviews.Handlers
 {
     internal class MoveInterviewStatusHandler : IRequestHandler<MoveInterviewStatusCommand, Result>
     {
-        private readonly IInterviewRespository _interviewRespository;
+        private readonly IInterviewRepository _interviewRepository;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IJobApplicationRepository _jobApplicationRepository;
 
-        public MoveInterviewStatusHandler(IInterviewRespository interviewRespository, IHttpContextAccessor contextAccessor, IJobApplicationRepository jobApplicationRepository)
+        public MoveInterviewStatusHandler(IInterviewRepository interviewRepository, IHttpContextAccessor contextAccessor, IJobApplicationRepository jobApplicationRepository)
         {
-            _interviewRespository = interviewRespository;
+            _interviewRepository = interviewRepository;
             _contextAccessor = contextAccessor;
             _jobApplicationRepository = jobApplicationRepository;
         }
@@ -29,14 +29,14 @@ namespace Server.Application.Aggregates.Interviews.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: fetch the interviw
-            var interview = await _interviewRespository.GetByIdAsync(request.InterviewId, cancellationToken);
+            var interview = await _interviewRepository.GetByIdAsync(request.InterviewId, cancellationToken);
             if (interview is null)
             {
-                throw new NotFoundExeption("Interview Not Found.");
+                throw new NotFoundException("Interview Not Found.");
             }
 
             // step 2: move the status
@@ -44,7 +44,7 @@ namespace Server.Application.Aggregates.Interviews.Handlers
             {
                 // TODO: make domain event for this task
                 // If all the interviews are completed (this is the last one to complete) then update the job application status to interviwed
-                var JobApplicationInterviews = await _interviewRespository.GetAllByJobApplicationIdAsync(interview.JobApplicationId, cancellationToken);
+                var JobApplicationInterviews = await _interviewRepository.GetAllByJobApplicationIdAsync(interview.JobApplicationId, cancellationToken);
 
                 var isAllCompleted = JobApplicationInterviews.Where(x => x.Id != interview.Id).All(x => x.Status == InterviewStatus.Completed);
                 if (isAllCompleted)
@@ -52,7 +52,7 @@ namespace Server.Application.Aggregates.Interviews.Handlers
                     var jobApplication = await _jobApplicationRepository.GetByIdAsync(interview.JobApplicationId, cancellationToken);
                     if (jobApplication is null)
                     {
-                        throw new NotFoundExeption("Job Application Not Found.");
+                        throw new NotFoundException("Job Application Not Found.");
                     }
                     jobApplication.MoveStatusBySystem(JobApplicationStatus.Interviewed);
                     await _jobApplicationRepository.UpdateAsync(jobApplication, cancellationToken);
@@ -69,7 +69,7 @@ namespace Server.Application.Aggregates.Interviews.Handlers
             }
 
             // step 3: persist the entity
-            await _interviewRespository.UpdateAsync(interview, cancellationToken);
+            await _interviewRepository.UpdateAsync(interview, cancellationToken);
 
             // step 4: return the result
             return Result.Success();

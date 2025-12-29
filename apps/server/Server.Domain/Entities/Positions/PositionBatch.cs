@@ -135,7 +135,6 @@ namespace Server.Domain.Entities.Positions
                 var toUpdate = SkillOverRides.FirstOrDefault(x => x.Id == overRide.Id);
                 toUpdate?.Update(
                         overRide.Comments,
-                        overRide.MinExperienceYears,
                         overRide.Type,
                         overRide.ActionType
                     );

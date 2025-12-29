@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.JobApplications.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.JobApplications.Handlers
@@ -25,14 +25,14 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: check if exists
             var application = await _jobApplicationRepository.GetByIdAsync(request.Id, cancellationToken);
             if (application is null)
             {
-                throw new NotFoundExeption("Job Application Not Found.");
+                throw new NotFoundException("Job Application Not Found.");
             }
 
             // step 2: soft delete

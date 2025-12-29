@@ -174,7 +174,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/bulk/exel-doc": {
+    "/bulk/excel-doc": {
         parameters: {
             query?: never;
             header?: never;
@@ -192,9 +192,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["CreateCandidatesWithExelDocCommand"];
-                    "text/json": components["schemas"]["CreateCandidatesWithExelDocCommand"];
-                    "application/*+json": components["schemas"]["CreateCandidatesWithExelDocCommand"];
+                    "application/json": components["schemas"]["CreateCandidatesWithExcelDocCommand"];
+                    "text/json": components["schemas"]["CreateCandidatesWithExcelDocCommand"];
+                    "application/*+json": components["schemas"]["CreateCandidatesWithExcelDocCommand"];
                 };
             };
             responses: {
@@ -246,6 +246,89 @@ export interface paths {
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/candidate/{candidateId}/verify-doc/{documentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    candidateId: string;
+                    documentId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["VerifyCandidateDocumentCommand"];
+                    "text/json": components["schemas"]["VerifyCandidateDocumentCommand"];
+                    "application/*+json": components["schemas"]["VerifyCandidateDocumentCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/candidate/{candidateId}/add-document": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    candidateId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["AddCandidateDocumentCommand"];
+                    "text/json": components["schemas"]["AddCandidateDocumentCommand"];
+                    "application/*+json": components["schemas"]["AddCandidateDocumentCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -659,24 +742,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        get?: never;
         put?: never;
         post: {
             parameters: {
@@ -924,6 +990,74 @@ export interface paths {
                 };
             };
         };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/interview/assigned": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/interview/job-application/{jobApplicationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    jobApplicationId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -1219,6 +1353,74 @@ export interface paths {
                 };
             };
         };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-application/for-job-opening/{jobOpeningId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    jobOpeningId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/job-application/to-review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -2312,6 +2514,13 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AddCandidateDocumentCommand: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            documentTypeId?: string;
+            url?: string | null;
+        };
         CandidateSkillDTO: {
             /** Format: uuid */
             skillId?: string;
@@ -2335,7 +2544,7 @@ export interface components {
             skills?: components["schemas"]["CandidateSkillDTO"][] | null;
         };
         CreateCandidateWithResumeDocCommand: Record<string, never>;
-        CreateCandidatesWithExelDocCommand: Record<string, never>;
+        CreateCandidatesWithExcelDocCommand: Record<string, never>;
         CreateDesignationCommand: {
             name?: string | null;
             designationSkills?: components["schemas"]["DesignationSkillDTO"][] | null;
@@ -2430,8 +2639,6 @@ export interface components {
             /** Format: uuid */
             skillId?: string;
             skillType?: components["schemas"]["SkillType"];
-            /** Format: float */
-            minExperienceYears?: number | null;
         };
         DocumentDTO: {
             /** Format: uuid */
@@ -2573,7 +2780,7 @@ export interface components {
             role?: components["schemas"]["InterviewParticipantRole"];
         };
         /** @enum {string} */
-        InterviewParticipantRole: "Interviewer" | "Observer" | "NoteTaker" | "HRRepresentative" | "HiringManager";
+        InterviewParticipantRole: "TechnicalInterviewer" | "Observer" | "NoteTaker" | "HRInterviewer";
         InterviewRoundTemplateDTO: {
             /** Format: uuid */
             id?: string | null;
@@ -2651,8 +2858,6 @@ export interface components {
             /** Format: uuid */
             skillId?: string;
             comments?: string | null;
-            /** Format: float */
-            minExperienceYears?: number;
             type?: components["schemas"]["SkillType"];
             actionType?: components["schemas"]["SkillActionType"];
         };
@@ -2682,18 +2887,22 @@ export interface components {
             /** Format: uuid */
             skillId?: string;
             comments?: string | null;
-            /** Format: float */
-            minExperienceYears?: number;
             type?: components["schemas"]["SkillType"];
             actionType?: components["schemas"]["SkillActionType"];
         };
         /** @enum {string} */
-        SkillType: "Required" | "Preferred" | "NiceToHave";
+        SkillType: "Required" | "Preferred";
         UserRolesDTO: {
             /** Format: uuid */
             roleId?: string;
             /** Format: uuid */
             assignedBy?: string | null;
+        };
+        VerifyCandidateDocumentCommand: {
+            /** Format: uuid */
+            candidateId?: string;
+            /** Format: uuid */
+            documentId?: string;
         };
     };
     responses: never;

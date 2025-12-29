@@ -110,7 +110,7 @@ export function PositionBatchSelector({ setSelectedPositionBatchId }: Props) {
                         )}
                         {isLoading && (
                             <CommandEmpty>
-                                Loading position bacthes...
+                                Loading position batches...
                             </CommandEmpty>
                         )}
                         <CommandGroup>

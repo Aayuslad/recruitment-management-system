@@ -122,6 +122,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("{id:guid}/roles")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditUserRoles(Guid id, [FromBody] EditUserRolesCommand command, CancellationToken cancellationToken)
         {
             command.UserId = id;
@@ -130,7 +131,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsers(CancellationToken cancellationToken)
         {
             var query = new GetUsersQuery();

@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, X } from 'lucide-react';
+import { Check, Info, X } from 'lucide-react';
 import * as React from 'react';
 
 import { useGetUsersSummary } from '@/api/user-api';
@@ -22,10 +22,18 @@ import { cn } from '@/lib/utils';
 import type { CreateJobOpeningCommandCorrected } from '@/types/job-opening-types';
 import { Label } from '../../ui/label';
 import { InterviewParticipantRoleSelector } from './interview-participant-role-selector';
-import type { InterviewParticipantRole } from '@/types/enums';
+import {
+    INTERVIEW_PARTICIPANT_ROLE,
+    type InterviewParticipantRole,
+} from '@/types/enums';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 type Props = {
-    fealds: CreateJobOpeningCommandCorrected['interviewers'];
+    fields: CreateJobOpeningCommandCorrected['interviewers'];
     append: (
         value: CreateJobOpeningCommandCorrected['interviewers'][0]
     ) => void;
@@ -33,7 +41,7 @@ type Props = {
 };
 
 export function InterviewParticipantSelector({
-    fealds,
+    fields,
     append,
     remove,
 }: Props) {
@@ -43,7 +51,23 @@ export function InterviewParticipantSelector({
     return (
         <div>
             <div className="flex justify-between">
-                <Label htmlFor="reviewers">Interview Participants</Label>
+                <h3 className="font-semibold text-lg flex items-center gap-1">
+                    <Label>Interview Participants:</Label>
+                    <span>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Info className="w-4 h-4" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p className="text-wrap max-w-[200px] font-semibold">
+                                    These participants will be assigned randomly
+                                    to the interviews defined above, based on
+                                    their role and panel requirements.
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </span>
+                </h3>
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                         <Button
@@ -72,7 +96,7 @@ export function InterviewParticipantSelector({
                                         <CommandItem
                                             key={userSummary.userId}
                                             value={userSummary.userId}
-                                            disabled={fealds?.some(
+                                            disabled={fields?.some(
                                                 (x) =>
                                                     x.userId ===
                                                     userSummary.userId
@@ -80,7 +104,7 @@ export function InterviewParticipantSelector({
                                             onSelect={(currentValue) => {
                                                 append({
                                                     userId: currentValue,
-                                                    role: 'Interviewer',
+                                                    role: INTERVIEW_PARTICIPANT_ROLE.TECHNICAL_INTERVIEWER,
                                                 });
                                                 setOpen(false);
                                             }}
@@ -92,7 +116,7 @@ export function InterviewParticipantSelector({
                                             <Check
                                                 className={cn(
                                                     'ml-auto',
-                                                    fealds?.some(
+                                                    fields?.some(
                                                         (x) =>
                                                             x.userId ===
                                                             userSummary.userId
@@ -111,18 +135,18 @@ export function InterviewParticipantSelector({
             </div>
 
             <div className="border rounded-2xl py-2 px-4 space-y-2.5">
-                {fealds
+                {fields
                     .reduce(
-                        (acc, feald) => {
-                            if (!acc.find((x) => x.userId === feald.userId)) {
+                        (acc, field) => {
+                            if (!acc.find((x) => x.userId === field.userId)) {
                                 acc.push({
-                                    userId: feald.userId,
-                                    roles: [feald.role],
+                                    userId: field.userId,
+                                    roles: [field.role],
                                 });
                             } else {
                                 acc.find(
-                                    (x) => x.userId === feald.userId
-                                )?.roles.push(feald.role);
+                                    (x) => x.userId === field.userId
+                                )?.roles.push(field.role);
                             }
 
                             return acc;
@@ -162,7 +186,7 @@ export function InterviewParticipantSelector({
                                     }}
                                     removeRole={(role) => {
                                         remove(
-                                            fealds.findIndex(
+                                            fields.findIndex(
                                                 (x) =>
                                                     x.userId ===
                                                         participant.userId &&
@@ -175,11 +199,11 @@ export function InterviewParticipantSelector({
                                     size="sm"
                                     variant="link"
                                     onClick={() =>
-                                        fealds.map((x) => {
+                                        fields.map((x) => {
                                             if (
                                                 x.userId === participant.userId
                                             ) {
-                                                remove(fealds.indexOf(x));
+                                                remove(fields.indexOf(x));
                                             }
                                         })
                                     }
@@ -190,7 +214,7 @@ export function InterviewParticipantSelector({
                             </div>
                         </div>
                     ))}
-                {fealds?.length === 0 && (
+                {fields?.length === 0 && (
                     <div className="text-muted-foreground text-center py-3">
                         No Participants selected.
                     </div>

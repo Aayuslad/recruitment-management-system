@@ -14,6 +14,7 @@ export interface PositionBatchSummary {
     positionsOnHoldCount: number;
     createdBy?: string | null;
     createdByUserName?: string | null;
+    createdAt: string;
 }
 
 export interface PositionBatch {
@@ -30,6 +31,7 @@ export interface PositionBatch {
     createdBy?: string | null;
     createdByUserName?: string | null;
     reviewers: ReviewerDetailDTO[];
+    createdAt: string;
     skills: SkillDetailDTO[];
     skillOverRides: SkillOverRideDetailDTO[];
 }
@@ -37,7 +39,7 @@ export interface PositionBatch {
 export interface PositionSummary {
     batchId: string;
     positionId: string;
-    descripcion?: string;
+    description?: string;
     designationId: string;
     designationName: string;
     jobLocation: string;
@@ -52,7 +54,7 @@ export interface BatchPositionsSummary {
     batchId: string;
     positionId: string;
     status: PositionStatus;
-    clousedByCandidateId?: string | null;
+    closedByCandidateId?: string | null;
     closedByCandidateFullName?: string | null;
     closureReason?: string | null;
 }
@@ -60,7 +62,7 @@ export interface BatchPositionsSummary {
 export interface Position {
     batchId: string;
     positionId: string;
-    descripcion?: string;
+    description?: string;
     designationId: string;
     designationName: string;
     jobLocation: string;
@@ -84,14 +86,12 @@ export interface SkillDetailDTO {
     skillId: string;
     skillName: string;
     skillType: SkillType;
-    minExperienceYears: number;
 }
 
 export interface SkillOverRideDetailDTO {
     id: string | null;
     skillId: string;
     comments?: string | null;
-    minExperienceYears: number;
     type: SkillType;
     actionType: SkillActionType;
 }
@@ -130,17 +130,11 @@ export type CreatePositionBatchCommandCorrected = Omit<
     })[];
     skillOverRides: (Omit<
         components['schemas']['PositionSkillOverRideDTO'],
-        | 'skillId'
-        | 'minExperienceYears'
-        | 'type'
-        | 'actionType'
-        | 'id'
-        | 'comments'
+        'skillId' | 'type' | 'actionType' | 'id' | 'comments'
     > & {
         id?: string | null;
         skillId: string;
         comments?: string | null;
-        minExperienceYears: number;
         type: components['schemas']['SkillType'];
         actionType: components['schemas']['SkillActionType'];
     })[];
@@ -167,17 +161,11 @@ export type EditPositionBatchCommandCorrected = Omit<
     })[];
     skillOverRides: (Omit<
         components['schemas']['PositionSkillOverRideDTO'],
-        | 'skillId'
-        | 'minExperienceYears'
-        | 'type'
-        | 'actionType'
-        | 'id'
-        | 'comments'
+        'skillId' | 'type' | 'actionType' | 'id' | 'comments'
     > & {
         id?: string | null;
         skillId: string;
         comments?: string | null;
-        minExperienceYears: number;
         type: components['schemas']['SkillType'];
         actionType: components['schemas']['SkillActionType'];
     })[];

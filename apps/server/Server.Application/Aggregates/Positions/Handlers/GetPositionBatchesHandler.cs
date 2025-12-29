@@ -40,6 +40,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
                     PositionsOnHoldCount = batch.Positions.Count(x => x.Status == PositionStatus.OnHold),
                     CreatedBy = batch.CreatedBy,
                     CreatedByUserName = batch.CreatedByUser?.Auth.UserName,
+                    CreatedAt = batch.CreatedAt
                 };
                 batchesDto.Add(summaryDto);
             }

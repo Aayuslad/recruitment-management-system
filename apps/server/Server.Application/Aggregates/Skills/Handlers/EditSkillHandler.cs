@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Aggregates.Skills.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Infrastructure.Repositories;
 
@@ -25,14 +25,14 @@ namespace Server.Application.Aggregates.Skills.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: fetch existing skill
             var skill = await _skillRepository.GetByIdAsync(command.Id, cancellationToken);
             if (skill == null)
             {
-                throw new NotFoundExeption("Role Not Found.");
+                throw new NotFoundException("Role Not Found.");
             }
 
             // step 2: update skill properties

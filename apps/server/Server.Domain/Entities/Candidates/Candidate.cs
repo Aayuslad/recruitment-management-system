@@ -165,5 +165,16 @@ namespace Server.Domain.Entities.Candidates
                     Documents.Add(doc);
             }
         }
+
+        public void AddDocument(CandidateDocument document)
+        {
+            Documents.Add(document);
+        }
+
+        public void VerifyDocument(Guid verifiedBy, Guid candidateDocId)
+        {
+            var doc = Documents.FirstOrDefault(x => x.Id == candidateDocId)!;
+            doc.MarkVerified(verifiedBy);
+        }
     }
 }

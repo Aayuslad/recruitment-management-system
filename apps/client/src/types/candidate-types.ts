@@ -1,4 +1,4 @@
-import type { Gender } from './enums';
+import type { Gender, JobApplicationStatus } from './enums';
 import type { components } from './generated/api';
 
 export interface Candidate {
@@ -18,6 +18,7 @@ export interface Candidate {
     createdAt: string;
     skills: CandidateSkillDetailDTO[];
     documents: CandidateDocumentDetailDTO[];
+    jobApplications: JobApplicationDetailForCandidate[];
 }
 
 export interface CandidateSkillDetailDTO {
@@ -47,7 +48,21 @@ export interface CandidateSummary {
     collegeName: string;
     resumeUrl: string;
     isBgVerificationCompleted: boolean;
+    isDocumentsVerified: boolean;
+    jobApplications: JobApplicationSummaryForCandidate[];
     createdAt: string;
+}
+
+export interface JobApplicationSummaryForCandidate {
+    status: JobApplicationStatus;
+}
+
+export interface JobApplicationDetailForCandidate {
+    id: string;
+    designationName: string;
+    jobLocation: string;
+    appliedAt: string;
+    status: JobApplicationStatus;
 }
 
 export type CreateCandidateCommandCorrected = Omit<
@@ -112,4 +127,21 @@ export type EditCandidateCommandCorrected = Omit<
               url: string;
           })[]
         | null;
+};
+
+export type AddCandidateDocumentCommandCorrected = Omit<
+    components['schemas']['AddCandidateDocumentCommand'],
+    'id' | 'documentTypeId' | 'url'
+> & {
+    id: string;
+    documentTypeId: string;
+    url: string;
+};
+
+export type VerifyCandidateDocumentCommandCorrected = Omit<
+    components['schemas']['VerifyCandidateDocumentCommand'],
+    'candidateId' | 'documentId'
+> & {
+    candidateId: string;
+    documentId: string;
 };

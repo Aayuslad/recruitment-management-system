@@ -19,6 +19,16 @@ export interface InterviewSummary {
     status: InterviewStatus;
 }
 
+export interface InterviewSummaryForJobApplication {
+    id: string;
+    roundNumber: number;
+    interviewType: InterviewType;
+    scheduledAt?: string | null;
+    durationInMinutes: number;
+    status: InterviewStatus;
+    participants: InterviewParticipantDetailDTO[];
+}
+
 export interface Interview {
     id: string;
     jobApplicationId: string;

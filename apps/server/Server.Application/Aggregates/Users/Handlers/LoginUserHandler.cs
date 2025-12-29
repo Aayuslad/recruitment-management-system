@@ -4,7 +4,7 @@ using Server.Application.Abstractions.Repositories;
 using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Users.Commands;
 using Server.Application.Aggregates.Users.Commands.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Users.Handlers
@@ -28,21 +28,21 @@ namespace Server.Application.Aggregates.Users.Handlers
             var auth = await _userRepository.GetAuthByEmailOrUserNameAsync(request.UsernameOrEmail, cancellationToken);
             if (auth is null)
             {
-                throw new NotFoundExeption("User not found");
+                throw new NotFoundException("User not found");
             }
 
             // step 2: verify password
             var passwordVerificationResult = _hasher.Verify(auth.PasswordHash!, request.Password);
             if (!passwordVerificationResult)
             {
-                throw new UnAuthorisedExeption("Invalid credentials");
+                throw new UnAuthorisedException("Invalid credentials");
             }
 
             // step 3: fetch user profile
             var user = await _userRepository.GetProfileByAuthIdAsync(auth.Id, cancellationToken);
 
             // step 3: generate token
-            var token = _jwtTokenGenerator.GenerateToken(auth.Id, user?.Id, auth.UserName);
+            var token = _jwtTokenGenerator.GenerateToken(auth.Id, user?.Id, auth.UserName, user?.Roles.Select(x => x.Role.Name).ToList());
 
             // step 4: return token
             var loginUserDto = new LoginUserDTO

@@ -8,16 +8,16 @@ export function Index() {
                 <div className="px-10 flex-1">
                     <h1 className="text-2xl font-bold">Candidates</h1>
                     <p>
-                        View and manage all candidates associated with your
-                        recruitment process.
+                        View and manage all candidates and apply them to job
+                        openings.
                     </p>
                 </div>
                 <div className="w-[230px] mb-4">
-                    <CreateCandidateSheet />
+                    <CreateCandidateSheet visibleTo={['Admin', 'Recruiter']} />
                 </div>
             </div>
 
-            <div className="w-full flex justify-evenly pt-10">
+            <div className="w-full flex justify-evenly pt-8">
                 <div className="w-full flex flex-col items-center">
                     <div className="mr-12 w-fit">
                         <CandidatesTable />

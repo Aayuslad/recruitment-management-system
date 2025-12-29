@@ -206,9 +206,6 @@ namespace Server.Infrastructure.Migrations
                     b.Property<Guid>("SkillId")
                         .HasColumnType("uuid");
 
-                    b.Property<float?>("MinExperienceYears")
-                        .HasColumnType("real");
-
                     b.Property<string>("SkillType")
                         .IsRequired()
                         .HasColumnType("text");
@@ -887,6 +884,64 @@ namespace Server.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Role", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("730a5c0e-76a2-4826-a192-3c584a367f82"),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9510),
+                            Description = "Manages users, roles, and system-wide configurations.",
+                            IsDeleted = false,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("d51ae472-657e-4b68-9c73-82be537ae083"),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9516),
+                            Description = "Manages job openings, candidate profiles, interviews.",
+                            IsDeleted = false,
+                            Name = "Recruiter"
+                        },
+                        new
+                        {
+                            Id = new Guid("e8157fe7-7c8e-44ad-8440-891350dbc7e9"),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9528),
+                            Description = "Provides interview feedback.",
+                            IsDeleted = false,
+                            Name = "Interviewer"
+                        },
+                        new
+                        {
+                            Id = new Guid("2508f54e-ab1f-481c-859f-4f1505533dfa"),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9530),
+                            Description = "Culture fit, final negotiation, documentation and background verification",
+                            IsDeleted = false,
+                            Name = "HR"
+                        },
+                        new
+                        {
+                            Id = new Guid("761a2beb-ae68-4950-865b-98ea7eb7079a"),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9533),
+                            Description = "Screens CVs and shortlists candidates.",
+                            IsDeleted = false,
+                            Name = "Reviewer"
+                        },
+                        new
+                        {
+                            Id = new Guid("78e3afbe-c2b2-459b-a114-1f23e4cd42f0"),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9535),
+                            Description = "Views job openings, uploads CVs, and submits documents.",
+                            IsDeleted = false,
+                            Name = "Candidate"
+                        },
+                        new
+                        {
+                            Id = new Guid("8fd55f0f-8262-4781-ba7b-7124db6f147b"),
+                            CreatedAt = new DateTime(2025, 12, 28, 13, 59, 43, 294, DateTimeKind.Utc).AddTicks(9536),
+                            Description = "Read-only access to all data.",
+                            IsDeleted = false,
+                            Name = "Viewer"
+                        });
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.SkillFeedback", b =>
@@ -924,9 +979,6 @@ namespace Server.Infrastructure.Migrations
 
                     b.Property<Guid?>("JobOpeningId")
                         .HasColumnType("uuid");
-
-                    b.Property<float>("MinExperienceYears")
-                        .HasColumnType("real");
 
                     b.Property<Guid?>("PositionBatchId")
                         .HasColumnType("uuid");
@@ -1815,7 +1867,7 @@ namespace Server.Infrastructure.Migrations
                     b.HasOne("Server.Domain.Entities.Roles.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Server.Domain.Entities.Users.User", "User")

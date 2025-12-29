@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { createUserSlice, type UserStoreSliceType } from './user-store';
 import {
     createUiSlice,
     SIDEBAR_STATE_KEY,
@@ -19,21 +18,25 @@ import {
     createJobApplicationSlice,
     type JobApplicationStoreSliceType,
 } from './job-application-store';
+import { createAdminSlice, type AdminStoreSliceType } from './admin-store';
+import { createAuthSlice, type AuthStoreSliceType } from './auth-store';
 
-type AppStoreTupe = UserStoreSliceType &
-    UiStoreSliceType &
+type AppStoreType = UiStoreSliceType &
     SkillStoreSliceType &
     DocumentTypeStoreSliceType &
     DesignationStoreSliceType &
-    JobApplicationStoreSliceType;
+    JobApplicationStoreSliceType &
+    AdminStoreSliceType &
+    AuthStoreSliceType;
 
-export const useAppStore = create<AppStoreTupe>((...args) => ({
-    ...createUserSlice(...args),
+export const useAppStore = create<AppStoreType>((...args) => ({
     ...createUiSlice(...args),
     ...createSkillSlice(...args),
     ...createDocTypeSlice(...args),
     ...createDesignationSlice(...args),
     ...createJobApplicationSlice(...args),
+    ...createAdminSlice(...args),
+    ...createAuthSlice(...args),
 }));
 
 // updating configs from localstorage
@@ -45,6 +48,6 @@ if (typeof window !== 'undefined') {
     if (sidebarState) {
         useAppStore
             .getState()
-            .setSidebarState(sidebarState as 'opend' | 'closed');
+            .setSidebarState(sidebarState as 'opened' | 'closed');
     }
 }

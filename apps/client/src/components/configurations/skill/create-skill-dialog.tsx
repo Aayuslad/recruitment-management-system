@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAccessChecker } from '@/hooks/use-has-access';
 import type { CreateSkillCommandCorrected } from '@/types/skill-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -26,8 +27,13 @@ const createSkillFormSchema = z.object({
         .max(50, 'Name must be at most 50 characters long'),
 }) satisfies z.ZodType<CreateSkillCommandCorrected>;
 
-export function CreateSkillDialog() {
+type Props = {
+    visibleTo: string[];
+};
+
+export function CreateSkillDialog({ visibleTo }: Props) {
     const [open, setOpen] = useState(false);
+    const canAccess = useAccessChecker();
     const createSkillMutation = useCreateSkill();
 
     const form = useForm<CreateSkillCommandCorrected>({
@@ -50,6 +56,8 @@ export function CreateSkillDialog() {
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };
+
+    if (!canAccess(visibleTo)) return null;
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

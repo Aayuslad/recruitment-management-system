@@ -144,6 +144,9 @@ export function useMoveJobApplicationStatus() {
                 queryKey: ['position-batches'],
             });
             queryClient.invalidateQueries({
+                queryKey: ['job-applications-to-review'],
+            });
+            queryClient.invalidateQueries({
                 queryKey: ['job-application', variables.id],
             });
         },
@@ -240,5 +243,15 @@ export function useGetJobOpeningApplications(jobOpeningId: string) {
             return data;
         },
         enabled: !!jobOpeningId,
+    });
+}
+
+export function useGetJobApplicationsToReview() {
+    return useQuery({
+        queryKey: ['job-applications-to-review'],
+        queryFn: async (): Promise<JobApplicationSummary[]> => {
+            const { data } = await axios.get('/job-application/to-review');
+            return data;
+        },
     });
 }

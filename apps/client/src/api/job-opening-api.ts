@@ -44,11 +44,9 @@ export function useEditJobOpening() {
         onSuccess: (_, variables) => {
             toast.success('Job opening updated');
             queryClient.invalidateQueries({ queryKey: ['job-openings'] });
-            if (variables?.jobOpeningId) {
-                queryClient.invalidateQueries({
-                    queryKey: ['job-opening', variables.jobOpeningId],
-                });
-            }
+            queryClient.invalidateQueries({
+                queryKey: ['job-opening', variables.jobOpeningId],
+            });
         },
         onError: (error: AxiosError<{ error: string }>) => {
             toast.error(

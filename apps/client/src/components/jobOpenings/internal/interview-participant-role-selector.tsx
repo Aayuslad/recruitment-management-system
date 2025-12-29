@@ -23,12 +23,12 @@ import {
 
 const roles: { value: InterviewParticipantRole; label: string }[] = [
     {
-        value: INTERVIEW_PARTICIPANT_ROLE.INTERVIEWER,
-        label: 'Interviewer',
+        value: INTERVIEW_PARTICIPANT_ROLE.TECHNICAL_INTERVIEWER,
+        label: 'Technical Interviewer',
     },
     {
-        value: INTERVIEW_PARTICIPANT_ROLE.HR_REPRESENTATIVE,
-        label: 'HR Representative',
+        value: INTERVIEW_PARTICIPANT_ROLE.HR_INTERVIEWER,
+        label: 'HR Interviewer',
     },
     {
         value: INTERVIEW_PARTICIPANT_ROLE.NOTE_TAKER,
@@ -37,10 +37,6 @@ const roles: { value: InterviewParticipantRole; label: string }[] = [
     {
         value: INTERVIEW_PARTICIPANT_ROLE.OBSERVER,
         label: 'Observer',
-    },
-    {
-        value: INTERVIEW_PARTICIPANT_ROLE.HIRING_MANAGER,
-        label: 'Hiring Manager',
     },
 ];
 

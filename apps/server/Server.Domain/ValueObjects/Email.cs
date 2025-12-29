@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 
 using Server.Core.ValueObjects;
-using Server.Domain.Exeptions;
+using Server.Domain.Exceptions;
 
 namespace Server.Domain.ValueObjects
 {
@@ -23,10 +23,10 @@ namespace Server.Domain.ValueObjects
         public static Email Create(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
-                throw new DomainExeption("Email cannot be null or empty.");
+                throw new DomainException("Email cannot be null or empty.");
 
             if (!_emailRegex.IsMatch(email))
-                throw new DomainExeption("Invalid email format.");
+                throw new DomainException("Invalid email format.");
 
             return new Email(email);
         }

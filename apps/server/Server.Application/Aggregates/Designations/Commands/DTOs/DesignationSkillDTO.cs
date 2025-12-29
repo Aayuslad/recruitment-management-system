@@ -6,6 +6,5 @@ namespace Server.Application.Aggregates.Designations.Commands.DTOs
     {
         public Guid SkillId { get; set; }
         public SkillType SkillType { get; set; }
-        public float? MinExperienceYears { get; set; }
     }
 }

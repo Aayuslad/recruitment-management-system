@@ -4,7 +4,7 @@ using MediatR;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.JobApplications.Queries;
 using Server.Application.Aggregates.JobApplications.Queries.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Enums;
 
@@ -25,7 +25,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
             var application = await _jobApplicationRepository.GetByIdAsync(request.Id, cancellationToken);
             if (application is null)
             {
-                throw new NotFoundExeption("Job Application Not Found.");
+                throw new NotFoundException("Job Application Not Found.");
             }
 
             // step 2: create dto
@@ -46,6 +46,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
                             GivenByName = x.GivenByUser.Auth.UserName,
                             Comment = x.Comment,
                             Rating = x.Rating,
+                            Stage = x.Stage,
                             SkillFeedbacks = x.SkillFeedbacks.Select(
                                     selector: x => new SkillFeedbackDetailDTO
                                     {
@@ -65,6 +66,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
                             GivenByName = x.GivenByUser.Auth.UserName,
                             Comment = x.Comment,
                             Rating = x.Rating,
+                            Stage = x.Stage,
                             SkillFeedbacks = x.SkillFeedbacks.Select(
                                     selector: x => new SkillFeedbackDetailDTO
                                     {

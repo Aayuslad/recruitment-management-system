@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Documents.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Documents.Handlers
@@ -25,14 +25,14 @@ namespace Server.Application.Aggregates.Documents.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: fetch the entity
             var docType = await _documentRepository.GetByIdAsync(request.Id, cancellationToken);
             if (docType is null)
             {
-                throw new NotFoundExeption($"Document Type not found.");
+                throw new NotFoundException($"Document Type not found.");
             }
 
             // step 2: soft delete

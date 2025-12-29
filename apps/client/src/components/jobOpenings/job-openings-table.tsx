@@ -10,17 +10,10 @@ import {
     useReactTable,
     type VisibilityState,
 } from '@tanstack/react-table';
-import { ChevronDown, Copy } from 'lucide-react';
 import * as React from 'react';
 
 import { useGetJobOpenings } from '@/api/job-opening-api';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import {
     Table,
@@ -31,9 +24,9 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import type { JobOpeningSummary } from '@/types/job-opening-types';
+import { timeAgo } from '@/util/time-ago';
 import { useNavigate } from 'react-router-dom';
 import { Spinner } from '../ui/spinner';
-import { toast } from 'sonner';
 
 export function JobOpeningsTable() {
     const navigate = useNavigate();
@@ -55,78 +48,82 @@ export function JobOpeningsTable() {
             ),
         },
         {
-            id: 'id',
-            header: 'Opening Id',
+            accessorKey: 'designationName',
+            header: () => <div className="min-w-[150px] ml-4">Designation</div>,
             cell: ({ row }) => (
-                <div className="font-medium w-[100px] relative group">
-                    <span className="text-sm font-mono">
-                        {row.original.id.slice(0, 6).toUpperCase()}...
-                    </span>
-                    <button
+                <div className="font-medium pl-4">
+                    <span
+                        className="hover:cursor-pointer hover:underline"
                         onClick={(e) => {
                             e.stopPropagation();
-                            navigator.clipboard.writeText(row.original.id);
-                            toast.success('Copied to clipboard');
+                            navigate('/configuration/designations');
                         }}
-                        className="text-muted-foreground hover:text-foreground hover:cursor-pointer"
-                        title="Copy full ID"
                     >
-                        <Copy size={16} />
-                    </button>
-                </div>
-            ),
-        },
-        {
-            accessorKey: 'designationName',
-            header: () => <div className="w-[150px] ml-4">Designation</div>,
-            cell: ({ row }) => (
-                <div
-                    className="font-medium pl-4 hover:cursor-pointer hover:underline"
-                    onClick={() => navigate('/configuration/designations')}
-                >
-                    {row.original.designationName}
-                </div>
-            ),
-        },
-        {
-            id: 'type',
-            header: 'Opening Type',
-            cell: ({ row }) => (
-                <div className="font-medium w-[130px]">{row.original.type}</div>
-            ),
-        },
-        {
-            id: 'interview-rounds',
-            header: 'Interview Rounds',
-            cell: ({ row }) => (
-                <div className="font-medium w-[180px]">
-                    {`${row.original.interviewRounds.map((r) => `#${r.roundNumber} ${r.type}`).join(', ')}` ||
-                        '—'}
+                        {row.original.designationName}
+                    </span>
                 </div>
             ),
         },
         {
             id: 'location',
-            header: 'Location',
+            header: () => <div className="min-w-[150px]">Location</div>,
             cell: ({ row }) => (
-                <div className="font-medium w-[150px]">
-                    {row.original.jobLocation}
+                <div className="font-medium">{row.original.jobLocation}</div>
+            ),
+        },
+        // {
+        //     id: 'type',
+        //     header: 'Opening Type',
+        //     cell: ({ row }) => (
+        //         <div className="font-medium w-[130px]">{row.original.type}</div>
+        //     ),
+        // },
+        {
+            id: 'interview-rounds',
+            header: () => (
+                <div className="min-w-[150px] mr-4">Interview Rounds</div>
+            ),
+            cell: ({ row }) => (
+                <div className="font-medium min-w-[150px] mr-4">
+                    {`${row.original.interviewRounds.length} Rounds ${
+                        row.original.interviewRounds.length === 0
+                            ? ''
+                            : `(${row.original.interviewRounds
+                                  .sort((a, b) => b.roundNumber - a.roundNumber)
+                                  .reverse()
+                                  .map((round) => round.type)
+                                  .join(' -> ')})`
+                    }`}
                 </div>
             ),
         },
         {
-            id: 'created-by',
-            header: 'Created By',
+            id: 'applications-count',
+            header: () => <div className="min-w-[110px]">Applications</div>,
             cell: ({ row }) => (
-                <div className="font-medium w-[130px]">
-                    {row.original.createdByUserName || '—'}
+                <div className="font-medium pl-7">
+                    {row.original.applicationsCount}
+                </div>
+            ),
+        },
+        {
+            id: 'created-at',
+            header: () => <div className="min-w-[150px]">Created</div>,
+            cell: ({ row }) => (
+                <div className="font-medium">
+                    {timeAgo(row.original.createdAt)}
                 </div>
             ),
         },
     ];
 
     const table = useReactTable({
-        data: data as JobOpeningSummary[],
+        data:
+            (data?.sort(
+                (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+            ) as JobOpeningSummary[]) ?? [],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -157,7 +154,7 @@ export function JobOpeningsTable() {
             <h2 className="font-semibold text-xl">Job Openings:</h2>
 
             {/* header */}
-            <div className="flex items-center py-4">
+            <div className="flex items-center justify-between py-4">
                 <Input
                     placeholder="Filter job openings with title..."
                     value={
@@ -172,36 +169,12 @@ export function JobOpeningsTable() {
                     }
                     className="max-w-sm"
                 />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => (
-                                <DropdownMenuCheckboxItem
-                                    key={column.id}
-                                    className="capitalize"
-                                    checked={column.getIsVisible()}
-                                    onCheckedChange={(value) =>
-                                        column.toggleVisibility(!!value)
-                                    }
-                                >
-                                    {column.id}
-                                </DropdownMenuCheckboxItem>
-                            ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
             </div>
 
             {/* table */}
             <div className="overflow-hidden rounded-md border">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-border">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
@@ -250,7 +223,7 @@ export function JobOpeningsTable() {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No Job Openins Found.
+                                    No Job Openings Found.
                                 </TableCell>
                             </TableRow>
                         )}
@@ -260,6 +233,33 @@ export function JobOpeningsTable() {
 
             {/* footer */}
             <div className="flex items-center justify-end space-x-2 py-4">
+                <div className="text-muted-foreground flex grow justify-end text-sm mr-5 whitespace-nowrap">
+                    <p
+                        className="text-muted-foreground text-sm whitespace-nowrap"
+                        aria-live="polite"
+                    >
+                        <span className="text-foreground">
+                            {table.getState().pagination.pageIndex *
+                                table.getState().pagination.pageSize +
+                                1}
+                            -
+                            {Math.min(
+                                Math.max(
+                                    table.getState().pagination.pageIndex *
+                                        table.getState().pagination.pageSize +
+                                        table.getState().pagination.pageSize,
+                                    0
+                                ),
+                                table.getRowCount()
+                            )}
+                        </span>{' '}
+                        of{' '}
+                        <span className="text-foreground">
+                            {table.getRowCount().toString()}
+                        </span>
+                    </p>
+                </div>
+
                 <div className="space-x-2">
                     <Button
                         variant="outline"

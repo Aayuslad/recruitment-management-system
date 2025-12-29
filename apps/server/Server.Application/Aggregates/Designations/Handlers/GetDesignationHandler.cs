@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Designations.Queries;
 using Server.Application.Aggregates.Designations.Queries.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Designations.Handlers
@@ -26,14 +26,14 @@ namespace Server.Application.Aggregates.Designations.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: fetch designation
             var designation = await _designationRepository.GetByIdAsync(query.Id, cancellationToken);
             if (designation == null)
             {
-                throw new NotFoundExeption("Designation not found");
+                throw new NotFoundException("Designation not found");
             }
 
             // step 2: map to DTO
@@ -46,7 +46,6 @@ namespace Server.Application.Aggregates.Designations.Handlers
                     SkillId = ds.SkillId,
                     SkillType = ds.SkillType,
                     Name = ds.Skill.Name,
-                    MinExperienceYears = ds.MinExperienceYears,
                 }).ToList(),
             };
 

@@ -72,7 +72,7 @@ namespace Server.Domain.Entities.JobOpenings
         {
             if (newRequirements is null) return;
 
-            // TODO: rely on Ids here, but first enforce that uniqe constraint in PanelReq entity (mentioned in commet)
+            // TODO: rely on Ids here, but first enforce that unique constraint in PanelReq entity (mentioned in comment)
             var newIds = newRequirements.Select(x => x.Role).ToHashSet(); // role acts as unique key here
 
             // remove missing

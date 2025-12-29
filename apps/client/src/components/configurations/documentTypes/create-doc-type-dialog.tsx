@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAccessChecker } from '@/hooks/use-has-access';
 import type { CreateDocumentTypeCommandCorrected } from '@/types/document-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -26,8 +27,13 @@ const createDocumentTypeFormSchema = z.object({
         .max(50, 'Name must be at most 50 characters long'),
 }) satisfies z.ZodType<CreateDocumentTypeCommandCorrected>;
 
-export function CreateDocTypeDialog() {
+type Props = {
+    visibleTo: string[];
+};
+
+export function CreateDocTypeDialog({ visibleTo }: Props) {
     const [open, setOpen] = useState(false);
+    const canAccess = useAccessChecker();
     const createDocumentTypeMutation = useCreateDocumentType();
 
     const form = useForm<CreateDocumentTypeCommandCorrected>({
@@ -50,6 +56,8 @@ export function CreateDocTypeDialog() {
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };
+
+    if (!canAccess(visibleTo)) return null;
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

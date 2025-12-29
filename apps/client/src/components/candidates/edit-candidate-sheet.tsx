@@ -30,9 +30,11 @@ import {
     SelectValue,
 } from '../ui/select';
 import type { Gender } from '@/types/enums';
+import { useAccessChecker } from '@/hooks/use-has-access';
 
 type Props = {
     candidateId: string;
+    visibleTo: string[];
 };
 
 const editCandidateFormSchema = z.object({
@@ -53,10 +55,11 @@ const editCandidateFormSchema = z.object({
     ),
 }) satisfies z.ZodType<EditCandidateCommandCorrected>;
 
-export function EditCandidateSheet({ candidateId }: Props) {
+export function EditCandidateSheet({ candidateId, visibleTo }: Props) {
     const [open, setOpen] = useState(false);
     const { data, isLoading, isError } = useGetCandidate(candidateId);
     const editCandidateMutation = useEditCandidate();
+    const canAccess = useAccessChecker();
 
     const form = useForm<z.infer<typeof editCandidateFormSchema>>({
         resolver: zodResolver(editCandidateFormSchema),
@@ -90,6 +93,8 @@ export function EditCandidateSheet({ candidateId }: Props) {
         messages.reverse().forEach((msg) => toast.error(msg));
     };
 
+    if (!canAccess(visibleTo)) return null;
+
     if (isLoading)
         return (
             <div className="h-[50vh] flex justify-center items-center">
@@ -114,7 +119,7 @@ export function EditCandidateSheet({ candidateId }: Props) {
                     <SheetHeader>
                         <SheetTitle>Edit Candidate</SheetTitle>
                         <SheetDescription>
-                            Edit deatils for the candidate. Click Save when
+                            Edit details for the candidate. Click Save when
                             you&apos;re done.
                         </SheetDescription>
                     </SheetHeader>

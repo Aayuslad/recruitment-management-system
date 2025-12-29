@@ -7,24 +7,35 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { useAccessChecker } from '@/hooks/use-has-access';
 import { NavLink } from 'react-router-dom';
 
-export function SimpleNavGroup({
-    Workflows,
-    title,
-}: {
+type Props = {
     Workflows: {
         name: string;
         url: string;
         icon: LucideIcon;
+        roles?: string[];
     }[];
     title?: string;
-}) {
+};
+
+export function SimpleNavGroup({ Workflows, title }: Props) {
+    const canAccess = useAccessChecker();
+
+    const visibleWorkflows = Workflows.filter((item) => {
+        return canAccess(item.roles);
+    });
+
+    if (visibleWorkflows.length === 0) {
+        return null;
+    }
+
     return (
         <SidebarGroup>
             {title !== null && <SidebarGroupLabel>{title}</SidebarGroupLabel>}
             <SidebarMenu className="font-semibold">
-                {Workflows.map((item) => (
+                {visibleWorkflows.map((item) => (
                     <NavLink to={item.url} key={item.name}>
                         {({ isActive }) => (
                             <SidebarMenuItem>

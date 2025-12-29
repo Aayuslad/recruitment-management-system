@@ -22,6 +22,7 @@ import { Textarea } from '../ui/textarea';
 import { ReviewersSelector } from './internal/reviewers-selector';
 import { PositionSkillSelector } from './internal/position-skill-selector';
 import { Spinner } from '../ui/spinner';
+import { useAccessChecker } from '@/hooks/use-has-access';
 
 const editPositionBatchFormSchema = z.object({
     positionBatchId: z.string(),
@@ -39,20 +40,21 @@ const editPositionBatchFormSchema = z.object({
             id: z.string().optional().nullable(),
             skillId: z.string(),
             comments: z.string().optional().nullable(),
-            minExperienceYears: z.number(),
-            type: z.enum(['Required', 'Preferred', 'NiceToHave']),
+            type: z.enum(['Required', 'Preferred']),
             actionType: z.enum(['Add', 'Remove', 'Update']),
         })
     ),
 }) satisfies z.ZodType<EditPositionBatchCommandCorrected>;
 
-export function EditPositionBatchSheet({
-    positionBatchId,
-}: {
+type Props = {
+    visibleTo: string[];
     positionBatchId: string;
-}) {
+};
+
+export function EditPositionBatchSheet({ positionBatchId, visibleTo }: Props) {
     const [open, setOpen] = useState(false);
     const editPositionBatchMutation = useEditPositionBatch();
+    const canAccess = useAccessChecker();
     const {
         data: positionBatch,
         isLoading,
@@ -63,25 +65,20 @@ export function EditPositionBatchSheet({
         resolver: zodResolver(editPositionBatchFormSchema),
     });
 
-    const skillOverRidesFealdArray = useFieldArray({
+    const skillOverRidesFieldArray = useFieldArray({
         name: 'skillOverRides',
         control: form.control,
     });
 
-    const reviewersFealdArray = useFieldArray({
+    const reviewersFieldArray = useFieldArray({
         name: 'reviewers',
         control: form.control,
     });
 
     useEffect(() => {
         if (positionBatch) {
-            form.setValue('positionBatchId', positionBatch.batchId);
-            form.setValue('description', positionBatch.description);
-            form.setValue('minCTC', positionBatch.minCTC);
-            form.setValue('maxCTC', positionBatch.maxCTC);
-            form.setValue('jobLocation', positionBatch.jobLocation);
-            form.setValue('reviewers', positionBatch.reviewers);
-            form.setValue('skillOverRides', positionBatch.skillOverRides);
+            form.reset(positionBatch);
+            form.setValue('positionBatchId', positionBatchId);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [positionBatch]);
@@ -116,6 +113,8 @@ export function EditPositionBatchSheet({
         );
     }
 
+    if (!canAccess(visibleTo)) return null;
+
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
@@ -123,7 +122,7 @@ export function EditPositionBatchSheet({
                     Edit Position Batch
                 </Button>
             </SheetTrigger>
-            <SheetContent className="w-[40vw]">
+            <SheetContent className="w-[35vw]">
                 <form
                     onSubmit={form.handleSubmit(onSubmit, onInvalid)}
                     className="flex h-full flex-col gap-4"
@@ -131,7 +130,7 @@ export function EditPositionBatchSheet({
                     <SheetHeader>
                         <SheetTitle>Edit Position Batch</SheetTitle>
                         <SheetDescription>
-                            Edit deatils for your position batch. Click Save
+                            Edit details for your position batch. Click Save
                             when you&apos;re done.
                         </SheetDescription>
                     </SheetHeader>
@@ -189,17 +188,17 @@ export function EditPositionBatchSheet({
                                 designationId={
                                     positionBatch?.designationId as string
                                 }
-                                skillOverRides={skillOverRidesFealdArray.fields}
-                                append={skillOverRidesFealdArray.append}
-                                remove={skillOverRidesFealdArray.remove}
-                                update={skillOverRidesFealdArray.update}
+                                skillOverRides={skillOverRidesFieldArray.fields}
+                                append={skillOverRidesFieldArray.append}
+                                remove={skillOverRidesFieldArray.remove}
+                                update={skillOverRidesFieldArray.update}
                             />
                         </div>
                         <div className="grid gap-2">
                             <ReviewersSelector
-                                fealds={reviewersFealdArray.fields}
-                                append={reviewersFealdArray.append}
-                                remove={reviewersFealdArray.remove}
+                                fields={reviewersFieldArray.fields}
+                                append={reviewersFieldArray.append}
+                                remove={reviewersFieldArray.remove}
                             />
                         </div>
                     </div>

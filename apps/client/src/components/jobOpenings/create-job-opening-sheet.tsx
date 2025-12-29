@@ -24,6 +24,7 @@ import { TypeSelector } from './internal/job-opening-type-selector';
 import { Textarea } from '../ui/textarea';
 import { InterviewRoundSelector } from './internal/interview-round-selector';
 import { InterviewParticipantSelector } from './internal/interview-participant-selector';
+import { useAccessChecker } from '@/hooks/use-has-access';
 
 const CreateJobOpeningSheetSchema = z.object({
     title: z.string(),
@@ -34,11 +35,10 @@ const CreateJobOpeningSheetSchema = z.object({
         z.object({
             userId: z.string(),
             role: z.enum([
-                'Interviewer',
+                'TechnicalInterviewer',
                 'Observer',
                 'NoteTaker',
-                'HRRepresentative',
-                'HiringManager',
+                'HRInterviewer',
             ]),
         })
     ),
@@ -50,11 +50,10 @@ const CreateJobOpeningSheetSchema = z.object({
             requirements: z.array(
                 z.object({
                     role: z.enum([
-                        'Interviewer',
+                        'TechnicalInterviewer',
                         'Observer',
                         'NoteTaker',
-                        'HRRepresentative',
-                        'HiringManager',
+                        'HRInterviewer',
                     ]),
                     requirementCount: z.number(),
                 })
@@ -65,32 +64,36 @@ const CreateJobOpeningSheetSchema = z.object({
         z.object({
             skillId: z.string(),
             comments: z.string().optional().nullable(),
-            minExperienceYears: z.number(),
-            type: z.enum(['Required', 'Preferred', 'NiceToHave']),
+            type: z.enum(['Required', 'Preferred']),
             actionType: z.enum(['Add', 'Remove', 'Update']),
         })
     ),
 }) satisfies z.ZodType<CreateJobOpeningCommandCorrected>;
 
-export function CreateJobOpeningSheet() {
+type Props = {
+    visibleTo: string[];
+};
+
+export function CreateJobOpeningSheet({ visibleTo }: Props) {
     const [open, setOpen] = useState(false);
+    const canAccess = useAccessChecker();
     const createJobOpeningMutation = useCreateJobOpening();
 
     const form = useForm<z.infer<typeof CreateJobOpeningSheetSchema>>({
         resolver: zodResolver(CreateJobOpeningSheetSchema),
     });
 
-    const skillOverRidesFealdArray = useFieldArray({
+    const skillOverRidesFieldArray = useFieldArray({
         name: 'skillOverRides',
         control: form.control,
     });
 
-    const interviewRoundsFealdArray = useFieldArray({
+    const interviewRoundsFieldArray = useFieldArray({
         name: 'interviewRounds',
         control: form.control,
     });
 
-    const interviewersFealdArray = useFieldArray({
+    const interviewersFieldArray = useFieldArray({
         name: 'interviewers',
         control: form.control,
     });
@@ -108,6 +111,8 @@ export function CreateJobOpeningSheet() {
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };
+
+    if (!canAccess(visibleTo)) return null;
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
@@ -175,37 +180,59 @@ export function CreateJobOpeningSheet() {
                         <div className="grid gap-2">
                             <JobOpeningSkillSelector
                                 positionBatchId={form.watch('positionBatchId')}
-                                skillOverRides={skillOverRidesFealdArray.fields}
-                                append={skillOverRidesFealdArray.append}
-                                remove={skillOverRidesFealdArray.remove}
-                                update={skillOverRidesFealdArray.update}
+                                skillOverRides={skillOverRidesFieldArray.fields}
+                                append={skillOverRidesFieldArray.append}
+                                remove={skillOverRidesFieldArray.remove}
+                                update={skillOverRidesFieldArray.update}
                             />
+                        </div>
+
+                        <div className="my-5">
+                            <div className="flex items-center justify-between gap-2">
+                                <div className="border-b flex-1"></div>
+                                <div>Interview Template (optional)</div>
+                                <div className="border-b flex-1"></div>
+                            </div>
+                            <div className="text-muted-foreground text-center">
+                                If you want interviews to be created
+                                automatically when a candidate is shortlisted,
+                                you can define an interview template here.
+                            </div>
                         </div>
 
                         <div className="grid gap-2">
                             <InterviewRoundSelector
-                                fealds={interviewRoundsFealdArray.fields}
-                                append={interviewRoundsFealdArray.append}
-                                remove={interviewRoundsFealdArray.remove}
-                                update={interviewRoundsFealdArray.update}
+                                fields={interviewRoundsFieldArray.fields}
+                                append={interviewRoundsFieldArray.append}
+                                remove={interviewRoundsFieldArray.remove}
+                                update={interviewRoundsFieldArray.update}
                             />
                         </div>
 
                         <div className="grid gap-2">
                             <InterviewParticipantSelector
-                                fealds={interviewersFealdArray.fields}
-                                append={interviewersFealdArray.append}
-                                remove={interviewersFealdArray.remove}
+                                fields={interviewersFieldArray.fields}
+                                append={interviewersFieldArray.append}
+                                remove={interviewersFieldArray.remove}
                             />
                         </div>
                     </div>
 
                     <SheetFooter className="flex flex-row w-full">
-                        <Button type="submit" className="flex-1">
+                        <Button
+                            type="submit"
+                            className="flex-1"
+                            disabled={createJobOpeningMutation.isPending}
+                        >
                             Create Opening
                         </Button>
                         <SheetClose className="flex-1" asChild>
-                            <Button variant="outline">Close</Button>
+                            <Button
+                                variant="outline"
+                                disabled={createJobOpeningMutation.isPending}
+                            >
+                                Close
+                            </Button>
                         </SheetClose>
                     </SheetFooter>
                 </form>

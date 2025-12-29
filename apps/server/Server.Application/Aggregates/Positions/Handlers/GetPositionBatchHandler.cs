@@ -4,7 +4,7 @@ using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Positions.Queries;
 using Server.Application.Aggregates.Positions.Queries.DTOs;
 using Server.Application.Aggregates.Positions.Queries.DTOs.PositionBatchDTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Enums;
 
@@ -25,7 +25,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
             var batch = await _batchRepository.GetByIdAsync(query.BatchId, cancellationToken);
             if (batch == null)
             {
-                throw new NotFoundExeption("Position Batch Not Found.");
+                throw new NotFoundException("Position Batch Not Found.");
             }
 
             // step 2: make dto
@@ -37,7 +37,6 @@ namespace Server.Application.Aggregates.Positions.Handlers
                     SkillId = ds.SkillId,
                     SkillName = ds.Skill.Name,
                     SkillType = ds.SkillType,
-                    MinExperienceYears = ds.MinExperienceYears,
                 };
             }).ToList();
 
@@ -51,7 +50,6 @@ namespace Server.Application.Aggregates.Positions.Handlers
                         {
                             SkillId = overRide.SkillId,
                             SkillName = overRide.Skill.Name,
-                            MinExperienceYears = overRide.MinExperienceYears,
                             SkillType = overRide.Type,
                         });
                         break;
@@ -60,7 +58,6 @@ namespace Server.Application.Aggregates.Positions.Handlers
                         var skill = skills.FirstOrDefault(x => x.SkillId == overRide.SkillId);
                         if (skill != null)
                         {
-                            skill.MinExperienceYears = overRide.MinExperienceYears;
                             skill.SkillType = overRide.Type;
                         }
                         break;
@@ -85,6 +82,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
                 PositionsOnHoldCount = batch.Positions.Count(x => x.Status == PositionStatus.OnHold),
                 CreatedBy = batch.CreatedBy,
                 CreatedByUserName = batch.CreatedByUser?.Auth.UserName,
+                CreatedAt = batch.CreatedAt,
                 Reviewers = batch.Reviewers.Select(reviewer =>
                 {
                     return new ReviewersDetailDTO
@@ -102,7 +100,6 @@ namespace Server.Application.Aggregates.Positions.Handlers
                         Id = x.Id,
                         SkillId = x.SkillId,
                         Comments = x.Comments,
-                        MinExperienceYears = x.MinExperienceYears,
                         Type = x.Type,
                         ActionType = x.ActionType,
                     };

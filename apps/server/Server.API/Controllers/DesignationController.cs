@@ -22,6 +22,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateDesignation([FromBody] CreateDesignationCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
@@ -29,6 +30,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditDesignation(Guid id, [FromBody] EditDesignationCommand command, CancellationToken cancellationToken)
         {
             command.Id = id;
@@ -37,6 +39,7 @@ namespace Server.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteDesignation(Guid id, CancellationToken cancellationToken)
         {
             var command = new DeleteDesignationCommand(id);
@@ -45,6 +48,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize(Roles = "Admin, Recruiter, Viewer")]
         public async Task<IActionResult> GetDesignation(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetDesignationQuery(id);
@@ -53,6 +57,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Recruiter, Viewer")]
         public async Task<IActionResult> GetDesignations(CancellationToken cancellationToken)
         {
             var query = new GetDesignationsQuery(null, null, null);

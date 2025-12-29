@@ -8,18 +8,23 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
+import { useAccessChecker } from '@/hooks/use-has-access';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
-    id: string;
+    jobOpeningId: string;
+    visibleTo: string[];
 }
 
-export function DeleteJobOpeningDialog({ id }: Props) {
+export function DeleteJobOpeningDialog({ jobOpeningId, visibleTo }: Props) {
     const [open, setOpen] = useState(false);
+    const canAccess = useAccessChecker();
     const deleteJobApplicationMutation = useDeleteJobApplication();
     const navigate = useNavigate();
+
+    if (!canAccess(visibleTo)) return null;
 
     return (
         <>
@@ -60,12 +65,15 @@ export function DeleteJobOpeningDialog({ id }: Props) {
                             variant="default"
                             className="flex-1 bg-red-500 text-white hover:bg-red-600"
                             onClick={() => {
-                                deleteJobApplicationMutation.mutate(id, {
-                                    onSuccess: () => {
-                                        setOpen(false);
-                                        navigate('/job-openings');
-                                    },
-                                });
+                                deleteJobApplicationMutation.mutate(
+                                    jobOpeningId,
+                                    {
+                                        onSuccess: () => {
+                                            setOpen(false);
+                                            navigate('/job-openings');
+                                        },
+                                    }
+                                );
                             }}
                             disabled={deleteJobApplicationMutation.isPending}
                         >

@@ -28,6 +28,11 @@ import { JobOpeningDetailPage } from './pages/jobOpening/job-opening-details-pag
 import { CandidateDetailsPage } from './pages/candidate/candidate-details-page';
 import { JobApplicationDetailsPage } from './pages/jobApplication/job-application-details-page';
 import { InterviewDetailsPage } from './pages/interview/interview-details-page';
+import { Index as ScreeningsIndex } from './pages/screenings';
+import { ScreeningApplicationDetailsPage } from './pages/screenings/screening-application-details-page';
+import { Index as VerificationsIndex } from './pages/verifications';
+import { VerificationCandidateDetailsPage } from './pages/verifications/verification-candidate-details-page';
+import { UserProfilePage } from './pages/user/user-profile-page';
 
 function App() {
     return (
@@ -67,7 +72,20 @@ function App() {
                             element={<InterviewDetailsPage />}
                         />
                     </Route>
-
+                    <Route path="screenings">
+                        <Route index element={<ScreeningsIndex />} />
+                        <Route
+                            path="application/:id"
+                            element={<ScreeningApplicationDetailsPage />}
+                        />
+                    </Route>
+                    <Route path="verifications">
+                        <Route index element={<VerificationsIndex />} />
+                        <Route
+                            path="candidate/:id"
+                            element={<VerificationCandidateDetailsPage />}
+                        />
+                    </Route>
                     <Route path="positions">
                         <Route index element={<PositionsIndex />} />
                         <Route
@@ -80,7 +98,6 @@ function App() {
                         path="reports-and-analytics"
                         element={<ReportsAndAnalyticsIndex />}
                     />
-
                     <Route path="configuration">
                         <Route path="skills" element={<SkillsPage />} />
                         <Route
@@ -97,6 +114,10 @@ function App() {
                         <Route path="roles" element={<RolesPage />} />
                         <Route path="employees" element={<EmployeesPage />} />
                     </Route>
+                    <Route
+                        path="user-profile/:id?"
+                        element={<UserProfilePage />}
+                    />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>

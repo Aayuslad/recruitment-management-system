@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.JobApplications.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.JobApplications;
 
@@ -26,14 +26,14 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: check if alredy exists
             var result = await _jobApplicationRepository.ExistsByCandidateAndOpeningAsync(request.JobOpeningId, request.CandidateId, cancellationToken);
             if (result)
             {
-                throw new ConflictExeption("Job application already exists for this candidate and job opening.");
+                throw new ConflictException("Job application already exists for this candidate and job opening.");
             }
 
             // step 2: create entity

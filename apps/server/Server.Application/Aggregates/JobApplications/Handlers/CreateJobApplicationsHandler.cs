@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.JobApplications.Commands;
 using Server.Application.Aggregates.JobApplications.Commands.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.JobApplications;
 
@@ -27,7 +27,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: enumurate and check if any already exists

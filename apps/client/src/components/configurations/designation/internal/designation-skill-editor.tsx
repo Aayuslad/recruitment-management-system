@@ -8,7 +8,6 @@ import {
     CommandItem,
     CommandList,
 } from '@/components/ui/command';
-import { Input } from '@/components/ui/input';
 import {
     Popover,
     PopoverContent,
@@ -54,7 +53,6 @@ export function DesignationSkillEditor({
         append({
             skillId: skill.skillId,
             skillType: skill.skillType,
-            minExperienceYears: skill.minExperienceYears ?? 0,
         });
         setOpen(false);
     };
@@ -114,38 +112,8 @@ export function DesignationSkillEditor({
                                         <SelectItem value="Preferred">
                                             Preferred
                                         </SelectItem>
-                                        <SelectItem value="NiceToHave">
-                                            Nice To Have
-                                        </SelectItem>
                                     </SelectContent>
                                 </Select>
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                <label
-                                    htmlFor="minExperienceYears"
-                                    className="text-sm text-muted-foreground"
-                                >
-                                    Exp:
-                                </label>
-                                <Input
-                                    id="minExperienceYears"
-                                    type="text"
-                                    value={skill.minExperienceYears}
-                                    onChange={(e) => {
-                                        update(fields.indexOf(skill), {
-                                            ...skill,
-                                            minExperienceYears: Number(
-                                                e.target.value
-                                            ),
-                                        });
-                                    }}
-                                    className="w-8 h-8 px-2 text-sm"
-                                    placeholder="0"
-                                    style={{ height: '28px' }}
-                                    min={0}
-                                    max={50}
-                                />
                             </div>
 
                             <button

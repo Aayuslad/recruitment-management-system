@@ -50,12 +50,12 @@ namespace Server.Domain.Entities.Designations
         {
             Name = name;
 
-            SyncDesignatioSkills(newSkills);
+            SyncDesignationSkills(newSkills);
 
             MarkAsUpdated(updatedBy);
         }
 
-        private void SyncDesignatioSkills(IEnumerable<DesignationSkill> newDesignationSkills)
+        private void SyncDesignationSkills(IEnumerable<DesignationSkill> newDesignationSkills)
         {
             if (newDesignationSkills is null) return;
 
@@ -70,8 +70,7 @@ namespace Server.Domain.Entities.Designations
             {
                 var toUpdate = DesignationSkills.FirstOrDefault(x => x.SkillId == newSkill.SkillId);
                 toUpdate?.Update(
-                    newSkill.SkillType,
-                    newSkill.MinExperienceYears
+                    newSkill.SkillType
                 );
             }
 

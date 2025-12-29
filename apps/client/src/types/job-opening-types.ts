@@ -16,6 +16,8 @@ export interface JobOpeningSummary {
     jobLocation: string;
     createdById: string;
     createdByUserName: string;
+    createdAt: string;
+    applicationsCount: number;
     interviewRounds: InterviewRoundTemplateSummaryDTO[];
 }
 
@@ -32,6 +34,9 @@ export interface JobOpening {
     maxCTC: number;
     positionsCount: number;
     closedPositionsCount: number;
+    createdById: string;
+    createdByUserName: string;
+    createdAt: string;
     skills: SkillDetailDTO[];
     skillOverRides: SkillOverRideDetailDTO[];
     interviewers: JobOpeningInterviewerDetailDTO[];
@@ -42,14 +47,12 @@ export interface SkillDetailDTO {
     skillId: string;
     skillName: string;
     skillType: SkillType;
-    minExperienceYears?: number | null;
 }
 
 export interface SkillOverRideDetailDTO {
     id: string;
     skillId: string;
     comments?: string | null;
-    minExperienceYears: number;
     type: SkillType;
     actionType: SkillActionType;
 }
@@ -118,10 +121,9 @@ export type CreateJobOpeningCommandCorrected = Omit<
     })[];
     skillOverRides: (Omit<
         components['schemas']['SkillOverRideDTO'],
-        'skillId' | 'minExperienceYears' | 'type' | 'actionType'
+        'skillId' | 'type' | 'actionType'
     > & {
         skillId: string;
-        minExperienceYears: number;
         type: components['schemas']['SkillType'];
         actionType: components['schemas']['SkillActionType'];
     })[];
@@ -165,10 +167,9 @@ export type EditJobOpeningCommandCorrected = Omit<
     })[];
     skillOverRides: (Omit<
         components['schemas']['SkillOverRideDTO'],
-        'skillId' | 'minExperienceYears' | 'type' | 'actionType'
+        'skillId' | 'type' | 'actionType'
     > & {
         skillId: string;
-        minExperienceYears: number;
         type: components['schemas']['SkillType'];
         actionType: components['schemas']['SkillActionType'];
     })[];

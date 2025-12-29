@@ -4,6 +4,5 @@
     {
         Required = 1,
         Preferred = 2,
-        NiceToHave = 3
     }
 }

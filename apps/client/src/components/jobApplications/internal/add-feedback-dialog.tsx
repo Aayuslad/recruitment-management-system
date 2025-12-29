@@ -19,11 +19,13 @@ import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
-import { SkillFeedbackInput } from './skill-feedback-intput';
+import { SkillFeedbackInput } from './skill-feedback-input';
+import { useAccessChecker } from '@/hooks/use-has-access';
 
 type Props = {
-    jobApplicationId: string;
-    candidateId: string;
+    jobApplicationId?: string;
+    candidateId?: string;
+    visibleTo?: string[];
 };
 
 const createFeedbackFormSchema = z.object({
@@ -39,8 +41,13 @@ const createFeedbackFormSchema = z.object({
     ),
 }) satisfies z.ZodType<CreateJobApplicationFeedbackCommandCorrected>;
 
-export function AddFeedbackDialog({ jobApplicationId, candidateId }: Props) {
+export function AddFeedbackDialog({
+    jobApplicationId,
+    candidateId,
+    visibleTo,
+}: Props) {
     const [open, setOpen] = useState(false);
+    const canAccess = useAccessChecker();
     const createFeedbackMutation = useCreateJobApplicationFeedback();
 
     const form = useForm<z.infer<typeof createFeedbackFormSchema>>({
@@ -74,6 +81,10 @@ export function AddFeedbackDialog({ jobApplicationId, candidateId }: Props) {
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };
+
+    if (visibleTo && !canAccess(visibleTo)) {
+        return null;
+    }
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

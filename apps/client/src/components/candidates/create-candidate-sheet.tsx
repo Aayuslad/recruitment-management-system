@@ -29,6 +29,7 @@ import {
     SelectValue,
 } from '../ui/select';
 import type { Gender } from '@/types/enums';
+import { useAccessChecker } from '@/hooks/use-has-access';
 
 const createCandidateFormSchema = z.object({
     email: z.email('Invalid email address'),
@@ -47,9 +48,14 @@ const createCandidateFormSchema = z.object({
     ),
 }) satisfies z.ZodType<CreateCandidateCommandCorrected>;
 
-export function CreateCandidateSheet() {
+type Props = {
+    visibleTo: string[];
+};
+
+export function CreateCandidateSheet({ visibleTo }: Props) {
     const [open, setOpen] = useState(false);
     const createCandidateMutation = useCreateCandidate();
+    const canAccess = useAccessChecker();
 
     const form = useForm<z.infer<typeof createCandidateFormSchema>>({
         resolver: zodResolver(createCandidateFormSchema),
@@ -78,6 +84,8 @@ export function CreateCandidateSheet() {
         messages.reverse().forEach((msg) => toast.error(msg));
     };
 
+    if (!canAccess(visibleTo)) return null;
+
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
@@ -93,7 +101,7 @@ export function CreateCandidateSheet() {
                     <SheetHeader>
                         <SheetTitle>Create Candidate</SheetTitle>
                         <SheetDescription>
-                            Add deatils for the candidate. Click create when
+                            Add details for the candidate. Click create when
                             you&apos;re done.
                         </SheetDescription>
                     </SheetHeader>

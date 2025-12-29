@@ -15,7 +15,7 @@ export function DocumentTypesPage() {
                     </p>
                 </div>
                 <div className="w-[250px] mb-4">
-                    <CreateDocTypeDialog />
+                    <CreateDocTypeDialog visibleTo={['Admin']} />
                 </div>
             </div>
 

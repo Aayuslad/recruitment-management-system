@@ -4,7 +4,7 @@ using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Positions.Queries;
 using Server.Application.Aggregates.Positions.Queries.DTOs;
 using Server.Application.Aggregates.Positions.Queries.DTOs.PositionDTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Enums;
 
@@ -26,7 +26,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
             var position = await _positionRepository.GetByIdAsync(query.PositionId, cancellationToken);
             if (position == null)
             {
-                throw new NotFoundExeption("Position Not Found.");
+                throw new NotFoundException("Position Not Found.");
             }
 
             // step 2: make dto
@@ -38,7 +38,6 @@ namespace Server.Application.Aggregates.Positions.Handlers
                     SkillId = ds.SkillId,
                     SkillName = ds.Skill.Name,
                     SkillType = ds.SkillType,
-                    MinExperienceYears = ds.MinExperienceYears,
                 };
             }).ToList();
 
@@ -52,7 +51,6 @@ namespace Server.Application.Aggregates.Positions.Handlers
                         {
                             SkillId = overRide.SkillId,
                             SkillName = overRide.Skill.Name,
-                            MinExperienceYears = overRide.MinExperienceYears,
                             SkillType = overRide.Type,
                         });
                         break;
@@ -61,7 +59,6 @@ namespace Server.Application.Aggregates.Positions.Handlers
                         var skill = skills.FirstOrDefault(x => x.SkillId == overRide.SkillId);
                         if (skill != null)
                         {
-                            skill.MinExperienceYears = overRide.MinExperienceYears;
                             skill.SkillType = overRide.Type;
                         }
                         break;

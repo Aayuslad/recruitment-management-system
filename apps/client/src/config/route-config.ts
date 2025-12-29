@@ -50,6 +50,26 @@ export const routes: RouteConfigType[] = [
         ],
     },
     {
+        breadcrumb: 'Screenings',
+        path: 'screenings',
+        children: [
+            {
+                breadcrumb: 'Job Application',
+                path: 'application/:id',
+            },
+        ],
+    },
+    {
+        breadcrumb: 'Verifications',
+        path: 'verifications',
+        children: [
+            {
+                breadcrumb: 'Candidate',
+                path: 'candidate/:id',
+            },
+        ],
+    },
+    {
         breadcrumb: 'Positions',
         path: 'positions',
         children: [
@@ -102,5 +122,9 @@ export const routes: RouteConfigType[] = [
                 path: 'employees',
             },
         ],
+    },
+    {
+        breadcrumb: 'User Profile',
+        path: 'user-profile',
     },
 ];

@@ -24,6 +24,7 @@ import { JobOpeningSkillSelector } from './internal/job-opening-skill-selector';
 import { InterviewRoundSelector } from './internal/interview-round-selector';
 import { InterviewParticipantSelector } from './internal/interview-participant-selector';
 import { Spinner } from '../ui/spinner';
+import { useAccessChecker } from '@/hooks/use-has-access';
 
 const EditJobOpeningSheetSchema = z.object({
     jobOpeningId: z.string(),
@@ -35,11 +36,10 @@ const EditJobOpeningSheetSchema = z.object({
         z.object({
             userId: z.string(),
             role: z.enum([
-                'Interviewer',
+                'TechnicalInterviewer',
                 'Observer',
                 'NoteTaker',
-                'HRRepresentative',
-                'HiringManager',
+                'HRInterviewer',
             ]),
         })
     ),
@@ -53,11 +53,10 @@ const EditJobOpeningSheetSchema = z.object({
                 z.object({
                     id: z.string().optional().nullable(),
                     role: z.enum([
-                        'Interviewer',
+                        'TechnicalInterviewer',
                         'Observer',
                         'NoteTaker',
-                        'HRRepresentative',
-                        'HiringManager',
+                        'HRInterviewer',
                     ]),
                     requirementCount: z.number(),
                 })
@@ -69,8 +68,7 @@ const EditJobOpeningSheetSchema = z.object({
             id: z.string().optional().nullable(),
             skillId: z.string(),
             comments: z.string().optional().nullable(),
-            minExperienceYears: z.number(),
-            type: z.enum(['Required', 'Preferred', 'NiceToHave']),
+            type: z.enum(['Required', 'Preferred']),
             actionType: z.enum(['Add', 'Remove', 'Update']),
         })
     ),
@@ -78,11 +76,13 @@ const EditJobOpeningSheetSchema = z.object({
 
 type Props = {
     jobOpeningId: string;
+    visibleTo: string[];
 };
 
-export function EditJobOpeningSheet({ jobOpeningId }: Props) {
+export function EditJobOpeningSheet({ jobOpeningId, visibleTo }: Props) {
     const [open, setOpen] = useState(false);
     const editJobOpeningMutation = useEditJobOpening();
+    const canAccess = useAccessChecker();
     const { data, isLoading, isError } = useGetJobOpening(jobOpeningId);
 
     const form = useForm<z.infer<typeof EditJobOpeningSheetSchema>>({
@@ -90,21 +90,29 @@ export function EditJobOpeningSheet({ jobOpeningId }: Props) {
     });
 
     useEffect(() => {
-        if (data) form.reset(data);
-        form.setValue('jobOpeningId', jobOpeningId);
+        if (data) {
+            form.reset(data);
+            form.setValue('jobOpeningId', jobOpeningId);
+            form.setValue(
+                'interviewRounds',
+                data.interviewRounds.sort(
+                    (a, b) => a.roundNumber - b.roundNumber
+                )
+            );
+        }
     }, [data, form, jobOpeningId]);
 
-    const skillOverRidesFealdArray = useFieldArray({
+    const skillOverRidesFieldArray = useFieldArray({
         name: 'skillOverRides',
         control: form.control,
     });
 
-    const interviewRoundsFealdArray = useFieldArray({
+    const interviewRoundsFieldArray = useFieldArray({
         name: 'interviewRounds',
         control: form.control,
     });
 
-    const interviewersFealdArray = useFieldArray({
+    const interviewersFieldArray = useFieldArray({
         name: 'interviewers',
         control: form.control,
     });
@@ -122,6 +130,8 @@ export function EditJobOpeningSheet({ jobOpeningId }: Props) {
         const messages = Object.values(errors).map((err) => err.message);
         messages.reverse().forEach((msg) => toast.error(msg));
     };
+
+    if (!canAccess(visibleTo)) return null;
 
     if (isLoading)
         return (
@@ -147,7 +157,7 @@ export function EditJobOpeningSheet({ jobOpeningId }: Props) {
                     <SheetHeader>
                         <SheetTitle>Edit Job Opening</SheetTitle>
                         <SheetDescription>
-                            Edit deatils for your job opening. Click Save when
+                            Edit details for your job opening. Click Save when
                             you&apos;re done.
                         </SheetDescription>
                     </SheetHeader>
@@ -189,37 +199,59 @@ export function EditJobOpeningSheet({ jobOpeningId }: Props) {
                         <div className="grid gap-2">
                             <JobOpeningSkillSelector
                                 positionBatchId={form.watch('positionBatchId')}
-                                skillOverRides={skillOverRidesFealdArray.fields}
-                                append={skillOverRidesFealdArray.append}
-                                remove={skillOverRidesFealdArray.remove}
-                                update={skillOverRidesFealdArray.update}
+                                skillOverRides={skillOverRidesFieldArray.fields}
+                                append={skillOverRidesFieldArray.append}
+                                remove={skillOverRidesFieldArray.remove}
+                                update={skillOverRidesFieldArray.update}
                             />
+                        </div>
+
+                        <div className="my-5">
+                            <div className="flex items-center justify-between gap-2">
+                                <div className="border-b flex-1"></div>
+                                <div>Interview Template (optional)</div>
+                                <div className="border-b flex-1"></div>
+                            </div>
+                            <div className="text-muted-foreground text-center">
+                                If you want interviews to be created
+                                automatically when a candidate is shortlisted,
+                                you can define an interview template here.
+                            </div>
                         </div>
 
                         <div className="grid gap-2">
                             <InterviewRoundSelector
-                                fealds={interviewRoundsFealdArray.fields}
-                                append={interviewRoundsFealdArray.append}
-                                remove={interviewRoundsFealdArray.remove}
-                                update={interviewRoundsFealdArray.update}
+                                fields={interviewRoundsFieldArray.fields}
+                                append={interviewRoundsFieldArray.append}
+                                remove={interviewRoundsFieldArray.remove}
+                                update={interviewRoundsFieldArray.update}
                             />
                         </div>
 
                         <div className="grid gap-2">
                             <InterviewParticipantSelector
-                                fealds={interviewersFealdArray.fields}
-                                append={interviewersFealdArray.append}
-                                remove={interviewersFealdArray.remove}
+                                fields={interviewersFieldArray.fields}
+                                append={interviewersFieldArray.append}
+                                remove={interviewersFieldArray.remove}
                             />
                         </div>
                     </div>
 
                     <SheetFooter className="flex flex-row w-full">
-                        <Button type="submit" className="flex-1">
+                        <Button
+                            type="submit"
+                            className="flex-1"
+                            disabled={editJobOpeningMutation.isPending}
+                        >
                             Save
                         </Button>
                         <SheetClose className="flex-1" asChild>
-                            <Button variant="outline">Close</Button>
+                            <Button
+                                variant="outline"
+                                disabled={editJobOpeningMutation.isPending}
+                            >
+                                Close
+                            </Button>
                         </SheetClose>
                     </SheetFooter>
                 </form>

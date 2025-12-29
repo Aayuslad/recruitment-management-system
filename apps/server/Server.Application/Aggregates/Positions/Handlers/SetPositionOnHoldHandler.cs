@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Positions.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Positions.Handlers
@@ -25,14 +25,14 @@ namespace Server.Application.Aggregates.Positions.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: fetch existing position
             var position = await _positionRepository.GetByIdAsync(command.PositionId, cancellationToken);
             if (position == null)
             {
-                throw new NotFoundExeption("Position Not Found.");
+                throw new NotFoundException("Position Not Found.");
             }
 
             // step 2: make move

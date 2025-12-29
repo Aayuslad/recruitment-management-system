@@ -11,7 +11,6 @@ import {
     CommandItem,
     CommandList,
 } from '@/components/ui/command';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
     Popover,
@@ -25,6 +24,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { SkillPill } from '@/components/ui/skill-pill';
 import {
     Tooltip,
     TooltipContent,
@@ -35,7 +35,7 @@ import type { SkillType } from '@/types/enums';
 import type { CreateJobOpeningCommandCorrected } from '@/types/job-opening-types';
 import type { SkillDetailDTO } from '@/types/position-types';
 import type { Skill } from '@/types/skill-types';
-import { Check, Save, SquarePen, X } from 'lucide-react';
+import { Check, Info, Save, SquarePen, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -88,7 +88,6 @@ export const JobOpeningSkillSelector = ({
         append({
             skillId: skill.id,
             type: 'Required',
-            minExperienceYears: 0,
             actionType: 'Add',
         });
 
@@ -110,7 +109,6 @@ export const JobOpeningSkillSelector = ({
             skillId: inheritedSkill.skillId,
             comments: null,
             type: inheritedSkill.skillType,
-            minExperienceYears: inheritedSkill.minExperienceYears ?? 0,
             actionType: 'Remove',
         });
 
@@ -130,7 +128,6 @@ export const JobOpeningSkillSelector = ({
             skillId: inheritedSkill.skillId,
             comments: null,
             type: inheritedSkill.skillType,
-            minExperienceYears: inheritedSkill.minExperienceYears ?? 0,
             actionType: 'Update',
         });
 
@@ -155,28 +152,6 @@ export const JobOpeningSkillSelector = ({
                         ? {
                               ...s,
                               skillType: newValue,
-                          }
-                        : s
-                ) ?? []
-        );
-    };
-
-    const handleOverRideMinExperienceYearsChange = (
-        overRide: CreateJobOpeningCommandCorrected['skillOverRides'][0],
-        newValue: number
-    ) => {
-        update(skillOverRides.indexOf(overRide), {
-            ...overRide,
-            minExperienceYears: newValue,
-        });
-
-        setFinalSkills(
-            (prev) =>
-                prev?.map((s) =>
-                    s.skillId === overRide.skillId
-                        ? {
-                              ...s,
-                              minExperienceYears: newValue,
                           }
                         : s
                 ) ?? []
@@ -211,7 +186,6 @@ export const JobOpeningSkillSelector = ({
                         skills?.find((x) => x.id === overRide.skillId)?.name ??
                         '',
                     skillType: overRide.type,
-                    minExperienceYears: overRide.minExperienceYears,
                 },
             ]);
         }
@@ -228,8 +202,6 @@ export const JobOpeningSkillSelector = ({
                             skillId: overRide.skillId,
                             skillName: relativePositionSkill?.skillName ?? '',
                             skillType: relativePositionSkill.skillType,
-                            minExperienceYears:
-                                relativePositionSkill.minExperienceYears,
                         };
                     }
 
@@ -242,7 +214,23 @@ export const JobOpeningSkillSelector = ({
     return (
         <div className="">
             <div className="flex justify-between">
-                <Label>Skills</Label>
+                <h3 className="font-semibold text-lg flex items-center gap-1">
+                    <Label>Skills Criteria</Label>
+                    <span>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Info className="w-4 h-4" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p className="text-wrap max-w-[200px] font-semibold">
+                                    Skills are sourced from the Position-Batch
+                                    you have selected. You can add remove,
+                                    update skills from here.
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </span>
+                </h3>
                 <Button
                     title={viewMode === 'view' ? 'Edit' : 'Save'}
                     variant={'ghost'}
@@ -271,40 +259,13 @@ export const JobOpeningSkillSelector = ({
                         ...finalSkills.filter(
                             (x) => x.skillType === 'Preferred'
                         ),
-                        ...finalSkills.filter(
-                            (x) => x.skillType === 'NiceToHave'
-                        ),
                     ].map((x) => {
                         return (
-                            <Tooltip key={x.skillId}>
-                                <TooltipTrigger asChild>
-                                    <Badge
-                                        variant="outline"
-                                        className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${x.skillType === 'Required' ? 'border-red-400' : ''} ${x.skillType === 'Preferred' ? 'border-blue-400' : ''} ${x.skillType === 'NiceToHave' ? 'border-slate-400' : ''}`}
-                                    >
-                                        <span>{x.skillName}</span>
-                                        {x.minExperienceYears !== 0 && (
-                                            <span className="text-xs -mb-1 pb-[1px] px-1.5 bg-accent rounded-2xl">
-                                                {x.minExperienceYears}
-                                            </span>
-                                        )}
-                                    </Badge>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p className="space-x-1.5 mb-1">
-                                        <span className="font-semibold">
-                                            Type:
-                                        </span>
-                                        <span>{x.skillType}</span>
-                                    </p>
-                                    <p className="space-x-1.5">
-                                        <span className="font-semibold">
-                                            Minimum Experience years:
-                                        </span>
-                                        <span>{x.minExperienceYears}</span>
-                                    </p>
-                                </TooltipContent>
-                            </Tooltip>
+                            <SkillPill
+                                id={x.skillId}
+                                name={x.skillName}
+                                type={x.skillType}
+                            />
                         );
                     })}
                 </div>
@@ -324,30 +285,17 @@ export const JobOpeningSkillSelector = ({
                                     (inheritedSkill) =>
                                         inheritedSkill.skillType === 'Preferred'
                                 ),
-                                ...inheritedSkills.filter(
-                                    (inheritedSkill) =>
-                                        inheritedSkill.skillType ===
-                                        'NiceToHave'
-                                ),
                             ].map((inheritedSkill) => {
                                 return (
                                     <Tooltip key={inheritedSkill.skillId}>
                                         <TooltipTrigger asChild>
                                             <Badge
                                                 variant="outline"
-                                                className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${inheritedSkill.skillType === 'Required' ? 'border-red-400' : ''} ${inheritedSkill.skillType === 'Preferred' ? 'border-blue-400' : ''} ${inheritedSkill.skillType === 'NiceToHave' ? 'border-slate-400' : ''}`}
+                                                className={`text-sm font-normal pb-1.5 px-2.5 mr-1 mb-1 ${inheritedSkill.skillType ? (inheritedSkill.skillType === 'Required' ? 'border-amber-950' : 'border-cyan-800') : ''}`}
                                             >
                                                 <span>
                                                     {inheritedSkill.skillName}
                                                 </span>
-                                                {inheritedSkill.minExperienceYears !==
-                                                    0 && (
-                                                    <span className="text-xs -mb-1 pb-[1px] px-1.5 bg-accent rounded-2xl">
-                                                        {
-                                                            inheritedSkill.minExperienceYears
-                                                        }
-                                                    </span>
-                                                )}
                                             </Badge>
                                         </TooltipTrigger>
                                         <TooltipContent>
@@ -357,16 +305,6 @@ export const JobOpeningSkillSelector = ({
                                                 </span>
                                                 <span>
                                                     {inheritedSkill.skillType}
-                                                </span>
-                                            </p>
-                                            <p className="space-x-1.5">
-                                                <span className="font-semibold">
-                                                    Minimum Experience years:
-                                                </span>
-                                                <span>
-                                                    {
-                                                        inheritedSkill.minExperienceYears
-                                                    }
                                                 </span>
                                             </p>
                                             <div className="space-x-2 mt-1">
@@ -401,7 +339,7 @@ export const JobOpeningSkillSelector = ({
                     </div>
                     <div>
                         <div className="flex justify-between">
-                            <h3>Overides</h3>
+                            <h3>Overrides</h3>
                             <AddSkillPopover
                                 skills={skills}
                                 skillOverRides={skillOverRides}
@@ -456,42 +394,8 @@ export const JobOpeningSkillSelector = ({
                                                     <SelectItem value="Preferred">
                                                         Preferred
                                                     </SelectItem>
-                                                    <SelectItem value="NiceToHave">
-                                                        Nice To Have
-                                                    </SelectItem>
                                                 </SelectContent>
                                             </Select>
-                                        </div>
-
-                                        <div className="flex items-center gap-2">
-                                            <label
-                                                htmlFor="minExperienceYears"
-                                                className="text-sm text-muted-foreground"
-                                            >
-                                                Exp:
-                                            </label>
-                                            <Input
-                                                id="minExperienceYears"
-                                                type="text"
-                                                disabled={
-                                                    overRide.actionType ===
-                                                    'Remove'
-                                                }
-                                                value={
-                                                    overRide.minExperienceYears
-                                                }
-                                                onChange={(e) => {
-                                                    handleOverRideMinExperienceYearsChange(
-                                                        overRide,
-                                                        Number(e.target.value)
-                                                    );
-                                                }}
-                                                className="w-8 h-8 px-2 text-sm"
-                                                placeholder="0"
-                                                style={{ height: '28px' }}
-                                                min={0}
-                                                max={50}
-                                            />
                                         </div>
 
                                         <div className="text-muted-foreground text-sm">
@@ -511,7 +415,7 @@ export const JobOpeningSkillSelector = ({
                                 ))}
                                 {skillOverRides?.length === 0 && (
                                     <div className="text-center text-muted-foreground py-10">
-                                        No skill overides
+                                        No Skill Overrides
                                     </div>
                                 )}
                             </div>

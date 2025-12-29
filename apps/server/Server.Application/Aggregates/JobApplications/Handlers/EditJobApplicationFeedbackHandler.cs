@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.JobApplications.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities;
 
@@ -26,27 +26,27 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: check if application exists
             var application = await _jobApplicationRepository.GetByIdAsync(request.JobApplicationId, cancellationToken);
             if (application is null)
             {
-                throw new NotFoundExeption("Job Application Not Found.");
+                throw new NotFoundException("Job Application Not Found.");
             }
 
             // step 2: check if feedback exists
             var feedback = application.Feedbacks.FirstOrDefault(x => x.Id == request.FeedbackId);
             if (feedback is null)
             {
-                throw new NotFoundExeption("Feedback Not Found.");
+                throw new NotFoundException("Feedback Not Found.");
             }
 
             // step 3: authorise (only feedback creator can edit)
             if (feedback.GivenById != Guid.Parse(userIdString))
             {
-                throw new ForbiddenExeption("not allowed to edit this feedback.");
+                throw new ForbiddenException("not allowed to edit this feedback.");
             }
 
             // step 4: update feedback

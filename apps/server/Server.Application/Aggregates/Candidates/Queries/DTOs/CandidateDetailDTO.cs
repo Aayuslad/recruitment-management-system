@@ -19,7 +19,8 @@ namespace Server.Application.Aggregates.Candidates.Queries.DTOs
         public Guid? BgVerificationCompletedById { get; set; }
         public string? BgVerificationCompletedByUserName { get; set; }
         public DateTime CreatedAt { get; set; }
-
+        public List<JobApplicationDetailForCandidateDTO> JobApplications { get; set; } =
+            new List<JobApplicationDetailForCandidateDTO>();
         public ICollection<CandidateSkillDetailDTO> Skills { get; set; } =
             new HashSet<CandidateSkillDetailDTO>();
         public ICollection<CandidateDocumentDetailDTO> Documents { get; set; } =

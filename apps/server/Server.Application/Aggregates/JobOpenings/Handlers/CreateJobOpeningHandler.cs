@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.JobOpenings.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities;
 using Server.Domain.Entities.JobOpenings;
@@ -29,7 +29,7 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: create entity
@@ -42,7 +42,6 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                             jobOpeningId: newJobOpeningId,
                             skillId: x.SkillId,
                             comments: x.Comments,
-                            minExperienceYears: x.MinExperienceYears,
                             type: x.Type,
                             actionType: x.ActionType,
                             sourceType: SkillSourceType.JobOpening

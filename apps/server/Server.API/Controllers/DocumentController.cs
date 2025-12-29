@@ -22,6 +22,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateDocumentType([FromBody] CreateDocumentTypeCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
@@ -29,6 +30,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditDocumentType(Guid id, [FromBody] EditDocumentTypeCommand command, CancellationToken cancellationToken)
         {
             command.Id = id;
@@ -37,6 +39,7 @@ namespace Server.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteDocumentType(Guid id, CancellationToken cancellationToken)
         {
             var command = new DeleteDocumentTypeCommand(id);
@@ -45,6 +48,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Recruiter, Viewer, HR")]
         public async Task<IActionResult> GetDocumentTypes(CancellationToken cancellationToken)
         {
             var query = new GetDocumentTypesQuery();

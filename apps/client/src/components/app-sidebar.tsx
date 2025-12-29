@@ -1,21 +1,7 @@
 'use client';
 
-import {
-    BarChart3,
-    Briefcase,
-    CalendarCheck,
-    CalendarDays,
-    ClipboardList,
-    Layers,
-    LayoutDashboard,
-    Settings2,
-    SlidersHorizontal,
-    UsersRound,
-} from 'lucide-react';
 import * as React from 'react';
 
-import { useGetUser } from '@/api/user-api';
-import { CollapsibleNavGroup } from '@/components/collapsible-nav-group';
 import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
@@ -23,122 +9,25 @@ import {
     SidebarFooter,
     SidebarRail,
 } from '@/components/ui/sidebar';
-import { SimpleNavGroup } from './simple-nav-group';
+import { sidebarNavConfig as data } from '@/config/sidebar-nav-config';
 import { useAppStore } from '@/store';
 import { useShallow } from 'zustand/react/shallow';
-
-const data = {
-    user: {
-        name: 'loading...',
-        email: 'loading...',
-        avatar: '/avatars/shadcn.jpg',
-    },
-    dashboard: [
-        {
-            name: 'Dashboard',
-            url: '/dashboard',
-            icon: LayoutDashboard,
-        },
-    ],
-    coreWorkflows: [
-        {
-            name: 'Job Openings',
-            url: '/job-openings',
-            icon: Briefcase,
-        },
-        {
-            name: 'Candidates',
-            url: '/candidates',
-            icon: UsersRound,
-        },
-        {
-            name: 'Job Applications',
-            url: 'job-applications',
-            icon: ClipboardList,
-        },
-        {
-            name: 'Interviews',
-            url: 'interviews',
-            icon: CalendarCheck,
-        },
-    ],
-    supportingWorkflows: [
-        {
-            name: 'Positions',
-            url: 'positions',
-            icon: Layers,
-        },
-        {
-            name: 'Events',
-            url: 'events',
-            icon: CalendarDays,
-        },
-        {
-            name: 'Reports & Analytics',
-            url: 'reports-and-analytics',
-            icon: BarChart3,
-        },
-    ],
-    other: [
-        {
-            title: 'Configurations',
-            url: 'configuration',
-            icon: SlidersHorizontal,
-            isActive: false,
-            items: [
-                {
-                    title: 'Skills',
-                    url: 'configuration/skills',
-                },
-                {
-                    title: 'Designations',
-                    url: 'configuration/designations',
-                },
-                {
-                    title: 'Document Types',
-                    url: 'configuration/document-types',
-                },
-            ],
-        },
-        {
-            title: 'Admin',
-            url: 'admin',
-            icon: Settings2,
-            isActive: false,
-            items: [
-                {
-                    title: 'Users',
-                    url: 'admin/users',
-                },
-                {
-                    title: 'Roles',
-                    url: 'admin/roles',
-                },
-                {
-                    title: 'Employees',
-                    url: 'admin/employees',
-                },
-            ],
-        },
-    ],
-};
+import { CollapsibleNavGroup } from './collapsible-nav-group';
+import { SimpleNavGroup } from './simple-nav-group';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const { data: user } = useGetUser();
     const { toggleSidebar } = useAppStore(
         useShallow((s) => ({
             toggleSidebar: s.toggleSidebarState,
         }))
     );
 
-    data.user.name = `${user?.firstName} ${user?.lastName}`;
-    // eslint-disable-next-line
-    data.user.email = user?.email! ?? 'unknown@example.com';
-
     return (
         <Sidebar collapsible="icon" {...props}>
             <SidebarContent className="pt-5">
                 <SimpleNavGroup Workflows={data.dashboard} />
+                <SimpleNavGroup Workflows={data.admin} title="Admin Controls" />
+                <SimpleNavGroup Workflows={data.myWork} title="My Work" />
                 <SimpleNavGroup
                     Workflows={data.coreWorkflows}
                     title="Core Workflows"
@@ -147,10 +36,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     Workflows={data.supportingWorkflows}
                     title="Supporting Workflows"
                 />
-                <CollapsibleNavGroup items={data.other} title="Other" />
+                <SimpleNavGroup Workflows={data.other} title="Other" />
+                <CollapsibleNavGroup items={data.collapsibleGroup} />
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user} />
+                <NavUser />
             </SidebarFooter>
             <SidebarRail onClick={() => toggleSidebar()} />
         </Sidebar>

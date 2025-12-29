@@ -37,6 +37,7 @@ export interface UsersDetail {
     roles: {
         id: string;
         name: string;
+        assignedBy?: string | null;
     }[];
 }
 

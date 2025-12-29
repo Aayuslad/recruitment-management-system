@@ -28,11 +28,11 @@ namespace Server.Application.Aggregates.Employees.Handlers
                     Id = x.Id,
                     DesignationId = x.DesignationId,
                     DesignationName = x.Designation.Name,
-                    Email = x.Email,
+                    Email = x.Email.ToString(),
                     FirstName = x.FirstName,
                     MiddleName = x.MiddleName,
                     LastName = x.LastName,
-                    ContactNumber = x.ContactNumber,
+                    ContactNumber = x.ContactNumber.ToString(),
                     Dob = x.Dob,
                 }
             ).ToList();

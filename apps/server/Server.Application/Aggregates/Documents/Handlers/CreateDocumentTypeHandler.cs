@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Documents.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.Documents;
 
@@ -26,14 +26,14 @@ namespace Server.Application.Aggregates.Documents.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: check if with this name a doc tyype exsist
             var result = await _documentRepository.ExistsByNameAsync(request.Name, cancellationToken);
             if (result)
             {
-                throw new ConflictExeption($"Document type with name {request.Name} already exsist");
+                throw new ConflictException($"Document type with name {request.Name} already exsist");
             }
 
             // step 2: create entity

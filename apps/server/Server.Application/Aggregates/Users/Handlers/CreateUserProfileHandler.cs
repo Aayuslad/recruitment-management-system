@@ -6,7 +6,7 @@ using Server.Application.Abstractions.Repositories;
 using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Users.Commands;
 using Server.Application.Aggregates.Users.Commands.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.Users;
 using Server.Domain.ValueObjects;
@@ -32,14 +32,14 @@ namespace Server.Application.Aggregates.Users.Handlers
             var userName = _httpContextAccessor.HttpContext?.User.FindFirst("userName")?.Value;
             if (authId is null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: check if profile is already there for the auth
             var result = await _userRepository.ProfileExistsByAuthIdAsync(Guid.Parse(authId), cancellationToken);
             if (result == true)
             {
-                throw new ConflictExeption("User profile already exists.");
+                throw new ConflictException("User profile already exists.");
             }
 
             // step 2: create all VOs
@@ -48,7 +48,7 @@ namespace Server.Application.Aggregates.Users.Handlers
             // step 3: check if user with same contact number exists
             if (await _userRepository.ProfileExistsByContactNumberAsync(contactNumber, cancellationToken))
             {
-                throw new ConflictExeption("User with same contact number already exists.");
+                throw new ConflictException("User with same contact number already exists.");
             }
 
             // step 4: create user entity

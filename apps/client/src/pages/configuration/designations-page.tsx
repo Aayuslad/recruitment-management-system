@@ -15,7 +15,7 @@ export function DesignationsPage() {
                     </p>
                 </div>
                 <div className="w-[230px] mb-4">
-                    <CreateDesignationDialog />
+                    <CreateDesignationDialog visibleTo={['Admin']} />
                 </div>
             </div>
 

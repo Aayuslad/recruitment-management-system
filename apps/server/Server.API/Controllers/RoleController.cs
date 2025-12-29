@@ -11,7 +11,7 @@ namespace Server.API.Controllers
 {
     [ApiController]
     [Route("api/role")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class RoleController : ControllerBase
     {
         private readonly IMediator _mediator;

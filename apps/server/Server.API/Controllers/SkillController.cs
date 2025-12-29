@@ -22,6 +22,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateSkill([FromBody] CreateSkillCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
@@ -29,6 +30,7 @@ namespace Server.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Recruiter, Viewer")]
         public async Task<IActionResult> GetSkills(CancellationToken cancellationToken)
         {
             var query = new GetSkillsQuery(null, null, null);
@@ -37,6 +39,7 @@ namespace Server.API.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditSkill(Guid id, [FromBody] EditSkillCommand command, CancellationToken cancellationToken)
         {
             command.Id = id;
@@ -45,6 +48,7 @@ namespace Server.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteSkill(Guid id, CancellationToken cancellationToken)
         {
             var command = new DeleteSkillCommand(id);

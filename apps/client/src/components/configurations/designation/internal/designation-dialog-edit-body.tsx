@@ -22,8 +22,7 @@ const editDesignationFormSchema = z.object({
     designationSkills: z
         .object({
             skillId: z.string(),
-            skillType: z.enum(['Required', 'Preferred', 'NiceToHave']),
-            minExperienceYears: z.number().min(0).max(50),
+            skillType: z.enum(['Required', 'Preferred']),
         })
         .array(),
 }) satisfies z.ZodType<EditDesignationCommandCorrected>;
@@ -44,7 +43,7 @@ export const EditDialogBody = () => {
             resolver: zodResolver(editDesignationFormSchema),
         });
 
-    const designationSkillsFealdArray = useFieldArray({
+    const designationSkillsFieldArray = useFieldArray({
         control,
         name: 'designationSkills',
     });
@@ -57,7 +56,6 @@ export const EditDialogBody = () => {
             designationDialogTarget?.designationSkills.map((x) => ({
                 skillId: x.skillId,
                 skillType: x.skillType,
-                minExperienceYears: x.minExperienceYears,
             })) || []
         );
     }, [designationDialogTarget, setValue]);
@@ -96,10 +94,10 @@ export const EditDialogBody = () => {
                 <div className="grid gap-3">
                     <Label htmlFor="skills">Skills</Label>
                     <DesignationSkillEditor
-                        fields={designationSkillsFealdArray.fields}
-                        append={designationSkillsFealdArray.append}
-                        remove={designationSkillsFealdArray.remove}
-                        update={designationSkillsFealdArray.update}
+                        fields={designationSkillsFieldArray.fields}
+                        append={designationSkillsFieldArray.append}
+                        remove={designationSkillsFieldArray.remove}
+                        update={designationSkillsFieldArray.update}
                     />
                 </div>
 

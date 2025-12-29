@@ -177,7 +177,6 @@ namespace Server.Domain.Entities.JobOpenings
                 var toUpdate = SkillOverRides.FirstOrDefault(x => x.Id == overRide.Id);
                 toUpdate?.Update(
                         overRide.Comments,
-                        overRide.MinExperienceYears,
                         overRide.Type,
                         overRide.ActionType
                     );
