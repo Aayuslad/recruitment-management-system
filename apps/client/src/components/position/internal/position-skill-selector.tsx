@@ -35,7 +35,7 @@ import type { DesignationSkillDTO } from '@/types/designation-types';
 import type { SkillType } from '@/types/enums';
 import type { CreatePositionBatchCommandCorrected } from '@/types/position-types';
 import type { Skill } from '@/types/skill-types';
-import { Check, Save, SquarePen, X } from 'lucide-react';
+import { Check, Info, Save, SquarePen, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -219,7 +219,23 @@ export const PositionSkillSelector = ({
     return (
         <div className="">
             <div className="flex justify-between">
-                <Label>Skills</Label>
+                <h3 className="font-semibold text-lg flex items-center gap-1">
+                    <Label>Skills Criteria</Label>
+                    <span>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Info className="w-4 h-4" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p className="text-wrap max-w-[200px] font-semibold">
+                                    Skills are sourced from the Designation you
+                                    have selected. You can add remove, update
+                                    skills from here.
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </span>
+                </h3>
                 <Button
                     title={viewMode === 'view' ? 'Edit' : 'Save'}
                     variant={'ghost'}
@@ -328,7 +344,7 @@ export const PositionSkillSelector = ({
                     </div>
                     <div>
                         <div className="flex justify-between">
-                            <h3>Overides</h3>
+                            <h3>Overrides</h3>
                             <AddSkillPopover
                                 skills={skills}
                                 skillOverRides={skillOverRides}
@@ -404,7 +420,7 @@ export const PositionSkillSelector = ({
                                 ))}
                                 {skillOverRides?.length === 0 && (
                                     <div className="text-center text-muted-foreground py-10">
-                                        No skill overides
+                                        No skill overrides
                                     </div>
                                 )}
                             </div>

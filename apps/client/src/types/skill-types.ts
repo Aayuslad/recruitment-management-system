@@ -7,14 +7,14 @@ export interface Skill {
 
 export type CreateSkillCommandCorrected = Omit<
     components['schemas']['CreateSkillCommand'],
-    'name' | 'descripttion'
+    'name'
 > & {
     name: string;
 };
 
 export type EditSkillCommandCorrected = Omit<
     components['schemas']['EditSkillCommand'],
-    'id' | 'name' | 'descripttion'
+    'id' | 'name'
 > & {
     id: string;
     name: string;

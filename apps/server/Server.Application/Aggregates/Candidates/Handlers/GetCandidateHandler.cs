@@ -4,7 +4,7 @@ using MediatR;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Candidates.Queries;
 using Server.Application.Aggregates.Candidates.Queries.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Candidates.Handlers
@@ -26,7 +26,7 @@ namespace Server.Application.Aggregates.Candidates.Handlers
             var candidate = await _candidateRepository.GetByIdAsync(request.Id, cancellationToken);
             if (candidate == null)
             {
-                throw new NotFoundExeption("Candidate Not Found");
+                throw new NotFoundException("Candidate Not Found");
             }
 
             var candidateJobApplications = await _jobApplicationRepository.GetApplicationsByCandidateIdAsync(candidate.Id, cancellationToken);

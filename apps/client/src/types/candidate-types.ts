@@ -18,7 +18,7 @@ export interface Candidate {
     createdAt: string;
     skills: CandidateSkillDetailDTO[];
     documents: CandidateDocumentDetailDTO[];
-    jobApplications: JobApplicatioDetailforCandidate[];
+    jobApplications: JobApplicationDetailForCandidate[];
 }
 
 export interface CandidateSkillDetailDTO {
@@ -49,15 +49,15 @@ export interface CandidateSummary {
     resumeUrl: string;
     isBgVerificationCompleted: boolean;
     isDocumentsVerified: boolean;
-    jobApplications: JobApplicationSummaryforCandidate[];
+    jobApplications: JobApplicationSummaryForCandidate[];
     createdAt: string;
 }
 
-export interface JobApplicationSummaryforCandidate {
+export interface JobApplicationSummaryForCandidate {
     status: JobApplicationStatus;
 }
 
-export interface JobApplicatioDetailforCandidate {
+export interface JobApplicationDetailForCandidate {
     id: string;
     designationName: string;
     jobLocation: string;

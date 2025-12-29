@@ -19,7 +19,7 @@ import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
-import { SkillFeedbackInput } from './skill-feedback-intput';
+import { SkillFeedbackInput } from './skill-feedback-input';
 import { useAccessChecker } from '@/hooks/use-has-access';
 
 type Props = {

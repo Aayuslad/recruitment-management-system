@@ -12,11 +12,6 @@ import {
 } from 'lucide-react';
 
 export const sidebarNavConfig = {
-    user: {
-        name: 'loading...',
-        email: 'loading...',
-        avatar: '/avatars/shadcn.jpg',
-    },
     dashboard: [
         {
             name: 'Dashboard',
@@ -121,7 +116,7 @@ export const sidebarNavConfig = {
             roles: ['Admin', 'Recruiter', 'Viewer'],
         },
     ],
-    collapsibleGrop: [
+    collapsibleGroup: [
         {
             title: 'Configurations',
             url: 'configuration',

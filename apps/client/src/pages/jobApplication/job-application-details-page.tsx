@@ -138,7 +138,7 @@ export const JobApplicationDetailsPage = () => {
                 className="h-full flex mx-auto justify-center transition-width duration-200 ease-in-out"
                 style={{
                     width: `calc(100vw - ${SIDEBAR_WIDTH} - ${
-                        sidebarState === 'opend' ? '80px' : '0px'
+                        sidebarState === 'opened' ? '80px' : '0px'
                     })`,
                 }}
             >
@@ -349,7 +349,7 @@ export const JobApplicationDetailsPage = () => {
                                             </div>
                                         </AccordionTrigger>
                                         <AccordionContent className="flex flex-col gap-4 text-balance pt-2 pb-4 px-3">
-                                            <h4>Participannts:</h4>
+                                            <h4>Participants:</h4>
 
                                             <div className="space-y-1.5">
                                                 {x.participants.map((x) => {
@@ -408,7 +408,7 @@ export const JobApplicationDetailsPage = () => {
                             {/* At 'SHORTLISTED' state */}
                             {jobApplication?.status === 'Shortlisted' && (
                                 <>
-                                    {/* <MarkInterviwedButton
+                                    {/* <MarkInterviewedButton
                                         jobApplicationId={jobApplication.id}
                                         visibleTo={['Admin', 'Interviewer']}
                                     /> */}
@@ -423,7 +423,7 @@ export const JobApplicationDetailsPage = () => {
                                 </>
                             )}
 
-                            {/* At 'INTERVIEWD' state */}
+                            {/* At 'INTERVIEWED' state */}
                             {jobApplication?.status === 'Interviewed' && (
                                 <>
                                     <MarkOfferedButton

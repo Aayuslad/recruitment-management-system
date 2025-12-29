@@ -75,7 +75,7 @@ export const PositionBatchDetailsPage = () => {
             <div
                 className="h-full flex mx-auto justify-center transition-width duration-200 ease-in-out"
                 style={{
-                    width: `calc(100vw - ${SIDEBAR_WIDTH} - ${sidebarState === 'opend' ? '80px' : '0px'})`,
+                    width: `calc(100vw - ${SIDEBAR_WIDTH} - ${sidebarState === 'opened' ? '80px' : '0px'})`,
                 }}
             >
                 <div className="flex-[50%] px-5 pt-8 space-y-7">

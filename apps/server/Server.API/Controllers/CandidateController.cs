@@ -56,9 +56,9 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
-        [HttpPost("/bulk/exel-doc")]
+        [HttpPost("/bulk/excel-doc")]
         [Authorize(Roles = "Admin, Recruiter")]
-        public async Task<IActionResult> CreateCandidatesWithExelDoc([FromBody] CreateCandidatesWithExelDocCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateCandidatesWithExcelDoc([FromBody] CreateCandidatesWithExcelDocCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
             return result.ToActionResult(this);

@@ -48,7 +48,7 @@ export function useEditDocumentType() {
             toast.error(
                 error.response?.data?.error ||
                     error.message ||
-                    'Docyment Type Not Edited'
+                    'Document Type Not Edited'
             );
             console.error('Document type editing failed:', error);
         },

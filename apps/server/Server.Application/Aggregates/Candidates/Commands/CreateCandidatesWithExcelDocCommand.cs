@@ -4,7 +4,7 @@ using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Candidates.Commands
 {
-    public class CreateCandidatesWithExelDocCommand : IRequest<Result>
+    public class CreateCandidatesWithExcelDocCommand : IRequest<Result>
     {
     }
 }

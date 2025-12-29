@@ -166,7 +166,7 @@ namespace Server.Domain.Entities.Candidates
             }
         }
 
-        public void AddDocumet(CandidateDocument document)
+        public void AddDocument(CandidateDocument document)
         {
             Documents.Add(document);
         }

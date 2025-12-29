@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.JobApplications.Queries;
 using Server.Application.Aggregates.JobApplications.Queries.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.JobApplications.Handlers
@@ -26,7 +26,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: fetch applications

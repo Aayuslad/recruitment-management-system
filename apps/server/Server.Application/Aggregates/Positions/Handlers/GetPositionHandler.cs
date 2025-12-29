@@ -4,7 +4,7 @@ using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Positions.Queries;
 using Server.Application.Aggregates.Positions.Queries.DTOs;
 using Server.Application.Aggregates.Positions.Queries.DTOs.PositionDTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Enums;
 
@@ -26,7 +26,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
             var position = await _positionRepository.GetByIdAsync(query.PositionId, cancellationToken);
             if (position == null)
             {
-                throw new NotFoundExeption("Position Not Found.");
+                throw new NotFoundException("Position Not Found.");
             }
 
             // step 2: make dto

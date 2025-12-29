@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Roles.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Roles.Handlers
@@ -26,14 +26,14 @@ namespace Server.Application.Aggregates.Roles.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: fetch the role
             var role = await _rolesRepository.GetByIdAsync(request.Id, cancellationToken);
             if (role is null)
             {
-                throw new NotFoundExeption("Role Not Found.");
+                throw new NotFoundException("Role Not Found.");
             }
 
             // step 2: update

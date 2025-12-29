@@ -1,4 +1,4 @@
-import { CreatePositionBatchSheet } from '@/components/position/create-position-batch-seet';
+import { CreatePositionBatchSheet } from '@/components/position/create-position-batch-sheet';
 import { PositionBatchesTable } from '@/components/position/position-batches-table';
 
 export function Index() {

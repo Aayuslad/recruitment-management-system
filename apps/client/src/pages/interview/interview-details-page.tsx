@@ -52,7 +52,7 @@ export const InterviewDetailsPage = () => {
                     <div className="flex space-x-2">
                         <h1 className="text-2xl font-bold">Interview</h1>{' '}
                         <span className="px-3 py-1 rounded-full text-sm font-semibold border">
-                            {interview.status === 'Scheduled' && 'Upcomming'}
+                            {interview.status === 'Scheduled' && 'Upcoming'}
                             {interview.status === 'NotScheduled' &&
                                 'To Be Scheduled'}
                             {interview.status === 'Completed' && 'Completed'}
@@ -85,7 +85,7 @@ export const InterviewDetailsPage = () => {
                 className="h-full flex mx-auto justify-center transition-width duration-200 ease-in-out"
                 style={{
                     width: `calc(100vw - ${SIDEBAR_WIDTH} - ${
-                        sidebarState === 'opend' ? '80px' : '0px'
+                        sidebarState === 'opened' ? '80px' : '0px'
                     })`,
                 }}
             >
@@ -96,7 +96,7 @@ export const InterviewDetailsPage = () => {
                         <div className="flex flex-col gap-2">
                             <div className="grid grid-cols-[180px_1fr] items-start gap-2">
                                 <span className="text-sm text-muted-foreground">
-                                    Sheduled At
+                                    Scheduled At
                                 </span>
 
                                 {interview.scheduledAt ? (
@@ -124,7 +124,7 @@ export const InterviewDetailsPage = () => {
 
                             <div className="grid grid-cols-[180px_1fr] items-start gap-2">
                                 <span className="text-sm text-muted-foreground">
-                                    Mitting Link
+                                    Meeting Link
                                 </span>
 
                                 {interview.meetingLink ? (

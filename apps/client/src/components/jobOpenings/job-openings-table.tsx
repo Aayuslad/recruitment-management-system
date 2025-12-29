@@ -223,7 +223,7 @@ export function JobOpeningsTable() {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No Job Openins Found.
+                                    No Job Openings Found.
                                 </TableCell>
                             </TableRow>
                         )}

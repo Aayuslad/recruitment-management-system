@@ -42,7 +42,7 @@ export function DeleteCandidateDialog({ candidateId, visibleTo }: Props) {
                     <DialogHeader className="space-y-2">
                         <DialogTitle>Delete this candidate?</DialogTitle>
                         <DialogDescription>
-                            All applications by this cadidate will also be
+                            All applications by this candidate will also be
                             removed.
                             <br />
                             This action cannot be undone.

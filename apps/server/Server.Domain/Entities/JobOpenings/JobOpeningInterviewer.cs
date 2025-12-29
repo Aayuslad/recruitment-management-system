@@ -34,7 +34,7 @@ namespace Server.Domain.Entities.JobOpenings
         )
         {
             // TODO: add logic for (JobOpeningId + UserId + Role) must be unique
-            // at db levle it is added
+            // at db level it is added
 
             return new JobOpeningInterviewer(
                 id,

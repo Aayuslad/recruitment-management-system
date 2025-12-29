@@ -1,7 +1,7 @@
 ﻿using PhoneNumbers;
 
 using Server.Core.ValueObjects;
-using Server.Domain.Exeptions;
+using Server.Domain.Exceptions;
 
 namespace Server.Domain.ValueObjects
 
@@ -23,7 +23,7 @@ namespace Server.Domain.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(number))
             {
-                throw new DomainExeption("Contact number cannot be empty.");
+                throw new DomainException("Contact number cannot be empty.");
             }
 
             try
@@ -33,7 +33,7 @@ namespace Server.Domain.ValueObjects
 
                 if (!phoneNumberUtil.IsValidNumber(parsedNumber))
                 {
-                    throw new DomainExeption("Invalid contact number format.");
+                    throw new DomainException("Invalid contact number format.");
                 }
 
                 string e164Number = phoneNumberUtil.Format(parsedNumber, PhoneNumberFormat.E164);
@@ -42,7 +42,7 @@ namespace Server.Domain.ValueObjects
             }
             catch (Exception)
             {
-                throw new DomainExeption("Invalid contact number format.");
+                throw new DomainException("Invalid contact number format.");
             }
         }
 

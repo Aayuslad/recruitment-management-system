@@ -1,4 +1,14 @@
 import { useMoveJobApplicationStatus } from '@/api/job-application-api';
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { useAccessChecker } from '@/hooks/use-has-access';
 import { JOB_APPLICATION_ACTION_TYPE } from '@/types/enums';
@@ -36,14 +46,37 @@ export const UnHoldButton = ({ jobApplicationId, visibleTo }: Props) => {
     if (!canAccess(visibleTo)) return null;
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Button
-                variant="outline"
-                type="submit"
-                disabled={moveJobApplicationStatusMutation.isPending}
-            >
-                Unhold
-            </Button>
-        </form>
+        <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <Button variant="outline" type="button">
+                    Resume
+                </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action will rollback the job application to its
+                            previous status before hold.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <Button
+                            type="submit"
+                            variant="destructive"
+                            disabled={
+                                moveJobApplicationStatusMutation.isPending
+                            }
+                        >
+                            Continue
+                        </Button>
+                    </AlertDialogFooter>
+                </form>
+            </AlertDialogContent>
+        </AlertDialog>
     );
 };

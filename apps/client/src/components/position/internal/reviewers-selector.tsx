@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, X } from 'lucide-react';
+import { Check, Info, X } from 'lucide-react';
 import * as React from 'react';
 
 import { useGetUsersSummary } from '@/api/user-api';
@@ -21,23 +21,44 @@ import {
 import { cn } from '@/lib/utils';
 import type { CreatePositionBatchCommandCorrected } from '@/types/position-types';
 import { Label } from '../../ui/label';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 type Props = {
-    fealds: CreatePositionBatchCommandCorrected['reviewers'];
+    fields: CreatePositionBatchCommandCorrected['reviewers'];
     append: (
         value: CreatePositionBatchCommandCorrected['reviewers'][0]
     ) => void;
     remove: (index: number) => void;
 };
 
-export function ReviewersSelector({ fealds, append, remove }: Props) {
+export function ReviewersSelector({ fields, append, remove }: Props) {
     const [open, setOpen] = React.useState(false);
     const { data, isLoading } = useGetUsersSummary();
 
     return (
         <div>
             <div className="flex justify-between">
-                <Label htmlFor="reviewers">Reviewers</Label>
+                <h3 className="font-semibold text-lg flex items-center gap-1">
+                    <Label>Reviewers</Label>
+                    <span>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Info className="w-4 h-4" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p className="text-wrap max-w-[200px] font-semibold">
+                                    Selected reviewers will be assigned for
+                                    screening of job applications for this
+                                    position batch.
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </span>
+                </h3>
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                         <Button
@@ -66,7 +87,7 @@ export function ReviewersSelector({ fealds, append, remove }: Props) {
                                         <CommandItem
                                             key={userSummary.userId}
                                             value={userSummary.userId}
-                                            disabled={fealds?.some(
+                                            disabled={fields?.some(
                                                 (x) =>
                                                     x.reviewerUserId ===
                                                     userSummary.userId
@@ -86,7 +107,7 @@ export function ReviewersSelector({ fealds, append, remove }: Props) {
                                             <Check
                                                 className={cn(
                                                     'ml-auto',
-                                                    fealds?.some(
+                                                    fields?.some(
                                                         (x) =>
                                                             x.reviewerUserId ===
                                                             userSummary.userId
@@ -105,21 +126,21 @@ export function ReviewersSelector({ fealds, append, remove }: Props) {
             </div>
 
             <div className="border rounded-2xl py-2 px-4">
-                {fealds?.map((feald, index) => (
+                {fields?.map((field, index) => (
                     <div
-                        key={feald.reviewerUserId}
+                        key={field.reviewerUserId}
                         className="flex items-center justify-between"
                     >
                         <span className="space-x-2">
                             <span>
                                 {data?.find(
-                                    (x) => x.userId === feald.reviewerUserId
+                                    (x) => x.userId === field.reviewerUserId
                                 )?.userName ?? '--'}
                             </span>
                             <span className="text-muted-foreground">
                                 (
                                 {data?.find(
-                                    (x) => x.userId === feald.reviewerUserId
+                                    (x) => x.userId === field.reviewerUserId
                                 )?.email ?? '--'}
                                 )
                             </span>
@@ -134,7 +155,7 @@ export function ReviewersSelector({ fealds, append, remove }: Props) {
                         </Button>
                     </div>
                 ))}
-                {fealds?.length === 0 && (
+                {fields?.length === 0 && (
                     <div className="text-muted-foreground text-center py-3">
                         No reviewers selected.
                     </div>

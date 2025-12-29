@@ -1,19 +1,19 @@
 import { useVerifyCandidateBg } from '@/api/candidate-api';
 import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '../ui/alert-dialog';
 
 const verifyCandidateBgFormSchema = z.object({
     candidateId: z.string().nonempty('Candidate ID is required'),
@@ -45,40 +45,34 @@ export function VerifyCandidateBg({ candidateId }: Props) {
     };
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button variant="outline">Verify Background</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-4"
-                >
-                    <DialogHeader>
-                        <DialogTitle>Verify Candidate Background</DialogTitle>
-                        <DialogDescription>
-                            Sure you want to mark this candidate as verified ?
-                        </DialogDescription>
-                    </DialogHeader>
-
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button
-                                variant="outline"
-                                disabled={verifyCandidateBgMutation.isPending}
-                            >
-                                Cancel
-                            </Button>
-                        </DialogClose>
+        <AlertDialog open={open} onOpenChange={setOpen}>
+            <AlertDialogTrigger asChild>
+                <Button variant="outline" type="button">
+                    Verify Background
+                </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            You are verifieng the background of the candidate
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <Button
                             type="submit"
+                            variant="destructive"
                             disabled={verifyCandidateBgMutation.isPending}
                         >
-                            Verify
+                            Continue
                         </Button>
-                    </DialogFooter>
+                    </AlertDialogFooter>
                 </form>
-            </DialogContent>
-        </Dialog>
+            </AlertDialogContent>
+        </AlertDialog>
     );
 }

@@ -65,12 +65,12 @@ export function EditPositionBatchSheet({ positionBatchId, visibleTo }: Props) {
         resolver: zodResolver(editPositionBatchFormSchema),
     });
 
-    const skillOverRidesFealdArray = useFieldArray({
+    const skillOverRidesFieldArray = useFieldArray({
         name: 'skillOverRides',
         control: form.control,
     });
 
-    const reviewersFealdArray = useFieldArray({
+    const reviewersFieldArray = useFieldArray({
         name: 'reviewers',
         control: form.control,
     });
@@ -122,7 +122,7 @@ export function EditPositionBatchSheet({ positionBatchId, visibleTo }: Props) {
                     Edit Position Batch
                 </Button>
             </SheetTrigger>
-            <SheetContent className="w-[40vw]">
+            <SheetContent className="w-[35vw]">
                 <form
                     onSubmit={form.handleSubmit(onSubmit, onInvalid)}
                     className="flex h-full flex-col gap-4"
@@ -130,7 +130,7 @@ export function EditPositionBatchSheet({ positionBatchId, visibleTo }: Props) {
                     <SheetHeader>
                         <SheetTitle>Edit Position Batch</SheetTitle>
                         <SheetDescription>
-                            Edit deatils for your position batch. Click Save
+                            Edit details for your position batch. Click Save
                             when you&apos;re done.
                         </SheetDescription>
                     </SheetHeader>
@@ -188,17 +188,17 @@ export function EditPositionBatchSheet({ positionBatchId, visibleTo }: Props) {
                                 designationId={
                                     positionBatch?.designationId as string
                                 }
-                                skillOverRides={skillOverRidesFealdArray.fields}
-                                append={skillOverRidesFealdArray.append}
-                                remove={skillOverRidesFealdArray.remove}
-                                update={skillOverRidesFealdArray.update}
+                                skillOverRides={skillOverRidesFieldArray.fields}
+                                append={skillOverRidesFieldArray.append}
+                                remove={skillOverRidesFieldArray.remove}
+                                update={skillOverRidesFieldArray.update}
                             />
                         </div>
                         <div className="grid gap-2">
                             <ReviewersSelector
-                                fealds={reviewersFealdArray.fields}
-                                append={reviewersFealdArray.append}
-                                remove={reviewersFealdArray.remove}
+                                fields={reviewersFieldArray.fields}
+                                append={reviewersFieldArray.append}
+                                remove={reviewersFieldArray.remove}
                             />
                         </div>
                     </div>

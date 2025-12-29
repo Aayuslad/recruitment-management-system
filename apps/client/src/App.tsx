@@ -32,6 +32,7 @@ import { Index as ScreeningsIndex } from './pages/screenings';
 import { ScreeningApplicationDetailsPage } from './pages/screenings/screening-application-details-page';
 import { Index as VerificationsIndex } from './pages/verifications';
 import { VerificationCandidateDetailsPage } from './pages/verifications/verification-candidate-details-page';
+import { UserProfilePage } from './pages/user/user-profile-page';
 
 function App() {
     return (
@@ -113,6 +114,10 @@ function App() {
                         <Route path="roles" element={<RolesPage />} />
                         <Route path="employees" element={<EmployeesPage />} />
                     </Route>
+                    <Route
+                        path="user-profile/:id?"
+                        element={<UserProfilePage />}
+                    />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>

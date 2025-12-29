@@ -4,7 +4,7 @@ using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Positions.Queries;
 using Server.Application.Aggregates.Positions.Queries.DTOs;
 using Server.Application.Aggregates.Positions.Queries.DTOs.PositionBatchDTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Enums;
 
@@ -25,7 +25,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
             var batch = await _batchRepository.GetByIdAsync(query.BatchId, cancellationToken);
             if (batch == null)
             {
-                throw new NotFoundExeption("Position Batch Not Found.");
+                throw new NotFoundException("Position Batch Not Found.");
             }
 
             // step 2: make dto

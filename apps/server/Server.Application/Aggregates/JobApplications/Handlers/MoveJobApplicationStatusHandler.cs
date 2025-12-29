@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.JobApplications.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.Employees;
 using Server.Domain.Entities.Interviews;
@@ -16,21 +16,21 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
     {
         private readonly IJobApplicationRepository _jobApplicationRepository;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly IInterviewRespository _interviewRespository;
+        private readonly IInterviewRepository _interviewRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IPositionRepository _positionRepository;
 
         public MoveJobApplicationStatusHandler(
             IJobApplicationRepository jobApplicationRepository,
             IHttpContextAccessor contextAccessor,
-            IInterviewRespository interviewRespository,
+            IInterviewRepository interviewRepository,
             IEmployeeRepository employeeRepository,
             IPositionRepository positionRepository
         )
         {
             _jobApplicationRepository = jobApplicationRepository;
             _contextAccessor = contextAccessor;
-            _interviewRespository = interviewRespository;
+            _interviewRepository = interviewRepository;
             _employeeRepository = employeeRepository;
             _positionRepository = positionRepository;
         }
@@ -40,14 +40,14 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
             var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: check if exists
             var application = await _jobApplicationRepository.GetByIdAsync(request.Id, cancellationToken);
             if (application is null)
             {
-                throw new NotFoundExeption("Job Application Not Found.");
+                throw new NotFoundException("Job Application Not Found.");
             }
 
 
@@ -89,7 +89,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
                         ));
                     }
 
-                    await _interviewRespository.AddRangeAsync(interviews, cancellationToken);
+                    await _interviewRepository.AddRangeAsync(interviews, cancellationToken);
                 }
 
                 // TODO: make domain event for adding candidate in position

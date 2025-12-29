@@ -119,7 +119,7 @@ export function EditCandidateSheet({ candidateId, visibleTo }: Props) {
                     <SheetHeader>
                         <SheetTitle>Edit Candidate</SheetTitle>
                         <SheetDescription>
-                            Edit deatils for the candidate. Click Save when
+                            Edit details for the candidate. Click Save when
                             you&apos;re done.
                         </SheetDescription>
                     </SheetHeader>

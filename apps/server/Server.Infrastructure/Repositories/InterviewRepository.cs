@@ -9,7 +9,7 @@ using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories
 {
-    internal class InterviewRepository : IInterviewRespository
+    internal class InterviewRepository : IInterviewRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -18,7 +18,7 @@ namespace Server.Infrastructure.Repositories
             _context = context;
         }
 
-        Task IInterviewRespository.AddAsync(Interview interview, CancellationToken cancellationToken)
+        Task IInterviewRepository.AddAsync(Interview interview, CancellationToken cancellationToken)
         {
             _context.Interviews.Add(interview);
             return _context.SaveChangesAsync(cancellationToken);
@@ -30,18 +30,18 @@ namespace Server.Infrastructure.Repositories
             return _context.SaveChangesAsync(cancellationToken);
         }
 
-        Task IInterviewRespository.UpdateAsync(Interview interview, CancellationToken cancellationToken)
+        Task IInterviewRepository.UpdateAsync(Interview interview, CancellationToken cancellationToken)
         {
             return _context.SaveChangesAsync(cancellationToken);
         }
 
-        Task IInterviewRespository.DeleteAsync(Interview interview, CancellationToken cancellationToken)
+        Task IInterviewRepository.DeleteAsync(Interview interview, CancellationToken cancellationToken)
         {
             _context.Interviews.Remove(interview);
             return _context.SaveChangesAsync(cancellationToken);
         }
 
-        Task<Interview?> IInterviewRespository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        Task<Interview?> IInterviewRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return _context.Interviews
                 .AsTracking()

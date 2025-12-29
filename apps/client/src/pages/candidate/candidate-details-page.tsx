@@ -1,5 +1,5 @@
 import { useGetCandidate } from '@/api/candidate-api';
-import { CandidateDocumentsTable } from '@/components/candidates/candidate-documets-table';
+import { CandidateDocumentsTable } from '@/components/candidates/candidate-documents-table';
 import { DeleteCandidateDialog } from '@/components/candidates/delete-candidate-dialog';
 import { EditCandidateSheet } from '@/components/candidates/edit-candidate-sheet';
 import { Badge } from '@/components/ui/badge';
@@ -58,7 +58,7 @@ export const CandidateDetailsPage = () => {
             <div
                 className="h-full flex mx-auto justify-center transition-width duration-200 ease-in-out"
                 style={{
-                    width: `calc(100vw - ${SIDEBAR_WIDTH} - ${sidebarState === 'opend' ? '80px' : '0px'})`,
+                    width: `calc(100vw - ${SIDEBAR_WIDTH} - ${sidebarState === 'opened' ? '80px' : '0px'})`,
                 }}
             >
                 <div className="flex-[50%] px-5 pt-8 space-y-7">

@@ -10,6 +10,7 @@ using Server.Core.Extensions;
 namespace Server.API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/job-opening")]
     public class JobOpeningController : ControllerBase
     {

@@ -6,26 +6,26 @@ using Microsoft.AspNetCore.Http;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Interviews.Queries;
 using Server.Application.Aggregates.Interviews.Queries.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Interviews.Handlers
 {
     internal class GetJobApplicationInterviewsHandler : IRequestHandler<GetJobApplicationInterviewsQuery, Result<List<InterviewSummaryForApplicationDTO>>>
     {
-        private readonly IInterviewRespository _interviewRespository;
+        private readonly IInterviewRepository _interviewRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GetJobApplicationInterviewsHandler(IInterviewRespository interviewRespository, IHttpContextAccessor httpContextAccessor)
+        public GetJobApplicationInterviewsHandler(IInterviewRepository interviewRepository, IHttpContextAccessor httpContextAccessor)
         {
-            _interviewRespository = interviewRespository;
+            _interviewRepository = interviewRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Result<List<InterviewSummaryForApplicationDTO>>> Handle(GetJobApplicationInterviewsQuery request, CancellationToken cancellationToken)
         {
             // step 1: fetch the interviw
-            var interviews = await _interviewRespository.GetAllByJobApplicationIdAsync(request.JobApplicationId, cancellationToken);
+            var interviews = await _interviewRepository.GetAllByJobApplicationIdAsync(request.JobApplicationId, cancellationToken);
 
             // step 2: map dto
             var interviewsDto = new List<InterviewSummaryForApplicationDTO>();

@@ -4,27 +4,27 @@ using MediatR;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Interviews.Queries;
 using Server.Application.Aggregates.Interviews.Queries.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Interviews.Handlers
 {
     internal class GetInterviewHandler : IRequestHandler<GetInterviewQuery, Result<InterviewDetailDTO>>
     {
-        private readonly IInterviewRespository _interviewRespository;
+        private readonly IInterviewRepository _interviewRepository;
 
-        public GetInterviewHandler(IInterviewRespository interviewRespository)
+        public GetInterviewHandler(IInterviewRepository interviewRepository)
         {
-            _interviewRespository = interviewRespository;
+            _interviewRepository = interviewRepository;
         }
 
         public async Task<Result<InterviewDetailDTO>> Handle(GetInterviewQuery request, CancellationToken cancellationToken)
         {
             // step 1: fetch the interviw
-            var interview = await _interviewRespository.GetByIdAsync(request.Id, cancellationToken);
+            var interview = await _interviewRepository.GetByIdAsync(request.Id, cancellationToken);
             if (interview is null)
             {
-                throw new NotFoundExeption($"Interview Not Found.");
+                throw new NotFoundException($"Interview Not Found.");
             }
 
             // step 2: map dto

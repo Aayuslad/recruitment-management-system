@@ -26,11 +26,11 @@ namespace Server.Infrastructure
             services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddScoped<IDesignationRepository, DesignationRepository>();
             services.AddScoped<IPositionBatchRepository, PositionBatchRepository>();
-            services.AddScoped<IPositionRepository, PositionRespository>();
+            services.AddScoped<IPositionRepository, PositionRepository>();
             services.AddScoped<IJobOpeningRepository, JobOpeningRepository>();
             services.AddScoped<ICandidateRepository, CandidateRepository>();
             services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
-            services.AddScoped<IInterviewRespository, InterviewRepository>();
+            services.AddScoped<IInterviewRepository, InterviewRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IDocumentRepository, DocumentRepository>();

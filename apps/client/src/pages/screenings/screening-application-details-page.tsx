@@ -120,7 +120,7 @@ export const ScreeningApplicationDetailsPage = () => {
                 className="h-full flex mx-auto justify-center transition-width duration-200 ease-in-out"
                 style={{
                     width: `calc(100vw - ${SIDEBAR_WIDTH} - ${
-                        sidebarState === 'opend' ? '80px' : '0px'
+                        sidebarState === 'opened' ? '80px' : '0px'
                     })`,
                 }}
             >

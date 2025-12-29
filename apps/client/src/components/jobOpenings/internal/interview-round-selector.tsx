@@ -13,11 +13,11 @@ import { Label } from '../../ui/label';
 import { InterviewRoundDurationSelector } from './interview-round-duration-selector';
 import { RoundNumberSelector } from './interview-round-number-selector';
 import { RoundReqCountInput } from './interview-round-req-count-input';
-import { InterviewRoundRolesRequirementSelector } from './interview-round-roles-requrement-selector';
+import { InterviewRoundRolesRequirementSelector } from './interview-round-roles-requirement-selector';
 import { InterviewRoundTypeSelector } from './interview-round-type-selector';
 
 type Props = {
-    fealds: CreateJobOpeningCommandCorrected['interviewRounds'];
+    fields: CreateJobOpeningCommandCorrected['interviewRounds'];
     append: (
         value: CreateJobOpeningCommandCorrected['interviewRounds'][0]
     ) => void;
@@ -29,7 +29,7 @@ type Props = {
 };
 
 export function InterviewRoundSelector({
-    fealds,
+    fields,
     append,
     remove,
     update,
@@ -37,7 +37,7 @@ export function InterviewRoundSelector({
     return (
         <div>
             <div className="flex justify-between">
-                <Label htmlFor="reviewers">Interview Rounds (template)</Label>
+                <Label htmlFor="reviewers">Interview Rounds</Label>
 
                 <Button
                     type="button"
@@ -45,7 +45,7 @@ export function InterviewRoundSelector({
                     role="combobox"
                     onClick={() => {
                         const roundNumber =
-                            fealds.reduce((acc, round) => {
+                            fields.reduce((acc, round) => {
                                 return round.roundNumber > acc
                                     ? round.roundNumber
                                     : acc;
@@ -69,16 +69,16 @@ export function InterviewRoundSelector({
             </div>
 
             <div className="border rounded-2xl py-2 px-2 space-y-2">
-                {fealds?.map((feald, index) => (
+                {fields?.map((field, index) => (
                     <RoundContent
                         key={index}
-                        field={feald}
+                        field={field}
                         index={index}
                         update={update}
                         remove={remove}
                     />
                 ))}
-                {fealds?.length === 0 && (
+                {fields?.length === 0 && (
                     <div className="text-muted-foreground text-center py-3">
                         No Interview Rounds added.
                     </div>

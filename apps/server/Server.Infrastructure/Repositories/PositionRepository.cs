@@ -6,11 +6,11 @@ using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Repositories
 {
-    internal class PositionRespository : IPositionRepository
+    internal class PositionRepository : IPositionRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public PositionRespository(ApplicationDbContext context)
+        public PositionRepository(ApplicationDbContext context)
         {
             _context = context;
         }

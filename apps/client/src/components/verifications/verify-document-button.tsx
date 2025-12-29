@@ -1,21 +1,20 @@
 import { useVerifyDocument } from '@/api/candidate-api';
 import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
 import type { VerifyCandidateDocumentCommandCorrected } from '@/types/candidate-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '../ui/alert-dialog';
 
 const verifyCandidateDocumentFormSchema = z.object({
     candidateId: z.string().nonempty('Candidate ID is required'),
@@ -49,51 +48,35 @@ export function VerifyDocumentButton({ candidateId, documentId }: Props) {
         });
     };
 
-    const onInvalid = (errors: typeof form.formState.errors) => {
-        const messages = Object.values(errors).map((err) => err.message);
-        messages.reverse().forEach((msg) => toast.error(msg));
-    };
-
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button
-                    variant="secondary"
-                    className="h-7 hover:cursor-pointer"
-                >
+        <AlertDialog open={open} onOpenChange={setOpen}>
+            <AlertDialogTrigger asChild>
+                <Button variant="outline" type="button">
                     Verify
                 </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-                <form
-                    onSubmit={form.handleSubmit(onSubmit, onInvalid)}
-                    className="space-y-4"
-                >
-                    <DialogHeader>
-                        <DialogTitle>Verify the document</DialogTitle>
-                        <DialogDescription>
-                            Sure you want to mark this document as verified ?
-                        </DialogDescription>
-                    </DialogHeader>
-
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button
-                                variant="outline"
-                                disabled={verifyCandidateDocMutation.isPending}
-                            >
-                                Cancel
-                            </Button>
-                        </DialogClose>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            You are verifing the candidates document.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <Button
                             type="submit"
+                            variant="destructive"
                             disabled={verifyCandidateDocMutation.isPending}
                         >
-                            Verify
+                            Continue
                         </Button>
-                    </DialogFooter>
+                    </AlertDialogFooter>
                 </form>
-            </DialogContent>
-        </Dialog>
+            </AlertDialogContent>
+        </AlertDialog>
     );
 }

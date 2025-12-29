@@ -9,18 +9,18 @@ using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Candidates.Handlers
 {
-    internal class CreateCandidateWithExelDocHandler : IRequestHandler<CreateCandidatesWithExelDocCommand, Result>
+    internal class CreateCandidateWithExcelDocHandler : IRequestHandler<CreateCandidatesWithExcelDocCommand, Result>
     {
         private readonly ICandidateRepository _candidateRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CreateCandidateWithExelDocHandler(ICandidateRepository candidateRepository, IHttpContextAccessor contextAccessor)
+        public CreateCandidateWithExcelDocHandler(ICandidateRepository candidateRepository, IHttpContextAccessor contextAccessor)
         {
             _candidateRepository = candidateRepository;
             _httpContextAccessor = contextAccessor;
         }
 
-        public Task<Result> Handle(CreateCandidatesWithExelDocCommand request, CancellationToken cancellationToken)
+        public Task<Result> Handle(CreateCandidatesWithExcelDocCommand request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

@@ -45,7 +45,7 @@ export const VerificationCandidateDetailsPage = () => {
                     </div>
                 </div>
                 <div className="ml-auto mb-4 space-x-2">
-                    {/* // TODO: Handle the situation where a candidate is offerd for more than one job application */}
+                    {/* // TODO: Handle the situation where a candidate is offered for more than one job application */}
                     {data.isBgVerificationCompleted &&
                         data.documents.every((x) => x.isVerified) &&
                         data.jobApplications.some(
@@ -69,7 +69,7 @@ export const VerificationCandidateDetailsPage = () => {
             <div
                 className="h-full flex mx-auto justify-center transition-width duration-200 ease-in-out"
                 style={{
-                    width: `calc(100vw - ${SIDEBAR_WIDTH} - ${sidebarState === 'opend' ? '80px' : '0px'})`,
+                    width: `calc(100vw - ${SIDEBAR_WIDTH} - ${sidebarState === 'opened' ? '80px' : '0px'})`,
                 }}
             >
                 <div className="flex-[45%] px-5 pt-8 space-y-7">

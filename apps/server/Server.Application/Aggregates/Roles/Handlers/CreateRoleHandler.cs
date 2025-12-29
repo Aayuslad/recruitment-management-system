@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Roles.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.Roles;
 
@@ -27,14 +27,14 @@ namespace Server.Application.Aggregates.Roles.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: check if with this name a role exsist
             var result = await _rolesRepository.ExistsByNameAsync(request.Name, cancellationToken);
             if (result)
             {
-                throw new ConflictExeption($"Role with name {request.Name} already exsist");
+                throw new ConflictException($"Role with name {request.Name} already exsist");
             }
 
             // step 2: make the entity

@@ -1,5 +1,5 @@
-﻿using Server.Application.Exeptions;
-using Server.Domain.Exeptions;
+﻿using Server.Application.Exceptions;
+using Server.Domain.Exceptions;
 
 namespace Server.API.Middlewares
 {
@@ -25,32 +25,32 @@ namespace Server.API.Middlewares
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsJsonAsync(new { error = ex.Errors.First().ErrorMessage });
             }
-            catch (UnAuthorisedExeption ex)
+            catch (UnAuthorisedException ex)
             {
                 context.Response.StatusCode = 401;
                 await context.Response.WriteAsJsonAsync(new { error = ex.Message });
             }
-            catch (ForbiddenExeption ex)
+            catch (ForbiddenException ex)
             {
                 context.Response.StatusCode = 403;
                 await context.Response.WriteAsJsonAsync(new { error = ex.Message });
             }
-            catch (NotFoundExeption ex)
+            catch (NotFoundException ex)
             {
                 context.Response.StatusCode = 404;
                 await context.Response.WriteAsJsonAsync(new { error = ex.Message });
             }
-            catch (BadRequestExeption ex)
+            catch (BadRequestException ex)
             {
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsJsonAsync(new { error = ex.Message });
             }
-            catch (ConflictExeption ex)
+            catch (ConflictException ex)
             {
                 context.Response.StatusCode = 409;
                 await context.Response.WriteAsJsonAsync(new { error = ex.Message });
             }
-            catch (DomainExeption ex)
+            catch (DomainException ex)
             {
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsJsonAsync(new { error = ex.Message });

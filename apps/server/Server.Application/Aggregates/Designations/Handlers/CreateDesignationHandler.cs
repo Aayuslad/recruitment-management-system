@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Designations.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.Designations;
 
@@ -26,14 +26,14 @@ namespace Server.Application.Aggregates.Designations.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: check if designation with this name exists
             var result = await _designationRepository.ExistsByNameAsync(command.Name, cancellationToken);
             if (result)
             {
-                throw new ConflictExeption("Designation with this name already exists");
+                throw new ConflictException("Designation with this name already exists");
             }
 
             // step 2: create designation

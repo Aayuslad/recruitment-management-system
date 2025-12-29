@@ -69,7 +69,7 @@ export function EmployeesTable() {
         },
         {
             accessorKey: 'contact-number',
-            header: () => <div className="w-[140px]">Contact Nummber</div>,
+            header: () => <div className="w-[140px]">Contact Number</div>,
             cell: ({ row }) => {
                 return <div>{row.original.contactNumber}</div>;
             },

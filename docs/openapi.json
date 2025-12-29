@@ -153,7 +153,7 @@
         }
       }
     },
-    "/bulk/exel-doc": {
+    "/bulk/excel-doc": {
       "post": {
         "tags": [
           "Candidate"
@@ -162,17 +162,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCandidatesWithExelDocCommand"
+                "$ref": "#/components/schemas/CreateCandidatesWithExcelDocCommand"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCandidatesWithExelDocCommand"
+                "$ref": "#/components/schemas/CreateCandidatesWithExcelDocCommand"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCandidatesWithExelDocCommand"
+                "$ref": "#/components/schemas/CreateCandidatesWithExcelDocCommand"
               }
             }
           }
@@ -2226,7 +2226,7 @@
         "type": "object",
         "additionalProperties": false
       },
-      "CreateCandidatesWithExelDocCommand": {
+      "CreateCandidatesWithExcelDocCommand": {
         "type": "object",
         "additionalProperties": false
       },

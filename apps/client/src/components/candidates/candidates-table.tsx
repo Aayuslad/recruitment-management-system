@@ -276,7 +276,7 @@ export function CandidatesTable() {
 
                                 <span className="font-semibold">On Hold</span>
                                 <span className="">
-                                    Candidates with appplications that are on
+                                    Candidates with applications that are on
                                     hold
                                 </span>
                             </div>

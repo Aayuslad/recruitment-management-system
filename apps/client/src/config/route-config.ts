@@ -123,4 +123,8 @@ export const routes: RouteConfigType[] = [
             },
         ],
     },
+    {
+        breadcrumb: 'User Profile',
+        path: 'user-profile',
+    },
 ];

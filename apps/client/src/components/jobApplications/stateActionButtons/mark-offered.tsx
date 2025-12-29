@@ -1,4 +1,14 @@
 import { useMoveJobApplicationStatus } from '@/api/job-application-api';
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { useAccessChecker } from '@/hooks/use-has-access';
 import { JOB_APPLICATION_STATUS } from '@/types/enums';
@@ -36,14 +46,37 @@ export const MarkOfferedButton = ({ jobApplicationId, visibleTo }: Props) => {
     if (!canAccess(visibleTo)) return null;
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Button
-                variant="outline"
-                type="submit"
-                disabled={moveJobApplicationStatusMutation.isPending}
-            >
-                Mark Offered
-            </Button>
-        </form>
+        <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <Button variant="outline" type="button">
+                    Mark Offered
+                </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action will close a position with this
+                            candidate under the related job opening.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <Button
+                            type="submit"
+                            variant="destructive"
+                            disabled={
+                                moveJobApplicationStatusMutation.isPending
+                            }
+                        >
+                            Continue
+                        </Button>
+                    </AlertDialogFooter>
+                </form>
+            </AlertDialogContent>
+        </AlertDialog>
     );
 };

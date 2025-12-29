@@ -174,7 +174,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/bulk/exel-doc": {
+    "/bulk/excel-doc": {
         parameters: {
             query?: never;
             header?: never;
@@ -192,9 +192,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["CreateCandidatesWithExelDocCommand"];
-                    "text/json": components["schemas"]["CreateCandidatesWithExelDocCommand"];
-                    "application/*+json": components["schemas"]["CreateCandidatesWithExelDocCommand"];
+                    "application/json": components["schemas"]["CreateCandidatesWithExcelDocCommand"];
+                    "text/json": components["schemas"]["CreateCandidatesWithExcelDocCommand"];
+                    "application/*+json": components["schemas"]["CreateCandidatesWithExcelDocCommand"];
                 };
             };
             responses: {
@@ -2544,7 +2544,7 @@ export interface components {
             skills?: components["schemas"]["CandidateSkillDTO"][] | null;
         };
         CreateCandidateWithResumeDocCommand: Record<string, never>;
-        CreateCandidatesWithExelDocCommand: Record<string, never>;
+        CreateCandidatesWithExcelDocCommand: Record<string, never>;
         CreateDesignationCommand: {
             name?: string | null;
             designationSkills?: components["schemas"]["DesignationSkillDTO"][] | null;

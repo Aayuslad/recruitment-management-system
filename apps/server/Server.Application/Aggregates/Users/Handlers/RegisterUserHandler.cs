@@ -4,7 +4,7 @@ using Server.Application.Abstractions.Repositories;
 using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Users.Commands;
 using Server.Application.Aggregates.Users.Commands.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.Users;
 using Server.Domain.ValueObjects;
@@ -32,11 +32,11 @@ namespace Server.Application.Aggregates.Users.Handlers
             // step 1: check if user auth already exists
             if (await _userRepository.AuthExistsByUserNameAsync(request.UserName, cancellationToken))
             {
-                throw new ConflictExeption("User with this username already exists.");
+                throw new ConflictException("User with this username already exists.");
             }
             if (await _userRepository.AuthExistsByEmailAsync(email, cancellationToken))
             {
-                throw new ConflictExeption("User with this email already exists.");
+                throw new ConflictException("User with this email already exists.");
             }
 
             // step 2: hash password

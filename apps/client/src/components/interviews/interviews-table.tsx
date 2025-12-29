@@ -41,11 +41,11 @@ type TabType = { name: string; statesToShow: InterviewStatus[] };
 
 const tabs: TabType[] = [
     {
-        name: 'Upcomming',
+        name: 'Upcoming',
         statesToShow: [INTERVIEW_STATUS.SCHEDULED],
     },
     {
-        name: 'To Be Sheduled',
+        name: 'To Be Scheduled',
         statesToShow: [INTERVIEW_STATUS.NOT_SCHEDULED],
     },
     {
@@ -109,8 +109,8 @@ export function InterviewsTable() {
             ),
         },
         {
-            accessorKey: 'sheduled-At',
-            header: () => <div className="w-[160px]">Sheduled At</div>,
+            accessorKey: 'scheduled-At',
+            header: () => <div className="w-[160px]">Scheduled At</div>,
             cell: ({ row }) => (
                 <div>
                     {row.original.scheduledAt
@@ -122,7 +122,11 @@ export function InterviewsTable() {
     ];
 
     const table = useReactTable({
-        data: data as InterviewSummary[],
+        data: data?.sort(
+            (a, b) =>
+                new Date(b?.scheduledAt ?? '').getTime() -
+                new Date(a?.scheduledAt ?? '').getTime()
+        ) as InterviewSummary[],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,

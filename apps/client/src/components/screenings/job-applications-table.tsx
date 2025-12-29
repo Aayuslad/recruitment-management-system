@@ -109,7 +109,12 @@ export const JobApplicationsTable = () => {
     ];
 
     const table = useReactTable({
-        data: data ?? [],
+        data:
+            data?.sort(
+                (a, b) =>
+                    new Date(b.appliedAt).getTime() -
+                    new Date(a.appliedAt).getTime()
+            ) ?? [],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,

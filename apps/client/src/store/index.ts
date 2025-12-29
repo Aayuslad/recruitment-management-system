@@ -21,7 +21,7 @@ import {
 import { createAdminSlice, type AdminStoreSliceType } from './admin-store';
 import { createAuthSlice, type AuthStoreSliceType } from './auth-store';
 
-type AppStoreTupe = UiStoreSliceType &
+type AppStoreType = UiStoreSliceType &
     SkillStoreSliceType &
     DocumentTypeStoreSliceType &
     DesignationStoreSliceType &
@@ -29,7 +29,7 @@ type AppStoreTupe = UiStoreSliceType &
     AdminStoreSliceType &
     AuthStoreSliceType;
 
-export const useAppStore = create<AppStoreTupe>((...args) => ({
+export const useAppStore = create<AppStoreType>((...args) => ({
     ...createUiSlice(...args),
     ...createSkillSlice(...args),
     ...createDocTypeSlice(...args),
@@ -48,6 +48,6 @@ if (typeof window !== 'undefined') {
     if (sidebarState) {
         useAppStore
             .getState()
-            .setSidebarState(sidebarState as 'opend' | 'closed');
+            .setSidebarState(sidebarState as 'opened' | 'closed');
     }
 }

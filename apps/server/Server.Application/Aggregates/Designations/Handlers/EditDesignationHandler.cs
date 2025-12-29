@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Designations.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.Designations;
 
@@ -26,14 +26,14 @@ namespace Server.Application.Aggregates.Designations.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: fetch existing 
             var designation = await _designationRepository.GetByIdAsync(command.Id, cancellationToken);
             if (designation == null)
             {
-                throw new NotFoundExeption($"Designation not found.");
+                throw new NotFoundException($"Designation not found.");
             }
 
             // step 2: edit skill

@@ -7,6 +7,6 @@ namespace Server.Application.Aggregates.Candidates.Queries
 {
     public class GetCandidatesQuery : IRequest<Result<List<CandidateSummaryDTO>>>
     {
-        // add pagination fealds
+        // add pagination fields
     }
 }

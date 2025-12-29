@@ -39,7 +39,7 @@ export interface PositionBatch {
 export interface PositionSummary {
     batchId: string;
     positionId: string;
-    descripcion?: string;
+    description?: string;
     designationId: string;
     designationName: string;
     jobLocation: string;
@@ -54,7 +54,7 @@ export interface BatchPositionsSummary {
     batchId: string;
     positionId: string;
     status: PositionStatus;
-    clousedByCandidateId?: string | null;
+    closedByCandidateId?: string | null;
     closedByCandidateFullName?: string | null;
     closureReason?: string | null;
 }
@@ -62,7 +62,7 @@ export interface BatchPositionsSummary {
 export interface Position {
     batchId: string;
     positionId: string;
-    descripcion?: string;
+    description?: string;
     designationId: string;
     designationName: string;
     jobLocation: string;

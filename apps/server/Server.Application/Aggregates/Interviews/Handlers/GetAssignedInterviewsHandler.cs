@@ -6,19 +6,19 @@ using Microsoft.AspNetCore.Http;
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Interviews.Queries;
 using Server.Application.Aggregates.Interviews.Queries.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Interviews.Handlers
 {
     internal class GetAssignedInterviewsHandler : IRequestHandler<GetAssignedInterviewsQuery, Result<List<InterviewSummaryDTO>>>
     {
-        private readonly IInterviewRespository _interviewRespository;
+        private readonly IInterviewRepository _interviewRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GetAssignedInterviewsHandler(IInterviewRespository interviewRespository, IHttpContextAccessor httpContextAccessor)
+        public GetAssignedInterviewsHandler(IInterviewRepository interviewRepository, IHttpContextAccessor httpContextAccessor)
         {
-            _interviewRespository = interviewRespository;
+            _interviewRepository = interviewRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -27,11 +27,11 @@ namespace Server.Application.Aggregates.Interviews.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
             if (userIdString is null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: fetch the interviw
-            var interviews = await _interviewRespository.GetAllAsync(cancellationToken);
+            var interviews = await _interviewRepository.GetAllAsync(cancellationToken);
 
             // step 2: filter the interviews assigned to the interviewer-user
             var assignedInterviews = interviews

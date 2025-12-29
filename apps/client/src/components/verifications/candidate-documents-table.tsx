@@ -29,11 +29,11 @@ import { Spinner } from '../ui/spinner';
 import { AddDocument } from '../verifications/add-document';
 import { VerifyDocumentButton } from './verify-document-button';
 
-type Porps = {
+type Props = {
     candidateId: string;
 };
 
-export function CandidateDocumentsTable({ candidateId }: Porps) {
+export function CandidateDocumentsTable({ candidateId }: Props) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
@@ -197,7 +197,7 @@ export function CandidateDocumentsTable({ candidateId }: Porps) {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No Documets Found.
+                                    No Documents Found.
                                 </TableCell>
                             </TableRow>
                         )}

@@ -28,7 +28,7 @@ namespace Server.Infrastructure.Persistence
         public DbSet<Skill> Skills { get; set; } = null!;
         public DbSet<Designation> Designations { get; set; } = null!;
         public DbSet<DesignationSkill> DesignationSkills { get; set; } = null!;
-        public DbSet<PositionBatch> PositionBatchs { get; set; } = null!;
+        public DbSet<PositionBatch> PositionBatches { get; set; } = null!;
         public DbSet<Position> Positions { get; set; } = null!;
         public DbSet<PositionBatchReviewer> PositionBatchReviewers { get; set; } = null!;
         public DbSet<PositionStatusMoveHistory> PositionStatusMoveHistories { get; set; } = null!;

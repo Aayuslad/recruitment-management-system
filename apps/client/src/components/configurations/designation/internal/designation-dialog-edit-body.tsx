@@ -43,7 +43,7 @@ export const EditDialogBody = () => {
             resolver: zodResolver(editDesignationFormSchema),
         });
 
-    const designationSkillsFealdArray = useFieldArray({
+    const designationSkillsFieldArray = useFieldArray({
         control,
         name: 'designationSkills',
     });
@@ -94,10 +94,10 @@ export const EditDialogBody = () => {
                 <div className="grid gap-3">
                     <Label htmlFor="skills">Skills</Label>
                     <DesignationSkillEditor
-                        fields={designationSkillsFealdArray.fields}
-                        append={designationSkillsFealdArray.append}
-                        remove={designationSkillsFealdArray.remove}
-                        update={designationSkillsFealdArray.update}
+                        fields={designationSkillsFieldArray.fields}
+                        append={designationSkillsFieldArray.append}
+                        remove={designationSkillsFieldArray.remove}
+                        update={designationSkillsFieldArray.update}
                     />
                 </div>
 

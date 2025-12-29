@@ -15,7 +15,7 @@ export type DesignationStoreSliceType = {
     closeDesignationDialog: () => void;
     setDesignationDialog: (state: boolean) => void;
     setDesignationDialogTab: (tab: 'view' | 'edit') => void;
-    updatedesignationDialogTarget: (updates: Partial<Designation>) => void;
+    updateDesignationDialogTarget: (updates: Partial<Designation>) => void;
 
     openDesignationDeleteDialog: (id: string) => void;
     closeDesignationDeleteDialog: () => void;
@@ -47,7 +47,7 @@ export const createDesignationSlice: StateCreator<DesignationStoreSliceType> = (
     setDesignationDialogTab: (tab) =>
         set(() => ({ designationDialogTab: tab })),
 
-    updatedesignationDialogTarget: (updates: Partial<Designation>) =>
+    updateDesignationDialogTarget: (updates: Partial<Designation>) =>
         set((state) => ({
             designationDialogTarget: state.designationDialogTarget
                 ? { ...state.designationDialogTarget, ...updates }

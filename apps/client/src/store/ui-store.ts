@@ -4,12 +4,12 @@ export const THEME_KEY = 'theme-preference';
 export const SIDEBAR_STATE_KEY = 'sidebar-state';
 
 export interface UiStoreSliceType {
-    sidebarState: 'opend' | 'closed';
+    sidebarState: 'opened' | 'closed';
     theme: 'light' | 'dark';
 
     toggleTheme: () => void;
     setTheme: (theme: 'light' | 'dark') => void;
-    setSidebarState: (state: 'opend' | 'closed') => void;
+    setSidebarState: (state: 'opened' | 'closed') => void;
     toggleSidebarState: () => void;
 }
 
@@ -45,7 +45,7 @@ export const createUiSlice: StateCreator<UiStoreSliceType> = (set, get) => ({
 
     toggleSidebarState: () => {
         const state = get().sidebarState;
-        const newState = state === 'opend' ? 'closed' : 'opend';
+        const newState = state === 'opened' ? 'closed' : 'opened';
         set({ sidebarState: newState });
         localStorage.setItem(SIDEBAR_STATE_KEY, newState);
     },

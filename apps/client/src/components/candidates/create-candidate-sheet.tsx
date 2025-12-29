@@ -101,7 +101,7 @@ export function CreateCandidateSheet({ visibleTo }: Props) {
                     <SheetHeader>
                         <SheetTitle>Create Candidate</SheetTitle>
                         <SheetDescription>
-                            Add deatils for the candidate. Click create when
+                            Add details for the candidate. Click create when
                             you&apos;re done.
                         </SheetDescription>
                     </SheetHeader>

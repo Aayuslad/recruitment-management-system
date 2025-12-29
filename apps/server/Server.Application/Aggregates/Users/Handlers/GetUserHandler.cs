@@ -3,7 +3,7 @@
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Users.Queries;
 using Server.Application.Aggregates.Users.Queries.DTOs;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Users.Handlers
@@ -22,7 +22,7 @@ namespace Server.Application.Aggregates.Users.Handlers
             // step 1: fetch user auth
             var auth = await _userRepository.GetAuthByAuthIdAsync(request.AuthId, cancellationToken);
             if (auth is null)
-                throw new NotFoundExeption("User Not Found.");
+                throw new NotFoundException("User Not Found.");
 
             // step 2: fetch user profile
             var user = await _userRepository.GetProfileByAuthIdAsync(request.AuthId, cancellationToken);

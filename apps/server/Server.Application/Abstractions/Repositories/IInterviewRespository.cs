@@ -2,7 +2,7 @@
 
 namespace Server.Application.Abstractions.Repositories
 {
-    public interface IInterviewRespository
+    public interface IInterviewRepository
     {
         Task AddAsync(Interview interview, CancellationToken cancellationToken);
         Task AddRangeAsync(IEnumerable<Interview> interviews, CancellationToken cancellationToken);

@@ -1,4 +1,14 @@
 import { useMoveJobApplicationStatus } from '@/api/job-application-api';
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { useAccessChecker } from '@/hooks/use-has-access';
 import { JOB_APPLICATION_STATUS } from '@/types/enums';
@@ -36,14 +46,38 @@ export const PutOnHoldButton = ({ jobApplicationId, visibleTo }: Props) => {
     if (!canAccess(visibleTo)) return null;
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Button
-                variant="outline"
-                type="submit"
-                disabled={moveJobApplicationStatusMutation.isPending}
-            >
-                Put on Hold
-            </Button>
-        </form>
+        <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <Button variant="outline" type="button">
+                    Put On Hold
+                </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action will move the job application to on hold
+                            state. You can later undo this by Resuming the job
+                            application.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <Button
+                            type="submit"
+                            variant="destructive"
+                            disabled={
+                                moveJobApplicationStatusMutation.isPending
+                            }
+                        >
+                            Continue
+                        </Button>
+                    </AlertDialogFooter>
+                </form>
+            </AlertDialogContent>
+        </AlertDialog>
     );
 };

@@ -63,7 +63,7 @@ export function ScheduleInterviewDialog({ interviewId }: Props) {
                     variant="outline"
                     disabled={moveInterviewStatusMutation.isPending}
                 >
-                    Scheule Interview
+                    Schedule Interview
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">

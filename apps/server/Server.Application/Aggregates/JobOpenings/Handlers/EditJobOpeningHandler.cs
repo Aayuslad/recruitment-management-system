@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.JobOpenings.Commands;
-using Server.Application.Exeptions;
+using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities;
 using Server.Domain.Entities.JobOpenings;
@@ -29,14 +29,14 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
             {
-                throw new UnAuthorisedExeption();
+                throw new UnAuthorisedException();
             }
 
             // step 1: fetch the entity
             var jobOpening = await _jobOpeningRepository.GetByIdAsync(cmd.JobOpeningId, cancellationToken);
             if (jobOpening == null)
             {
-                throw new NotFoundExeption("Job Opening Not Found.");
+                throw new NotFoundException("Job Opening Not Found.");
             }
 
             // step 2: edit entity
