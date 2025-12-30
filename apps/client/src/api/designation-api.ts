@@ -14,7 +14,7 @@ export function useCreateDesignation() {
         mutationFn: async (
             payload: CreateDesignationCommandCorrected
         ): Promise<void> => {
-            await axios.post('/designation', payload);
+            await axios.post('/designations', payload);
         },
         onSuccess: () => {
             toast.success('Designation Created');
@@ -38,7 +38,7 @@ export function useEditDesignation() {
         mutationFn: async (
             payload: EditDesignationCommandCorrected
         ): Promise<void> => {
-            await axios.put(`/designation/${payload.id}`, payload);
+            await axios.put(`/designations/${payload.id}`, payload);
         },
         onSuccess: (_, variables) => {
             toast.success('Designation Edited');
@@ -63,7 +63,7 @@ export function useDeleteDesignation() {
 
     return useMutation({
         mutationFn: async (id: string): Promise<void> => {
-            await axios.delete(`/designation/${id}`);
+            await axios.delete(`/designations/${id}`);
         },
         onSuccess: () => {
             toast.success('Designation Deleted');
@@ -84,7 +84,7 @@ export function useGetDesignation(id: string) {
     return useQuery({
         queryKey: ['designation', id],
         queryFn: async (): Promise<Designation | null> => {
-            const { data } = await axios.get(`/designation/${id}`);
+            const { data } = await axios.get(`/designations/${id}`);
             return data;
         },
     });
@@ -94,7 +94,7 @@ export function useGetDesignations() {
     return useQuery({
         queryKey: ['designations'],
         queryFn: async (): Promise<Designation[]> => {
-            const { data } = await axios.get('/designation');
+            const { data } = await axios.get('/designations');
             return data;
         },
     });

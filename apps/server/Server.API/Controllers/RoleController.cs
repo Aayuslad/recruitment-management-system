@@ -10,7 +10,7 @@ using Server.Core.Extensions;
 namespace Server.API.Controllers
 {
     [ApiController]
-    [Route("api/role")]
+    [Route("api/roles")]
     [Authorize(Roles = "Admin")]
     public class RoleController : ControllerBase
     {

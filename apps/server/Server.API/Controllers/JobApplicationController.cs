@@ -11,7 +11,7 @@ namespace Server.API.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/job-application")]
+    [Route("api/job-applications")]
     public class JobApplicationController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -57,7 +57,7 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
-        [HttpPut("{id:guid}/move-status")]
+        [HttpPatch("{id:guid}/move-status")]
         [Authorize(Roles = "Admin, Recruiter, HR, Reviewer")]
         public async Task<IActionResult> MoveStatusJobApplication(Guid id, [FromBody] MoveJobApplicationStatusCommand command, CancellationToken cancellationToken)
         {

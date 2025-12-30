@@ -13,7 +13,7 @@ export function useCreateEvent() {
         mutationFn: async (
             payload: CreateEventCommandCorrected
         ): Promise<void> => {
-            await axios.post('/event', payload);
+            await axios.post('/events', payload);
         },
         onSuccess: () => {
             toast.success('Event Created');
@@ -37,7 +37,7 @@ export function useEditEvent() {
         mutationFn: async (
             payload: EditEventCommandCorrected
         ): Promise<void> => {
-            await axios.put(`/event/${payload.id}`, payload);
+            await axios.put(`/events/${payload.id}`, payload);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['events'] });
@@ -59,7 +59,7 @@ export function useDeleteEvent() {
 
     return useMutation({
         mutationFn: async (id: string) => {
-            await axios.delete(`/event/${id}`);
+            await axios.delete(`/events/${id}`);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['events'] });
@@ -80,7 +80,7 @@ export function useGetEvents() {
     return useQuery({
         queryKey: ['events'],
         queryFn: async () => {
-            const { data } = await axios.get('/event');
+            const { data } = await axios.get('/events');
             return data;
         },
     });

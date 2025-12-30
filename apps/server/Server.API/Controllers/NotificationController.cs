@@ -10,7 +10,7 @@ using Server.Core.Extensions;
 namespace Server.API.Controllers
 {
     [ApiController]
-    [Route("api/notification")]
+    [Route("api/notifications")]
     [Authorize]
     public class NotificationController : ControllerBase
     {

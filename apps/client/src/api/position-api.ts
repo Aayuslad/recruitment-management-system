@@ -20,7 +20,7 @@ export function useCreatePositionBatch() {
         mutationFn: async (
             payload: CreatePositionBatchCommandCorrected
         ): Promise<void> => {
-            await axios.post('/position/batch', payload);
+            await axios.post('/positions/batches', payload);
         },
         onSuccess: () => {
             toast.success('Position batch created');
@@ -45,7 +45,7 @@ export function useEditPositionBatch() {
             payload: EditPositionBatchCommandCorrected
         ): Promise<void> => {
             await axios.put(
-                `/position/batch/${payload.positionBatchId}`,
+                `/positions/batches/${payload.positionBatchId}`,
                 payload
             );
         },
@@ -72,7 +72,7 @@ export function useDeletePositionBatch() {
 
     return useMutation({
         mutationFn: async (id: string): Promise<void> => {
-            await axios.delete(`/position/batch/${id}`);
+            await axios.delete(`/positions/batches/${id}`);
         },
         onSuccess: () => {
             toast.success('Position batch deleted');
@@ -96,7 +96,7 @@ export function useClosePosition() {
         mutationFn: async (
             payload: ClosePositionCommandCorrected
         ): Promise<void> => {
-            await axios.put(`/position/close/${payload.positionId}`, payload);
+            await axios.patch(`/positions/${payload.positionId}/close`, payload);
         },
         onSuccess: (_, variables) => {
             toast.success('Position closed');
@@ -123,7 +123,7 @@ export function useSetPositionOnHold() {
         mutationFn: async (
             payload: SetPositionOnHoldCommandCorrected
         ): Promise<void> => {
-            await axios.put(`/position/onHold/${payload.positionId}`, payload);
+            await axios.patch(`/positions/${payload.positionId}/set-on-hold`, payload);
         },
         onSuccess: (_, variables) => {
             toast.success('Position status updated to on hold');
@@ -147,7 +147,7 @@ export function useGetPositionBatch(id?: string) {
     return useQuery({
         queryKey: ['position-batch', id],
         queryFn: async (): Promise<PositionBatch | null> => {
-            const { data } = await axios.get(`/position/batch/${id}`);
+            const { data } = await axios.get(`/positions/batches/${id}`);
             return data;
         },
         enabled: !!id,
@@ -158,7 +158,7 @@ export function useGetPositionBatches() {
     return useQuery({
         queryKey: ['position-batches'],
         queryFn: async (): Promise<PositionBatchSummary[]> => {
-            const { data } = await axios.get('/position/batch');
+            const { data } = await axios.get('/positions/batches');
             return data;
         },
     });
@@ -168,7 +168,7 @@ export function useGetPosition(id: string) {
     return useQuery({
         queryKey: ['position', id],
         queryFn: async (): Promise<Position | null> => {
-            const { data } = await axios.get(`/position/${id}`);
+            const { data } = await axios.get(`/positions/${id}`);
             return data;
         },
     });
@@ -178,7 +178,7 @@ export function useGetPositions() {
     return useQuery({
         queryKey: ['positions'],
         queryFn: async (): Promise<PositionSummary[]> => {
-            const { data } = await axios.get('/position');
+            const { data } = await axios.get('/positions');
             return data;
         },
     });
@@ -189,7 +189,7 @@ export function useGetBatchPositions(batchId: string) {
         queryKey: ['batch-positions', batchId],
         queryFn: async (): Promise<BatchPositionsSummary[]> => {
             const { data } = await axios.get(
-                `/position/batch-positions/${batchId}`
+                `/positions/batches/${batchId}/positions`
             );
             return data;
         },

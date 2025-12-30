@@ -11,7 +11,7 @@ namespace Server.API.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/position")]
+    [Route("api/positions")]
     public class PositionController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -22,7 +22,7 @@ namespace Server.API.Controllers
         }
 
         // position batches
-        [HttpPost("batch")]
+        [HttpPost("batches")]
         [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> CreatePositionBatch([FromBody] CreatePositionBatchCommand command, CancellationToken cancellationToken)
         {
@@ -30,34 +30,34 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
-        [HttpPut("batch/{id:Guid}")]
+        [HttpPut("batches/{batchId:Guid}")]
         [Authorize(Roles = "Admin, Recruiter")]
-        public async Task<IActionResult> EditPositionBatch(Guid id, EditPositionBatchCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> EditPositionBatch(Guid batchId, EditPositionBatchCommand command, CancellationToken cancellationToken)
         {
             command.PositionBatchId = id;
             var result = await _mediator.Send(command, cancellationToken);
             return result.ToActionResult(this);
         }
 
-        [HttpDelete("batch/{id:Guid}")]
+        [HttpDelete("batches/{batchId:Guid}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeletePositionbatch(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeletePositionbatch(Guid batchId, CancellationToken cancellationToken)
         {
-            var command = new DeletePositionBatchCommand(id);
+            var command = new DeletePositionBatchCommand(batchId);
             var result = await _mediator.Send(command, cancellationToken);
             return result.ToActionResult(this);
         }
 
-        [HttpGet("batch/{id:Guid}")]
+        [HttpGet("batches/{batchId:Guid}")]
         [Authorize(Roles = "Admin, Recruiter, Viewer")]
-        public async Task<IActionResult> GetPositionBatch(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetPositionBatch(Guid batchId, CancellationToken cancellationToken)
         {
-            var query = new GetPositionBatchQuery(id);
+            var query = new GetPositionBatchQuery(batchId);
             var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }
 
-        [HttpGet("batch")]
+        [HttpGet("batches")]
         [Authorize(Roles = "Admin, Recruiter, Viewer")]
         public async Task<IActionResult> GetPositionBatches(CancellationToken cancellationToken)
         {
@@ -68,29 +68,29 @@ namespace Server.API.Controllers
 
         // positions
 
-        [HttpPut("/close/{id:Guid}")]
+        [HttpPatch("{positionId:Guid}/close")]
         [Authorize(Roles = "Admin, Recruiter")]
-        public async Task<IActionResult> ClosePosition(Guid id, [FromBody] ClosePositionCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> ClosePosition(Guid positionId, [FromBody] ClosePositionCommand command, CancellationToken cancellationToken)
         {
-            command.PositionId = id;
+            command.PositionId = positionId;
             var result = await _mediator.Send(command, cancellationToken);
             return result.ToActionResult(this);
         }
 
-        [HttpPut("/onHold/{id:Guid}")]
+        [HttpPatch("{positionId:Guid}/set-on-hold")]
         [Authorize(Roles = "Admin, Recruiter")]
-        public async Task<IActionResult> SetPositionOnHold(Guid id, SetPositionOnHoldCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> SetPositionOnHold(Guid positionId, SetPositionOnHoldCommand command, CancellationToken cancellationToken)
         {
-            command.PositionId = id;
+            command.PositionId = positionId;
             var result = await _mediator.Send(command, cancellationToken);
             return result.ToActionResult(this);
         }
 
-        [HttpGet("{id:Guid}")]
+        [HttpGet("{positionId:Guid}")]
         [Authorize(Roles = "Admin, Recruiter, Viewer")]
-        public async Task<IActionResult> GetPosition(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetPosition(Guid positionId, CancellationToken cancellationToken)
         {
-            var query = new GetPositionQuery(id);
+            var query = new GetPositionQuery(positionId);
             var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }
@@ -104,11 +104,11 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
-        [HttpGet("batch-positions/{id:Guid}")]
+        [HttpGet("batches/{batchId:Guid}/positions")]
         [Authorize(Roles = "Admin, Recruiter, Viewer")]
-        public async Task<IActionResult> GetBatchPositions(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetBatchPositions(Guid batchId, CancellationToken cancellationToken)
         {
-            var query = new GetBatchPositionsQuery(id);
+            var query = new GetBatchPositionsQuery(batchId);
             var result = await _mediator.Send(query, cancellationToken);
             return result.ToActionResult(this);
         }

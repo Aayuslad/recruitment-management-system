@@ -14,7 +14,7 @@ export function useCreateSkill() {
         mutationFn: async (
             payload: CreateSkillCommandCorrected
         ): Promise<void> => {
-            await axios.post('/skill', payload);
+            await axios.post('/skills', payload);
         },
         onSuccess: () => {
             toast.success('Skill Created');
@@ -38,7 +38,7 @@ export function useEditSkill() {
         mutationFn: async (
             payload: EditSkillCommandCorrected
         ): Promise<undefined> => {
-            await axios.put(`/skill/${payload.id}`, payload);
+            await axios.put(`/skills/${payload.id}`, payload);
         },
         onSuccess: () => {
             toast.success('Skill Edited');
@@ -60,7 +60,7 @@ export function useDeleteSkill() {
 
     return useMutation({
         mutationFn: async (id: string): Promise<void> => {
-            await axios.delete(`/skill/${id}`);
+            await axios.delete(`/skills/${id}`);
         },
         onSuccess: () => {
             toast.success('Skill Deleted');
@@ -81,7 +81,7 @@ export function useGetSkill(id: string) {
     return useQuery({
         queryKey: ['skill', id],
         queryFn: async (): Promise<Skill | null> => {
-            const { data } = await axios.get(`/skill/${id}`);
+            const { data } = await axios.get(`/skills/${id}`);
             return data;
         },
     });
@@ -91,7 +91,7 @@ export function useGetSkills() {
     return useQuery({
         queryKey: ['skills'],
         queryFn: async (): Promise<Skill[]> => {
-            const { data } = await axios.get('/skill');
+            const { data } = await axios.get('/skills');
             return data;
         },
     });

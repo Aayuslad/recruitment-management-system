@@ -21,7 +21,7 @@ export function useRegisterUser() {
         mutationFn: async (
             payload: RegisterUserCommandCorrected
         ): Promise<void> => {
-            await axios.post('/user/register', payload);
+            await axios.post('/users/register', payload);
         },
         onSuccess: () => {
             navigate('/create-user');
@@ -44,7 +44,7 @@ export function useCreateUser() {
         mutationFn: async (
             payload: CreateUserCommandCorrected
         ): Promise<void> => {
-            const { data } = await axios.post('/user/user-profile', payload);
+            const { data } = await axios.post('/users/user-profile', payload);
             return data;
         },
         onSuccess: () => {
@@ -68,7 +68,7 @@ export function useLoginUser() {
         mutationFn: async (
             payload: LoginUserCommandCorrected
         ): Promise<void> => {
-            await axios.post('/user/login', payload);
+            await axios.post('/users/login', payload);
         },
         onSuccess: () => {
             navigate('/dashboard');
@@ -90,7 +90,7 @@ export function useLogoutUser() {
 
     return useMutation({
         mutationFn: async () => {
-            await axios.post('/user/logout');
+            await axios.post('/users/logout');
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['user'] });
@@ -106,7 +106,7 @@ export function useEditUserRoles() {
         mutationFn: async (
             payload: EditUserRolesCommandCorrected
         ): Promise<void> => {
-            await axios.put(`/user/${payload.userId}/roles`, payload);
+            await axios.put(`/users/${payload.userId}/roles`, payload);
         },
         onSuccess: () => {
             toast.success('User Roles Updated');
@@ -135,7 +135,7 @@ export function useGetUser() {
         queryKey: ['user'],
         queryFn: async (): Promise<User | undefined> => {
             try {
-                const { data } = await axios.get('/user/me');
+                const { data } = await axios.get('/users/me');
                 setUserRoles(data.roles.map((r: { name: string }) => r.name));
                 return data;
             } catch {
@@ -149,7 +149,7 @@ export function useGetUsers() {
     return useQuery({
         queryKey: ['users'],
         queryFn: async (): Promise<UsersDetail[]> => {
-            const { data } = await axios.get('/user');
+            const { data } = await axios.get('/users');
             return data;
         },
     });
@@ -159,7 +159,7 @@ export function useGetUsersSummary() {
     return useQuery({
         queryKey: ['users-summary'],
         queryFn: async (): Promise<UsersSummary[]> => {
-            const { data } = await axios.get('/user/summary');
+            const { data } = await axios.get('/users/summary');
             return data;
         },
     });

@@ -11,7 +11,7 @@ namespace Server.API.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/job-opening")]
+    [Route("api/job-openings")]
     public class JobOpeningController : ControllerBase
     {
         private readonly IMediator _mediator;

@@ -10,7 +10,7 @@ using Server.Core.Extensions;
 namespace Server.API.Controllers
 {
     [ApiController]
-    [Route("api/user")]
+    [Route("api/users")]
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;

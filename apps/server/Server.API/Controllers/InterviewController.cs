@@ -10,7 +10,7 @@ using Server.Core.Extensions;
 namespace Server.API.Controllers
 {
     [ApiController]
-    [Route("api/interview")]
+    [Route("api/interviews")]
     [Authorize]
     public class InterviewController : ControllerBase
     {
@@ -66,7 +66,7 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
-        [HttpPut("{id:guid}/move-status")]
+        [HttpPatch("{id:guid}/move-status")]
         [Authorize(Roles = "Admin, Recruiter, Interviewer")]
         public async Task<IActionResult> MoveInterviewStatus(Guid id, [FromBody] MoveInterviewStatusCommand command, CancellationToken cancellationToken)
         {
@@ -102,7 +102,7 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
-        [HttpGet("job-application/{jobApplicationId:guid}")]
+        [HttpGet("for-job-application/{jobApplicationId:guid}")]
         [Authorize(Roles = "Admin, Recruiter, HR, Viewer, Interviewer, Reviewer")]
         public async Task<IActionResult> GetJobApplicationInterviews(Guid jobApplicationId, CancellationToken cancellationToken)
         {

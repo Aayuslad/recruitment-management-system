@@ -10,7 +10,7 @@ using Server.Core.Extensions;
 namespace Server.API.Controllers
 {
     [ApiController]
-    [Route("api/document")]
+    [Route("api/documents")]
     [Authorize]
     public class DocumentController : ControllerBase
     {

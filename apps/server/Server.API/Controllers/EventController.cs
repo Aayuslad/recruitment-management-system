@@ -10,7 +10,7 @@ using Server.Core.Extensions;
 namespace Server.API.Controllers
 {
     [ApiController]
-    [Route("api/event")]
+    [Route("api/events")]
     [Authorize]
     public class EventController : ControllerBase
     {

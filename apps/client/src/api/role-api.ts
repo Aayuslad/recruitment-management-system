@@ -14,7 +14,7 @@ export function useCreateRole() {
         mutationFn: async (
             payload: CreateRoleCommandCorrected
         ): Promise<void> => {
-            await axios.post('/role', payload);
+            await axios.post('/roles', payload);
         },
         onSuccess: () => {
             toast.success('Role Created');
@@ -38,7 +38,7 @@ export function useEditRole() {
         mutationFn: async (
             payload: EditRoleCommandCorrected
         ): Promise<void> => {
-            await axios.put(`/role/${payload.id}`, payload);
+            await axios.put(`/roles/${payload.id}`, payload);
         },
         onSuccess: () => {
             toast.success('Role Edited');
@@ -60,7 +60,7 @@ export function useDeleteRole() {
 
     return useMutation({
         mutationFn: async (roleId: string): Promise<void> => {
-            await axios.delete(`/role/${roleId}`);
+            await axios.delete(`/roles/${roleId}`);
         },
         onSuccess: () => {
             toast.success('Role Deleted');
@@ -81,7 +81,7 @@ export function useGetRoles() {
     return useQuery({
         queryKey: ['roles'],
         queryFn: async (): Promise<Role[]> => {
-            const { data } = await axios.get('/role');
+            const { data } = await axios.get('/roles');
             return data;
         },
     });

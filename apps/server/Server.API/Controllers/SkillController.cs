@@ -11,7 +11,7 @@ namespace Server.API.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/skill")]
+    [Route("api/skills")]
     public class SkillController : ControllerBase
     {
         private readonly IMediator _mediator;

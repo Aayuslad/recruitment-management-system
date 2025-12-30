@@ -17,7 +17,7 @@ export function useCreateCandidate() {
         mutationFn: async (
             payload: CreateCandidateCommandCorrected
         ): Promise<void> => {
-            await axios.post('/candidate', payload);
+            await axios.post('/candidates', payload);
         },
         onSuccess: () => {
             toast.success('Candidate created');
@@ -41,7 +41,7 @@ export function useEditCandidate() {
         mutationFn: async (
             payload: EditCandidateCommandCorrected
         ): Promise<void> => {
-            await axios.put(`/candidate/${payload.id}`, payload);
+            await axios.put(`/candidates/${payload.id}`, payload);
         },
         onSuccess: (_, variables) => {
             toast.success('Candidate updated');
@@ -66,7 +66,7 @@ export function useDeleteCandidate() {
 
     return useMutation({
         mutationFn: async (id: string): Promise<void> => {
-            await axios.delete(`/candidate/${id}`);
+            await axios.delete(`/candidates/${id}`);
         },
         onSuccess: () => {
             toast.success('Candidate deleted');
@@ -88,7 +88,7 @@ export function useVerifyCandidateBg() {
 
     return useMutation({
         mutationFn: async (id: string): Promise<void> => {
-            await axios.put(`/candidate/verify-bg/${id}`);
+            await axios.put(`/candidates/${id}/verify-bg`);
         },
         onSuccess: () => {
             toast.success('Background verification updated');
@@ -113,7 +113,7 @@ export function useVerifyDocument() {
             payload: VerifyCandidateDocumentCommandCorrected
         ): Promise<void> => {
             await axios.put(
-                `/candidate/${payload.candidateId}/verify-doc/${payload.documentId}`,
+                `/candidates/${payload.candidateId}/verify-doc/${payload.documentId}`,
                 payload
             );
         },
@@ -142,7 +142,7 @@ export function useAddDocument() {
         mutationFn: async (
             payload: AddCandidateDocumentCommandCorrected
         ): Promise<void> => {
-            await axios.put(`/candidate/${payload.id}/add-document`, payload);
+            await axios.put(`/candidates/${payload.id}/add-doc`, payload);
         },
         onSuccess: (_, variables) => {
             toast.success('Document verification updated');
@@ -166,7 +166,7 @@ export function useGetCandidate(id?: string) {
     return useQuery<Candidate | null>({
         queryKey: ['candidate', id],
         queryFn: async () => {
-            const { data } = await axios.get(`/candidate/${id}`);
+            const { data } = await axios.get(`/candidates/${id}`);
             return data;
         },
         enabled: !!id,
@@ -177,7 +177,7 @@ export function useGetCandidates() {
     return useQuery({
         queryKey: ['candidates'],
         queryFn: async (): Promise<CandidateSummary[]> => {
-            const { data } = await axios.get('/candidate');
+            const { data } = await axios.get('/candidates');
             return data;
         },
     });
