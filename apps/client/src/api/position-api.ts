@@ -96,7 +96,10 @@ export function useClosePosition() {
         mutationFn: async (
             payload: ClosePositionCommandCorrected
         ): Promise<void> => {
-            await axios.patch(`/positions/${payload.positionId}/close`, payload);
+            await axios.patch(
+                `/positions/${payload.positionId}/close`,
+                payload
+            );
         },
         onSuccess: (_, variables) => {
             toast.success('Position closed');
@@ -123,7 +126,10 @@ export function useSetPositionOnHold() {
         mutationFn: async (
             payload: SetPositionOnHoldCommandCorrected
         ): Promise<void> => {
-            await axios.patch(`/positions/${payload.positionId}/set-on-hold`, payload);
+            await axios.patch(
+                `/positions/${payload.positionId}/set-on-hold`,
+                payload
+            );
         },
         onSuccess: (_, variables) => {
             toast.success('Position status updated to on hold');
