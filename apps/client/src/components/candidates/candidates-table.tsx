@@ -45,6 +45,7 @@ import { ApplyToJobOpeningDialog } from './internal/apply-to-job-opening-dialog'
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { Info } from 'lucide-react';
+import { genderFormatConverter } from '@/util/gender-format-converter';
 
 type TabType = {
     name: string;
@@ -142,9 +143,11 @@ export function CandidatesTable() {
         },
         {
             id: 'gender',
-            header: () => <div className="w-[80px]">Gender</div>,
+            header: () => <div className="w-[100px]">Gender</div>,
             cell: ({ row }) => (
-                <div className="font-medium">{row.original.gender}</div>
+                <div className="font-medium">
+                    {genderFormatConverter(row.original.gender)}
+                </div>
             ),
         },
         {

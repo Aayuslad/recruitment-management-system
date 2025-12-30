@@ -157,7 +157,7 @@ export const JobApplicationsTable = () => {
                 <Spinner className="size-8" />
             </div>
         );
-    if (isError) return <div>Error Loading Job Openings</div>;
+    if (isError) return <div>Error Loading Applications</div>;
 
     return (
         <div className="w-full">
@@ -209,7 +209,7 @@ export const JobApplicationsTable = () => {
                 />
             </div>
 
-            <div className="rounded-md border">
+            <div className="rounded-md border overflow-hidden">
                 <Table>
                     <TableHeader className="bg-border">
                         {table.getHeaderGroups().map((headerGroup) => (

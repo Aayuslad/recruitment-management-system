@@ -35,6 +35,7 @@ import {
 import type { BatchPositionsSummary } from '@/types/position-types';
 import { useNavigate } from 'react-router-dom';
 import { Spinner } from '../ui/spinner';
+import { POSITION_STATUS } from '@/types/enums';
 
 export function BatchPositionsTable({ batchId }: { batchId: string }) {
     const navigate = useNavigate();
@@ -48,29 +49,6 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
     const { data, isLoading, isError } = useGetBatchPositions(batchId);
 
     const columns: ColumnDef<BatchPositionsSummary>[] = [
-        // {
-        //     id: 'position-id',
-        //     header: () => {
-        //         return <div className="ml-2">Position Id</div>;
-        //     },
-        //     cell: ({ row }) => (
-        //         <div className="ml-2 from-sm font-mono w-[70px]">
-        //             {row.original.positionId.slice(0, 6).toUpperCase()}...
-        //             <button
-        //                 onClick={() => {
-        //                     navigator.clipboard.writeText(
-        //                         row.original.positionId
-        //                     );
-        //                     toast.success('Copied to clipboard');
-        //                 }}
-        //                 className="text-muted-foreground hover:text-foreground hover:cursor-pointer"
-        //                 title="Copy full ID"
-        //             >
-        //                 <Copy size={16} />
-        //             </button>
-        //         </div>
-        //     ),
-        // },
         {
             id: 'index',
             header: () => {
@@ -143,7 +121,12 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
     ];
 
     const table = useReactTable({
-        data: data as BatchPositionsSummary[],
+        data: [
+            ...(data?.filter((x) => x.status === POSITION_STATUS.ON_HOLD) ??
+                []),
+            ...(data?.filter((x) => x.status === POSITION_STATUS.CLOSED) ?? []),
+            ...(data?.filter((x) => x.status === POSITION_STATUS.OPEN) ?? []),
+        ] as BatchPositionsSummary[],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,

@@ -10,6 +10,7 @@ import { timeAgo } from '@/util/time-ago';
 import { ExternalLink } from 'lucide-react';
 import { useParams } from 'react-router';
 import { useShallow } from 'zustand/react/shallow';
+import { genderFormatConverter } from '@/util/gender-format-converter';
 
 export const VerificationCandidateDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -88,7 +89,9 @@ export const VerificationCandidateDetailsPage = () => {
                                 <span className="text-sm text-muted-foreground">
                                     Gender
                                 </span>
-                                <span className="text-sm">{data.gender}</span>
+                                <span className="text-sm">
+                                    {genderFormatConverter(data.gender)}
+                                </span>
                             </div>
 
                             <div className="grid grid-cols-[150px_1fr] items-start gap-2">

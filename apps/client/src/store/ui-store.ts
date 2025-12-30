@@ -15,7 +15,7 @@ export interface UiStoreSliceType {
 
 export const createUiSlice: StateCreator<UiStoreSliceType> = (set, get) => ({
     theme: 'dark',
-    sidebarState: 'closed',
+    sidebarState: 'opened',
 
     toggleTheme: () => {
         const currentTheme = get().theme;

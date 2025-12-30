@@ -1,4 +1,4 @@
-import { useDeleteJobApplication } from '@/api/job-application-api';
+import { useDeleteJobOpening } from '@/api/job-opening-api';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -21,7 +21,7 @@ interface Props {
 export function DeleteJobOpeningDialog({ jobOpeningId, visibleTo }: Props) {
     const [open, setOpen] = useState(false);
     const canAccess = useAccessChecker();
-    const deleteJobApplicationMutation = useDeleteJobApplication();
+    const deleteJobOpeningMutation = useDeleteJobOpening();
     const navigate = useNavigate();
 
     if (!canAccess(visibleTo)) return null;
@@ -31,7 +31,7 @@ export function DeleteJobOpeningDialog({ jobOpeningId, visibleTo }: Props) {
             <Button
                 variant="secondary"
                 className="hover:bg-red-600 w-[160px]"
-                disabled={deleteJobApplicationMutation.isPending}
+                disabled={deleteJobOpeningMutation.isPending}
                 onClick={() => setOpen(true)}
             >
                 Delete Job Opening
@@ -53,9 +53,7 @@ export function DeleteJobOpeningDialog({ jobOpeningId, visibleTo }: Props) {
                         <DialogClose asChild className="flex-1">
                             <Button
                                 variant="secondary"
-                                disabled={
-                                    deleteJobApplicationMutation.isPending
-                                }
+                                disabled={deleteJobOpeningMutation.isPending}
                             >
                                 Cancel
                             </Button>
@@ -65,17 +63,14 @@ export function DeleteJobOpeningDialog({ jobOpeningId, visibleTo }: Props) {
                             variant="default"
                             className="flex-1 bg-red-500 text-white hover:bg-red-600"
                             onClick={() => {
-                                deleteJobApplicationMutation.mutate(
-                                    jobOpeningId,
-                                    {
-                                        onSuccess: () => {
-                                            setOpen(false);
-                                            navigate('/job-openings');
-                                        },
-                                    }
-                                );
+                                deleteJobOpeningMutation.mutate(jobOpeningId, {
+                                    onSuccess: () => {
+                                        setOpen(false);
+                                        navigate('/job-openings');
+                                    },
+                                });
                             }}
-                            disabled={deleteJobApplicationMutation.isPending}
+                            disabled={deleteJobOpeningMutation.isPending}
                         >
                             Delete
                         </Button>

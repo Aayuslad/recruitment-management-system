@@ -151,8 +151,6 @@ export function JobOpeningsTable() {
 
     return (
         <div className="w-full">
-            <h2 className="font-semibold text-xl">Job Openings:</h2>
-
             {/* header */}
             <div className="flex items-center justify-between py-4">
                 <Input

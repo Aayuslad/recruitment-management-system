@@ -10,9 +10,10 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import NumberInputWithEndButtons from '@/components/ui/number-input';
 import { Textarea } from '@/components/ui/textarea';
+import { useAccessChecker } from '@/hooks/use-has-access';
 import type { CreateJobApplicationFeedbackCommandCorrected } from '@/types/job-application-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -20,7 +21,6 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
 import { SkillFeedbackInput } from './skill-feedback-input';
-import { useAccessChecker } from '@/hooks/use-has-access';
 
 type Props = {
     jobApplicationId?: string;
@@ -106,17 +106,24 @@ export function AddFeedbackDialog({
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4">
-                        <div className="grid gap-3">
+                        <div className="grid gap-3 w-[150px]">
                             <Label htmlFor="name-1">Rating</Label>
-                            <Input
-                                id="name-1"
-                                type="number"
+                            <NumberInputWithEndButtons
+                                field={form.watch('rating')}
                                 min={0}
                                 max={10}
-                                className="w-[100px]"
-                                {...form.register('rating', {
-                                    valueAsNumber: true,
-                                })}
+                                increase={() =>
+                                    form.setValue(
+                                        'rating',
+                                        form.getValues().rating + 1
+                                    )
+                                }
+                                decrease={() =>
+                                    form.setValue(
+                                        'rating',
+                                        form.getValues().rating - 1
+                                    )
+                                }
                             />
                         </div>
                         <div className="grid gap-3">

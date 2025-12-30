@@ -143,13 +143,14 @@ export function useSetPositionOnHold() {
     });
 }
 
-export function useGetPositionBatch(id: string) {
+export function useGetPositionBatch(id?: string) {
     return useQuery({
         queryKey: ['position-batch', id],
         queryFn: async (): Promise<PositionBatch | null> => {
             const { data } = await axios.get(`/position/batch/${id}`);
             return data;
         },
+        enabled: !!id,
     });
 }
 

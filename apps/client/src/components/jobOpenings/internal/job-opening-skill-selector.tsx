@@ -40,7 +40,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 type Props = {
-    positionBatchId: string;
+    positionBatchId?: string;
     skillOverRides: CreateJobOpeningCommandCorrected['skillOverRides'];
     append: (
         value: CreateJobOpeningCommandCorrected['skillOverRides'][0]

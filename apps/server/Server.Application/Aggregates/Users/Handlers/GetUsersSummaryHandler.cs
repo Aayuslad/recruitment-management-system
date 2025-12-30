@@ -36,6 +36,13 @@ namespace Server.Application.Aggregates.Users.Handlers
                     Status = user.Status,
                     ContactNumber = user.ContactNumber.ToString(),
                     Gender = user.Gender,
+                    Roles = user.Roles.Select(
+                        selector: x => new UserRolesSummaryDTO
+                        {
+                            Id = x.RoleId,
+                            Name = x.Role.Name
+                        }
+                    ).ToList(),
                 };
 
                 usersDto.Add(userDto);

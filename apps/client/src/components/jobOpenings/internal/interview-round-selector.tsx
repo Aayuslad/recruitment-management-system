@@ -3,6 +3,7 @@
 import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
+import NumberInputWithEndButtons from '@/components/ui/number-input';
 import { INTERVIEW_PARTICIPANT_ROLE } from '@/types/enums';
 import type { CreateJobOpeningCommandCorrected } from '@/types/job-opening-types';
 import { interviewParticipantRoleFormatConverter } from '@/util/interview-participant-role-format-converter';
@@ -11,8 +12,6 @@ import { Save, SquarePen, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { Label } from '../../ui/label';
 import { InterviewRoundDurationSelector } from './interview-round-duration-selector';
-import { RoundNumberSelector } from './interview-round-number-selector';
-import { RoundReqCountInput } from './interview-round-req-count-input';
 import { InterviewRoundRolesRequirementSelector } from './interview-round-roles-requirement-selector';
 import { InterviewRoundTypeSelector } from './interview-round-type-selector';
 
@@ -106,10 +105,13 @@ const RoundContent = ({ field, index, update, remove }: RoundContentProps) => {
             {edit ? (
                 <div className="flex-1 border rounded-2xl py-3 px-3 gap-6 pb-4 flex justify-around items-baseline">
                     <div className="space-y-3">
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 w-[110px]">
                             <Label className="w-[130px]">Round Number</Label>
-                            <RoundNumberSelector
-                                field={field}
+                            <NumberInputWithEndButtons
+                                field={field.roundNumber}
+                                name="roundNumber"
+                                min={1}
+                                small
                                 increase={() =>
                                     update(index, {
                                         ...field,
@@ -157,11 +159,16 @@ const RoundContent = ({ field, index, update, remove }: RoundContentProps) => {
                                     className="flex items-center justify-between gap-2"
                                 >
                                     <span className="font-normal">
-                                        {requirement.role}
+                                        {interviewParticipantRoleFormatConverter(
+                                            requirement.role
+                                        )}
                                     </span>
-                                    <div className="flex items-center">
-                                        <RoundReqCountInput
-                                            field={requirement}
+                                    <div className="flex items-center w-[120px]">
+                                        <NumberInputWithEndButtons
+                                            field={requirement.requirementCount}
+                                            name={requirement.role}
+                                            min={1}
+                                            small
                                             increase={() =>
                                                 update(index, {
                                                     ...field,
@@ -199,6 +206,7 @@ const RoundContent = ({ field, index, update, remove }: RoundContentProps) => {
                                                 })
                                             }
                                         />
+
                                         <button
                                             type="button"
                                             onClick={() => {
@@ -259,14 +267,17 @@ const RoundContent = ({ field, index, update, remove }: RoundContentProps) => {
                     </h4>
                     <div>
                         <span>Panel:</span>{' '}
-                        {field.requirements
-                            .map((requirement) =>
-                                interviewParticipantRoleFormatConverter(
+                        {field.requirements.map(
+                            (requirement, index) =>
+                                `${requirement.requirementCount} ${interviewParticipantRoleFormatConverter(
                                     requirement.role,
-                                    requirement.requirementCount
-                                )
-                            )
-                            .join(', ')}
+                                    requirement.requirementCount > 1
+                                )}${
+                                    index === field.requirements.length - 1
+                                        ? ''
+                                        : ', '
+                                }`
+                        )}
                     </div>
                 </div>
             )}

@@ -31,7 +31,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
                     BatchId = position.BatchId,
                     Status = position.Status,
                     ClosedByCandidateId = position.ClosedByCandidate,
-                    ClosedByCandidateFullName = position.ClosedByCandidate != null ? $"{position.Candidate?.FirstName} {position.Candidate?.LastName}" : null,
+                    ClosedByCandidateFullName = position.ClosedByCandidate != null ? $"{position.Candidate?.FirstName} {position.Candidate?.MiddleName} {position.Candidate?.LastName}" : null,
                     ClosureReason = position.ClosureReason,
                 };
                 positionsDto.Add(positionSummaryDto);

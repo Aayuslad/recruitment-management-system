@@ -37,6 +37,7 @@ import {
 } from '../ui/select';
 import { Spinner } from '../ui/spinner';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
+import { genderFormatConverter } from '@/util/gender-format-converter';
 
 type TabType = {
     name: string;
@@ -85,7 +86,9 @@ export function CandidatesTable() {
             id: 'gender',
             header: () => <div className="w-[80px]">Gender</div>,
             cell: ({ row }) => (
-                <div className="font-medium">{row.original.gender}</div>
+                <div className="font-medium">
+                    {genderFormatConverter(row.original.gender)}
+                </div>
             ),
         },
         {

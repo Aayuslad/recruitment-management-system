@@ -13,5 +13,6 @@ namespace Server.Application.Aggregates.Users.Queries.DTOs
         public UserStatus Status { get; set; }
         public string ContactNumber { get; set; } = null!;
         public Gender Gender { get; set; }
+        public List<UserRolesSummaryDTO> Roles { get; set; } = null!;
     }
 }
