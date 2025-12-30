@@ -34,7 +34,7 @@ namespace Server.API.Controllers
         [Authorize(Roles = "Admin, Recruiter")]
         public async Task<IActionResult> EditPositionBatch(Guid batchId, EditPositionBatchCommand command, CancellationToken cancellationToken)
         {
-            command.PositionBatchId = id;
+            command.PositionBatchId = batchId;
             var result = await _mediator.Send(command, cancellationToken);
             return result.ToActionResult(this);
         }

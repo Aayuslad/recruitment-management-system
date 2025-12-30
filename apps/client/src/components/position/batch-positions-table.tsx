@@ -49,6 +49,29 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
     const { data, isLoading, isError } = useGetBatchPositions(batchId);
 
     const columns: ColumnDef<BatchPositionsSummary>[] = [
+        // {
+        //     id: 'position-id',
+        //     header: () => {
+        //         return <div className="ml-2">Position Id</div>;
+        //     },
+        //     cell: ({ row }) => (
+        //         <div className="ml-2 from-sm font-mono w-[70px]">
+        //             {row.original.positionId.slice(0, 6).toUpperCase()}...
+        //             <button
+        //                 onClick={() => {
+        //                     navigator.clipboard.writeText(
+        //                         row.original.positionId
+        //                     );
+        //                     toast.success('Copied to clipboard');
+        //                 }}
+        //                 className="text-muted-foreground hover:text-foreground hover:cursor-pointer"
+        //                 title="Copy full ID"
+        //             >
+        //                 <Copy size={16} />
+        //             </button>
+        //         </div>
+        //     ),
+        // },
         {
             id: 'index',
             header: () => {
