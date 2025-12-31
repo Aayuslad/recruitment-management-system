@@ -1,7 +1,6 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Skills.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -12,24 +11,18 @@ namespace Server.Application.Aggregates.Skills.Handlers
     internal class EditSkillHandler : IRequestHandler<EditSkillCommand, Result>
     {
         private readonly ISkillRepository _skillRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public EditSkillHandler(ISkillRepository skillRepository, IHttpContextAccessor httpContextAccessor)
+        public EditSkillHandler(ISkillRepository skillRepository, IUserContext userContext)
         {
             _skillRepository = skillRepository;
-            _httpContextAccessor = httpContextAccessor;
+            _userContext = userContext;
         }
 
-        public async Task<Result> Handle(EditSkillCommand command, CancellationToken cancellationToken)
+        public async Task<Result> Handle(EditSkillCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch existing skill
-            var skill = await _skillRepository.GetByIdAsync(command.Id, cancellationToken);
+            var skill = await _skillRepository.GetByIdAsync(request.Id, cancellationToken);
             if (skill == null)
             {
                 throw new NotFoundException("Role Not Found.");
@@ -37,8 +30,8 @@ namespace Server.Application.Aggregates.Skills.Handlers
 
             // step 2: update skill properties
             skill.Update(
-                command.Name,
-                Guid.Parse(userIdString)
+                request.Name,
+                _userContext.UserId
             );
 
             // step 3: persist changes

@@ -6,7 +6,7 @@ using Server.Application.Abstractions.Repositories;
 using Server.Application.Abstractions.Services;
 using Server.Infrastructure.Persistence;
 using Server.Infrastructure.Repositories;
-using Server.Infrastructure.Security;
+using Server.Infrastructure.Services;
 
 namespace Server.Infrastructure
 {
@@ -39,6 +39,7 @@ namespace Server.Infrastructure
             // Register Services
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IHasher, Hasher>();
+            services.AddScoped<IUserContext, UserContext>();
 
             return services;
         }

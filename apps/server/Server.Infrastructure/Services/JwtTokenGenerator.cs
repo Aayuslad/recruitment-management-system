@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 using Server.Application.Abstractions.Services;
 
-namespace Server.Infrastructure.Security
+namespace Server.Infrastructure.Services
 {
     public class JwtTokenGenerator : IJwtTokenGenerator
     {

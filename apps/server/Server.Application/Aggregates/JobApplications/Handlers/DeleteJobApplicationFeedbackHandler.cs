@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.JobApplications.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -12,22 +11,16 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
     internal class DeleteJobApplicationFeedbackHandler : IRequestHandler<DeleteJobApplicationFeedbackCommand, Result>
     {
         private readonly IJobApplicationRepository _jobApplicationRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public DeleteJobApplicationFeedbackHandler(IJobApplicationRepository jobApplicationRepository, IHttpContextAccessor contextAccessor)
+        public DeleteJobApplicationFeedbackHandler(IJobApplicationRepository jobApplicationRepository, IUserContext userContext)
         {
             _jobApplicationRepository = jobApplicationRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(DeleteJobApplicationFeedbackCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: check if exists
             var application = await _jobApplicationRepository.GetByIdAsync(request.JobApplicationId, cancellationToken);
             if (application is null)
@@ -44,7 +37,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
 
             // TODO: allow admin to do this when RABC applied
             // step 3: authorise (only feedback creator can delete)
-            if (feedback.GivenById != Guid.Parse(userIdString))
+            if (feedback.GivenById != _userContext.UserId)
             {
                 throw new ForbiddenException("not allowed to delete this feedback.");
             }

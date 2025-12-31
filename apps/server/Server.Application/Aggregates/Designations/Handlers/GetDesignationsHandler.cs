@@ -16,7 +16,7 @@ namespace Server.Application.Aggregates.Designations.Handlers
             _designationRepository = designationRepository;
         }
 
-        public async Task<Result<IEnumerable<DesignationDetailDTO>>> Handle(GetDesignationsQuery query, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<DesignationDetailDTO>>> Handle(GetDesignationsQuery request, CancellationToken cancellationToken)
         {
             // step 1: fetch designations
             var designations = await _designationRepository.GetAllAsync(cancellationToken);

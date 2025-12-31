@@ -1,9 +1,8 @@
 ﻿
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Events.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -14,22 +13,17 @@ namespace Server.Application.Aggregates.Events.Handlers
     internal class EditEventHandler : IRequestHandler<EditEventCommand, Result>
     {
         private readonly IEventRepository _repository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public EditEventHandler(IEventRepository eventRepository, IHttpContextAccessor contextAccessor)
+        public EditEventHandler(IEventRepository eventRepository, IUserContext userContext)
         {
             _repository = eventRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
 
         }
+
         public async Task<Result> Handle(EditEventCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch event
             var event_ = await _repository.GetByIdAsync(request.Id, cancellationToken);
             if (event_ is null)
@@ -39,7 +33,7 @@ namespace Server.Application.Aggregates.Events.Handlers
 
             // step 2: make changes
             event_.Update(
-                    updatedBy: Guid.Parse(userIdString),
+                    updatedBy: _userContext.UserId,
                     name: request.Name,
                     type: request.Type,
                     eventJobOpenings: request.JobOpenings.Select(

@@ -1,9 +1,8 @@
 ﻿
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.JobOpenings.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -13,22 +12,16 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
     internal class DeleteJobOpeningHandler : IRequestHandler<DeleteJobOpeningCommand, Result>
     {
         private readonly IJobOpeningRepository _jobOpeningRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public DeleteJobOpeningHandler(IJobOpeningRepository jobOpeningRepository, IHttpContextAccessor httpContext)
+        public DeleteJobOpeningHandler(IJobOpeningRepository jobOpeningRepository, IUserContext userContext)
         {
             _jobOpeningRepository = jobOpeningRepository;
-            _httpContextAccessor = httpContext;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(DeleteJobOpeningCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: find the position
             var jobOpening = await _jobOpeningRepository.GetByIdAsync(request.JobOpeningId, cancellationToken);
             if (jobOpening == null)
@@ -36,8 +29,8 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                 throw new NotFoundException("Job Opening Not Found.");
             }
 
-            // step 2: soft delet
-            jobOpening.Delete(Guid.Parse(userIdString));
+            // step 2: soft delete
+            jobOpening.Delete(_userContext.UserId);
 
             // step 3: persist entity
             await _jobOpeningRepository.UpdateAysnc(jobOpening, cancellationToken);

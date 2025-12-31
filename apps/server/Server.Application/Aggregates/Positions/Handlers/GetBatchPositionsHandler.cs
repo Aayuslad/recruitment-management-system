@@ -16,10 +16,10 @@ namespace Server.Application.Aggregates.Positions.Handlers
             _positionRepository = positionRepository;
         }
 
-        public async Task<Result<List<BatchPositionSummaryDTO>>> Handle(GetBatchPositionsQuery query, CancellationToken cancellationToken)
+        public async Task<Result<List<BatchPositionSummaryDTO>>> Handle(GetBatchPositionsQuery request, CancellationToken cancellationToken)
         {
             // step 1: fetch positions
-            var positions = await _positionRepository.GetAllByBatchIdAsync(query.BatchId, cancellationToken);
+            var positions = await _positionRepository.GetAllByBatchIdAsync(request.BatchId, cancellationToken);
 
             // step 2: map dto
             var positionsDto = new List<BatchPositionSummaryDTO>();

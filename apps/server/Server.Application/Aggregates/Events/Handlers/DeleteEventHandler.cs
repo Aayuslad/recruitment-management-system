@@ -1,9 +1,8 @@
 ﻿
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Events.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -13,22 +12,16 @@ namespace Server.Application.Aggregates.Events.Handlers
     internal class DeleteEventHandler : IRequestHandler<DeleteEventCommand, Result>
     {
         private readonly IEventRepository _repository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public DeleteEventHandler(IEventRepository eventRepository, IHttpContextAccessor contextAccessor)
+        public DeleteEventHandler(IEventRepository eventRepository, IUserContext userContext)
         {
             _repository = eventRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(DeleteEventCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch event
             var event_ = await _repository.GetByIdAsync(request.Id, cancellationToken);
             if (event_ is null)
@@ -37,7 +30,7 @@ namespace Server.Application.Aggregates.Events.Handlers
             }
 
             // step 2: soft delete
-            event_.Delete(Guid.Parse(userIdString));
+            event_.Delete(_userContext.UserId);
 
             // step 3: perist changes
             await _repository.UpdateAsync(event_, cancellationToken);

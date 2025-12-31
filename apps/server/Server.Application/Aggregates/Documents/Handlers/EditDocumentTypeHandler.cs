@@ -1,8 +1,7 @@
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Documents.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -12,22 +11,16 @@ namespace Server.Application.Aggregates.Documents.Handlers
     internal class EditDocumentTypeHandler : IRequestHandler<EditDocumentTypeCommand, Result>
     {
         private readonly IDocumentRepository _documentRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public EditDocumentTypeHandler(IHttpContextAccessor httpContextAccessor, IDocumentRepository documentRepository)
+        public EditDocumentTypeHandler(IUserContext userContext, IDocumentRepository documentRepository)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _userContext = userContext;
             _documentRepository = documentRepository;
         }
 
         public async Task<Result> Handle(EditDocumentTypeCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch the doc type
             var documentType = await _documentRepository.GetByIdAsync(request.Id, cancellationToken);
             if (documentType == null)
@@ -38,7 +31,7 @@ namespace Server.Application.Aggregates.Documents.Handlers
             // step 2: update the entityO
             documentType.Update(
                 name: request.Name,
-                updatedBy: Guid.Parse(userIdString)
+                updatedBy: _userContext.UserId
             );
 
             // step 3: persist entity

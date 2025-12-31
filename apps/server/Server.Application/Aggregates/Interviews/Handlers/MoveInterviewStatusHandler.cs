@@ -1,8 +1,6 @@
 
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Aggregates.Interviews.Commands;
 using Server.Application.Exceptions;
@@ -14,24 +12,16 @@ namespace Server.Application.Aggregates.Interviews.Handlers
     internal class MoveInterviewStatusHandler : IRequestHandler<MoveInterviewStatusCommand, Result>
     {
         private readonly IInterviewRepository _interviewRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
         private readonly IJobApplicationRepository _jobApplicationRepository;
 
-        public MoveInterviewStatusHandler(IInterviewRepository interviewRepository, IHttpContextAccessor contextAccessor, IJobApplicationRepository jobApplicationRepository)
+        public MoveInterviewStatusHandler(IInterviewRepository interviewRepository, IJobApplicationRepository jobApplicationRepository)
         {
             _interviewRepository = interviewRepository;
-            _contextAccessor = contextAccessor;
             _jobApplicationRepository = jobApplicationRepository;
         }
 
         public async Task<Result> Handle(MoveInterviewStatusCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch the interviw
             var interview = await _interviewRepository.GetByIdAsync(request.InterviewId, cancellationToken);
             if (interview is null)

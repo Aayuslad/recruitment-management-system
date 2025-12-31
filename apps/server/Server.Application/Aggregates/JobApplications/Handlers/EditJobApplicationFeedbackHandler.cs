@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.JobApplications.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -13,22 +12,16 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
     internal class EditJobApplicationFeedbackHandler : IRequestHandler<EditJobApplicationFeedbackCommand, Result>
     {
         private readonly IJobApplicationRepository _jobApplicationRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public EditJobApplicationFeedbackHandler(IJobApplicationRepository jobApplicationRepository, IHttpContextAccessor contextAccessor)
+        public EditJobApplicationFeedbackHandler(IJobApplicationRepository jobApplicationRepository, IUserContext userContext)
         {
             _jobApplicationRepository = jobApplicationRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
 
         }
         public async Task<Result> Handle(EditJobApplicationFeedbackCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: check if application exists
             var application = await _jobApplicationRepository.GetByIdAsync(request.JobApplicationId, cancellationToken);
             if (application is null)
@@ -44,7 +37,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
             }
 
             // step 3: authorise (only feedback creator can edit)
-            if (feedback.GivenById != Guid.Parse(userIdString))
+            if (feedback.GivenById != _userContext.UserId)
             {
                 throw new ForbiddenException("not allowed to edit this feedback.");
             }

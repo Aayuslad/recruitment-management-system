@@ -17,7 +17,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
             _batchRepository = batchRepository;
         }
 
-        public async Task<Result<List<PositionBatchSummaryDTO>>> Handle(GetPositionBatchesQuery query, CancellationToken cancellationToken)
+        public async Task<Result<List<PositionBatchSummaryDTO>>> Handle(GetPositionBatchesQuery request, CancellationToken cancellationToken)
         {
             // step 1: fetch positinoBatch
             var batches = await _batchRepository.GetAllAsync(cancellationToken);

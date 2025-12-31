@@ -16,7 +16,7 @@ namespace Server.Application.Aggregates.Skills.Handlers
             _skillRepository = skillRepository;
         }
 
-        public async Task<Result<IEnumerable<SkillDetailDTO>>> Handle(GetSkillsQuery query, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<SkillDetailDTO>>> Handle(GetSkillsQuery request, CancellationToken cancellationToken)
         {
             // step 1: fetch skills
             var skills = await _skillRepository.GetAllAsync(cancellationToken);

@@ -1,10 +1,8 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Positions.Commands;
-using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities;
 using Server.Domain.Entities.Positions;
@@ -15,27 +13,21 @@ namespace Server.Application.Aggregates.Positions.Handlers
     internal class CreatePositionBatchHandler : IRequestHandler<CreatePositionBatchCommand, Result>
     {
         private readonly IPositionBatchRepository _positionBatchRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public CreatePositionBatchHandler(IPositionBatchRepository positionBatchRepository, IHttpContextAccessor contextAccessor)
+        public CreatePositionBatchHandler(IPositionBatchRepository positionBatchRepository, IUserContext userContext)
         {
             _positionBatchRepository = positionBatchRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
-        public async Task<Result> Handle(CreatePositionBatchCommand command, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreatePositionBatchCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: create entity
             var newPositionBatchId = Guid.NewGuid();
 
             // create skil over rides entity list
-            var overrides = command.SkillOverRides?.Select(
+            var overrides = request.SkillOverRides?.Select(
                     selector: x => SkillOverRide.CreateForPosition(
                             id: null,
                             positionBatchId: newPositionBatchId,
@@ -48,7 +40,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
                 ).ToList() ?? [];
 
             // create reviewers list
-            var reviewers = command.Reviewers?.Select(
+            var reviewers = request.Reviewers?.Select(
                 selector: reviewer => PositionBatchReviewer.Create(
                             positionBatchId: newPositionBatchId,
                             reviewerId: reviewer.ReviewerUserId
@@ -56,7 +48,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
 
             // create needed positions list
             var positions = new List<Position>();
-            for (int i = 0; i < command.NumberOfPositions; i++)
+            for (int i = 0; i < request.NumberOfPositions; i++)
             {
                 var position = Position.Create(newPositionBatchId);
                 positions.Add(position);
@@ -65,21 +57,21 @@ namespace Server.Application.Aggregates.Positions.Handlers
             // create root entity
             var positionBatch = PositionBatch.Create(
                    id: newPositionBatchId,
-                   createdBy: Guid.Parse(userIdString),
-                   description: command.Description,
-                   designationId: command.DesignationId,
-                   jobLocation: command.JobLocation,
-                   maxCTC: command.MaxCTC,
-                   minCTC: command.MinCTC,
+                   createdBy: _userContext.UserId,
+                   description: request.Description,
+                   designationId: request.DesignationId,
+                   jobLocation: request.JobLocation,
+                   maxCTC: request.MaxCTC,
+                   minCTC: request.MinCTC,
                    positions: positions,
                    reviewers: reviewers,
                    overRides: overrides
                );
 
-            // step 5: persist position batch
+            // step 2: persist position batch
             await _positionBatchRepository.AddAsync(positionBatch, cancellationToken);
 
-            // step 6: return result
+            // step 3: return result
             return Result.Success();
         }
     }

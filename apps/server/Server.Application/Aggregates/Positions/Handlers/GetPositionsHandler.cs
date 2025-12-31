@@ -16,7 +16,7 @@ namespace Server.Application.Aggregates.Positions.Handlers
             _positionRepository = positionRepository;
         }
 
-        public async Task<Result<List<PositionSummaryDTO>>> Handle(GetPositionsQuery query, CancellationToken cancellationToken)
+        public async Task<Result<List<PositionSummaryDTO>>> Handle(GetPositionsQuery request, CancellationToken cancellationToken)
         {
             // step 1: fetch positions
             var positions = await _positionRepository.GetAllAsync(cancellationToken);

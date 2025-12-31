@@ -1,7 +1,6 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Skills.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -12,31 +11,25 @@ namespace Server.Application.Aggregates.Skills.Handlers
     internal class DeleteSkillHandler : IRequestHandler<DeleteSkillCommand, Result>
     {
         private readonly ISkillRepository _skillRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public DeleteSkillHandler(ISkillRepository skillRepository, IHttpContextAccessor httpContextAccessor)
+        public DeleteSkillHandler(ISkillRepository skillRepository, IUserContext userContext)
         {
             _skillRepository = skillRepository;
-            _httpContextAccessor = httpContextAccessor;
+            _userContext = userContext;
         }
 
-        public async Task<Result> Handle(DeleteSkillCommand command, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteSkillCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
-            if (string.IsNullOrEmpty(userIdString))
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch existing skill
-            var skill = await _skillRepository.GetByIdAsync(command.Id, cancellationToken);
+            var skill = await _skillRepository.GetByIdAsync(request.Id, cancellationToken);
             if (skill == null)
             {
                 throw new NotFoundException("Skill Not Found.");
             }
 
-            // step 2: delete skill
-            skill.Delete(Guid.Parse(userIdString));
+            // step 2: soft delete
+            skill.Delete(_userContext.UserId);
             await _skillRepository.UpdateAsync(skill, cancellationToken);
 
             // step 3: return result

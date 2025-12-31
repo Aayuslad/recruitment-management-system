@@ -19,10 +19,10 @@ namespace Server.Application.Aggregates.Positions.Handlers
             _batchRepository = batchRepository;
         }
 
-        public async Task<Result<PositionBatchDetailDTO>> Handle(GetPositionBatchQuery query, CancellationToken cancellationToken)
+        public async Task<Result<PositionBatchDetailDTO>> Handle(GetPositionBatchQuery request, CancellationToken cancellationToken)
         {
             // step 1: fetch positinoBatch
-            var batch = await _batchRepository.GetByIdAsync(query.BatchId, cancellationToken);
+            var batch = await _batchRepository.GetByIdAsync(request.BatchId, cancellationToken);
             if (batch == null)
             {
                 throw new NotFoundException("Position Batch Not Found.");

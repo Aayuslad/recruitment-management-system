@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Designations.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -13,24 +12,18 @@ namespace Server.Application.Aggregates.Designations.Handlers
     internal class CreateDesignationHandler : IRequestHandler<CreateDesignationCommand, Result>
     {
         private readonly IDesignationRepository _designationRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public CreateDesignationHandler(IDesignationRepository designationRepository, IHttpContextAccessor contextAccessor)
+        public CreateDesignationHandler(IDesignationRepository designationRepository, IUserContext userContext)
         {
             _designationRepository = designationRepository;
-            _httpContextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
-        public async Task<Result> Handle(CreateDesignationCommand command, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreateDesignationCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: check if designation with this name exists
-            var result = await _designationRepository.ExistsByNameAsync(command.Name, cancellationToken);
+            var result = await _designationRepository.ExistsByNameAsync(request.Name, cancellationToken);
             if (result)
             {
                 throw new ConflictException("Designation with this name already exists");
@@ -40,7 +33,7 @@ namespace Server.Application.Aggregates.Designations.Handlers
             var newDesignationId = Guid.NewGuid();
 
             // create designation skills
-            var dSkills = command.DesignationSkills.Select(
+            var dSkills = request.DesignationSkills.Select(
                     selector: x => DesignationSkill.Create(
                             designationId: newDesignationId,
                             skillId: x.SkillId,
@@ -51,8 +44,8 @@ namespace Server.Application.Aggregates.Designations.Handlers
             // create root entity designation
             var designation = Designation.Create(
                     id: newDesignationId,
-                    createdBy: Guid.Parse(userIdString),
-                    name: command.Name,
+                    createdBy: _userContext.UserId,
+                    name: request.Name,
                     skills: dSkills
                 );
 

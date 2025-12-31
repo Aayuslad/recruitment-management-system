@@ -1,11 +1,9 @@
 ﻿
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Interviews.Commands;
-using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.Interviews;
 using Server.Domain.Enums;
@@ -15,22 +13,16 @@ namespace Server.Application.Aggregates.Interviews.Handlers
     internal class CreateInterviewHandler : IRequestHandler<CreateInterviewCommand, Result>
     {
         private readonly IInterviewRepository _interviewRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public CreateInterviewHandler(IInterviewRepository interviewRepository, IHttpContextAccessor contextAccessor)
+        public CreateInterviewHandler(IInterviewRepository interviewRepository, IUserContext userContext)
         {
             _interviewRepository = interviewRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(CreateInterviewCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: create entity
             var newInterviewId = Guid.NewGuid();
 
