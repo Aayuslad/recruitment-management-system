@@ -11,7 +11,7 @@ namespace Server.API.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/candidate")]
+    [Route("api/candidates")]
     public class CandidateController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -47,7 +47,7 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
-        [HttpPut("verify-bg/{id:guid}")]
+        [HttpPut("{id:guid}/verify-bg")]
         [Authorize(Roles = "Admin, HR")]
         public async Task<IActionResult> VerifyCandidateBg(Guid id, CancellationToken cancellationToken)
         {
@@ -100,7 +100,7 @@ namespace Server.API.Controllers
             return result.ToActionResult(this);
         }
 
-        [HttpPut("{candidateId:guid}/add-document")]
+        [HttpPut("{candidateId:guid}/add-doc")]
         [Authorize(Roles = "Admin, HR")]
         public async Task<IActionResult> AddCandidateDocument(Guid candidateId, [FromBody] AddCandidateDocumentCommand command, CancellationToken cancellationToken)
         {

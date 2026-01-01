@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { SIDEBAR_WIDTH } from '@/components/ui/sidebar';
 import { Spinner } from '@/components/ui/spinner';
 import { useAppStore } from '@/store';
+import { genderFormatConverter } from '@/util/gender-format-converter';
 import { timeAgo } from '@/util/time-ago';
 import { ExternalLink } from 'lucide-react';
 import { useParams } from 'react-router';
@@ -40,7 +41,7 @@ export const CandidateDetailsPage = () => {
             <div className="h-30 flex items-center px-10 border-b ">
                 <div className="space-y-1">
                     <h1 className="text-2xl font-bold">Candidate</h1>
-                    <div className="space-x-3 font-semibold">
+                    <div className="space-x-3 font-semibold text-muted-foreground">
                         <span>{`${data.firstName} ${data.middleName} ${data.lastName}`}</span>
                     </div>
                 </div>
@@ -79,7 +80,9 @@ export const CandidateDetailsPage = () => {
                                 <span className="text-sm text-muted-foreground">
                                     Gender
                                 </span>
-                                <span className="text-sm">{data.gender}</span>
+                                <span className="text-sm">
+                                    {genderFormatConverter(data.gender)}
+                                </span>
                             </div>
 
                             {/* <div className="grid grid-cols-[150px_1fr] items-start gap-2">

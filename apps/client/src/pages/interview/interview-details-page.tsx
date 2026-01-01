@@ -21,6 +21,7 @@ import { useParams } from 'react-router';
 import { useShallow } from 'zustand/react/shallow';
 import { MarkCompletedButton } from './actions-components/mark-completed-button';
 import { ScheduleInterviewDialog } from './actions-components/schedule-interview-dialog';
+import { interviewParticipantRoleFormatConverter } from '@/util/interview-participant-role-format-converter';
 
 export const InterviewDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -216,10 +217,6 @@ export const InterviewDetailsPage = () => {
                                                 <Item className=" py-1.5 px-0">
                                                     <ItemMedia>
                                                         <Avatar>
-                                                            {/* <AvatarImage
-                                                            src={person.avatar}
-                                                            className="grayscale"
-                                                        /> */}
                                                             <AvatarFallback>
                                                                 {participant.participantUserName.charAt(
                                                                     0
@@ -237,7 +234,9 @@ export const InterviewDetailsPage = () => {
                                                             </span> */}
                                                         </ItemTitle>
                                                         <ItemDescription>
-                                                            {participant.role}
+                                                            {interviewParticipantRoleFormatConverter(
+                                                                participant.role
+                                                            )}
                                                         </ItemDescription>
                                                     </ItemContent>
                                                     <ItemActions>

@@ -37,7 +37,7 @@ export function ApplicationProgress({ status }: ApplicationProgressProps) {
 
                     {!isSideState && currentIndex >= 0 && (
                         <div
-                            className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-white transition-all mx-4"
+                            className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-black dark:bg-white transition-all mx-4"
                             style={{
                                 width: `${(currentIndex / (CORE_STATES.length - 1)) * 98}%`,
                             }}
@@ -54,7 +54,7 @@ export function ApplicationProgress({ status }: ApplicationProgressProps) {
                                 className="relative z-10 flex flex-col items-center gap-1"
                             >
                                 <div
-                                    className={`flex h-6 w-6 items-center justify-center rounded-full border text-xs font-semibold ${isCompleted ? 'bg-secondary-foreground text-accent' : isCurrent ? 'bg-white text-black' : 'border-muted bg-secondary text-muted-foreground'}`}
+                                    className={`flex h-6 w-6 items-center justify-center rounded-full border text-xs font-semibold ${isCompleted ? 'bg-secondary-foreground text-accent' : isCurrent ? 'bg-black dark:bg-white text-white dark:text-black' : 'border-muted bg-secondary text-muted-foreground'}`}
                                 >
                                     {isCompleted ? (
                                         <Check className="w-4 h-4" />
@@ -70,7 +70,7 @@ export function ApplicationProgress({ status }: ApplicationProgressProps) {
                                 )}
 
                                 <span
-                                    className={`text-sm ${isCompleted || isCurrent ? 'text-foreground' : 'text-muted-foreground'}`}
+                                    className={`text-sm font-semibold ${isCompleted || isCurrent ? 'text-foreground' : 'text-muted-foreground'}`}
                                 >
                                     {step}
                                 </span>

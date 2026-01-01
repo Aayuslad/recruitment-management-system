@@ -1,11 +1,9 @@
 
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Candidates.Commands;
-using Server.Application.Exceptions;
 using Server.Core.Results;
 
 namespace Server.Application.Aggregates.Candidates.Handlers
@@ -13,22 +11,16 @@ namespace Server.Application.Aggregates.Candidates.Handlers
     internal class VerifyCandidateDocumentHandler : IRequestHandler<VerifyCandidateDocumentCommand, Result>
     {
         private readonly ICandidateRepository _candidateRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public VerifyCandidateDocumentHandler(ICandidateRepository candidateRepository, IHttpContextAccessor contextAccessor)
+        public VerifyCandidateDocumentHandler(ICandidateRepository candidateRepository, IUserContext userContext)
         {
             _candidateRepository = candidateRepository;
-            _httpContextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(VerifyCandidateDocumentCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch the entity
             var candidate = await _candidateRepository.GetByIdAsync(request.CandidateId, cancellationToken);
             if (candidate == null)
@@ -36,19 +28,20 @@ namespace Server.Application.Aggregates.Candidates.Handlers
                 return Result.Failure("Candidate not found");
             }
 
-            // step 2: create doc entity
+            // step 2: fetch doc entity
             var docToVerify = candidate.Documents.FirstOrDefault(x => x.Id == request.DocumentId);
             if (docToVerify == null)
             {
                 return Result.Failure("Document not found");
             }
 
-            docToVerify.MarkVerified(Guid.Parse(userIdString));
+            // step 3: verify
+            docToVerify.MarkVerified(_userContext.UserId);
 
-            // step 3: persist entity
+            // step 4: persist entity
             await _candidateRepository.UpdateAsync(candidate, cancellationToken);
 
-            // step 4: return result
+            // step 5: return result
             return Result.Success();
         }
     }

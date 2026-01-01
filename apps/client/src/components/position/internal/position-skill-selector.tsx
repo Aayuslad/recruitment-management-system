@@ -117,11 +117,15 @@ export const PositionSkillSelector = ({
         });
 
         setInheritedSkills((prev) => {
-            return prev.filter((y) => y.skillId !== inheritedSkill.skillId);
+            return (
+                prev.filter((y) => y.skillId !== inheritedSkill.skillId) ?? []
+            );
         });
 
         setFinalSkills((prev) => {
-            return prev.filter((y) => y.skillId !== inheritedSkill.skillId);
+            return (
+                prev.filter((y) => y.skillId !== inheritedSkill.skillId) ?? []
+            );
         });
     };
 
@@ -258,12 +262,12 @@ export const PositionSkillSelector = ({
             {viewMode === 'view' && designation && skills && (
                 <div className="border rounded-2xl px-2 py-2">
                     {[
-                        ...finalSkills.filter(
+                        ...(finalSkills?.filter(
                             (x) => x.skillType === 'Required'
-                        ),
-                        ...finalSkills.filter(
+                        ) ?? []),
+                        ...(finalSkills?.filter(
                             (x) => x.skillType === 'Preferred'
-                        ),
+                        ) ?? []),
                     ].map((x) => {
                         return (
                             <SkillPill

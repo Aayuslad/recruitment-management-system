@@ -1,9 +1,8 @@
 ﻿
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Interviews.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -13,22 +12,16 @@ namespace Server.Application.Aggregates.Interviews.Handlers
     internal class DeleteInterviewHandler : IRequestHandler<DeleteInterviewCommand, Result>
     {
         private readonly IInterviewRepository _interviewRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public DeleteInterviewHandler(IInterviewRepository interviewRepository, IHttpContextAccessor contextAccessor)
+        public DeleteInterviewHandler(IInterviewRepository interviewRepository, IUserContext userContext)
         {
             _interviewRepository = interviewRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(DeleteInterviewCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch the interviw
             var interview = await _interviewRepository.GetByIdAsync(request.Id, cancellationToken);
             if (interview is null)

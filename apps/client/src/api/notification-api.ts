@@ -13,7 +13,7 @@ export function useMarkNotificationsAsRead() {
         mutationFn: async (
             payload: MarkNotificationsAsReadCommandCorrected
         ): Promise<void> => {
-            await axios.post('/notification/mark-as-read', payload);
+            await axios.post('/notifications/mark-as-read', payload);
         },
         onSuccess: () => {
             toast.success('Notifications Marked as Read');
@@ -34,7 +34,7 @@ export function useGetUserNotifications(userId: string) {
     return useQuery({
         queryKey: ['notifications', userId],
         queryFn: async (): Promise<Notification[]> => {
-            const { data } = await axios.get(`/notification/user/${userId}`);
+            const { data } = await axios.get(`/notifications/user/${userId}`);
             return data;
         },
     });

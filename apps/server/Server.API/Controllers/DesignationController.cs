@@ -10,7 +10,7 @@ using Server.Core.Extensions;
 namespace Server.API.Controllers
 {
     [ApiController]
-    [Route("api/designation")]
+    [Route("api/designations")]
     [Authorize]
     public class DesignationController : ControllerBase
     {

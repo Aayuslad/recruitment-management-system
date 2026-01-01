@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.JobApplications.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -13,22 +12,16 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
     internal class CreateJobApplicationHandler : IRequestHandler<CreateJobApplicationCommand, Result>
     {
         private readonly IJobApplicationRepository _jobApplicationRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public CreateJobApplicationHandler(IJobApplicationRepository jobApplicationRepository, IHttpContextAccessor contextAccessor)
+        public CreateJobApplicationHandler(IJobApplicationRepository jobApplicationRepository, IUserContext userContext)
         {
             _jobApplicationRepository = jobApplicationRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(CreateJobApplicationCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: check if alredy exists
             var result = await _jobApplicationRepository.ExistsByCandidateAndOpeningAsync(request.JobOpeningId, request.CandidateId, cancellationToken);
             if (result)
@@ -39,7 +32,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
             // step 2: create entity
             var application = JobApplication.Create(
                     id: null,
-                    createdBy: Guid.Parse(userIdString),
+                    createdBy: _userContext.UserId,
                     candidateId: request.CandidateId,
                     jobOpeningId: request.JobOpeningId
                 );

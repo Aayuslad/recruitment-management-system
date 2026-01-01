@@ -1,11 +1,9 @@
 ﻿
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.JobOpenings.Commands;
-using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities;
 using Server.Domain.Entities.JobOpenings;
@@ -16,27 +14,21 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
     internal class CreateJobOpeningHandler : IRequestHandler<CreateJobOpeningCommand, Result>
     {
         private readonly IJobOpeningRepository _jobOpeningRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public CreateJobOpeningHandler(IJobOpeningRepository jobOpeningRepository, IHttpContextAccessor httpContext)
+        public CreateJobOpeningHandler(IJobOpeningRepository jobOpeningRepository, IUserContext userContext)
         {
             _jobOpeningRepository = jobOpeningRepository;
-            _httpContextAccessor = httpContext;
+            _userContext = userContext;
         }
 
-        public async Task<Result> Handle(CreateJobOpeningCommand cmd, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreateJobOpeningCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: create entity
             var newJobOpeningId = Guid.NewGuid();
 
             // create skil over rides entity list
-            var skillOverRides = cmd.SkillOverRides.Select(
+            var skillOverRides = request.SkillOverRides.Select(
                     selector: x => SkillOverRide.CreateForJobOpening(
                             id: null,
                             jobOpeningId: newJobOpeningId,
@@ -49,7 +41,7 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                 ).ToList();
 
             // create interviewer enity list
-            var interviewers = cmd.Interviewers.Select(
+            var interviewers = request.Interviewers.Select(
                     selector: x => JobOpeningInterviewer.Create(
                             id: null,
                             jobOpeningId: newJobOpeningId,
@@ -60,7 +52,7 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
 
             // create interview rounds
             var interviewRoundsId = Guid.NewGuid();
-            var interviewRounds = cmd.InterviewRounds.Select(
+            var interviewRounds = request.InterviewRounds.Select(
                 selector: x => InterviewRoundTemplate.Create(
                         id: interviewRoundsId,
                         jobOpeningId: newJobOpeningId,
@@ -82,11 +74,11 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
             // create aggregate root entity
             var jobOpening = JobOpening.Create(
                     id: newJobOpeningId,
-                    createdBy: Guid.Parse(userIdString),
-                    positionBatchId: cmd.PositionBatchId,
-                    title: cmd.Title,
-                    description: cmd.Description,
-                    type: cmd.Type,
+                    createdBy: _userContext.UserId,
+                    positionBatchId: request.PositionBatchId,
+                    title: request.Title,
+                    description: request.Description,
+                    type: request.Type,
                     jobOpeningInterviewers: interviewers,
                     interviewRounds: interviewRounds,
                     skillOverRides: skillOverRides

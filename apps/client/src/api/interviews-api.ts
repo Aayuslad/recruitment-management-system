@@ -19,7 +19,7 @@ export function useCreateInterview() {
         mutationFn: async (
             payload: CreateInterviewCommandCorrected
         ): Promise<void> => {
-            await axios.post('/interview', payload);
+            await axios.post('/interviews', payload);
         },
         onSuccess: () => {
             toast.success('Interview created');
@@ -43,7 +43,7 @@ export function useEditInterview() {
         mutationFn: async (
             payload: EditInterviewCommandCorrected
         ): Promise<void> => {
-            await axios.put(`/interview/${payload.id}`, payload);
+            await axios.put(`/interviews/${payload.id}`, payload);
         },
         onSuccess: (_, variables) => {
             toast.success('Interview updated');
@@ -70,8 +70,8 @@ export function useMoveInterviewStatus() {
         mutationFn: async (
             payload: MoveInterviewStatusCommandCorrected
         ): Promise<void> => {
-            await axios.put(
-                `/interview/${payload.interviewId}/move-status`,
+            await axios.patch(
+                `/interviews/${payload.interviewId}/move-status`,
                 payload
             );
         },
@@ -101,7 +101,7 @@ export function useDeleteInterview() {
 
     return useMutation({
         mutationFn: async (id: string): Promise<void> => {
-            await axios.delete(`/interview/${id}`);
+            await axios.delete(`/interviews/${id}`);
         },
         onSuccess: (_, id) => {
             toast.success('Interview deleted');
@@ -127,7 +127,7 @@ export function useCreateInterviewFeedback() {
             payload: CreateInterviewFeedbackCommandCorrected
         ) => {
             await axios.post(
-                `/interview/${payload.interviewId}/feedback`,
+                `/interviews/${payload.interviewId}/feedback`,
                 payload
             );
         },
@@ -155,7 +155,7 @@ export function useEditInterviewFeedback() {
     return useMutation({
         mutationFn: async (payload: EditInterviewFeedbackCommandCorrected) => {
             await axios.put(
-                `/interview/${payload.interviewId}/feedback/${payload.feedbackId}`,
+                `/interviews/${payload.interviewId}/feedback/${payload.feedbackId}`,
                 payload
             );
         },
@@ -186,7 +186,7 @@ export function useDeleteInterviewFeedback() {
             feedbackId: string;
         }) => {
             await axios.delete(
-                `/interview/${args.interviewId}/feedback/${args.feedbackId}`
+                `/interviews/${args.interviewId}/feedback/${args.feedbackId}`
             );
         },
         onSuccess: (_, variables) => {
@@ -211,7 +211,7 @@ export function useGetInterview(id?: string) {
     return useQuery({
         queryKey: ['interview', id],
         queryFn: async (): Promise<Interview | null> => {
-            const { data } = await axios.get(`/interview/${id}`);
+            const { data } = await axios.get(`/interviews/${id}`);
             return data;
         },
         enabled: !!id,
@@ -222,7 +222,7 @@ export function useGetAssignedInterviews() {
     return useQuery({
         queryKey: ['assigned-interviews'],
         queryFn: async (): Promise<InterviewSummary[] | null> => {
-            const { data } = await axios.get('/interview/assigned');
+            const { data } = await axios.get('/interviews/assigned');
             return data;
         },
     });
@@ -235,7 +235,7 @@ export function useGetJobApplicationInterviews(jobApplicationId?: string) {
             InterviewSummaryForJobApplication[] | null
         > => {
             const { data } = await axios.get(
-                `/interview/job-application/${jobApplicationId}`
+                `/interviews/for-job-application/${jobApplicationId}`
             );
             return data;
         },

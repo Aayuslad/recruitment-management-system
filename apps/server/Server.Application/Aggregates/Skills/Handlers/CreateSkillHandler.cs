@@ -1,7 +1,6 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Skills.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -13,33 +12,27 @@ namespace Server.Application.Aggregates.Skills.Handlers
     internal class CreateSkillHandler : IRequestHandler<CreateSkillCommand, Result>
     {
         private readonly ISkillRepository _skillRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public CreateSkillHandler(ISkillRepository skillRepository, IHttpContextAccessor httpContextAccessor)
+        public CreateSkillHandler(ISkillRepository skillRepository, IUserContext userContext)
         {
             _skillRepository = skillRepository;
-            _httpContextAccessor = httpContextAccessor;
+            _userContext = userContext;
         }
 
-        public async Task<Result> Handle(CreateSkillCommand command, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreateSkillCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: check alredy existing skill with name
-            var nameResult = await _skillRepository.ExistsByNameAsync(command.Name, cancellationToken);
+            var nameResult = await _skillRepository.ExistsByNameAsync(request.Name, cancellationToken);
             if (nameResult)
             {
-                throw new ConflictException($"Skill with name {command.Name} already exists.");
+                throw new ConflictException($"Skill with name {request.Name} already exists.");
             }
 
             // step 2: create and persist entiry
             var skill = Skill.Create(
-                command.Name,
-                Guid.Parse(userIdString)
+                request.Name,
+                _userContext.UserId
             );
             await _skillRepository.AddAsync(skill, cancellationToken);
 

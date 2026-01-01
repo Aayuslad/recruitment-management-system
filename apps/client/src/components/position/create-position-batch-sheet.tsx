@@ -23,9 +23,12 @@ import { DesignationSelector } from './internal/designation-selector';
 import { PositionSkillSelector } from './internal/position-skill-selector';
 import { ReviewersSelector } from './internal/reviewers-selector';
 import { useAccessChecker } from '@/hooks/use-has-access';
+import InputWithEndButtons from '../ui/number-input';
 
 const createPositionBatchFormSchema = z.object({
-    numberOfPositions: z.number(),
+    numberOfPositions: z
+        .number()
+        .min(1, 'Number of positions must be at least 1'),
     description: z.string().nullable().optional(),
     designationId: z.string(),
     minCTC: z.number(),
@@ -57,6 +60,11 @@ export function CreatePositionBatchSheet({ visibleTo }: Props) {
 
     const form = useForm<z.infer<typeof createPositionBatchFormSchema>>({
         resolver: zodResolver(createPositionBatchFormSchema),
+        defaultValues: {
+            numberOfPositions: 1,
+            minCTC: 0,
+            maxCTC: 0,
+        },
     });
 
     const skillOverRidesFieldArray = useFieldArray({
@@ -124,34 +132,80 @@ export function CreatePositionBatchSheet({ visibleTo }: Props) {
                             <Input
                                 className="w-[300px]"
                                 id="location"
-                                placeholder="location of jon position"
+                                placeholder="location of job position"
                                 {...form.register('jobLocation')}
                             />
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="ctc-range">CTC Range</Label>
-                            <div className="flex flex-row gap-2 items-center">
-                                <Input
-                                    type="number"
-                                    id="description"
-                                    placeholder="min"
-                                    className="w-[90px]"
-                                    {...form.register('minCTC', {
-                                        valueAsNumber: true,
-                                    })}
+                            <div className="flex flex-row gap-2 items-center w-[400px]">
+                                <InputWithEndButtons
+                                    name="ctc-range"
+                                    field={Number(form.watch('minCTC'))}
+                                    min={0}
+                                    increase={() => {
+                                        Number(
+                                            form.setValue(
+                                                'minCTC',
+                                                +form.getValues('minCTC') + 1
+                                            )
+                                        );
+                                    }}
+                                    decrease={() => {
+                                        form.setValue(
+                                            'minCTC',
+                                            +form.getValues('minCTC') - 1
+                                        );
+                                    }}
                                 />
                                 <span>-</span>
-                                <Input
-                                    type="number"
-                                    id="description"
-                                    placeholder="max"
-                                    className="w-[90px]"
-                                    {...form.register('maxCTC', {
-                                        valueAsNumber: true,
-                                    })}
+                                <InputWithEndButtons
+                                    name="ctc-range"
+                                    field={Number(form.watch('maxCTC'))}
+                                    min={0}
+                                    increase={() => {
+                                        Number(
+                                            form.setValue(
+                                                'maxCTC',
+                                                +form.getValues('maxCTC') + 1
+                                            )
+                                        );
+                                    }}
+                                    decrease={() => {
+                                        form.setValue(
+                                            'maxCTC',
+                                            +form.getValues('maxCTC') - 1
+                                        );
+                                    }}
                                 />
                                 <span className="ml-2">LPA</span>
                             </div>
+                        </div>
+                        <div className="grid gap-2 w-[200px]">
+                            <Label htmlFor="number-of-positions">
+                                Number of position
+                            </Label>
+                            <InputWithEndButtons
+                                name="number-of-positions"
+                                field={Number(form.watch('numberOfPositions'))}
+                                min={1}
+                                increase={() => {
+                                    Number(
+                                        form.setValue(
+                                            'numberOfPositions',
+                                            +form.getValues(
+                                                'numberOfPositions'
+                                            ) + 1
+                                        )
+                                    );
+                                }}
+                                decrease={() => {
+                                    form.setValue(
+                                        'numberOfPositions',
+                                        +form.getValues('numberOfPositions') - 1
+                                    );
+                                }}
+                            />
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="description">Description</Label>
@@ -159,20 +213,6 @@ export function CreatePositionBatchSheet({ visibleTo }: Props) {
                                 id="description"
                                 placeholder="Position Batch Description"
                                 {...form.register('description')}
-                            />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="number-of-positions">
-                                Number of position
-                            </Label>
-                            <Input
-                                type="number"
-                                className="w-[90px]"
-                                id="number-of-positions"
-                                placeholder="ex: 10"
-                                {...form.register('numberOfPositions', {
-                                    valueAsNumber: true,
-                                })}
                             />
                         </div>
                         <div>

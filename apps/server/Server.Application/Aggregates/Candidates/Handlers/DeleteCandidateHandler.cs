@@ -1,9 +1,8 @@
 ﻿
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Candidates.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -13,22 +12,17 @@ namespace Server.Application.Aggregates.Candidates.Handlers
     internal class DeleteCandidateHandler : IRequestHandler<DeleteCandidateCommand, Result>
     {
         private readonly ICandidateRepository _candidateRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public DeleteCandidateHandler(ICandidateRepository candidateRepository, IHttpContextAccessor contextAccessor)
+
+        public DeleteCandidateHandler(ICandidateRepository candidateRepository, IUserContext userContext)
         {
             _candidateRepository = candidateRepository;
-            _httpContextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(DeleteCandidateCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch the entity
             var candidate = await _candidateRepository.GetByIdAsync(request.Id, cancellationToken);
             if (candidate == null)
@@ -37,7 +31,7 @@ namespace Server.Application.Aggregates.Candidates.Handlers
             }
 
             // step 2: soft delete
-            candidate.Delete(Guid.Parse(userIdString));
+            candidate.Delete(_userContext.UserId);
 
             // step 3: persist
             await _candidateRepository.UpdateAsync(candidate, cancellationToken);

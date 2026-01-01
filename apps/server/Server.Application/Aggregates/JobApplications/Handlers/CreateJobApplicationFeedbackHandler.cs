@@ -1,36 +1,28 @@
 ﻿
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.JobApplications.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities;
-using Server.Domain.Enums;
 
 namespace Server.Application.Aggregates.JobApplications.Handlers
 {
     internal class CreateJobApplicationFeedbackHandler : IRequestHandler<CreateJobApplicationFeedbackCommand, Result>
     {
         private readonly IJobApplicationRepository _jobApplicationRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public CreateJobApplicationFeedbackHandler(IJobApplicationRepository jobApplicationRepository, IHttpContextAccessor contextAccessor)
+        public CreateJobApplicationFeedbackHandler(IJobApplicationRepository jobApplicationRepository, IUserContext userContext)
         {
             _jobApplicationRepository = jobApplicationRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(CreateJobApplicationFeedbackCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: check if exists
             var application = await _jobApplicationRepository.GetByIdAsync(request.JobApplicationId, cancellationToken);
             if (application is null)
@@ -58,7 +50,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
             var feedback = Feedback.CreateForReviewStage(
                     id: feedbackId,
                     jobApplicationId: application.Id,
-                    givenById: Guid.Parse(userIdString),
+                    givenById: _userContext.UserId,
                     rating: request.Rating,
                     comment: request.Comment,
                     skillFeedbacks: skillFeedbacks

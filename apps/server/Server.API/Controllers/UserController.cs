@@ -10,7 +10,7 @@ using Server.Core.Extensions;
 namespace Server.API.Controllers
 {
     [ApiController]
-    [Route("api/user")]
+    [Route("api/users")]
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -109,13 +109,7 @@ namespace Server.API.Controllers
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentUser()
         {
-            //TODO: for all endpoints: move userId extraction here in controller (pass it thurgh command/query), remove all HttpAccessor from application layer.
-            var authIdString = _httpContextAccessor.HttpContext?.User.FindFirst("authId")?.Value;
-
-            if (string.IsNullOrEmpty(authIdString) || !Guid.TryParse(authIdString, out Guid authId))
-                return Unauthorized(new { error = "Invalid token" });
-
-            var query = new GetUserQuery(authId);
+            var query = new GetUserQuery();
             var result = await _mediator.Send(query);
 
             return result.ToActionResult(this);

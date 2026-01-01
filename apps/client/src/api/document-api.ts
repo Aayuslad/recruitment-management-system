@@ -14,7 +14,7 @@ export function useCreateDocumentType() {
         mutationFn: async (
             payload: CreateDocumentTypeCommandCorrected
         ): Promise<void> => {
-            await axios.post('/document', payload);
+            await axios.post('/documents', payload);
         },
         onSuccess: () => {
             toast.success('Document Created');
@@ -38,7 +38,7 @@ export function useEditDocumentType() {
         mutationFn: async (
             payload: EditDocumentTypeCommandCorrected
         ): Promise<undefined> => {
-            await axios.put(`/document/${payload.id}`, payload);
+            await axios.put(`/documents/${payload.id}`, payload);
         },
         onSuccess: () => {
             toast.success('Document Type Edited');
@@ -60,7 +60,7 @@ export function useDeleteDocumentType() {
 
     return useMutation({
         mutationFn: async (id: string): Promise<void> => {
-            await axios.delete(`/document/${id}`);
+            await axios.delete(`/documents/${id}`);
         },
         onSuccess: () => {
             toast.success('Document Deleted');
@@ -81,7 +81,7 @@ export function useGetDocumentTypes() {
     return useQuery({
         queryKey: ['documents'],
         queryFn: async (): Promise<Document[]> => {
-            const { data } = await axios.get('/document');
+            const { data } = await axios.get('/documents');
             return data;
         },
     });

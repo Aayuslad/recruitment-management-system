@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.JobApplications.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -15,21 +14,21 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
     internal class MoveJobApplicationStatusHandler : IRequestHandler<MoveJobApplicationStatusCommand, Result>
     {
         private readonly IJobApplicationRepository _jobApplicationRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
         private readonly IInterviewRepository _interviewRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IPositionRepository _positionRepository;
 
         public MoveJobApplicationStatusHandler(
             IJobApplicationRepository jobApplicationRepository,
-            IHttpContextAccessor contextAccessor,
+            IUserContext userContext,
             IInterviewRepository interviewRepository,
             IEmployeeRepository employeeRepository,
             IPositionRepository positionRepository
         )
         {
             _jobApplicationRepository = jobApplicationRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
             _interviewRepository = interviewRepository;
             _employeeRepository = employeeRepository;
             _positionRepository = positionRepository;
@@ -37,12 +36,6 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
 
         public async Task<Result> Handle(MoveJobApplicationStatusCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: check if exists
             var application = await _jobApplicationRepository.GetByIdAsync(request.Id, cancellationToken);
             if (application is null)
@@ -102,7 +95,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
 
                     if (vacantPosition != null)
                     {
-                        vacantPosition.CloseWithCandidate(application.CandidateId, Guid.Parse(userIdString));
+                        vacantPosition.CloseWithCandidate(application.CandidateId, _userContext.UserId);
                         await _positionRepository.UpdateAsync(vacantPosition, cancellationToken);
                     }
                 }
@@ -117,7 +110,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
 
                     if (occupiedPosition != null)
                     {
-                        occupiedPosition.ReOpen(Guid.Parse(userIdString), null);
+                        occupiedPosition.ReOpen(_userContext.UserId, null);
                         await _positionRepository.UpdateAsync(occupiedPosition, cancellationToken);
                     }
                 }
@@ -140,7 +133,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
                     await _employeeRepository.AddAsync(employee, cancellationToken);
                 }
 
-                application.MoveStatus(Guid.Parse(userIdString), (JobApplicationStatus)request.MoveTo);
+                application.MoveStatus(_userContext.UserId, (JobApplicationStatus)request.MoveTo);
             }
 
             // for status move actions which includes (un-hold, rollback)
@@ -160,12 +153,12 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
 
                         if (vacantPosition != null)
                         {
-                            vacantPosition.CloseWithCandidate(application.CandidateId, Guid.Parse(userIdString));
+                            vacantPosition.CloseWithCandidate(application.CandidateId, _userContext.UserId);
                             await _positionRepository.UpdateAsync(vacantPosition, cancellationToken);
                         }
                     }
 
-                    application.MoveStatus(Guid.Parse(userIdString), prevState);
+                    application.MoveStatus(_userContext.UserId, prevState);
                 }
             }
 

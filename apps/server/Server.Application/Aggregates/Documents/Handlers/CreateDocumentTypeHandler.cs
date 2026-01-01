@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Documents.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -13,22 +12,16 @@ namespace Server.Application.Aggregates.Documents.Handlers
     internal class CreateDocumentTypeHandler : IRequestHandler<CreateDocumentTypeCommand, Result>
     {
         private readonly IDocumentRepository _documentRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public CreateDocumentTypeHandler(IHttpContextAccessor httpContextAccessor, IDocumentRepository documentRepository)
+        public CreateDocumentTypeHandler(IUserContext userContext, IDocumentRepository documentRepository)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _userContext = userContext;
             _documentRepository = documentRepository;
         }
 
         public async Task<Result> Handle(CreateDocumentTypeCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: check if with this name a doc tyype exsist
             var result = await _documentRepository.ExistsByNameAsync(request.Name, cancellationToken);
             if (result)
@@ -37,7 +30,7 @@ namespace Server.Application.Aggregates.Documents.Handlers
             }
 
             // step 2: create entity
-            var docType = DocumentType.Create(request.Name, Guid.Parse(userIdString));
+            var docType = DocumentType.Create(request.Name, _userContext.UserId);
 
             // step 3: persist entity
             await _documentRepository.AddAsync(docType, cancellationToken);

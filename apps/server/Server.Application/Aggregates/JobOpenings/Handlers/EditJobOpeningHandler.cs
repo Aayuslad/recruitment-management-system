@@ -1,9 +1,8 @@
 ﻿
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.JobOpenings.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -16,24 +15,18 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
     internal class EditJobOpeningHandler : IRequestHandler<EditJobOpeningCommand, Result>
     {
         private readonly IJobOpeningRepository _jobOpeningRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public EditJobOpeningHandler(IJobOpeningRepository jobOpeningRepository, IHttpContextAccessor httpContext)
+        public EditJobOpeningHandler(IJobOpeningRepository jobOpeningRepository, IUserContext userContext)
         {
             _jobOpeningRepository = jobOpeningRepository;
-            _httpContextAccessor = httpContext;
+            _userContext = userContext;
         }
 
-        public async Task<Result> Handle(EditJobOpeningCommand cmd, CancellationToken cancellationToken)
+        public async Task<Result> Handle(EditJobOpeningCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch the entity
-            var jobOpening = await _jobOpeningRepository.GetByIdAsync(cmd.JobOpeningId, cancellationToken);
+            var jobOpening = await _jobOpeningRepository.GetByIdAsync(request.JobOpeningId, cancellationToken);
             if (jobOpening == null)
             {
                 throw new NotFoundException("Job Opening Not Found.");
@@ -42,7 +35,7 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
             // step 2: edit entity
 
             // skill over ride edit
-            var skillOverRides = cmd.SkillOverRides.Select(
+            var skillOverRides = request.SkillOverRides.Select(
                     selector: x => SkillOverRide.CreateForJobOpening(
                             id: x.Id ?? Guid.NewGuid(),
                             jobOpeningId: jobOpening.Id,
@@ -55,7 +48,7 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                 ).ToList();
 
             // interviewers edit
-            var interviewers = cmd.Interviewers.Select(
+            var interviewers = request.Interviewers.Select(
                     selector: x => JobOpeningInterviewer.Create(
                             id: x.Id ?? Guid.NewGuid(),
                             jobOpeningId: jobOpening.Id,
@@ -65,7 +58,7 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
                 ).ToList();
 
             // interview rounds edit
-            var interviewRounds = cmd.InterviewRounds.Select(
+            var interviewRounds = request.InterviewRounds.Select(
                 selector: x =>
                     {
                         var roundTemplateId = x.Id ?? Guid.NewGuid();
@@ -90,11 +83,11 @@ namespace Server.Application.Aggregates.JobOpenings.Handlers
 
             // update aggregate root
             jobOpening.Update(
-                updatedBy: Guid.Parse(userIdString),
-                positionBatchId: cmd.PositionBatchId,
-                title: cmd.Title,
-                type: cmd.Type,
-                description: cmd.Description,
+                updatedBy: _userContext.UserId,
+                positionBatchId: request.PositionBatchId,
+                title: request.Title,
+                type: request.Type,
+                description: request.Description,
                 jobOpeningInterviewers: interviewers,
                 interviewRounds: interviewRounds,
                 skillOverRides: skillOverRides

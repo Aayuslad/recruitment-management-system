@@ -35,6 +35,7 @@ import {
 import type { BatchPositionsSummary } from '@/types/position-types';
 import { useNavigate } from 'react-router-dom';
 import { Spinner } from '../ui/spinner';
+import { POSITION_STATUS } from '@/types/enums';
 
 export function BatchPositionsTable({ batchId }: { batchId: string }) {
     const navigate = useNavigate();
@@ -143,7 +144,12 @@ export function BatchPositionsTable({ batchId }: { batchId: string }) {
     ];
 
     const table = useReactTable({
-        data: data as BatchPositionsSummary[],
+        data: [
+            ...(data?.filter((x) => x.status === POSITION_STATUS.ON_HOLD) ??
+                []),
+            ...(data?.filter((x) => x.status === POSITION_STATUS.CLOSED) ?? []),
+            ...(data?.filter((x) => x.status === POSITION_STATUS.OPEN) ?? []),
+        ] as BatchPositionsSummary[],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,

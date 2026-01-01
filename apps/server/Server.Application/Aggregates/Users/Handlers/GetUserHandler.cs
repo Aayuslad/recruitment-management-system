@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Users.Queries;
 using Server.Application.Aggregates.Users.Queries.DTOs;
 using Server.Application.Exceptions;
@@ -11,21 +12,23 @@ namespace Server.Application.Aggregates.Users.Handlers
     internal class GetUserHandler : IRequestHandler<GetUserQuery, Result<UserDetailDTO>>
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserContext _userContext;
 
-        public GetUserHandler(IUserRepository userRepository)
+        public GetUserHandler(IUserRepository userRepository, IUserContext userContext)
         {
             _userRepository = userRepository;
+            _userContext = userContext;
         }
 
         public async Task<Result<UserDetailDTO>> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
             // step 1: fetch user auth
-            var auth = await _userRepository.GetAuthByAuthIdAsync(request.AuthId, cancellationToken);
+            var auth = await _userRepository.GetAuthByAuthIdAsync(_userContext.AuthId, cancellationToken);
             if (auth is null)
                 throw new NotFoundException("User Not Found.");
 
             // step 2: fetch user profile
-            var user = await _userRepository.GetProfileByAuthIdAsync(request.AuthId, cancellationToken);
+            var user = await _userRepository.GetProfileByAuthIdAsync(_userContext.AuthId, cancellationToken);
 
             // step 3: prepare DTO
             var userDto = new UserDetailDTO

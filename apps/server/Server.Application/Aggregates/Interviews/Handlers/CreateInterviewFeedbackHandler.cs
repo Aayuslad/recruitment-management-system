@@ -1,9 +1,8 @@
 ﻿
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Interviews.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -14,22 +13,16 @@ namespace Server.Application.Aggregates.Interviews.Handlers
     internal class CreateInterviewFeedbackHandler : IRequestHandler<CreateInterviewFeedbackCommand, Result>
     {
         private readonly IInterviewRepository _interviewRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public CreateInterviewFeedbackHandler(IInterviewRepository interviewRepository, IHttpContextAccessor contextAccessor)
+        public CreateInterviewFeedbackHandler(IInterviewRepository interviewRepository, IUserContext userContext)
         {
             _interviewRepository = interviewRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(CreateInterviewFeedbackCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch the interviw
             var interview = await _interviewRepository.GetByIdAsync(request.InterviewId, cancellationToken);
             if (interview is null)
@@ -58,7 +51,7 @@ namespace Server.Application.Aggregates.Interviews.Handlers
                     id: feedbackId,
                     jobApplicationId: interview.JobApplicationId,
                     interviewId: interview.Id,
-                    givenById: Guid.Parse(userIdString),
+                    givenById: _userContext.UserId,
                     rating: request.Rating,
                     comment: request.Comment,
                     skillFeedbacks: skillFeedbacks

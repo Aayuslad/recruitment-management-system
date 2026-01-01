@@ -142,8 +142,6 @@ export function PositionBatchesTable() {
 
     return (
         <div className="w-full">
-            <h2 className="font-semibold text-xl">Position Batches:</h2>
-
             {/* header */}
             <div className="flex items-center py-4">
                 <Input

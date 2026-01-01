@@ -50,6 +50,10 @@ export interface UsersSummary {
     lastName: string;
     contactNumber: string;
     gender: Gender;
+    roles: {
+        id: string;
+        name: string;
+    }[];
 }
 
 export type CreateUserCommandCorrected = Omit<

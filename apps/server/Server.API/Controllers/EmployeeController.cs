@@ -9,7 +9,7 @@ using Server.Core.Extensions;
 namespace Server.API.Controllers
 {
     [ApiController]
-    [Route("api/employee")]
+    [Route("api/employees")]
     [Authorize]
     public class EmployeeController : ControllerBase
     {

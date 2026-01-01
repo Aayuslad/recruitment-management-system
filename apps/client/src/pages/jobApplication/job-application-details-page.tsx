@@ -21,6 +21,7 @@ import { SkillPill } from '@/components/ui/skill-pill';
 import { Spinner } from '@/components/ui/spinner';
 import { useAppStore } from '@/store';
 import { INTERVIEW_STATUS } from '@/types/enums';
+import { interviewParticipantRoleFormatConverter } from '@/util/interview-participant-role-format-converter';
 import { durationFormatConverter } from '@/util/interview-round-duration-format-converter';
 import { timeAgo } from '@/util/time-ago';
 import { ExternalLink } from 'lucide-react';
@@ -112,13 +113,13 @@ export const JobApplicationDetailsPage = () => {
 
     return (
         <div className="h-full flex flex-col mb-10">
-            <div className="h-45 flex items-center justify-between px-10 border-b">
+            <div className="h-36 flex items-center justify-between px-10 border-b">
                 <div className="space-y-1">
                     <div className="flex space-x-2">
                         <h1 className="text-2xl font-bold">Job Application</h1>
                     </div>
 
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-3 text-sm font-semibold text-muted-foreground">
                         <div>{`${candidate?.firstName} ${candidate?.middleName} ${candidate?.lastName}`}</div>
                         <span>•</span>
                         <span>{jobApplication?.designation}</span>
@@ -364,7 +365,9 @@ export const JobApplicationDetailsPage = () => {
                                                                 }
                                                             </span>
                                                             <span>
-                                                                {x.role}
+                                                                {interviewParticipantRoleFormatConverter(
+                                                                    x.role
+                                                                )}
                                                             </span>
                                                         </div>
                                                     );
@@ -428,7 +431,7 @@ export const JobApplicationDetailsPage = () => {
                                 <>
                                     <MarkOfferedButton
                                         jobApplicationId={jobApplication.id}
-                                        visibleTo={['Admin', 'HR']}
+                                        visibleTo={['Admin', 'HR', 'Recruiter']}
                                     />
                                     <RejectButton
                                         jobApplicationId={jobApplication.id}

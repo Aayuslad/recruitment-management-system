@@ -51,7 +51,7 @@ export const JobOpeningDetailPage = () => {
 
     return (
         <div className="h-full mb-10">
-            <div className="h-[120px] flex items-center px-10 border-b ">
+            <div className="h-[100px] flex items-center px-10 border-b ">
                 <div className="space-y-1">
                     <h1 className="text-2xl font-bold">Job Opening</h1>
                     <div className="space-x-3 font-semibold">
@@ -314,19 +314,21 @@ export const JobOpeningDetailPage = () => {
                                                                             index
                                                                         ) => (
                                                                             <span>
+                                                                                {
+                                                                                    requirement.requirementCount
+                                                                                }{' '}
                                                                                 {interviewParticipantRoleFormatConverter(
                                                                                     requirement.role,
-                                                                                    requirement.requirementCount
+                                                                                    requirement.requirementCount >
+                                                                                        1
                                                                                 )}
-                                                                                {index <
-                                                                                    round
-                                                                                        .requirements
-                                                                                        .length -
-                                                                                        1 && (
-                                                                                    <span>
-                                                                                        ,{' '}
-                                                                                    </span>
-                                                                                )}
+                                                                                {index ===
+                                                                                round
+                                                                                    .requirements
+                                                                                    .length -
+                                                                                    1
+                                                                                    ? ''
+                                                                                    : ', '}
                                                                             </span>
                                                                         )
                                                                     )}
@@ -340,8 +342,26 @@ export const JobOpeningDetailPage = () => {
                                 </div>
                                 <div className="flex-[50%] flex justify px-5 pt-8 space-y-7">
                                     <div className="space-y-2">
-                                        <h3 className="font-semibold text-lg">
-                                            Participant Pool
+                                        <h3 className="font-semibold text-lg flex items-center gap-2">
+                                            <span>Participant Pool</span>
+                                            <span>
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <Info className="w-4 h-4" />
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        <p className="text-wrap max-w-[200px] font-semibold">
+                                                            These participants
+                                                            will be assigned
+                                                            randomly to the
+                                                            interviews defined
+                                                            above, based on
+                                                            their role and panel
+                                                            requirements.
+                                                        </p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </span>
                                         </h3>
                                         <div className="ml-1 space-y-1.5">
                                             {data.interviewers.length === 0 && (
@@ -404,7 +424,7 @@ export const JobOpeningDetailPage = () => {
                                             {data.interviewers.filter(
                                                 (x) =>
                                                     x.role ===
-                                                    INTERVIEW_PARTICIPANT_ROLE.TECHNICAL_INTERVIEWER
+                                                    INTERVIEW_PARTICIPANT_ROLE.HR_INTERVIEWER
                                             ).length > 0 && (
                                                 <div>
                                                     <h3 className="font-semibold">

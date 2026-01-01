@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Positions.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -12,31 +11,25 @@ namespace Server.Application.Aggregates.Positions.Handlers
     internal class SetPositionOnHoldHandler : IRequestHandler<SetPositionOnHoldCommand, Result>
     {
         private readonly IPositionRepository _positionRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public SetPositionOnHoldHandler(IPositionRepository positionRepository, IHttpContextAccessor contextAccessor)
+        public SetPositionOnHoldHandler(IPositionRepository positionRepository, IUserContext userContext)
         {
             _positionRepository = positionRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
-        public async Task<Result> Handle(SetPositionOnHoldCommand command, CancellationToken cancellationToken)
+        public async Task<Result> Handle(SetPositionOnHoldCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch existing position
-            var position = await _positionRepository.GetByIdAsync(command.PositionId, cancellationToken);
+            var position = await _positionRepository.GetByIdAsync(request.PositionId, cancellationToken);
             if (position == null)
             {
                 throw new NotFoundException("Position Not Found.");
             }
 
             // step 2: make move
-            position.PutOnHold(Guid.Parse(userIdString), command.Comments);
+            position.PutOnHold(_userContext.UserId, request.Comments);
 
             // step 3: persist move
             await _positionRepository.UpdateAsync(position, cancellationToken);

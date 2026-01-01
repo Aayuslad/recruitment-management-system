@@ -15,7 +15,7 @@ export function useCreateJobOpening() {
         mutationFn: async (
             payload: CreateJobOpeningCommandCorrected
         ): Promise<void> => {
-            await axios.post('/job-opening', payload);
+            await axios.post('/job-openings', payload);
         },
         onSuccess: () => {
             toast.success('Job opening created');
@@ -39,7 +39,7 @@ export function useEditJobOpening() {
         mutationFn: async (
             payload: EditJobOpeningCommandCorrected
         ): Promise<void> => {
-            await axios.put(`/job-opening/${payload.jobOpeningId}`, payload);
+            await axios.put(`/job-openings/${payload.jobOpeningId}`, payload);
         },
         onSuccess: (_, variables) => {
             toast.success('Job opening updated');
@@ -64,7 +64,7 @@ export function useDeleteJobOpening() {
 
     return useMutation({
         mutationFn: async (id: string): Promise<void> => {
-            await axios.delete(`/job-opening/${id}`);
+            await axios.delete(`/job-openings/${id}`);
         },
         onSuccess: () => {
             toast.success('Job opening deleted');
@@ -85,7 +85,7 @@ export function useGetJobOpenings() {
     return useQuery({
         queryKey: ['job-openings'],
         queryFn: async (): Promise<JobOpeningSummary[]> => {
-            const { data } = await axios.get('/job-opening');
+            const { data } = await axios.get('/job-openings');
             return data;
         },
     });
@@ -95,7 +95,7 @@ export function useGetJobOpening(id?: string) {
     return useQuery({
         queryKey: ['job-opening', id],
         queryFn: async (): Promise<JobOpening | null> => {
-            const { data } = await axios.get(`/job-opening/${id}`);
+            const { data } = await axios.get(`/job-openings/${id}`);
             return data;
         },
         enabled: !!id,

@@ -1,11 +1,9 @@
 ﻿
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Candidates.Commands;
-using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.Candidates;
 using Server.Domain.ValueObjects;
@@ -15,22 +13,16 @@ namespace Server.Application.Aggregates.Candidates.Handlers
     internal class CreateCandidateHandler : IRequestHandler<CreateCandidateCommand, Result>
     {
         private readonly ICandidateRepository _candidateRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public CreateCandidateHandler(ICandidateRepository candidateRepository, IHttpContextAccessor contextAccessor)
+        public CreateCandidateHandler(ICandidateRepository candidateRepository, IUserContext userContext)
         {
             _candidateRepository = candidateRepository;
-            _httpContextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(CreateCandidateCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: check VOs
             var contactNumber = ContactNumber.Create(request.ContactNumber);
             var email = Email.Create(request.Email);
@@ -49,7 +41,6 @@ namespace Server.Application.Aggregates.Candidates.Handlers
             // create root entity
             var candidate = Candidate.Create(
                 id: newCandidateId,
-                createdBy: Guid.Parse(userIdString),
                 email: email,
                 firstName: request.FirstName,
                 middleName: request.MiddleName,
@@ -59,7 +50,8 @@ namespace Server.Application.Aggregates.Candidates.Handlers
                 dob: request.Dob,
                 collegeName: request.CollegeName,
                 resumeUrl: request.ResumeUrl,
-                skills: skills
+                skills: skills,
+                createdBy: _userContext.UserId
             );
 
             // step 3: persist entity

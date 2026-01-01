@@ -1,11 +1,9 @@
 
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Candidates.Commands;
-using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.Candidates;
 
@@ -14,22 +12,16 @@ namespace Server.Application.Aggregates.Candidates.Handlers
     internal class AddCandidateDocumentHandler : IRequestHandler<AddCandidateDocumentCommand, Result>
     {
         private readonly ICandidateRepository _candidateRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public AddCandidateDocumentHandler(ICandidateRepository candidateRepository, IHttpContextAccessor contextAccessor)
+        public AddCandidateDocumentHandler(ICandidateRepository candidateRepository, IUserContext userContext)
         {
             _candidateRepository = candidateRepository;
-            _httpContextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(AddCandidateDocumentCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch the entity
             var candidate = await _candidateRepository.GetByIdAsync(request.Id, cancellationToken);
             if (candidate == null)

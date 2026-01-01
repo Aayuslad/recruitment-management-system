@@ -19,11 +19,11 @@ namespace Server.Application.Aggregates.Positions.Handlers
             _positionRepository = positionRepository;
         }
 
-        public async Task<Result<PositionDetailDTO>> Handle(GetPositionQuery query, CancellationToken cancellationToken)
+        public async Task<Result<PositionDetailDTO>> Handle(GetPositionQuery request, CancellationToken cancellationToken)
         {
 
             // step 1: fetch positinoBatch
-            var position = await _positionRepository.GetByIdAsync(query.PositionId, cancellationToken);
+            var position = await _positionRepository.GetByIdAsync(request.PositionId, cancellationToken);
             if (position == null)
             {
                 throw new NotFoundException("Position Not Found.");

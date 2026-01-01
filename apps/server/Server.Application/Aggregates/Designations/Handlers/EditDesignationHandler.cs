@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Designations.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -13,24 +12,18 @@ namespace Server.Application.Aggregates.Designations.Handlers
     internal class EditDesignationHandler : IRequestHandler<EditDesignationCommand, Result>
     {
         private readonly IDesignationRepository _designationRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public EditDesignationHandler(IDesignationRepository designationRepository, IHttpContextAccessor httpContextAccessor)
+        public EditDesignationHandler(IDesignationRepository designationRepository, IUserContext userContext)
         {
             _designationRepository = designationRepository;
-            _httpContextAccessor = httpContextAccessor;
+            _userContext = userContext;
         }
 
-        public async Task<Result> Handle(EditDesignationCommand command, CancellationToken cancellationToken)
+        public async Task<Result> Handle(EditDesignationCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch existing 
-            var designation = await _designationRepository.GetByIdAsync(command.Id, cancellationToken);
+            var designation = await _designationRepository.GetByIdAsync(request.Id, cancellationToken);
             if (designation == null)
             {
                 throw new NotFoundException($"Designation not found.");
@@ -39,7 +32,7 @@ namespace Server.Application.Aggregates.Designations.Handlers
             // step 2: edit skill
 
             // create new list of eidted
-            var newDSkills = command.DesignationSkills?.Select(
+            var newDSkills = request.DesignationSkills?.Select(
                     selector: x => DesignationSkill.Create(
                             designationId: designation.Id,
                             skillId: x.SkillId,
@@ -49,8 +42,8 @@ namespace Server.Application.Aggregates.Designations.Handlers
 
             // update root entity
             designation.Update(
-                updatedBy: Guid.Parse(userIdString),
-                name: command.Name,
+                updatedBy: _userContext.UserId,
+                name: request.Name,
                 newSkills: newDSkills
             );
 

@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Documents.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -12,22 +11,16 @@ namespace Server.Application.Aggregates.Documents.Handlers
     internal class DeleteDocumentTypeHandler : IRequestHandler<DeleteDocumentTypeCommand, Result>
     {
         private readonly IDocumentRepository _documentRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public DeleteDocumentTypeHandler(IHttpContextAccessor httpContextAccessor, IDocumentRepository documentRepository)
+        public DeleteDocumentTypeHandler(IUserContext userContext, IDocumentRepository documentRepository)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _userContext = userContext;
             _documentRepository = documentRepository;
         }
 
         public async Task<Result> Handle(DeleteDocumentTypeCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch the entity
             var docType = await _documentRepository.GetByIdAsync(request.Id, cancellationToken);
             if (docType is null)
@@ -36,7 +29,7 @@ namespace Server.Application.Aggregates.Documents.Handlers
             }
 
             // step 2: soft delete
-            docType.Delete(Guid.Parse(userIdString));
+            docType.Delete(_userContext.UserId);
 
             // step 3: persist
             await _documentRepository.UpdateAsync(docType, cancellationToken);

@@ -1,11 +1,9 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.JobApplications.Commands;
 using Server.Application.Aggregates.JobApplications.Commands.DTOs;
-using Server.Application.Exceptions;
 using Server.Core.Results;
 using Server.Domain.Entities.JobApplications;
 
@@ -14,22 +12,16 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
     internal class CreateJobApplicationsHandler : IRequestHandler<CreateJobApplicationsCommand, Result>
     {
         private readonly IJobApplicationRepository _jobApplicationRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public CreateJobApplicationsHandler(IJobApplicationRepository jobApplicationRepository, IHttpContextAccessor contextAccessor)
+        public CreateJobApplicationsHandler(IJobApplicationRepository jobApplicationRepository, IUserContext userContext)
         {
             _jobApplicationRepository = jobApplicationRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(CreateJobApplicationsCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: enumurate and check if any already exists
             // TODO: this is not efficient, can be checked in bulk at db level, improve it
             var applicationstoCreate = new List<JobApplicationDTO>();
@@ -48,7 +40,7 @@ namespace Server.Application.Aggregates.JobApplications.Handlers
             {
                 var application = JobApplication.Create(
                         id: null,
-                        createdBy: Guid.Parse(userIdString),
+                        createdBy: _userContext.UserId,
                         candidateId: applicationDto.CandidateId,
                         jobOpeningId: applicationDto.JobOpeningId
                     );

@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Http;
 
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Positions.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -12,31 +13,25 @@ namespace Server.Application.Aggregates.Positions.Handlers
     internal class DeletePositionBatchHandler : IRequestHandler<DeletePositionBatchCommand, Result>
     {
         private readonly IPositionBatchRepository _positionBatchRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUserContext _userContext;
 
-        public DeletePositionBatchHandler(IPositionBatchRepository positionBatchRepository, IHttpContextAccessor contextAccessor)
+        public DeletePositionBatchHandler(IPositionBatchRepository positionBatchRepository, IUserContext userContext)
         {
             _positionBatchRepository = positionBatchRepository;
-            _contextAccessor = contextAccessor;
+            _userContext = userContext;
         }
 
-        public async Task<Result> Handle(DeletePositionBatchCommand command, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeletePositionBatchCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _contextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
-            if (userIdString == null)
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch existing position
-            var position = await _positionBatchRepository.GetByIdAsync(command.BatchId, cancellationToken);
+            var position = await _positionBatchRepository.GetByIdAsync(request.BatchId, cancellationToken);
             if (position == null)
             {
                 throw new NotFoundException("Position Not Found.");
             }
 
             // step 2: soft delete
-            position.Delete(Guid.Parse(userIdString));
+            position.Delete(_userContext.UserId);
             await _positionBatchRepository.UpdateAsync(position, cancellationToken);
 
             // step 3: return result

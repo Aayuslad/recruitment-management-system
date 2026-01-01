@@ -19,7 +19,7 @@ export function useCreateJobApplication() {
         mutationFn: async (
             payload: CreateJobApplicationCommandCorrected
         ): Promise<void> => {
-            await axios.post('/job-application', payload);
+            await axios.post('/job-applications', payload);
         },
         onSuccess: () => {
             toast.success('Job application created');
@@ -43,7 +43,7 @@ export function useCreateJobApplications() {
         mutationFn: async (
             payload: CreateJobApplicationsCommandCorrected
         ): Promise<void> => {
-            await axios.post('/job-application/bulk', payload);
+            await axios.post('/job-applications/bulk', payload);
         },
         onSuccess: () => {
             toast.success('Job applications created');
@@ -68,7 +68,7 @@ export function useCreateJobApplicationFeedback() {
             payload: CreateJobApplicationFeedbackCommandCorrected
         ) => {
             await axios.post(
-                `/job-application/${payload.jobApplicationId}/feedback`,
+                `/job-applications/${payload.jobApplicationId}/feedback`,
                 payload
             );
         },
@@ -98,7 +98,7 @@ export function useEditJobApplicationFeedback() {
             payload: EditJobApplicationFeedbackCommandCorrected
         ) => {
             await axios.put(
-                `/job-application/${payload.jobApplicationId}/feedback/${payload.feedbackId}`,
+                `/job-applications/${payload.jobApplicationId}/feedback/${payload.feedbackId}`,
                 payload
             );
         },
@@ -127,8 +127,8 @@ export function useMoveJobApplicationStatus() {
         mutationFn: async (
             payload: MoveJobApplicationStatusCommandCorrected
         ) => {
-            await axios.put(
-                `/job-application/${payload.id}/move-status`,
+            await axios.patch(
+                `/job-applications/${payload.id}/move-status`,
                 payload
             );
         },
@@ -166,7 +166,7 @@ export function useDeleteJobApplication() {
 
     return useMutation({
         mutationFn: async (id: string): Promise<void> => {
-            await axios.delete(`/job-application/${id}`);
+            await axios.delete(`/job-applications/${id}`);
         },
         onSuccess: () => {
             toast.success('Job application deleted');
@@ -192,7 +192,7 @@ export function useDeleteJobApplicationFeedback() {
             feedbackId: string;
         }) => {
             await axios.delete(
-                `/job-application/${args.applicationId}/feedback/${args.feedbackId}`
+                `/job-applications/${args.applicationId}/feedback/${args.feedbackId}`
             );
         },
         onSuccess: (_, variables) => {
@@ -217,7 +217,7 @@ export function useGetJobApplication(id: string) {
     return useQuery({
         queryKey: ['job-application', id],
         queryFn: async (): Promise<JobApplication | null> => {
-            const { data } = await axios.get(`/job-application/${id}`);
+            const { data } = await axios.get(`/job-applications/${id}`);
             return data;
         },
     });
@@ -227,7 +227,7 @@ export function useGetJobApplications() {
     return useQuery({
         queryKey: ['job-applications'],
         queryFn: async (): Promise<JobApplicationSummary[]> => {
-            const { data } = await axios.get('/job-application');
+            const { data } = await axios.get('/job-applications');
             return data;
         },
     });
@@ -238,7 +238,7 @@ export function useGetJobOpeningApplications(jobOpeningId: string) {
         queryKey: ['job-applications', jobOpeningId],
         queryFn: async (): Promise<JobOpeningApplicationSummary[]> => {
             const { data } = await axios.get(
-                `/job-application/for-job-opening/${jobOpeningId}`
+                `/job-applications/for-job-opening/${jobOpeningId}`
             );
             return data;
         },
@@ -250,7 +250,7 @@ export function useGetJobApplicationsToReview() {
     return useQuery({
         queryKey: ['job-applications-to-review'],
         queryFn: async (): Promise<JobApplicationSummary[]> => {
-            const { data } = await axios.get('/job-application/to-review');
+            const { data } = await axios.get('/job-applications/to-review');
             return data;
         },
     });

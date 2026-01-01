@@ -1,3 +1,4 @@
+import { useCreateJobOpening } from '@/api/job-opening-api';
 import { Button } from '@/components/ui/button';
 import {
     Sheet,
@@ -9,22 +10,21 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
-import { useState } from 'react';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
-import { useCreateJobOpening } from '@/api/job-opening-api';
-import { useFieldArray, useForm } from 'react-hook-form';
-import z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { CreateJobOpeningCommandCorrected } from '@/types/job-opening-types';
-import { toast } from 'sonner';
-import { JobOpeningSkillSelector } from './internal/job-opening-skill-selector';
-import { PositionBatchSelector } from './internal/position-batch-selector';
-import { TypeSelector } from './internal/job-opening-type-selector';
-import { Textarea } from '../ui/textarea';
-import { InterviewRoundSelector } from './internal/interview-round-selector';
-import { InterviewParticipantSelector } from './internal/interview-participant-selector';
 import { useAccessChecker } from '@/hooks/use-has-access';
+import type { CreateJobOpeningCommandCorrected } from '@/types/job-opening-types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import z from 'zod';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Textarea } from '../ui/textarea';
+import { InterviewParticipantSelector } from './internal/interview-participant-selector';
+import { InterviewRoundSelector } from './internal/interview-round-selector';
+import { JobOpeningSkillSelector } from './internal/job-opening-skill-selector';
+import { TypeSelector } from './internal/job-opening-type-selector';
+import { PositionBatchSelector } from './internal/position-batch-selector';
 
 const CreateJobOpeningSheetSchema = z.object({
     title: z.string(),
@@ -214,6 +214,7 @@ export function CreateJobOpeningSheet({ visibleTo }: Props) {
                                 fields={interviewersFieldArray.fields}
                                 append={interviewersFieldArray.append}
                                 remove={interviewersFieldArray.remove}
+                                interviewRounds={form.watch('interviewRounds')}
                             />
                         </div>
                     </div>

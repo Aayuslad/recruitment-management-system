@@ -1,8 +1,7 @@
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Users.Commands;
 using Server.Application.Exceptions;
 using Server.Core.Results;
@@ -14,22 +13,16 @@ namespace Server.Application.Aggregates.Users.Handlers
     internal class EditUserRolesHandler : IRequestHandler<EditUserRolesCommand, Result>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public EditUserRolesHandler(IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
+        public EditUserRolesHandler(IUserRepository userRepository, IUserContext userContext)
         {
             _userRepository = userRepository;
-            _httpContextAccessor = httpContextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Result> Handle(EditUserRolesCommand request, CancellationToken cancellationToken)
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirst("userId")?.Value;
-            if (string.IsNullOrEmpty(userIdString))
-            {
-                throw new UnAuthorisedException();
-            }
-
             // step 1: fetch user
             var user = await _userRepository.GetProfileByUserIdAsync(request.UserId, cancellationToken);
             if (user is null)
@@ -54,7 +47,7 @@ namespace Server.Application.Aggregates.Users.Handlers
                     selector: x => UserRole.Create(
                         userId: user.Id,
                         roleId: x.RoleId,
-                        assignedBy: x.AssignedBy ?? Guid.Parse(userIdString)
+                        assignedBy: x.AssignedBy ?? _userContext.UserId
                     )
                 ).ToList()
             );

@@ -6,7 +6,7 @@ export function useGetEmployees() {
     return useQuery({
         queryKey: ['employees'],
         queryFn: async (): Promise<Employee[]> => {
-            const { data } = await axios.get('/employee');
+            const { data } = await axios.get('/employees');
             return data;
         },
     });

@@ -21,7 +21,7 @@ namespace Server.Application.Aggregates.Designations.Handlers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<Result<DesignationDetailDTO>> Handle(GetDesignationQuery query, CancellationToken cancellationToken)
+        public async Task<Result<DesignationDetailDTO>> Handle(GetDesignationQuery request, CancellationToken cancellationToken)
         {
             var userIdString = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
             if (userIdString == null)
@@ -30,7 +30,7 @@ namespace Server.Application.Aggregates.Designations.Handlers
             }
 
             // step 1: fetch designation
-            var designation = await _designationRepository.GetByIdAsync(query.Id, cancellationToken);
+            var designation = await _designationRepository.GetByIdAsync(request.Id, cancellationToken);
             if (designation == null)
             {
                 throw new NotFoundException("Designation not found");

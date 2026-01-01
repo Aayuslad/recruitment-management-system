@@ -23,6 +23,7 @@ import { ReviewersSelector } from './internal/reviewers-selector';
 import { PositionSkillSelector } from './internal/position-skill-selector';
 import { Spinner } from '../ui/spinner';
 import { useAccessChecker } from '@/hooks/use-has-access';
+import InputWithEndButtons from '../ui/number-input';
 
 const editPositionBatchFormSchema = z.object({
     positionBatchId: z.string(),
@@ -152,25 +153,45 @@ export function EditPositionBatchSheet({ positionBatchId, visibleTo }: Props) {
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="ctc-range">CTC Range</Label>
-                            <div className="flex flex-row gap-2 items-center">
-                                <Input
-                                    type="number"
-                                    id="description"
-                                    placeholder="min"
-                                    className="w-[90px]"
-                                    {...form.register('minCTC', {
-                                        valueAsNumber: true,
-                                    })}
+                            <div className="flex flex-row gap-2 items-center w-[400px]">
+                                <InputWithEndButtons
+                                    name="ctc-range"
+                                    field={Number(form.watch('minCTC'))}
+                                    min={0}
+                                    increase={() => {
+                                        Number(
+                                            form.setValue(
+                                                'minCTC',
+                                                +form.getValues('minCTC') + 1
+                                            )
+                                        );
+                                    }}
+                                    decrease={() => {
+                                        form.setValue(
+                                            'minCTC',
+                                            +form.getValues('minCTC') - 1
+                                        );
+                                    }}
                                 />
-                                <span>-</span>
-                                <Input
-                                    type="number"
-                                    id="description"
-                                    placeholder="max"
-                                    className="w-[90px]"
-                                    {...form.register('maxCTC', {
-                                        valueAsNumber: true,
-                                    })}
+                                <span> To </span>
+                                <InputWithEndButtons
+                                    name="ctc-range"
+                                    field={Number(form.watch('maxCTC'))}
+                                    min={0}
+                                    increase={() => {
+                                        Number(
+                                            form.setValue(
+                                                'maxCTC',
+                                                +form.getValues('maxCTC') + 1
+                                            )
+                                        );
+                                    }}
+                                    decrease={() => {
+                                        form.setValue(
+                                            'maxCTC',
+                                            +form.getValues('maxCTC') - 1
+                                        );
+                                    }}
                                 />
                                 <span className="ml-2">LPA</span>
                             </div>

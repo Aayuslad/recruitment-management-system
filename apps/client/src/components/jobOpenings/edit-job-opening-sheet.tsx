@@ -233,6 +233,9 @@ export function EditJobOpeningSheet({ jobOpeningId, visibleTo }: Props) {
                                 fields={interviewersFieldArray.fields}
                                 append={interviewersFieldArray.append}
                                 remove={interviewersFieldArray.remove}
+                                interviewRounds={
+                                    form.watch('interviewRounds') ?? []
+                                }
                             />
                         </div>
                     </div>

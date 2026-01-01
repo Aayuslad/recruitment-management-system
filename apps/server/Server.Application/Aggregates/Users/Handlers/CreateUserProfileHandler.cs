@@ -1,7 +1,5 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
-
 using Server.Application.Abstractions.Repositories;
 using Server.Application.Abstractions.Services;
 using Server.Application.Aggregates.Users.Commands;
@@ -16,44 +14,46 @@ namespace Server.Application.Aggregates.Users.Handlers
     internal class CreateUserprofileHandler : IRequestHandler<CreateUserProfileCommand, Result<CreateUserProfileDTO>>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-        public CreateUserprofileHandler(IUserRepository userRepository, IHttpContextAccessor httpContextAccessor, IJwtTokenGenerator jwtTokenGenerator)
+        public CreateUserprofileHandler(IUserRepository userRepository, IUserContext userContext, IJwtTokenGenerator jwtTokenGenerator)
         {
             _userRepository = userRepository;
-            _httpContextAccessor = httpContextAccessor;
+            _userContext = userContext;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
         public async Task<Result<CreateUserProfileDTO>> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
         {
-            var authId = _httpContextAccessor.HttpContext?.User.FindFirst("authId")?.Value;
-            var userName = _httpContextAccessor.HttpContext?.User.FindFirst("userName")?.Value;
-            if (authId is null)
+            var authId = _userContext.AuthId;
+
+            // step 1: check if the auth exists
+            var auth = await _userRepository.GetAuthByAuthIdAsync(authId, cancellationToken);
+            if (auth is null)
             {
                 throw new UnAuthorisedException();
             }
 
-            // step 1: check if profile is already there for the auth
-            var result = await _userRepository.ProfileExistsByAuthIdAsync(Guid.Parse(authId), cancellationToken);
+            // step 2: check if profile is already there for the auth
+            var result = await _userRepository.ProfileExistsByAuthIdAsync(authId, cancellationToken);
             if (result == true)
             {
                 throw new ConflictException("User profile already exists.");
             }
 
-            // step 2: create all VOs
+            // step 3: create all VOs
             var contactNumber = ContactNumber.Create(request.ContactNumber);
 
-            // step 3: check if user with same contact number exists
+            // step 4: check if user with same contact number exists
             if (await _userRepository.ProfileExistsByContactNumberAsync(contactNumber, cancellationToken))
             {
                 throw new ConflictException("User with same contact number already exists.");
             }
 
-            // step 4: create user entity
+            // step 5: create user entity
             var user = User.Create(
-                Guid.Parse(authId),
+                authId,
                 request.FirstName,
                 request.MiddleName,
                 request.LastName,
@@ -63,13 +63,13 @@ namespace Server.Application.Aggregates.Users.Handlers
                 request.Dob
             );
 
-            // step 5: save user profile
+            // step 6: save user profile
             await _userRepository.AddProfileAsync(user, cancellationToken);
 
-            // step 6: create jwt token
-            var token = _jwtTokenGenerator.GenerateToken(Guid.Parse(authId), user.Id, userName ?? "");
+            // step 7: create jwt token
+            var token = _jwtTokenGenerator.GenerateToken(authId, user.Id, auth.UserName ?? "");
 
-            // step 7: return result
+            // step 8: return result
             var createUserProfileDTO = new CreateUserProfileDTO
             {
                 Token = token
