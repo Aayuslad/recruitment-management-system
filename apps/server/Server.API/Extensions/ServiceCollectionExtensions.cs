@@ -87,7 +87,7 @@ namespace Server.API.Extensions
                 options.AddPolicy("FrontendPolicy", policy =>
                 {
                     policy.WithOrigins(
-                        "http://localhost:5173"
+                        ["http://localhost:5173", "https://app.rms.projects.aayushlad.online"]
                     )
                     .AllowAnyHeader()
                     .AllowAnyMethod()

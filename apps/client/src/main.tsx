@@ -4,7 +4,8 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:5126/api';
+// axios.defaults.baseURL = 'http://localhost:5126/api';
+axios.defaults.baseURL = 'https://backend.rms.projects.aayushlad.online/api';
 
 createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
