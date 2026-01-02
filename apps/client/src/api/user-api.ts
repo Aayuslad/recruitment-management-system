@@ -93,7 +93,7 @@ export function useLogoutUser() {
             await axios.post('/users/logout');
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['user'] });
+            queryClient.clear();
             navigate('/login');
         },
     });

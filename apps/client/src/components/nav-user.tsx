@@ -1,6 +1,6 @@
 import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from 'lucide-react';
 
-import { useGetUser } from '@/api/user-api';
+import { useGetUser, useLogoutUser } from '@/api/user-api';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
     DropdownMenu,
@@ -23,6 +23,7 @@ export function NavUser() {
     const { isMobile } = useSidebar();
     const { data: user } = useGetUser();
     const navigate = useNavigate();
+    const logoutMutation = useLogoutUser();
 
     return (
         <SidebarMenu>
@@ -86,10 +87,17 @@ export function NavUser() {
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <LogOut />
-                            Log out
-                        </DropdownMenuItem>
+                        <button
+                            type="button"
+                            className="flex w-full items-center gap-2"
+                            disabled={logoutMutation.isPending}
+                            onClick={() => logoutMutation.mutate()}
+                        >
+                            <DropdownMenuItem className='w-full'>
+                                <LogOut />
+                                Log out
+                            </DropdownMenuItem>
+                        </button>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>
