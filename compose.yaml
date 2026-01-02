@@ -1,0 +1,12 @@
+
+services:
+  server:
+    build:
+      context: ./apps/server
+      dockerfile: Dockerfile
+    image: rms-server:latest
+    ports:
+      - "5126:5126"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    restart: unless-stopped

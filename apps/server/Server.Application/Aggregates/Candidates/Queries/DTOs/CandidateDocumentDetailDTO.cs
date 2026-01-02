@@ -1,0 +1,13 @@
+﻿namespace Server.Application.Aggregates.Candidates.Queries.DTOs
+{
+    public class CandidateDocumentDetailDTO
+    {
+        public Guid Id { get; set; }
+        public string Url { get; set; } = null!;
+        public Guid DocumentTypeId { get; set; }
+        public string DocumentName { get; set; } = null!;
+        public bool IsVerified { get; set; }
+        public Guid? VerifiedById { get; set; }
+        public string? VerifiedByUserName { get; set; }
+    }
+}

@@ -1,0 +1,44 @@
+name: Client CI
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  recruiter-client:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('apps/client/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./apps/client
+
+      - name: Lint
+        run: make lint-check-client
+        working-directory: ./
+
+      - name: Format check
+        run: make format-check-client
+        working-directory: ./
+
+      - name: Build
+        run: make build-client
+        working-directory: ./

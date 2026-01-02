@@ -1,0 +1,47 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+using Server.Application.Abstractions.Repositories;
+using Server.Application.Abstractions.Services;
+using Server.Infrastructure.Persistence;
+using Server.Infrastructure.Repositories;
+using Server.Infrastructure.Services;
+
+namespace Server.Infrastructure
+{
+    public static class DependencyInjection
+    {
+        public static IServiceCollection AddInfrastructure(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+
+            // Register Repositories
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRolesRepository, RolesRepository>();
+            services.AddScoped<ISkillRepository, SkillRepository>();
+            services.AddScoped<IDesignationRepository, DesignationRepository>();
+            services.AddScoped<IPositionBatchRepository, PositionBatchRepository>();
+            services.AddScoped<IPositionRepository, PositionRepository>();
+            services.AddScoped<IJobOpeningRepository, JobOpeningRepository>();
+            services.AddScoped<ICandidateRepository, CandidateRepository>();
+            services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
+            services.AddScoped<IInterviewRepository, InterviewRepository>();
+            services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<IDocumentRepository, DocumentRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+            // Register Services
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IHasher, Hasher>();
+            services.AddScoped<IUserContext, UserContext>();
+
+            return services;
+        }
+    }
+}

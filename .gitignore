@@ -1,5 +1,7 @@
 ###### .NET Core ######
 
+.vscode
+
 # Build
 bin/
 obj/
@@ -14,6 +16,8 @@ out/
 # Secrets
 *.env
 secrets.json
+appsettings.Development.json
+apps/server/Server.API/appsettings.Development.json
 
 # Logs
 *.log
@@ -42,5 +46,4 @@ dist-ssr
 *.suo
 *.ntvs*
 *.njsproj
-*.sln
 *.sw?
