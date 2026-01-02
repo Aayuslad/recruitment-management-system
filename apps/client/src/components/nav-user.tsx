@@ -93,7 +93,7 @@ export function NavUser() {
                             disabled={logoutMutation.isPending}
                             onClick={() => logoutMutation.mutate()}
                         >
-                            <DropdownMenuItem className='w-full'>
+                            <DropdownMenuItem className="w-full">
                                 <LogOut />
                                 Log out
                             </DropdownMenuItem>
